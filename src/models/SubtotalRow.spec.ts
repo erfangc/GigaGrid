@@ -1,16 +1,38 @@
 import {SubtotalRow} from "./SubtotalRow";
 
 describe("a SubtotalRow with 2 children", () => {
+    var childSubtotalRows:SubtotalRow[];
+    var subtotalRow:SubtotalRow;
+    beforeEach(()=> {
+        childSubtotalRows = [
+            new SubtotalRow("Child 1"),
+            new SubtotalRow("Child 2")
+        ];
 
-    const childSubtotalRows:SubtotalRow[] = [
-        new SubtotalRow("Child 1"),
-        new SubtotalRow("Child 2")
-    ];
+        subtotalRow = new SubtotalRow("Parent");
+        childSubtotalRows.forEach((child)=> {
+            subtotalRow.addChild(child);
+        });
+    });
 
-    const subtotalRow = new SubtotalRow("Parent", childSubtotalRows);
+    it("can add handle adding child with duplicate title", () => {
+        subtotalRow.addChild(new SubtotalRow("Child 1"));
+        expect(subtotalRow.getNumChild()).toBe(2);
+    });
+
+    it("can add handle adding child", () => {
+        subtotalRow.addChild(new SubtotalRow("Child 3"));
+        expect(subtotalRow.getNumChild()).toBe(3);
+    });
+
+    it("can remove a child with the same title", ()=> {
+        expect(subtotalRow.getChildByTitle("Child 1")).toBeDefined();
+        subtotalRow.removeChild(new SubtotalRow("Child 1"));
+        expect(subtotalRow.getChildByTitle("Child 1")).toBeUndefined();
+    });
 
     it("has 2 children", () => {
-        expect(subtotalRow.children.length).toBe(2);
+        expect(subtotalRow.getNumChild()).toBe(2);
     });
 
     it("can find a child by its title", () => {
@@ -18,12 +40,12 @@ describe("a SubtotalRow with 2 children", () => {
     });
 
     it("can find a child by its title or return null", () => {
-        expect(subtotalRow.getChildByTitle("Never to Be Found")).toBeNull();
+        expect(subtotalRow.getChildByTitle("Never to Be Found")).toBeUndefined();
     });
 
     it("knows if it has a child with a given name", () => {
         expect(subtotalRow.hasChildWithTitle("Child 2")).toBeTruthy();
-    })
+    });
 
 });
 
@@ -32,6 +54,10 @@ describe('SubtotalRow properties', ()=> {
     const subtotalRow = new SubtotalRow("Parent");
     it("has a title", () => {
         expect(subtotalRow.title).toBe("Parent");
+    });
+
+    it("has a member called `data` to store subtotals", () => {
+        expect(subtotalRow.data).toEqual({});
     });
 
 });
