@@ -1,0 +1,40 @@
+{
+  "name": "gigagrid",
+  "version": "0.0.0",
+  "description": "Massively performant, multi-layered React.js table widget Written in TypeScript",
+  "main": "gigagrid.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erfangc/GigaGrid.git"
+  },
+  "keywords": [
+    "react",
+    "table",
+    "typescript",
+    "grid",
+    "data",
+    "pivot",
+    "subtotal"
+  ],
+  "dependencies": {
+    "systemjs": "0.19.6",
+    "es6-promise": "^3.0.2",
+    "es6-shim": "^0.33.3",
+    "reflect-metadata": "0.1.2",
+    "rxjs": "5.0.0-beta.0",
+    "zone.js": "0.5.10"
+  },
+  "author": "Erfang Chen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/erfangc/GigaGrid/issues"
+  },
+  "homepage": "https://github.com/erfangc/GigaGrid#readme",
+  "devDependencies": {
+    "jasmine-core": "2.4.1",
+    "typescript": "^1.7.5"
+  }
+}
