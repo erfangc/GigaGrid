@@ -1,7 +1,7 @@
 import {SubtotalBy} from "./../models/ColumnLike";
 import {TreeBuilder} from "./TreeBuilder";
 import {Tree} from "./TreeBuilder";
-describe("a Tree builder", ()=> {
+describe("TreeBuilder", ()=> {
 
     const subtotalBy = [new SubtotalBy("col1"), new SubtotalBy("col2")];
 
@@ -57,7 +57,7 @@ describe("a Tree builder", ()=> {
         const tree:Tree = TreeBuilder.buildTree(data, subtotalBy);
 
         it("should handle the case where a SubtotalBy colTag is missing entirely in the data", () => {
-            expect(tree.getRoot().getChildByTitle("B").getNumChild()).toBe(0);
+            expect(tree.getRoot().getChildByTitle("B").getNumChildren()).toBe(0);
         });
 
     });

@@ -26,13 +26,16 @@ export class SubtotalRow {
         }
     }
 
-
     getChildByTitle(title:string):SubtotalRow {
         return this.childrenByTitle[title];
     }
 
-    getNumChild() {
+    getNumChildren(): number {
         return this.children.length;
+    }
+
+    getChildren(): SubtotalRow[] {
+        return this.children;
     }
 
     getChildAtIndex(idx: number):SubtotalRow {

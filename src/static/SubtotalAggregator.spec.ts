@@ -7,7 +7,7 @@ import {TreeBuilder} from "./TreeBuilder";
 import {SubtotalBy} from "../models/ColumnLike";
 import {Tree} from "./TreeBuilder";
 
-describe("a SubtotalAggregator", () => {
+describe("SubtotalAggregator", () => {
 
     const subtotalRow = new SubtotalRow("Parent");
     subtotalRow.detailRows = [

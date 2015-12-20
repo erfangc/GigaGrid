@@ -16,9 +16,9 @@ export class SubtotalAggregator {
      * @param columnDefs
      */
     private static aggregateChildren(subtotalRow:SubtotalRow, columnDefs:ColumnDef[]) {
-        subtotalRow.children.forEach((childRow)=> {
+        subtotalRow.getChildren().forEach((childRow)=> {
             SubtotalAggregator.aggregateSubtotalRow(childRow, columnDefs);
-            if (childRow.children.length > 0)
+            if (childRow.getChildren().length > 0)
                 SubtotalAggregator.aggregateChildren(childRow, columnDefs);
         });
     }

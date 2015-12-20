@@ -3,6 +3,7 @@
     "target": "ES5",
     "module": "system",
     "sourceMap": true,
+    "jsx": "react",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   }

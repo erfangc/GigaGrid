@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>React &amp; .tsx Demo</title>
+    <!-- 1. Load libraries -->
+    <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <script src="node_modules/rxjs/bundles/Rx.js"></script>
+    <script src="node_modules/react/dist/react-with-addons.js"></script>
+    <script src="node_modules/react-dom/dist/react-dom.js"></script>
+    <script>
+        System.config({
+            defaultJSExtensions: true
+        });
+        System.import('src/react/Demo').then(mount).catch(console.error.bind(console));
+        function mount() {
+            const elem = React.createElement(Demo, {name: "Erfang", age: 27});
+            ReactDOM.render(elem, document.getElementById("demo"));
+        }
+    </script>
+</head>
+<body>
+<div id="demo"></div>
+</body>
+</html>
