@@ -5,6 +5,13 @@ class SubtotalRow {
     private childrenByTitle:{ [title: string] : SubtotalRow; } = {};
     public data:any;
 
+    private findIndex(child:SubtotalRow) {
+        for (var i = 0; i < this.children.length; i++)
+            if (this.children[i].title === child.title)
+                return i;
+        return -1;
+    }
+
     constructor(title:string) {
         this.detailRows = [];
         this.title = title;
@@ -18,9 +25,9 @@ class SubtotalRow {
         this.childrenByTitle[child.title] = child;
     }
 
-    removeChild(child: SubtotalRow) {
+    removeChild(child:SubtotalRow) {
         if (this.childrenByTitle[child.title] != undefined) {
-            const idx = this.children.findIndex((c)=>c.title === child.title);
+            const idx = this.findIndex(child);
             this.children.splice(idx, 1);
             this.childrenByTitle[child.title] = undefined;
         }
@@ -30,15 +37,15 @@ class SubtotalRow {
         return this.childrenByTitle[title];
     }
 
-    getNumChildren(): number {
+    getNumChildren():number {
         return this.children.length;
     }
 
-    getChildren(): SubtotalRow[] {
+    getChildren():SubtotalRow[] {
         return this.children;
     }
 
-    getChildAtIndex(idx: number):SubtotalRow {
+    getChildAtIndex(idx:number):SubtotalRow {
         return this.children[idx];
     }
 
