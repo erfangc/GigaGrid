@@ -1,6 +1,3 @@
-import {SubtotalBy} from "./../models/ColumnLike";
-import {TreeBuilder} from "./TreeBuilder";
-import {Tree} from "./TreeBuilder";
 describe("TreeBuilder", ()=> {
 
     const subtotalBy = [new SubtotalBy("col1"), new SubtotalBy("col2")];

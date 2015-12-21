@@ -1,5 +1,3 @@
-import {SubtotalRow} from "./SubtotalRow";
-
 describe('SubtotalRow basic property test', ()=> {
 
     const subtotalRow = new SubtotalRow("Parent");
