@@ -1,4 +1,4 @@
-export class SubtotalRow {
+class SubtotalRow {
     public detailRows:any[];
     public title:string;
     private children:SubtotalRow[] = [];

@@ -1,15 +1,17 @@
-export enum AggregationMethod {
+/// <reference path="../../typings/tsd.d.ts" />
+
+enum AggregationMethod {
     SUM, AVERAGE
 }
-export enum ColumnFormat {
+enum ColumnFormat {
     NUMBER, STRING, CURRENCY, DATE
 }
 
-export interface ColumnLike {
+interface ColumnLike {
     colTag: string;
 }
 
-export class ColumnDef implements ColumnLike {
+class ColumnDef implements ColumnLike {
 
     public colTag:string;
     public format:ColumnFormat;
@@ -23,7 +25,7 @@ export class ColumnDef implements ColumnLike {
 
 }
 
-export class SubtotalBy implements ColumnLike {
+class SubtotalBy implements ColumnLike {
     constructor(colTag:string) {
         this.colTag = colTag;
     }

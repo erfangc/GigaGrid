@@ -1,11 +1,8 @@
-import {ColumnDef} from "../models/ColumnLike";
-import {AggregationMethod} from "../models/ColumnLike";
-import {SubtotalRow} from "../models/SubtotalRow";
-import {Tree} from "./TreeBuilder";
+/// <reference path="./TreeBuilder.ts" />
 
-export class SubtotalAggregator {
+class SubtotalAggregator {
 
-    static aggregateTree(tree:Tree, columnDefs:ColumnDef[]):void {
+    static aggregateTree(tree: Tree, columnDefs:ColumnDef[]):void {
         SubtotalAggregator.aggregateSubtotalRow(tree.getRoot(), columnDefs);
         SubtotalAggregator.aggregateChildren(tree.getRoot(), columnDefs);
     }
