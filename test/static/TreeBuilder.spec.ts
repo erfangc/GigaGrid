@@ -2,15 +2,16 @@ describe("TreeBuilder", ()=> {
 
     const subtotalBy = [new SubtotalBy("col1"), new SubtotalBy("col2")];
 
+    it("still functions when an empty SubtotalBy array is passed in", ()=> {
+        const data:any[] = TestUtils.getSimpleRawData();
+        const tree:Tree = TreeBuilder.buildTree(data, []);
+        expect(tree.getRoot().getChildren().length).toBe(0);
+        expect(tree.getRoot().detailRows.length).toBe(5);
+    });
+
     describe("can build Tree of even depth", () => {
 
-        const data:any[] = [
-            {"col1": "A", "col2": "C"},
-            {"col1": "B", "col2": "C"},
-            {"col1": "A", "col2": "C"},
-            {"col1": "A", "col2": "D"},
-            {"col1": "B", "col2": "D"}
-        ];
+        const data:any[] = TestUtils.getSimpleRawData();
 
         const tree:Tree = TreeBuilder.buildTree(data, subtotalBy);
 
@@ -51,13 +52,7 @@ describe("TreeBuilder", ()=> {
 
     describe("can build Tree of uneven depth", ()=> {
         // here, B -> * is simply missing entirely
-        const data:any[] = [
-            {"col1": "A", "col2": "C"},
-            {"col1": "B"},
-            {"col1": "A", "col2": "C"},
-            {"col1": "A", "col2": "D"},
-            {"col1": "B"}
-        ];
+        const data:any[] = TestUtils.getSimpleRawDataWithMissing();
         const tree:Tree = TreeBuilder.buildTree(data, subtotalBy);
 
         it("should handle the case where a SubtotalBy colTag is missing entirely in the data", () => {

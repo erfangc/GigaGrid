@@ -1,5 +1,25 @@
 class TestUtils {
 
+    public static getSimpleRawDataWithMissing():any[] {
+        return [
+            {"col1": "A", "col2": "C"},
+            {"col1": "B"},
+            {"col1": "A", "col2": "C"},
+            {"col1": "A", "col2": "D"},
+            {"col1": "B"}
+        ];
+    }
+
+    public static getSimpleRawData():any[] {
+        return [
+            {"col1": "A", "col2": "C"},
+            {"col1": "B", "col2": "C"},
+            {"col1": "A", "col2": "C"},
+            {"col1": "A", "col2": "D"},
+            {"col1": "B", "col2": "D"}
+        ];
+    }
+
     public static getRowWithMissingData():Row {
         return new DetailRow({
             "numCol1": 7,
@@ -15,6 +35,41 @@ class TestUtils {
             "textCol1": "R2D2",
             "textCol2": "City Wok"
         });
+    }
+
+    /**
+     * return a small set of sample data
+     * @returns {{data: {gender: string, first_name: string, last_name: string, gift: number}[], columnDefs: ColumnDef[]}}
+     */
+    public static getSampleData():{data: any[], columnDefs: ColumnDef[]} {
+        const data = [{"gender": "Female", "first_name": "Maria", "last_name": "Young", "gift": 2},
+            {"gender": "Female", "first_name": "Kimberly", "last_name": "Kennedy", "gift": 2},
+            {"gender": "Female", "first_name": "Lisa", "last_name": "Hall", "gift": 10},
+            {"gender": "Female", "first_name": "Andrea", "last_name": "Peterson", "gift": 4},
+            {"gender": "Male", "first_name": "Clarence", "last_name": "Cox", "gift": 9},
+            {"gender": "Male", "first_name": "Charles", "last_name": "Riley", "gift": 7},
+            {"gender": "Male", "first_name": "Bruce", "last_name": "Turner", "gift": 2},
+            {"gender": "Female", "first_name": "Shirley", "last_name": "Riley", "gift": 9},
+            {"gender": "Male", "first_name": "David", "last_name": "Hunt", "gift": 7},
+            {"gender": "Male", "first_name": "Thomas", "last_name": "Bradley", "gift": 6}];
+        const columnDefs:ColumnDef[] = [
+            {
+                colTag: "gender", format: ColumnFormat.STRING, aggregationMethod: AggregationMethod.NONE
+            },
+            {
+                colTag: "first_name", format: ColumnFormat.STRING, aggregationMethod: AggregationMethod.NONE
+            },
+            {
+                colTag: "last_name", format: ColumnFormat.STRING, aggregationMethod: AggregationMethod.NONE
+            },
+            {
+                colTag: "gift", format: ColumnFormat.NUMBER, aggregationMethod: AggregationMethod.SUM
+            }
+        ];
+        return {
+            data: data,
+            columnDefs: columnDefs
+        };
     }
 
     public static regex:{ dataReact: RegExp } = {
