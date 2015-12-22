@@ -1,7 +1,7 @@
 /// <reference path="../../typings/tsd.d.ts" />
 
 enum AggregationMethod {
-    SUM, AVERAGE
+    SUM, AVERAGE, NONE
 }
 enum ColumnFormat {
     NUMBER, STRING, CURRENCY, DATE
@@ -10,6 +10,7 @@ enum ColumnFormat {
 interface ColumnLike {
     colTag: string;
 }
+
 
 class ColumnDef implements ColumnLike {
 
@@ -23,6 +24,12 @@ class ColumnDef implements ColumnLike {
         this.aggregationMethod = aggregationMethod;
     }
 
+}
+
+class TableRowColumnDef extends ColumnDef {
+    constructor(columnDef:ColumnDef, public width:string = "auto") {
+        super(columnDef.colTag, columnDef.format, columnDef.aggregationMethod);
+    }
 }
 
 class SubtotalBy implements ColumnLike {

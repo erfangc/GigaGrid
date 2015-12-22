@@ -20,17 +20,17 @@ class SubtotalAggregator {
         });
     }
 
-    static aggregate(detailRows:any[], columnDefs:ColumnDef[]):any {
+    static aggregate(detailRows:DetailRow[], columnDefs:ColumnDef[]):any {
         const aggregated:any = {};
         columnDefs.forEach((columnDef) => {
 
             if (columnDef.aggregationMethod === AggregationMethod.SUM) {
                 var sum:number = 0.0;
-                detailRows.forEach((row)=>sum += row[columnDef.colTag]);
+                detailRows.forEach((row)=>sum += row.data()[columnDef.colTag]);
                 aggregated[columnDef.colTag] = sum;
             } else if (columnDef.aggregationMethod === AggregationMethod.AVERAGE) {
                 var sum:number = 0.0;
-                detailRows.forEach((row)=>sum += row[columnDef.colTag]);
+                detailRows.forEach((row)=>sum += row.data()[columnDef.colTag]);
                 aggregated[columnDef.colTag] = sum / detailRows.length;
             }
         });
@@ -38,6 +38,6 @@ class SubtotalAggregator {
     }
 
     static aggregateSubtotalRow(subtotalRow:SubtotalRow, columnDefs:ColumnDef[]):void {
-        subtotalRow.data = SubtotalAggregator.aggregate(subtotalRow.detailRows, columnDefs);
+        subtotalRow.setData(SubtotalAggregator.aggregate(subtotalRow.detailRows, columnDefs));
     }
 }
