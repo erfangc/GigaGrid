@@ -8,6 +8,7 @@ class TreeBuilder {
          * parent SubtotalRow (in other words, find the detailRow's "bucket") and append said detailRow to the parent
          */
         grandTotal = grandTotal || new SubtotalRow("Grand Total");
+        grandTotal.setSectorPath([]);
         data.forEach((datum) => this.bucketDetailRow(subtotalBys, new DetailRow(datum), grandTotal));
         return new Tree(grandTotal);
     }
@@ -28,6 +29,7 @@ class TreeBuilder {
                 subtotalRow.detailRows.push(detailedRow);
             }
         });
+        detailedRow.setSectorPath(sectors);
     };
 
     /**
@@ -46,6 +48,8 @@ class TreeBuilder {
             else {
                 // create a new sector if it is not already available
                 const newRow = new SubtotalRow(sectors[k]);
+                // set the sector path for the new SubtotalRow we just created the length of which determines its depth
+                newRow.setSectorPath(sectors.slice(0, k + 1));
                 currentRow.addChild(newRow);
                 currentRow = newRow;
             }

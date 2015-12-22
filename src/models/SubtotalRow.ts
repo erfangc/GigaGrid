@@ -1,13 +1,27 @@
 interface Row {
     data(): any;
     isDetail(): boolean;
+    title:string;
+    sectorPath(): string[];
 }
 
 class DetailRow implements Row {
+
     private _data:any;
+    private _sectorPath:string[];
+
+    public title:string = null;
 
     constructor(data:any) {
         this._data = data;
+    }
+
+    sectorPath():string[] {
+        return this._sectorPath;
+    }
+
+    setSectorPath(sectorPath:string[]) {
+        this._sectorPath = sectorPath;
     }
 
     isDetail():boolean {
@@ -20,11 +34,21 @@ class DetailRow implements Row {
 }
 
 class SubtotalRow implements Row {
+
     public detailRows:DetailRow[];
     public title:string;
     private children:SubtotalRow[] = [];
     private childrenByTitle:{ [title: string] : SubtotalRow; } = {};
     private _data:any;
+    private _sectorPath:string[];
+
+    sectorPath():string[] {
+        return this._sectorPath;
+    }
+
+    setSectorPath(sectorPath:string[]) {
+        this._sectorPath = sectorPath;
+    }
 
     isDetail():boolean {
         return false;
@@ -85,4 +109,5 @@ class SubtotalRow implements Row {
     hasChildWithTitle(title:string):boolean {
         return this.getChildByTitle(title) != undefined;
     }
+
 }
