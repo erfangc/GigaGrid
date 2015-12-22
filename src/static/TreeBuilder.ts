@@ -8,11 +8,11 @@ class TreeBuilder {
          * parent SubtotalRow (in other words, find the detailRow's "bucket") and append said detailRow to the parent
          */
         grandTotal = grandTotal || new SubtotalRow("Grand Total");
-        data.forEach((detailRow) => this.bucketDetailRow(subtotalBys, detailRow, grandTotal));
+        data.forEach((datum) => this.bucketDetailRow(subtotalBys, new DetailRow(datum), grandTotal));
         return new Tree(grandTotal);
     }
 
-    private static bucketDetailRow(subtotalBys:SubtotalBy[], detailedRow:any, grandTotal:SubtotalRow):void {
+    private static bucketDetailRow(subtotalBys:SubtotalBy[], detailedRow:DetailRow, grandTotal:SubtotalRow):void {
         /*
          * to traverse the grandTotal and find the detailRow's immediate parent SubtotalRow
          * we store the detailRow's sector names in an ordered array
@@ -21,7 +21,7 @@ class TreeBuilder {
         grandTotal.detailRows.push(detailedRow);
         subtotalBys.forEach((subtotalBy) => {
             // the subtotal title
-            const bucketTitle = detailedRow[subtotalBy.colTag];
+            const bucketTitle = detailedRow.data()[subtotalBy.colTag];
             if (bucketTitle !== undefined) {
                 sectors.push(bucketTitle);
                 const subtotalRow = TreeBuilder.traverseOrCreate(grandTotal, sectors);
@@ -30,6 +30,12 @@ class TreeBuilder {
         });
     };
 
+    /**
+     *
+     * @param grandTotal
+     * @param sectors
+     * @returns {SubtotalRow}
+     */
     private static traverseOrCreate(grandTotal:SubtotalRow, sectors:string[]):SubtotalRow {
         // traverse to the correct SubtotalRow
         var currentRow:SubtotalRow = grandTotal;

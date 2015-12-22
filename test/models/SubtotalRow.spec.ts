@@ -5,8 +5,8 @@ describe('SubtotalRow basic property test', ()=> {
         expect(subtotalRow.title).toBe("Parent");
     });
 
-    it("has a member called `data` to store subtotals", () => {
-        expect(subtotalRow.data).toEqual({});
+    it("has a method `data()` that returns the the aggregated results of the row, and it should be initially empty", () => {
+        expect(subtotalRow.data()).toEqual({});
     });
 
 });

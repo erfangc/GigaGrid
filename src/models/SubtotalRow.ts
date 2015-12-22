@@ -1,9 +1,42 @@
-class SubtotalRow {
-    public detailRows:any[];
+interface Row {
+    data(): any;
+    isDetail(): boolean;
+}
+
+class DetailRow implements Row {
+    private _data:any;
+
+    constructor(data:any) {
+        this._data = data;
+    }
+
+    isDetail():boolean {
+        return true
+    }
+
+    data():any {
+        return this._data
+    }
+}
+
+class SubtotalRow implements Row {
+    public detailRows:DetailRow[];
     public title:string;
     private children:SubtotalRow[] = [];
     private childrenByTitle:{ [title: string] : SubtotalRow; } = {};
-    public data:any;
+    private _data:any;
+
+    isDetail():boolean {
+        return false;
+    }
+
+    data():any {
+        return this._data;
+    }
+
+    setData(data:any):void {
+        this._data = data;
+    }
 
     private findIndex(child:SubtotalRow) {
         for (var i = 0; i < this.children.length; i++)
@@ -15,7 +48,7 @@ class SubtotalRow {
     constructor(title:string) {
         this.detailRows = [];
         this.title = title;
-        this.data = {};
+        this._data = {};
     }
 
     addChild(child:SubtotalRow) {

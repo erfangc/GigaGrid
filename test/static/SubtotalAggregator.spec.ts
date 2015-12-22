@@ -2,11 +2,11 @@ describe("SubtotalAggregator", () => {
 
     const subtotalRow = new SubtotalRow("Parent");
     subtotalRow.detailRows = [
-        {"col1": "A", "col2": "C", "data": 1},
-        {"col1": "A", "col2": "C", "data": 1},
-        {"col1": "A", "col2": "C", "data": 1},
-        {"col1": "A", "col2": "C", "data": 1},
-        {"col1": "A", "col2": "C", "data": 1}
+        new DetailRow({"col1": "A", "col2": "C", "data": 1}),
+        new DetailRow({"col1": "A", "col2": "C", "data": 1}),
+        new DetailRow({"col1": "A", "col2": "C", "data": 1}),
+        new DetailRow({"col1": "A", "col2": "C", "data": 1}),
+        new DetailRow({"col1": "A", "col2": "C", "data": 1})
     ];
     const straightSumColumnDef = new ColumnDef("data", ColumnFormat.NUMBER, AggregationMethod.SUM);
     const avgColumnDef = new ColumnDef("data", ColumnFormat.NUMBER, AggregationMethod.AVERAGE);
@@ -28,8 +28,8 @@ describe("SubtotalAggregator", () => {
     describe("provide function that accept SubtotalRow with detailRows, column definitions and populate the detailRows' `data` member", ()=> {
         it("should perform straight sum aggregation", ()=> {
             SubtotalAggregator.aggregateSubtotalRow(subtotalRow, [straightSumColumnDef]);
-            expect(subtotalRow.data).not.toEqual({});
-            expect(subtotalRow.data[straightSumColumnDef.colTag]).toBe(5);
+            expect(subtotalRow.data()).not.toEqual({});
+            expect(subtotalRow.data()[straightSumColumnDef.colTag]).toBe(5);
         });
     });
 
@@ -53,17 +53,17 @@ describe("SubtotalAggregator", () => {
         SubtotalAggregator.aggregateTree(tree, [straightSumColumnDef]);
 
         it("should have aggregated the grandTotal or root node", () => {
-            expect(tree.getRoot().data[straightSumColumnDef.colTag]).toBe(7);
+            expect(tree.getRoot().data()[straightSumColumnDef.colTag]).toBe(7);
         });
 
         it("should have aggregated the child SubtotalRow", ()=> {
 
-            expect(tree.getRoot().getChildByTitle("A").data[straightSumColumnDef.colTag]).toBe(5);
-            expect(tree.getRoot().getChildByTitle("B").data[straightSumColumnDef.colTag]).toBe(2);
+            expect(tree.getRoot().getChildByTitle("A").data()[straightSumColumnDef.colTag]).toBe(5);
+            expect(tree.getRoot().getChildByTitle("B").data()[straightSumColumnDef.colTag]).toBe(2);
 
-            expect(tree.getRoot().getChildByTitle("A").getChildByTitle("C").data[straightSumColumnDef.colTag]).toBe(3);
-            expect(tree.getRoot().getChildByTitle("A").getChildByTitle("D").data[straightSumColumnDef.colTag]).toBe(1);
-            expect(tree.getRoot().getChildByTitle("A").getChildByTitle("C").getChildByTitle("F").data[straightSumColumnDef.colTag]).toBe(2);
+            expect(tree.getRoot().getChildByTitle("A").getChildByTitle("C").data()[straightSumColumnDef.colTag]).toBe(3);
+            expect(tree.getRoot().getChildByTitle("A").getChildByTitle("D").data()[straightSumColumnDef.colTag]).toBe(1);
+            expect(tree.getRoot().getChildByTitle("A").getChildByTitle("C").getChildByTitle("F").data()[straightSumColumnDef.colTag]).toBe(2);
 
             expect(tree.getRoot().getChildByTitle("B").getChildByTitle("E")).toBeUndefined();
 
