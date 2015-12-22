@@ -1,6 +1,6 @@
 class TreeBuilder {
 
-    static buildTree(data:any[], subtotalBys:SubtotalBy[], grandTotal?:SubtotalRow):Tree {
+    static buildTree(data:any[], subtotalBys:SubtotalBy[] = [], grandTotal?:SubtotalRow):Tree {
         /*
          * the way we create a Tree is as follows
          * since each detailRow in data can only belong to ONE SubtotalRow and each SubtotalRow can have only 1 parent

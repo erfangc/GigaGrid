@@ -1,6 +1,4 @@
-import ReactInstance = __React.ReactInstance;
 describe("TableRow", () => {
-
 
     afterEach(()=> {
         ReactDOM.unmountComponentAtNode(document.getElementById('container'));
