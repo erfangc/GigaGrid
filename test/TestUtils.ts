@@ -1,5 +1,13 @@
 class TestUtils {
 
+    public static getRowWithMissingData():Row {
+        return new DetailRow({
+            "numCol1": 7,
+            "textCol1": "R2D2",
+            "textCol2": "City Wok"
+        });
+    }
+
     public static getDetailRow():DetailRow {
         return new DetailRow({
             "numCol1": 7,
@@ -8,6 +16,10 @@ class TestUtils {
             "textCol2": "City Wok"
         });
     }
+
+    public static regex:{ dataReact: RegExp } = {
+        dataReact: / data-react[-\w]+="[^"]+"/g
+    };
 
     public static getSampleSubtotalRow():SubtotalRow {
         const subtotalRow:SubtotalRow = new SubtotalRow("Sector X");
