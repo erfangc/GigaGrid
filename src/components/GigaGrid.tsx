@@ -20,13 +20,14 @@ class GigaGrid extends React.Component<GigaGridProps, any> {
         super(props);
         // set initial state (from this point on use this.setState();
         const tree:Tree = TreeBuilder.buildTree(this.props.data, this.props.initialSubtotalBys);
+        SubtotalAggregator.aggregateTree(tree, this.props.columnDefs);
         this.state = {tree: tree};
     }
 
     render() {
         // TODO first pass implementation ... need to make better
         return (
-            <div>
+            <div className="giga-grid">
                 <table>
                     {this.renderColumnHeaders()}
                     <tbody>
@@ -39,7 +40,8 @@ class GigaGrid extends React.Component<GigaGridProps, any> {
 
     renderColumnHeaders():ReactElement<{}> {
         const ths = this.props.columnDefs.map((colDef:ColumnDef, i:number)=> {
-            return <th key={i}>{colDef.title || colDef.colTag}</th>
+            return <th className={colDef.format === ColumnFormat.NUMBER ? "numeric" : "non-numeric"}
+                       key={i}>{colDef.title || colDef.colTag}</th>
         });
         return (
             <thead>
@@ -66,7 +68,20 @@ class GigaGrid extends React.Component<GigaGridProps, any> {
     }
 
     renderTableFooter() {
-        // TODO dummy implemenation
-        return <div>This is a footer</div>
+        // TODO dummy implemenation, replace with pagination
+        return (<div>This is Where the Footer is Supposed to Go!</div>);
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// In your runtime library somewhere
+// from TypeScript's official site, we need this to apply Mixins, weird .. I Know!
+////////////////////////////////////////////////////////////////////////////////
+
+function applyMixins(derivedCtor:any, baseCtors:any[]) {
+    baseCtors.forEach(baseCtor => {
+        Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+            derivedCtor.prototype[name] = baseCtor.prototype[name];
+        })
+    });
 }

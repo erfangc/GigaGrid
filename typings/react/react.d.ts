@@ -448,7 +448,7 @@ declare namespace __React {
         strokeOpacity?: number;
         strokeWidth?: number;
 
-        // Remaining properties auto-extracted from http://docs.webplatform.org.
+        // Remaining properties auto-calculateFirstColumnIdentation from http://docs.webplatform.org.
         // License: http://docs.webplatform.org/wiki/Template:CC-by-3.0
         /**
          * Aligns a flex container's lines within the flex container when there is extra space in the cross-axis, similar to how justify-content aligns individual items within the main-axis.

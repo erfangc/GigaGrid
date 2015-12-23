@@ -38,8 +38,8 @@ describe('GigaGrid', ()=> {
 
         expect($container.find("table > tbody").find("tr").length).toBe(12);
 
-        // TODO specify additional tests
-
     });
+
+    // TODO write addition tests for corner cases and other features
 
 });
