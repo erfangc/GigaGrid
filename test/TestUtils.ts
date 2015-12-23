@@ -54,16 +54,25 @@ class TestUtils {
             {"gender": "Male", "first_name": "Thomas", "last_name": "Bradley", "gift": 6}];
         const columnDefs:ColumnDef[] = [
             {
-                colTag: "gender", format: ColumnFormat.STRING, aggregationMethod: AggregationMethod.NONE
+                colTag: "first_name",
+                title: "First Name",
+                format: ColumnFormat.STRING,
+                aggregationMethod: AggregationMethod.NONE
             },
             {
-                colTag: "first_name", format: ColumnFormat.STRING, aggregationMethod: AggregationMethod.NONE
+                colTag: "gender",
+                title: "Gender",
+                format: ColumnFormat.STRING,
+                aggregationMethod: AggregationMethod.NONE
             },
             {
-                colTag: "last_name", format: ColumnFormat.STRING, aggregationMethod: AggregationMethod.NONE
+                colTag: "last_name",
+                title: "Last Name",
+                format: ColumnFormat.STRING,
+                aggregationMethod: AggregationMethod.NONE
             },
             {
-                colTag: "gift", format: ColumnFormat.NUMBER, aggregationMethod: AggregationMethod.SUM
+                colTag: "gift", title: "Gift", format: ColumnFormat.NUMBER, aggregationMethod: AggregationMethod.SUM
             }
         ];
         return {

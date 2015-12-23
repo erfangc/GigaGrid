@@ -15,6 +15,7 @@ interface ColumnLike {
 class ColumnDef implements ColumnLike {
 
     public colTag:string;
+    public title:string;
     public format:ColumnFormat;
     public aggregationMethod:AggregationMethod;
 

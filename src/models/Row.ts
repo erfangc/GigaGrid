@@ -39,8 +39,20 @@ class SubtotalRow implements Row {
     public title:string;
     private children:SubtotalRow[] = [];
     private childrenByTitle:{ [title: string] : SubtotalRow; } = {};
-    private _data:any;
+    private _data:any = {};
     private _sectorPath:string[];
+    private _isCollapsed:boolean = false;
+
+    toggleCollapse(state?:boolean) {
+        if (state != undefined)
+            this._isCollapsed = state;
+        else
+            this._isCollapsed = !this._isCollapsed;
+    }
+
+    isCollapsed():boolean {
+        return this._isCollapsed;
+    }
 
     sectorPath():string[] {
         return this._sectorPath;
@@ -72,7 +84,6 @@ class SubtotalRow implements Row {
     constructor(title:string) {
         this.detailRows = [];
         this.title = title;
-        this._data = {};
     }
 
     addChild(child:SubtotalRow) {
