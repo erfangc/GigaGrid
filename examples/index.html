@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GigaGrid</title>
+
+    <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="../src/styles/giga-grid.css">
+
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../bower_components/react/react-with-addons.js"></script>
+    <script src="../bower_components/react/react-dom.min.js"></script>
+
+    <!--TODO ok fine we will use a module loading system -->
+    <script src="../src/components/TableRow.js"></script>
+    <script src="../src/components/GigaGrid.js"></script>
+
+    <script src="../src/models/ColumnLike.js"></script>
+    <script src="../src/models/Row.js"></script>
+
+    <script src="../src/static/SubtotalAggregator.js"></script>
+    <script src="../src/static/TreeBuilder.js"></script>
+    <script src="../src/static/TreeRasterizer.js"></script>
+
+    <script src="../test/TestUtils.js"></script>
+
+</head>
+<body>
+
+<div id="giga-grid-container"></div>
+
+<script>
+
+    const element = React.createElement(GigaGrid, {
+        data: TestUtils.getSampleData().data,
+        columnDefs: TestUtils.getSampleData().columnDefs,
+        initialSubtotalBys: [new SubtotalBy("gender")]
+    });
+
+    ReactDOM.render(element, document.getElementById('giga-grid-container'));
+
+</script>
+
+</body>
+</html>

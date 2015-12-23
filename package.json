@@ -36,6 +36,7 @@
     "karma-phantomjs-launcher": "^0.2.1",
     "phantomjs": "^1.9.19",
     "phantomjs-polyfill": "0.0.1",
+    "stylus": "^0.53.0",
     "typescript": "^1.7.5"
   }
 }

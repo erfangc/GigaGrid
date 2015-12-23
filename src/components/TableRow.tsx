@@ -5,6 +5,14 @@ class SubtotalTableRowProps {
     }
 }
 
+class TableRowUtils {
+    public static calculateFirstColumnIdentation(row:Row) {
+        const identLevel = (row.sectorPath() || []).length;
+        return ((row.isDetail() && identLevel !== 0 ? identLevel + 1 : identLevel ) * 25) + 'px';
+    }
+}
+
+
 class SubtotalTableRow extends React.Component<SubtotalTableRowProps, {}> {
 
     constructor(props:SubtotalTableRowProps) {
@@ -19,8 +27,7 @@ class SubtotalTableRow extends React.Component<SubtotalTableRowProps, {}> {
 
     render() {
         const tds = this.props.tableRowColumnDefs.map((colDef:TableRowColumnDef, i:number) => {
-            const identLevel = (this.props.row.sectorPath() || []).length;
-            const padding = (10 + identLevel * 25) + 'px';
+            const padding = TableRowUtils.calculateFirstColumnIdentation(this.props.row);
             if (i === 0)
                 return (
                     <td key={i}
@@ -29,15 +36,16 @@ class SubtotalTableRow extends React.Component<SubtotalTableRowProps, {}> {
                         className="giga-grid-locked-col">
                         <strong>
                             <span>
-                                <i className="fa fa-plus"/>
+                                <i className="fa fa-minus"/>&nbsp;
                             </span>
                             {this.props.row.title}
                         </strong>
                     </td>);
             else
-                return <td key={i} style={{width: colDef.width}}>{this.props.row.data()[colDef.colTag] || ""}</td>;
+                return <td key={i} className={colDef.format === ColumnFormat.NUMBER ? "numeric" : "non-numeric"}
+                           style={{width: colDef.width}}>{this.props.row.data()[colDef.colTag] || ""}</td>;
         });
-        return <tr>{tds}</tr>
+        return <tr className="subtotal-row">{tds}</tr>
     }
 }
 
@@ -54,7 +62,12 @@ class DetailTableRow extends React.Component<DetailTableRowProps, {}> {
 
     render() {
         const tds = this.props.tableRowColumnDefs.map((colDef:TableRowColumnDef, i:number) => {
-            return <td key={i} style={{width: colDef.width}}>{this.props.row.data()[colDef.colTag] || ""}</td>;
+
+            var style = {width: colDef.width, paddingLeft: undefined};
+            if (i === 0)
+                style.paddingLeft = TableRowUtils.calculateFirstColumnIdentation(this.props.row);
+            return <td key={i} className={colDef.format === ColumnFormat.NUMBER ? "numeric" : "non-numeric"}
+                       style={style}>{this.props.row.data()[colDef.colTag] || ""}</td>;
         });
         return <tr>{tds}</tr>
     }
