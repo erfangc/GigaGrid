@@ -15,6 +15,7 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
+            'bower_components/font-awesome/css/font-awesome.min.css',
             'node_modules/phantomjs-polyfill/bind-polyfill.js',
             'bower_components/jquery/dist/jquery.min.js',
             'bower_components/react/react-with-addons.js',
