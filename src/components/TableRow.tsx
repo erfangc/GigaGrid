@@ -1,5 +1,5 @@
 class TableRowProps {
-    constructor(public row:Row, public tableRowColumnDefs:TableRowColumnDef[]) {
+    constructor(public row:Row, public tableRowColumnDefs:TableRowColumnDef[], public key:number = 1) {
     }
 }
 

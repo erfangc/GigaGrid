@@ -1,4 +1,4 @@
-xdescribe('GigaGrid', ()=> {
+describe('GigaGrid', ()=> {
 
     afterEach(()=> {
         ReactDOM.unmountComponentAtNode(document.getElementById('container'));
@@ -29,7 +29,7 @@ xdescribe('GigaGrid', ()=> {
         const data:any[] = TestUtils.getSampleData().data;
         const columnDefs:ColumnDef[] = TestUtils.getSampleData().columnDefs;
         const gigaGridProps:GigaGridProps = new GigaGridProps(data, columnDefs);
-        gigaGridProps.subtotalBys = [new SubtotalBy("gender")];
+        gigaGridProps.initialSubtotalBys = [new SubtotalBy("gender")];
 
         const element = React.createElement(GigaGrid, gigaGridProps);
         const $container = $("#container");

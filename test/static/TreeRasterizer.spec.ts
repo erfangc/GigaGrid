@@ -17,7 +17,29 @@ describe("TreeRasterizer", ()=> {
         it("the second row in a subtotaled data set should not be a subtotal row", () => {
             expect(rows[1].isDetail()).toBeTruthy();
         });
+
     });
+
+    describe("children of collapsed rows should not be in the rasterized row array", ()=> {
+        const sampleData = TestUtils.getSampleData();
+        const data:any[] = sampleData.data;
+        const tree:Tree = TreeBuilder.buildTree(data, [new SubtotalBy("gender")]);
+        // collapse the 'Male' subtotal row
+        tree.getRoot().getChildByTitle("Male").toggleCollapse();
+        const rows:Row[] = TreeRasterizer.rasterize(tree);
+        it("only contain 7 rows", () => {
+            expect(rows.length).toBe(7);
+        });
+        it("no detailed row can be 'Male'", ()=> {
+            var maleDetailRowEncountered:boolean = false;
+            rows.forEach((row:Row) => {
+                if (row.isDetail() && row.title === "Male")
+                    maleDetailRowEncountered = true;
+            });
+            expect(maleDetailRowEncountered).toBeFalsy();
+        })
+    });
+
     describe("can render a un-subtotaled tree", ()=> {
         const sampleData = TestUtils.getSampleData();
         const data:any[] = sampleData.data;
@@ -30,7 +52,7 @@ describe("TreeRasterizer", ()=> {
 
         it("every row should be a detail row", ()=> {
             var isAllDetail = true;
-            rows.forEach((row)=> {
+            rows.forEach((row:Row) => {
                 if (!row.isDetail())
                     isAllDetail = false;
             });

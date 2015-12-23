@@ -9,7 +9,7 @@ class TreeBuilder {
          */
         grandTotal = grandTotal || new SubtotalRow("Grand Total");
         grandTotal.setSectorPath([]);
-        data.forEach((datum) => this.bucketDetailRow(subtotalBys, new DetailRow(datum), grandTotal));
+        data.forEach(datum => this.bucketDetailRow(subtotalBys, new DetailRow(datum), grandTotal));
         return new Tree(grandTotal);
     }
 
@@ -20,7 +20,7 @@ class TreeBuilder {
          */
         const sectors:string[] = []; // temporary array of strings to keep track sector names in sequence
         grandTotal.detailRows.push(detailedRow);
-        subtotalBys.forEach((subtotalBy) => {
+        subtotalBys.forEach(subtotalBy => {
             // the subtotal title
             const bucketTitle = detailedRow.data()[subtotalBy.colTag];
             if (bucketTitle !== undefined) {

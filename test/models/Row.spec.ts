@@ -9,6 +9,16 @@ describe('SubtotalRow basic property test', ()=> {
         expect(subtotalRow.data()).toEqual({});
     });
 
+    it("has a property to indicate it should be collapsed (thus all children shall not be rendered during rasterization)", () => {
+        expect(subtotalRow.isCollapsed()).toBe(false);
+        subtotalRow.toggleCollapse();
+        expect(subtotalRow.isCollapsed()).toBe(true);
+        subtotalRow.toggleCollapse(true);
+        expect(subtotalRow.isCollapsed()).toBe(true);
+        subtotalRow.toggleCollapse();
+        expect(subtotalRow.isCollapsed()).toBe(false);
+    });
+
 });
 
 describe("SubtotalRow with 2 children", () => {
@@ -23,7 +33,7 @@ describe("SubtotalRow with 2 children", () => {
         ];
 
         subtotalRow = new SubtotalRow("Parent");
-        childSubtotalRows.forEach((child)=> {
+        childSubtotalRows.forEach(child => {
             subtotalRow.addChild(child);
         });
     });
