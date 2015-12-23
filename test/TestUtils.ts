@@ -20,7 +20,7 @@ class TestUtils {
         ];
     }
 
-    public static getRowWithMissingData():Row {
+    public static getRowWithMissingData():DetailRow {
         return new DetailRow({
             "numCol1": 7,
             "textCol1": "R2D2",
