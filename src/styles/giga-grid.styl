@@ -1,5 +1,6 @@
 div.giga-grid
   font-family Roboto, sans-serif
+  color #333
 
   table
     border-collapse collapse
@@ -16,27 +17,25 @@ div.giga-grid
     padding-left 10px
 
   tr th
-    font-weight normal
-    color #fff
-    background-color #0288d1
+    font-weight bold
+    border-bottom 2px solid #555
 
   tr td
-    color #333
-    border 1px solid #e0e0e0
+    border 1px solid #f5f5f5
     border-right none
     border-left none
 
   tr.subtotal-row
-    background-color #efefef
+    background-color #f5f5f5
 
-  tr:hover
+  thead tr:hover, tbody tr:hover
     cursor pointer
-    background-color #efefef
+
+  tbody tr:hover
+    background-color #f5f5f5
 
   tr.subtotal-row:hover
-    background-color #666
-    td
-      color #fff
+    background-color #ECE9E9
 
   .numeric
     text-align right
