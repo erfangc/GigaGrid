@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "system",
     "sourceMap": true,
     "jsx": "react",
     "emitDecoratorMetadata": true,

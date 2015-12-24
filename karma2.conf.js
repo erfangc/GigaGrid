@@ -10,24 +10,22 @@ module.exports = function (config) {
 
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: ['jasmine'],
+        frameworks: ['jspm', 'jasmine'],
 
 
         // list of files / patterns to load in the browser
         files: [
-            'bower_components/font-awesome/css/font-awesome.min.css',
-            'node_modules/phantomjs-polyfill/bind-polyfill.js',
-            'bower_components/jquery/dist/jquery.min.js',
-            'bower_components/react/react-with-addons.js',
-            'bower_components/react/react-dom.js',
-            "src/**/*.js",
-            "test/**/*.js"
+            'jspm_packages/npm/phantomjs-polyfill@0.0.1/bind-polyfill.js'
         ],
 
 
         // list of files to exclude
         exclude: [],
 
+        jspm: {
+            // Edit this to your needs
+            loadFiles: ['src/**/*.js','test/**/*.js']
+        },
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor

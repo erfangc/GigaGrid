@@ -1,4 +1,10 @@
-class TestUtils {
+import {DetailRow} from "../src/models/Row";
+import {ColumnDef} from "../src/models/ColumnLike";
+import {ColumnFormat} from "../src/models/ColumnLike";
+import {AggregationMethod} from "../src/models/ColumnLike";
+import {SubtotalRow} from "../src/models/Row";
+import {TableRowColumnDef} from "../src/models/ColumnLike";
+export class TestUtils {
 
     public static getSimpleRawDataWithMissing():any[] {
         return [

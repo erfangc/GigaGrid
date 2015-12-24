@@ -1,8 +1,19 @@
 import ReactElement = __React.ReactElement;
+import React = require('react');
+import {DetailTableRow,SubtotalTableRow} from "./TableRow";
+import {SubtotalBy} from "../models/ColumnLike";
+import {ColumnDef} from "../models/ColumnLike";
+import {TreeBuilder} from "../static/TreeBuilder";
+import {Tree} from "../static/TreeBuilder";
+import {SubtotalAggregator} from "../static/SubtotalAggregator";
+import {ColumnFormat} from "../models/ColumnLike";
+import {TreeRasterizer} from "../static/TreeRasterizer";
+import {Row} from "../models/Row";
+import {TableRowColumnDef} from "../models/ColumnLike";
 /**
  * strongly typed arguments given to the grid
  */
-class GigaGridProps {
+export class GigaGridProps {
 
     public initialSubtotalBys:SubtotalBy[];
 
@@ -14,7 +25,7 @@ class GigaGridProps {
  * The root component of this React library. assembles raw data into `Row` objects which are then translated into
  * their shadow DOM representations
  */
-class GigaGrid extends React.Component<GigaGridProps, any> {
+export class GigaGrid extends React.Component<GigaGridProps, any> {
 
     constructor(props:GigaGridProps) {
         super(props);
@@ -69,7 +80,7 @@ class GigaGrid extends React.Component<GigaGridProps, any> {
 
     renderTableFooter() {
         // TODO dummy implemenation, replace with pagination
-        return (<div>This is Where the Footer is Supposed to Go!</div>);
+        return (<div></div>);
     }
 }
 

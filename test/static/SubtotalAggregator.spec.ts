@@ -1,3 +1,12 @@
+import {DetailRow} from "../../src/models/Row";
+import {SubtotalRow} from "../../src/models/Row";
+import {ColumnDef} from "../../src/models/ColumnLike";
+import {ColumnFormat} from "../../src/models/ColumnLike";
+import {AggregationMethod} from "../../src/models/ColumnLike";
+import {SubtotalAggregator} from "../../src/static/SubtotalAggregator";
+import {Tree} from "../../src/static/TreeBuilder";
+import {TreeBuilder} from "../../src/static/TreeBuilder";
+import {SubtotalBy} from "../../src/models/ColumnLike";
 describe("SubtotalAggregator", () => {
 
     const subtotalRow = new SubtotalRow("Parent");
