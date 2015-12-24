@@ -1,4 +1,7 @@
-class TreeBuilder {
+import {SubtotalBy} from "../models/ColumnLike";
+import {SubtotalRow} from "../models/Row";
+import {DetailRow} from "../models/Row";
+export class TreeBuilder {
 
     static buildTree(data:any[], subtotalBys:SubtotalBy[] = [], grandTotal?:SubtotalRow):Tree {
         /*
@@ -59,7 +62,7 @@ class TreeBuilder {
 
 }
 
-class Tree {
+export class Tree {
 
     private root:SubtotalRow;
 

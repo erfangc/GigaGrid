@@ -1,11 +1,11 @@
-interface Row {
+export interface Row {
     data(): any;
     isDetail(): boolean;
     title:string;
     sectorPath(): string[];
 }
 
-class DetailRow implements Row {
+export class DetailRow implements Row {
 
     private _data:any;
     private _sectorPath:string[];
@@ -33,7 +33,7 @@ class DetailRow implements Row {
     }
 }
 
-class SubtotalRow implements Row {
+export class SubtotalRow implements Row {
 
     public detailRows:DetailRow[];
     public title:string;

@@ -1,11 +1,16 @@
-import SyntheticEvent = __React.SyntheticEvent;
+import React = require('react');
+import {SubtotalRow} from "../models/Row";
+import {TableRowColumnDef} from "../models/ColumnLike";
+import {ColumnFormat} from "../models/ColumnLike";
+import {DetailRow} from "../models/Row";
+import {Row} from "../models/Row";
 
-class SubtotalTableRowProps {
+export class SubtotalTableRowProps {
     constructor(public row:SubtotalRow, public tableRowColumnDefs:TableRowColumnDef[]) {
     }
 }
 
-class TableRowUtils {
+export class TableRowUtils {
     public static calculateFirstColumnIdentation(row:Row) {
         const identLevel = (row.sectorPath() || []).length;
         return ((row.isDetail() && identLevel !== 0 ? identLevel + 1 : identLevel ) * 25) + 'px';
@@ -13,7 +18,7 @@ class TableRowUtils {
 }
 
 
-class SubtotalTableRow extends React.Component<SubtotalTableRowProps, {}> {
+export class SubtotalTableRow extends React.Component<SubtotalTableRowProps, {}> {
 
     constructor(props:SubtotalTableRowProps) {
         super(props);
@@ -21,7 +26,7 @@ class SubtotalTableRow extends React.Component<SubtotalTableRowProps, {}> {
 
     // TODO this will certainly not trigger the parent to be re-rendered
     // we have two options, use a custom event system (Emit) or use a callback attached to props and the event will be propogated up to the parent
-    onCollapseToggle(e:SyntheticEvent) {
+    onCollapseToggle() {
         this.props.row.toggleCollapse();
     }
 
@@ -31,7 +36,7 @@ class SubtotalTableRow extends React.Component<SubtotalTableRowProps, {}> {
             if (i === 0)
                 return (
                     <td key={i}
-                        onClick={e => this.onCollapseToggle(e)}
+                        onClick={e => this.onCollapseToggle()}
                         style={{width: colDef.width, paddingLeft: padding}}
                         className="giga-grid-locked-col">
                         <strong>
@@ -49,12 +54,12 @@ class SubtotalTableRow extends React.Component<SubtotalTableRowProps, {}> {
     }
 }
 
-class DetailTableRowProps {
+export class DetailTableRowProps {
     constructor(public row:DetailRow, public tableRowColumnDefs:TableRowColumnDef[]) {
     }
 }
 
-class DetailTableRow extends React.Component<DetailTableRowProps, {}> {
+export class DetailTableRow extends React.Component<DetailTableRowProps, {}> {
 
     constructor(props:DetailTableRowProps) {
         super(props);

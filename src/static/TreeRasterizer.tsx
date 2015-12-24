@@ -1,4 +1,8 @@
-class TreeRasterizer {
+import {Tree} from "./TreeBuilder";
+import {Row} from "../models/Row";
+import {SubtotalRow} from "../models/Row";
+
+export class TreeRasterizer {
 
     static rasterize(tree:Tree):Row[] {
 

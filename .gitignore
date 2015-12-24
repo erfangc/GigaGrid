@@ -1,6 +1,8 @@
 src/**/*.js
 test/**/*.js
+examples/**/*.js
 **/*.js.map
 .idea
 node_modules
 bower_components
+jspm_packages

@@ -1,3 +1,9 @@
+import {Tree} from "../../src/static/TreeBuilder";
+import {TreeBuilder} from "../../src/static/TreeBuilder";
+import {SubtotalBy} from "../../src/models/ColumnLike";
+import {Row} from "../../src/models/Row";
+import {TreeRasterizer} from "../../src/static/TreeRasterizer";
+import {TestUtils} from "../TestUtils";
 describe("TreeRasterizer", ()=> {
     describe("can render a subtotaled tree", () => {
         const sampleData = TestUtils.getSampleData();

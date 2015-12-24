@@ -1,18 +1,18 @@
 /// <reference path="../../typings/tsd.d.ts" />
 
-enum AggregationMethod {
+export enum AggregationMethod {
     SUM, AVERAGE, NONE
 }
-enum ColumnFormat {
+export enum ColumnFormat {
     NUMBER, STRING, CURRENCY, DATE
 }
 
-interface ColumnLike {
+export interface ColumnLike {
     colTag: string;
 }
 
 
-class ColumnDef implements ColumnLike {
+export class ColumnDef implements ColumnLike {
 
     public colTag:string;
     public title:string;
@@ -27,13 +27,13 @@ class ColumnDef implements ColumnLike {
 
 }
 
-class TableRowColumnDef extends ColumnDef {
+export class TableRowColumnDef extends ColumnDef {
     constructor(columnDef:ColumnDef, public width:string = "auto") {
         super(columnDef.colTag, columnDef.format, columnDef.aggregationMethod);
     }
 }
 
-class SubtotalBy implements ColumnLike {
+export class SubtotalBy implements ColumnLike {
     constructor(colTag:string) {
         this.colTag = colTag;
     }
