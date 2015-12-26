@@ -1,6 +1,6 @@
 import React = require('react');
 import ReactDOM = require('react-dom');
-import {DropdownMenu,SimpleDropdownMenuItem} from "./../src/components/DropdownMenu";
+import {DropdownMenu,SimpleDropdownMenuItem} from "./../src/components/dropdown/DropdownMenu";
 import * as $ from 'jquery';
 import SyntheticEvent = __React.SyntheticEvent;
 

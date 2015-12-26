@@ -1,5 +1,5 @@
-import {DropdownMenu} from "../../src/components/DropdownMenu";
-import {SimpleDropdownMenuItem} from "../../src/components/DropdownMenu";
+import {DropdownMenu} from "../../../src/components/dropdown/DropdownMenu";
+import {SimpleDropdownMenuItem} from "../../../src/components/dropdown/DropdownMenu";
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as ReactTestUtils from 'react-addons-test-utils';
