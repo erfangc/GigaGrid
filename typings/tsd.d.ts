@@ -12,3 +12,4 @@
 /// <reference path="react/react.d.ts" />
 /// <reference path="jasmine/jasmine.d.ts" />
 /// <reference path="classnames/classnames.d.ts" />
+/// <reference path="eventemitter3/eventemitter3.d.ts" />

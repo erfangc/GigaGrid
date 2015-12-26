@@ -46,6 +46,9 @@
     },
     "classnames/classnames.d.ts": {
       "commit": "1da639a106527e0c4010b354a1efe52a3059a291"
+    },
+    "eventemitter3/eventemitter3.d.ts": {
+      "commit": "1da639a106527e0c4010b354a1efe52a3059a291"
     }
   }
 }

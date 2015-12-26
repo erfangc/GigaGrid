@@ -22,7 +22,7 @@ div.giga-grid .dropdown-menu-align-left {
   list-style: none;
   right: 0;
 }
-div.giga-grid .dropdown-submenu {
+div.giga-grid .dropdown-submenu-align-right {
   position: absolute;
   background-color: #fff;
   top: 100%;
@@ -34,6 +34,25 @@ div.giga-grid .dropdown-submenu {
   list-style: none;
   top: 0;
   left: 100%;
+}
+div.giga-grid .dropdown-submenu-align-left {
+  position: absolute;
+  background-color: #fff;
+  top: 100%;
+  min-width: 150px;
+  border: 1px solid #eee;
+  border-radius: 2px;
+  padding: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  list-style: none;
+  top: 0;
+  right: 50%;
+}
+div.giga-grid .dropdown-menu-toggle-handle {
+  color: #fff;
+}
+div.giga-grid .dropdown-menu-toggle-handle:hover {
+  color: #333;
 }
 div.giga-grid .dropdown-menu-item {
   position: relative;

@@ -8,6 +8,7 @@ System.config({
 
   map: {
     "classnames": "npm:classnames@2.2.1",
+    "eventemitter3": "npm:eventemitter3@1.1.1",
     "font-awesome": "npm:font-awesome@4.5.0",
     "jquery": "github:components/jquery@2.1.4",
     "phantomjs-polyfill": "npm:phantomjs-polyfill@0.0.1",

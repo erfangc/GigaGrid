@@ -43,7 +43,8 @@ export class DropdownMenu extends React.Component<DropdownMenuProps, DropdownMen
         const cx = className({
             "dropdown-menu-align-right": !this.props.alignLeft,
             "dropdown-menu-align-left": this.props.alignLeft,
-            "dropdown-submenu": this.props.isSubMenu
+            "dropdown-submenu-align-right": this.props.isSubMenu && !this.props.alignLeft,
+            "dropdown-submenu-align-left": this.props.isSubMenu && this.props.alignLeft
         });
         return (
             <ul style={style} className={cx}>{this.props.children}</ul>
@@ -52,7 +53,9 @@ export class DropdownMenu extends React.Component<DropdownMenuProps, DropdownMen
 }
 
 export interface DropdownMenuItemProps extends React.Props<SimpleDropdownMenuItem> {
-    text:string;
+    text?:string;
+    isFirstColumn?:boolean;
+    isLastColumn?:boolean;
     onClick?: (e:SyntheticEvent) => any
 }
 
@@ -79,7 +82,7 @@ export class SimpleDropdownMenuItem extends React.Component<DropdownMenuItemProp
 
     private renderSubMenu() {
         return (
-            <DropdownMenu isSubMenu={true} ref={(c:DropdownMenu)=>this.subMenuRef=c}>
+            <DropdownMenu isSubMenu={true} ref={(c:DropdownMenu)=>this.subMenuRef=c} alignLeft={this.props.isLastColumn}>
                 {this.props.children}
             </DropdownMenu>
         );
