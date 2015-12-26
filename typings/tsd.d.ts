@@ -11,4 +11,5 @@
 /// <reference path="react/react-global.d.ts" />
 /// <reference path="react/react.d.ts" />
 /// <reference path="jasmine/jasmine.d.ts" />
-/// <reference path="jquery/jquery.d.ts" />
+/// <reference path="classnames/classnames.d.ts" />
+undefined

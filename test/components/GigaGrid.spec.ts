@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import * as $ from 'jquery';
 import React = require('react');
 import ReactDOM = require('react-dom');
 import {ColumnDef} from "../../src/models/ColumnLike";
@@ -40,7 +40,7 @@ describe('GigaGrid', ()=> {
         const gigaGridProps:GigaGridProps = new GigaGridProps(data, columnDefs);
         gigaGridProps.initialSubtotalBys = [new SubtotalBy("gender")];
 
-        const element = React.createElement(GigaGrid, gigaGridProps);
+        const element = React.createElement<GigaGridProps>(GigaGrid, gigaGridProps);
         const $container = $("#container");
 
         ReactDOM.render(element, document.getElementById("container"));
@@ -50,5 +50,6 @@ describe('GigaGrid', ()=> {
     });
 
     // TODO write addition tests for corner cases and other features
+
 
 });

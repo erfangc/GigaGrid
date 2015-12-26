@@ -1,7 +1,7 @@
 import {GigaGrid} from "../src/components/GigaGrid";
 import {TestUtils} from "../test/TestUtils";
 import {SubtotalBy} from "../src/models/ColumnLike";
-import $ from 'jquery';
+import * as $ from 'jquery';
 import React = require('react');
 import ReactDOM = require('react-dom');
 const element = React.createElement(GigaGrid, {
