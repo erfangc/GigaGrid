@@ -2,9 +2,10 @@ import {SubtotalBy} from "../../src/models/ColumnLike";
 import {Tree} from "../../src/static/TreeBuilder";
 import {TreeBuilder} from "../../src/static/TreeBuilder";
 import {TestUtils} from "../TestUtils";
+
 describe("TreeBuilder", ()=> {
 
-    const subtotalBy = [new SubtotalBy("col1"), new SubtotalBy("col2")];
+    const subtotalBy = [{colTag: "col1"}, {colTag: "col2"}];
 
     it("still functions when an empty SubtotalBy array is passed in", ()=> {
         const data:any[] = TestUtils.getSimpleRawData();

@@ -1,20 +1,41 @@
-div.giga-grid .dropdown-menu {
+div.giga-grid .dropdown-menu-align-right {
   position: absolute;
   background-color: #fff;
   top: 100%;
   min-width: 150px;
-  left: 0;
   border: 1px solid #eee;
   border-radius: 2px;
   padding: 10px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   list-style: none;
+  left: 0;
 }
-div.giga-grid .dropdown-menu .dropdown-submenu {
+div.giga-grid .dropdown-menu-align-left {
+  position: absolute;
+  background-color: #fff;
+  top: 100%;
+  min-width: 150px;
+  border: 1px solid #eee;
+  border-radius: 2px;
+  padding: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  list-style: none;
+  right: 0;
+}
+div.giga-grid .dropdown-submenu {
+  position: absolute;
+  background-color: #fff;
+  top: 100%;
+  min-width: 150px;
+  border: 1px solid #eee;
+  border-radius: 2px;
+  padding: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  list-style: none;
   top: 0;
   left: 100%;
 }
-div.giga-grid .dropdown-menu .dropdown-menu-item {
+div.giga-grid .dropdown-menu-item {
   position: relative;
   padding-bottom: 5px;
   padding-left: 10px;
@@ -22,11 +43,11 @@ div.giga-grid .dropdown-menu .dropdown-menu-item {
   color: #666;
   border-radius: 2px;
 }
-div.giga-grid .dropdown-menu .dropdown-menu-item.hoverable:hover {
+div.giga-grid .dropdown-menu-item.hoverable:hover {
   cursor: pointer;
   background-color: #eee;
 }
-div.giga-grid .dropdown-menu .dropdown-menu-item input {
+div.giga-grid .dropdown-menu-item input {
   border: none;
   border-bottom: 2px solid #666;
   margin-top: 10px;

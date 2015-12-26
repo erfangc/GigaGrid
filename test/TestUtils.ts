@@ -107,10 +107,30 @@ export class TestUtils {
      * @returns {ColumnDef[]}
      */
     public static getSampleColumnDefs():ColumnDef[] {
-        const columnDef1:ColumnDef = new ColumnDef("numCol1", ColumnFormat.NUMBER, AggregationMethod.SUM);
-        const columnDef2:ColumnDef = new ColumnDef("numCol2", ColumnFormat.NUMBER, AggregationMethod.AVERAGE);
-        const columnDef3:ColumnDef = new ColumnDef("textCol1", ColumnFormat.STRING, AggregationMethod.NONE);
-        const columnDef4:ColumnDef = new ColumnDef("textCol2", ColumnFormat.STRING, AggregationMethod.NONE);
+        const columnDef1:ColumnDef = {
+            colTag: "numCol1",
+            title: "",
+            format: ColumnFormat.NUMBER,
+            aggregationMethod: AggregationMethod.SUM
+        };
+        const columnDef2:ColumnDef = {
+            colTag: "numCol2",
+            title: "",
+            format: ColumnFormat.NUMBER,
+            aggregationMethod: AggregationMethod.SUM
+        };
+        const columnDef3:ColumnDef = {
+            colTag: "textCol1",
+            title: "",
+            format: ColumnFormat.STRING,
+            aggregationMethod: AggregationMethod.NONE
+        };
+        const columnDef4:ColumnDef = {
+            colTag: "textCol2",
+            title: "",
+            format: ColumnFormat.STRING,
+            aggregationMethod: AggregationMethod.NONE
+        };
 
         return [
             columnDef1,
@@ -126,19 +146,6 @@ export class TestUtils {
      * @returns {TableRowColumnDef[]}
      */
     public static getSampleTableRowColumnDefs():TableRowColumnDef[] {
-
-        const columnDefs = TestUtils.getSampleColumnDefs();
-
-        const tableRowColumnDef1:TableRowColumnDef = new TableRowColumnDef(columnDefs[0]);
-        const tableRowColumnDef2:TableRowColumnDef = new TableRowColumnDef(columnDefs[1]);
-        const tableRowColumnDef3:TableRowColumnDef = new TableRowColumnDef(columnDefs[2]);
-        const tableRowColumnDef4:TableRowColumnDef = new TableRowColumnDef(columnDefs[3]);
-
-        return [
-            tableRowColumnDef1,
-            tableRowColumnDef2,
-            tableRowColumnDef3,
-            tableRowColumnDef4
-        ];
+        return TestUtils.getSampleColumnDefs();
     }
 }

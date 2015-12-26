@@ -7,6 +7,7 @@ import {SubtotalAggregator} from "../../src/static/SubtotalAggregator";
 import {Tree} from "../../src/static/TreeBuilder";
 import {TreeBuilder} from "../../src/static/TreeBuilder";
 import {SubtotalBy} from "../../src/models/ColumnLike";
+
 describe("SubtotalAggregator", () => {
 
     const subtotalRow = new SubtotalRow("Parent");
@@ -17,8 +18,18 @@ describe("SubtotalAggregator", () => {
         new DetailRow({"col1": "A", "col2": "C", "data": 1}),
         new DetailRow({"col1": "A", "col2": "C", "data": 1})
     ];
-    const straightSumColumnDef = new ColumnDef("data", ColumnFormat.NUMBER, AggregationMethod.SUM);
-    const avgColumnDef = new ColumnDef("data", ColumnFormat.NUMBER, AggregationMethod.AVERAGE);
+    const straightSumColumnDef:ColumnDef = {
+        colTag: "data",
+        title: "",
+        format: ColumnFormat.NUMBER,
+        aggregationMethod: AggregationMethod.SUM
+    };
+    const avgColumnDef = {
+        colTag: "data",
+        title: "",
+        format: ColumnFormat.NUMBER,
+        aggregationMethod: AggregationMethod.AVERAGE
+    };
 
     describe("provide function that accept array of detailRows, column definitions and return aggregated data", ()=> {
 
@@ -55,9 +66,9 @@ describe("SubtotalAggregator", () => {
         ];
 
         const tree:Tree = TreeBuilder.buildTree(rawData, [
-            new SubtotalBy("col1"),
-            new SubtotalBy("col2"),
-            new SubtotalBy("col3")]);
+            {colTag: "col1"},
+            {colTag: "col2"},
+            {colTag: "col3"}]);
 
         SubtotalAggregator.aggregateTree(tree, [straightSumColumnDef]);
 

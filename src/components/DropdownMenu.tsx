@@ -1,10 +1,11 @@
-import React = require('react');
+import * as React from 'react';
 import className = require('classnames');
 import SyntheticEvent = __React.SyntheticEvent;
 
 export interface DropdownMenuProps extends React.Props<DropdownMenu> {
     isSubMenu?: boolean;
     isInitiallyVisible?: boolean;
+    alignLeft?: boolean;
 }
 
 export interface DropdownMenuState {
@@ -40,7 +41,8 @@ export class DropdownMenu extends React.Component<DropdownMenuProps, DropdownMen
             display: this.state.visible ? 'block' : 'none'
         };
         const cx = className({
-            "dropdown-menu": true,
+            "dropdown-menu-align-right": !this.props.alignLeft,
+            "dropdown-menu-align-left": this.props.alignLeft,
             "dropdown-submenu": this.props.isSubMenu
         });
         return (
@@ -49,7 +51,7 @@ export class DropdownMenu extends React.Component<DropdownMenuProps, DropdownMen
     }
 }
 
-export interface DropdownMenuItemProps extends React.Props<DropdownMenuItem> {
+export interface DropdownMenuItemProps extends React.Props<SimpleDropdownMenuItem> {
     text:string;
     onClick?: (e:SyntheticEvent) => any
 }
@@ -58,10 +60,11 @@ export interface DropdownMenuItemProps extends React.Props<DropdownMenuItem> {
  * generic simple menu item on a dropdown menu that can optionally expand
  * into a submenu
  */
-export class DropdownMenuItem extends React.Component<DropdownMenuItemProps,{}> {
+export class SimpleDropdownMenuItem extends React.Component<DropdownMenuItemProps,any> {
 
     private subMenuRef:DropdownMenu;
-    private handleClick(e: SyntheticEvent) {
+
+    private handleClick(e:SyntheticEvent) {
         e.preventDefault();
         e.stopPropagation();
         if (this.subMenuRef)

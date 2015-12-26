@@ -1,12 +1,13 @@
 import * as $ from 'jquery';
-import React = require('react');
-import ReactDOM = require('react-dom');
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import {ColumnDef} from "../../src/models/ColumnLike";
 import {GigaGridProps} from "../../src/components/GigaGrid";
 import {GigaGrid} from "../../src/components/GigaGrid";
 import {SubtotalBy} from "../../src/models/ColumnLike";
 import {TestUtils} from "../TestUtils";
 
+// TODO use ReactTestUtils
 describe('GigaGrid', ()=> {
 
     afterEach(()=> {
@@ -22,14 +23,14 @@ describe('GigaGrid', ()=> {
 
         const data:any[] = TestUtils.getSampleData().data;
         const columnDefs:ColumnDef[] = TestUtils.getSampleData().columnDefs;
-        const gigaGridProps:GigaGridProps = new GigaGridProps(data, columnDefs);
+        const gigaGridProps:GigaGridProps = {data: data, columnDefs: columnDefs};
         const element = React.createElement(GigaGrid, gigaGridProps);
         const $container = $("#container");
 
         ReactDOM.render(element, document.getElementById("container"));
 
         expect($container.find("table > tbody").find("tr").length).toBe(10);
-        expect($container.find("table > thead").find("th").first().text()).toBe("First Name");
+        expect($container.find("table > thead").find("th").first().text().substr(0,10)).toBe("First Name");
 
     });
 
@@ -37,8 +38,8 @@ describe('GigaGrid', ()=> {
 
         const data:any[] = TestUtils.getSampleData().data;
         const columnDefs:ColumnDef[] = TestUtils.getSampleData().columnDefs;
-        const gigaGridProps:GigaGridProps = new GigaGridProps(data, columnDefs);
-        gigaGridProps.initialSubtotalBys = [new SubtotalBy("gender")];
+        const gigaGridProps:GigaGridProps = {data: data, columnDefs: columnDefs};
+        gigaGridProps.initialSubtotalBys = [{colTag: "gender"}];
 
         const element = React.createElement<GigaGridProps>(GigaGrid, gigaGridProps);
         const $container = $("#container");

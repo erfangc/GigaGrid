@@ -1,16 +1,16 @@
-import React = require('react');
+import * as React from 'react';
 import {SubtotalRow} from "../models/Row";
 import {TableRowColumnDef} from "../models/ColumnLike";
 import {ColumnFormat} from "../models/ColumnLike";
 import {DetailRow} from "../models/Row";
 import {Row} from "../models/Row";
 
-export class SubtotalTableRowProps {
-    constructor(public row:SubtotalRow, public tableRowColumnDefs:TableRowColumnDef[]) {
-    }
+export interface SubtotalTableRowProps extends React.Props<SubtotalTableRow> {
+    row:SubtotalRow;
+    tableRowColumnDefs:TableRowColumnDef[];
 }
 
-export class TableRowUtils {
+class TableRowUtils {
     public static calculateFirstColumnIdentation(row:Row) {
         const identLevel = (row.sectorPath() || []).length;
         return ((row.isDetail() && identLevel !== 0 ? identLevel + 1 : identLevel ) * 25) + 'px';
@@ -18,7 +18,7 @@ export class TableRowUtils {
 }
 
 
-export class SubtotalTableRow extends React.Component<SubtotalTableRowProps, {}> {
+export class SubtotalTableRow extends React.Component<SubtotalTableRowProps, any> {
 
     constructor(props:SubtotalTableRowProps) {
         super(props);
@@ -54,12 +54,12 @@ export class SubtotalTableRow extends React.Component<SubtotalTableRowProps, {}>
     }
 }
 
-export class DetailTableRowProps {
-    constructor(public row:DetailRow, public tableRowColumnDefs:TableRowColumnDef[]) {
-    }
+export interface DetailTableRowProps extends React.Props<DetailTableRow> {
+    row:DetailRow;
+    tableRowColumnDefs:TableRowColumnDef[];
 }
 
-export class DetailTableRow extends React.Component<DetailTableRowProps, {}> {
+export class DetailTableRow extends React.Component<DetailTableRowProps, any> {
 
     constructor(props:DetailTableRowProps) {
         super(props);
