@@ -4,11 +4,12 @@ import {SubtotalBy} from "../../src/models/ColumnLike";
 import {Row} from "../../src/models/Row";
 import {TreeRasterizer} from "../../src/static/TreeRasterizer";
 import {TestUtils} from "../TestUtils";
+
 describe("TreeRasterizer", ()=> {
     describe("can render a subtotaled tree", () => {
         const sampleData = TestUtils.getSampleData();
         const data:any[] = sampleData.data;
-        const tree:Tree = TreeBuilder.buildTree(data, [new SubtotalBy("gender")]);
+        const tree:Tree = TreeBuilder.buildTree(data, [{colTag: "gender"}]);
         const rows:Row[] = TreeRasterizer.rasterize(tree);
 
         it("can render the correct number of rows including subtotal rows", ()=> {
@@ -29,7 +30,7 @@ describe("TreeRasterizer", ()=> {
     describe("children of collapsed rows should not be in the rasterized row array", ()=> {
         const sampleData = TestUtils.getSampleData();
         const data:any[] = sampleData.data;
-        const tree:Tree = TreeBuilder.buildTree(data, [new SubtotalBy("gender")]);
+        const tree:Tree = TreeBuilder.buildTree(data, [{colTag: "gender"}]);
         // collapse the 'Male' subtotal row
         tree.getRoot().getChildByTitle("Male").toggleCollapse();
         const rows:Row[] = TreeRasterizer.rasterize(tree);

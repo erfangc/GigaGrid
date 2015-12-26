@@ -1,4 +1,5 @@
 import {SubtotalRow} from "../../src/models/Row";
+
 describe('SubtotalRow basic property test', ()=> {
 
     const subtotalRow = new SubtotalRow("Parent");

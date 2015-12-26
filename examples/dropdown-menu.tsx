@@ -1,6 +1,6 @@
 import React = require('react');
 import ReactDOM = require('react-dom');
-import {DropdownMenu,DropdownMenuItem} from "./../src/components/DropdownMenu";
+import {DropdownMenu,SimpleDropdownMenuItem} from "./../src/components/DropdownMenu";
 import * as $ from 'jquery';
 import SyntheticEvent = __React.SyntheticEvent;
 
@@ -33,13 +33,13 @@ $("#showMenuHandle").on('click', ()=> {
 });
 var menu = (
     <DropdownMenu ref={(c:DropdownMenu) => topLevelMenu = c}>
-        <DropdownMenuItem text="Item 1">
+        <SimpleDropdownMenuItem text="Item 1">
             <CustomDropdownMenuItemWithForm/>
-        </DropdownMenuItem>
-        <DropdownMenuItem text="Item 2" onClick={(e:SyntheticEvent)=>alert("Item 2 clicked!")}>
-            <DropdownMenuItem text="Item 2.1" onClick={(e:SyntheticEvent)=>alert("Item 2.1 clicked!")}/>
-            <DropdownMenuItem text="Item 2.2" onClick={(e:SyntheticEvent)=>alert("Item 2.2 clicked!")}/>
-        </DropdownMenuItem>
+        </SimpleDropdownMenuItem>
+        <SimpleDropdownMenuItem text="Item 2" onClick={(e:SyntheticEvent)=>alert("Item 2 clicked!")}>
+            <SimpleDropdownMenuItem text="Item 2.1" onClick={(e:SyntheticEvent)=>alert("Item 2.1 clicked!")}/>
+            <SimpleDropdownMenuItem text="Item 2.2" onClick={(e:SyntheticEvent)=>alert("Item 2.2 clicked!")}/>
+        </SimpleDropdownMenuItem>
     </DropdownMenu>);
 
 ReactDOM.render(menu, document.getElementById('container'));
