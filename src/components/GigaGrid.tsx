@@ -21,22 +21,32 @@ export class GigaGridProps {
     }
 
 }
+
+class GigaGridState {
+    public tree:Tree;
+    public subtotalBys: SubtotalBy[];
+}
+
 /**
- * The root component of this React library. assembles raw data into `Row` objects which are then translated into
- * their shadow DOM representations
+ * The root component of this React library. assembles raw data into `Row` objects which are then translated into their
+ * virtual DOM representation
+ *
+ * The bulk of the table state is stored in `tree`, which contains subtotal and detail rows
+ * Rows can be hidden if filtered out or sorted among other things, subtotal rows can be collapsed etc
+ * mutations to the state of table from user initiated actions can be thought of as mutates on the `tree`
+ *
  */
-export class GigaGrid extends React.Component<GigaGridProps, any> {
+export class GigaGrid extends React.Component<GigaGridProps, GigaGridState> {
 
     constructor(props:GigaGridProps) {
         super(props);
-        // set initial state (from this point on use this.setState();
         const tree:Tree = TreeBuilder.buildTree(this.props.data, this.props.initialSubtotalBys);
         SubtotalAggregator.aggregateTree(tree, this.props.columnDefs);
-        this.state = {tree: tree};
+        this.state = {tree: tree, subtotalBys: this.props.initialSubtotalBys};
     }
 
     render() {
-        // TODO first pass implementation ... need to make better
+        // TODO first pass implementation ... need to make better, the final implementation will wrap things like scrollbar and footers
         return (
             <div className="giga-grid">
                 <table>

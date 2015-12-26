@@ -45,10 +45,12 @@
   },
   "jspm": {
     "dependencies": {
+      "classnames": "npm:classnames@^2.2.1",
       "font-awesome": "npm:font-awesome@^4.5.0",
       "jquery": "github:components/jquery@^2.1.4",
       "phantomjs-polyfill": "npm:phantomjs-polyfill@^0.0.1",
       "react": "npm:react@^0.14.3",
+      "react-addons-test-utils": "npm:react-addons-test-utils@^0.14.3",
       "react-dom": "npm:react-dom@^0.14.3"
     },
     "devDependencies": {}

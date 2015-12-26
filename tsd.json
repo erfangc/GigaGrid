@@ -43,6 +43,9 @@
     },
     "jquery/jquery.d.ts": {
       "commit": "4c41545030eba44b27ce7209112dbf862f6b1d78"
+    },
+    "classnames/classnames.d.ts": {
+      "commit": "1da639a106527e0c4010b354a1efe52a3059a291"
     }
   }
 }

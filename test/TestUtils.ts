@@ -26,7 +26,7 @@ export class TestUtils {
         ];
     }
 
-    public static getRowWithMissingData():DetailRow {
+    public static getDetailRowWithMissingData():DetailRow {
         return new DetailRow({
             "numCol1": 7,
             "textCol1": "R2D2",
@@ -102,6 +102,10 @@ export class TestUtils {
         return subtotalRow;
     }
 
+    /**
+     * returns column definitions for two numeric columns: numCol1, numCol2, as well as two string columns: textCol1, textCol2
+     * @returns {ColumnDef[]}
+     */
     public static getSampleColumnDefs():ColumnDef[] {
         const columnDef1:ColumnDef = new ColumnDef("numCol1", ColumnFormat.NUMBER, AggregationMethod.SUM);
         const columnDef2:ColumnDef = new ColumnDef("numCol2", ColumnFormat.NUMBER, AggregationMethod.AVERAGE);
@@ -116,6 +120,11 @@ export class TestUtils {
         ];
     }
 
+    /**
+     * wraps around the sample columnDefs returned by another method
+     * @see getSampleColumnDefs
+     * @returns {TableRowColumnDef[]}
+     */
     public static getSampleTableRowColumnDefs():TableRowColumnDef[] {
 
         const columnDefs = TestUtils.getSampleColumnDefs();

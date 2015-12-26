@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import * as $ from 'jquery';
 import React = require('react');
 import ReactDOM = require('react-dom');
 import {SubtotalTableRow} from "../../src/components/TableRow";
@@ -129,7 +129,7 @@ describe("TableRow Components", () => {
         });
 
         it("should render a row with missing data", ()=> {
-            const props:DetailTableRowProps = new DetailTableRowProps(TestUtils.getRowWithMissingData(), TestUtils.getSampleTableRowColumnDefs());
+            const props:DetailTableRowProps = new DetailTableRowProps(TestUtils.getDetailRowWithMissingData(), TestUtils.getSampleTableRowColumnDefs());
             const element = React.createElement(DetailTableRow, props);
             ReactDOM.render(element, document.getElementById('container'));
             const $tr = $("#container").find("tr");
