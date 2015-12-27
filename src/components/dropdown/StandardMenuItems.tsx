@@ -7,6 +7,28 @@ import {ColumnFormat} from "../../models/ColumnLike";
 import className = require('classnames');
 import {DropdownMenuItemProps} from "./DropdownMenu";
 
+export interface SortMenuItemProps extends React.Props<SortMenuItem> {
+    isLastColumn?:boolean;
+    tableRowColumnDef:TableRowColumnDef;
+}
+
+export class SortMenuItem extends React.Component<SortMenuItemProps, any> {
+    constructor(props:SortMenuItemProps) {
+        super(props);
+    }
+    render() {
+        return (
+            <SimpleDropdownMenuItem text="Sort" isLastColumn={this.props.isLastColumn}>
+                <li className="dropdown-menu-item hoverable"><span><i className="fa fa-sort-amount-asc"/></span>&nbsp;Sort</li>
+                <li className="dropdown-menu-item hoverable"><span><i className="fa fa-sort-amount-desc"/></span>&nbsp;Sort</li>
+                <li className="dropdown-menu-item hoverable"><span><i className="fa fa-sort-amount-asc"/></span>&nbsp;Add Sort</li>
+                <li className="dropdown-menu-item hoverable"><span><i className="fa fa-sort-amount-desc"/></span>&nbsp;Add Sort</li>
+                <li className="dropdown-menu-item hoverable"><span><i className="fa fa-ban"/></span>&nbsp;Clear All Sort</li>
+            </SimpleDropdownMenuItem>
+        );
+    }
+}
+
 // TODO wire up events
 export interface SubtotalByMenuItemProps extends React.Props<SubtotalByMenuItem> {
     isLastColumn?:boolean;
@@ -69,12 +91,12 @@ export class SubtotalByMenuItem extends React.Component<SubtotalByMenuItemProps,
             );
     }
 
-    private renderCancelSubtotal() {
+    private renderClearSubtotal() {
         return (
             <li className="dropdown-menu-item hoverable">
                 <i className="fa fa-ban"/>
                 &nbsp;
-                <span onClick={e=>this.onCancel(e)}>Clear Subtotal</span>
+                <span onClick={e=>this.onCancel(e)}>Clear All Subtotal</span>
             </li>
         );
     }
@@ -94,7 +116,7 @@ export class SubtotalByMenuItem extends React.Component<SubtotalByMenuItemProps,
         return (
             <SimpleDropdownMenuItem text="Subtotal" isLastColumn={this.props.isLastColumn}>
                 {this.renderAddSubtotal()}
-                {this.renderCancelSubtotal()}
+                {this.renderClearSubtotal()}
             </SimpleDropdownMenuItem>
         );
     }
