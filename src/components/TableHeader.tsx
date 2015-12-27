@@ -5,6 +5,7 @@ import {DropdownMenu} from "./dropdown/DropdownMenu";
 import {SimpleDropdownMenuItem} from "./dropdown/DropdownMenu";
 import {ColumnFormat} from "../models/ColumnLike";
 import {SubtotalByMenuItem} from "./dropdown/StandardMenuItems";
+import {SortMenuItem} from "./dropdown/StandardMenuItems";
 
 export interface TableHeaderProps extends Props<TableHeader> {
     tableColumnDef: TableRowColumnDef;
@@ -24,8 +25,7 @@ export class TableHeader extends React.Component<TableHeaderProps,any> {
         // TODO wire real event system to menu items, also write actually useful menu items
         return (
             <DropdownMenu ref={(c:DropdownMenu)=>this.dropdownMenuRef=c} alignLeft={this.props.isLastColumn}>
-                <SimpleDropdownMenuItem text="Sort Ascending"/>
-                <SimpleDropdownMenuItem text="Sort Descending"/>
+                <SortMenuItem tableRowColumnDef={this.props.tableColumnDef} isLastColumn={this.props.isLastColumn}/>
                 <SubtotalByMenuItem tableRowColumnDef={this.props.tableColumnDef} isLastColumn={this.props.isLastColumn}/>
             </DropdownMenu>
         );
