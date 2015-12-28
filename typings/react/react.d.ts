@@ -448,7 +448,7 @@ declare namespace __React {
         strokeOpacity?: number;
         strokeWidth?: number;
 
-        // Remaining properties auto-calculateFirstColumnIdentation from http://docs.webplatform.org.
+        // Remaining properties auto-extracted from http://docs.webplatform.org.
         // License: http://docs.webplatform.org/wiki/Template:CC-by-3.0
         /**
          * Aligns a flex container's lines within the flex container when there is extra space in the cross-axis, similar to how justify-content aligns individual items within the main-axis.
@@ -1144,6 +1144,11 @@ declare namespace __React {
          * Sets the maximum width for an element. It limits the width property to be larger than the value specified in max-width.
          */
         maxWidth?: any;
+
+        /**
+         * Sets the minimum height for an element. It prevents the height of the element to be smaller than the specified value. The value of min-height overrides both max-height and height.
+         */
+        minHeight?: any;
 
         /**
          * Sets the minimum width of an element. It limits the width property to be not smaller than the value specified in min-width.
