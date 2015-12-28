@@ -6,8 +6,13 @@ import {TableRowColumnDef} from "../../models/ColumnLike";
 import {ColumnFormat} from "../../models/ColumnLike";
 import className = require('classnames');
 import {DropdownMenuItemProps} from "./DropdownMenu";
+import {GigaGridProps} from "../GigaGrid";
+import {GridSubcomponentProps} from "../TableHeader";
+import {GigaGridActionType} from "../../store/GigaGridStateStore";
+import {NewSubtotalAction} from "../../store/GigaGridStateStore";
+import {ClearSubtotalAction} from "../../store/GigaGridStateStore";
 
-export interface SortMenuItemProps extends React.Props<SortMenuItem> {
+export interface SortMenuItemProps extends GridSubcomponentProps<SortMenuItem> {
     isLastColumn?:boolean;
     tableRowColumnDef:TableRowColumnDef;
 }
@@ -16,21 +21,47 @@ export class SortMenuItem extends React.Component<SortMenuItemProps, any> {
     constructor(props:SortMenuItemProps) {
         super(props);
     }
+
     render() {
         return (
             <SimpleDropdownMenuItem text="Sort" isLastColumn={this.props.isLastColumn}>
-                <li className="dropdown-menu-item hoverable"><span><i className="fa fa-sort-amount-asc"/></span>&nbsp;Sort</li>
-                <li className="dropdown-menu-item hoverable"><span><i className="fa fa-sort-amount-desc"/></span>&nbsp;Sort</li>
-                <li className="dropdown-menu-item hoverable"><span><i className="fa fa-sort-amount-asc"/></span>&nbsp;Add Sort</li>
-                <li className="dropdown-menu-item hoverable"><span><i className="fa fa-sort-amount-desc"/></span>&nbsp;Add Sort</li>
-                <li className="dropdown-menu-item hoverable"><span><i className="fa fa-ban"/></span>&nbsp;Clear All Sort</li>
+                <li className="dropdown-menu-item hoverable">
+                    <span>
+                        <i className="fa fa-sort-amount-asc"/>
+                    </span>
+                    &nbsp;Sort
+                </li>
+                <li className="dropdown-menu-item hoverable">
+                    <span>
+                        <i className="fa fa-sort-amount-desc"/>
+                    </span>
+                    &nbsp;Sort
+                </li>
+                <li className="dropdown-menu-item hoverable">
+                    <span>
+                        <i className="fa fa-sort-amount-asc"/>
+                    </span>
+                    &nbsp;Add Sort
+                </li>
+                <li className="dropdown-menu-item hoverable">
+                    <span>
+                        <i className="fa fa-sort-amount-desc"/>
+                    </span>
+                    &nbsp;Add Sort
+                </li>
+                <li className="dropdown-menu-item hoverable">
+                    <span>
+                        <i className="fa fa-ban"/>
+                    </span>
+                    &nbsp;Clear All Sort
+                </li>
             </SimpleDropdownMenuItem>
         );
     }
 }
 
 // TODO wire up events
-export interface SubtotalByMenuItemProps extends React.Props<SubtotalByMenuItem> {
+export interface SubtotalByMenuItemProps extends GridSubcomponentProps<SubtotalByMenuItem> {
     isLastColumn?:boolean;
     tableRowColumnDef:TableRowColumnDef;
 }
@@ -50,13 +81,22 @@ export class SubtotalByMenuItem extends React.Component<SubtotalByMenuItemProps,
     private onSubmit(e:SyntheticEvent) {
         e.stopPropagation();
         e.preventDefault();
-        // TODO emit event
+        const action:NewSubtotalAction = {
+            type: GigaGridActionType.NEW_SUBTOTAL,
+            subtotalBys: [{
+                colTag: this.props.tableRowColumnDef.colTag
+            }]
+        };
+        this.props.dispatcher.dispatch(action);
     }
 
     private onCancel(e:SyntheticEvent) {
         e.stopPropagation();
         e.preventDefault();
-        // TODO emit event
+        const action:ClearSubtotalAction = {
+            type: GigaGridActionType.CLEAR_SUBTOTAL
+        };
+        this.props.dispatcher.dispatch(action);
     }
 
     private renderAddSubtotal() {

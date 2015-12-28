@@ -48,11 +48,8 @@ div.giga-grid .dropdown-submenu-align-left {
   top: 0;
   right: 50%;
 }
-div.giga-grid .dropdown-menu-toggle-handle {
-  color: #fff;
-}
-div.giga-grid .dropdown-menu-toggle-handle:hover {
-  color: #333;
+div.giga-grid .dropdown-menu-toggle-handle-hide {
+  opacity: 0;
 }
 div.giga-grid .dropdown-menu-item {
   position: relative;

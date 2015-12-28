@@ -46,7 +46,6 @@ export interface GigaGridState {
 
 export class GigaGrid extends React.Component<GigaGridProps, GigaGridState> {
 
-
     private store:GigaGridStateStore;
     private dispatcher:Dispatcher<GigaGridAction>;
 
@@ -55,6 +54,9 @@ export class GigaGrid extends React.Component<GigaGridProps, GigaGridState> {
         this.dispatcher = new Dispatcher<GigaGridAction>();
         this.store = new GigaGridStateStore(this.dispatcher, props);
         this.state = this.store.getInitialState();
+        this.store.addListener(()=> {
+            this.setState(this.store.getState());
+        });
     }
 
     render() {
@@ -77,14 +79,13 @@ export class GigaGrid extends React.Component<GigaGridProps, GigaGridState> {
                         {this.renderTableRows(tableRowColumnDefs)}
                     </tbody>
                 </table>
-                {this.renderTableFooter()}
             </div>);
     }
 
     renderColumnHeaders(tableRowColumnDefs:TableRowColumnDef[]):ReactElement<{}> {
         const ths = tableRowColumnDefs.map((colDef:TableRowColumnDef, i:number)=> {
             return <TableHeader tableColumnDef={colDef} key={i} isFirstColumn={i===0}
-                                isLastColumn={i===tableRowColumnDefs.length-1}/>
+                                isLastColumn={i===tableRowColumnDefs.length-1} dispatcher={this.dispatcher}/>
         });
         return (
             <thead>
@@ -99,14 +100,11 @@ export class GigaGrid extends React.Component<GigaGridProps, GigaGridState> {
         // convert plain ColumnDef to TableRowColumnDef which has additional properties
         return rows.map((row:Row, i:number)=> {
             if (row.isDetail())
-                return <DetailTableRow key={i} tableRowColumnDefs={tableRowColumnDefs} row={row as DetailRow}/>;
+                return <DetailTableRow key={i} tableRowColumnDefs={tableRowColumnDefs} row={row as DetailRow}
+                                       dispatcher={this.dispatcher}/>;
             else
-                return <SubtotalTableRow key={i} tableRowColumnDefs={tableRowColumnDefs} row={row as SubtotalRow}/>
+                return <SubtotalTableRow key={i} tableRowColumnDefs={tableRowColumnDefs} row={row as SubtotalRow}
+                                         dispatcher={this.dispatcher}/>
         });
-    }
-
-    renderTableFooter() {
-        // TODO dummy implemenation, replace with pagination
-        return (<div></div>);
     }
 }
