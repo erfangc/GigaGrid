@@ -4,8 +4,9 @@ import {TableRowColumnDef} from "../models/ColumnLike";
 import {ColumnFormat} from "../models/ColumnLike";
 import {DetailRow} from "../models/Row";
 import {Row} from "../models/Row";
+import {GridSubcomponentProps} from "./TableHeader";
 
-export interface SubtotalTableRowProps extends React.Props<SubtotalTableRow> {
+export interface SubtotalTableRowProps extends GridSubcomponentProps<SubtotalTableRow> {
     row:SubtotalRow;
     tableRowColumnDefs:TableRowColumnDef[];
 }
@@ -54,7 +55,7 @@ export class SubtotalTableRow extends React.Component<SubtotalTableRowProps, any
     }
 }
 
-export interface DetailTableRowProps extends React.Props<DetailTableRow> {
+export interface DetailTableRowProps extends GridSubcomponentProps<DetailTableRow> {
     row:DetailRow;
     tableRowColumnDefs:TableRowColumnDef[];
 }

@@ -1,8 +1,11 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import * as $ from 'jquery';
 import className = require('classnames');
 import SyntheticEvent = __React.SyntheticEvent;
 
 export interface DropdownMenuProps extends React.Props<DropdownMenu> {
+    toggleHandle?:()=>HTMLElement;
     isSubMenu?: boolean;
     isInitiallyVisible?: boolean;
     alignLeft?: boolean;
@@ -16,6 +19,8 @@ export interface DropdownMenuState {
  * a generic dropdown menu component that can be reused in any context
  */
 export class DropdownMenu extends React.Component<DropdownMenuProps, DropdownMenuState> {
+
+    private clickOutsideHandler:(event:MouseEvent) => void;
 
     constructor(props:DropdownMenuProps) {
         super(props);
@@ -46,10 +51,28 @@ export class DropdownMenu extends React.Component<DropdownMenuProps, DropdownMen
             "dropdown-submenu-align-right": this.props.isSubMenu && !this.props.alignLeft,
             "dropdown-submenu-align-left": this.props.isSubMenu && this.props.alignLeft
         });
+
+        // a click outside the ul should close the dropdown menu
         return (
             <ul style={style} className={cx}>{this.props.children}</ul>
         );
     }
+
+    componentDidMount() {
+        //FIXME conflicts with handler's attempt to toggle visibility, need to make sure the event does not come from the handler!
+        this.clickOutsideHandler = (event:MouseEvent) => {
+            if (!$(event.target).closest(ReactDOM.findDOMNode(this)).length && this.state.visible)
+                this.hide();
+        };
+        if (typeof document !== "undefined")
+            document.addEventListener('mousedown', this.clickOutsideHandler);
+    }
+
+    componentWillUnmount() {
+        if (typeof document !== "undefined")
+            document.removeEventListener('mousedown', this.clickOutsideHandler);
+    }
+
 }
 
 export interface DropdownMenuItemProps extends React.Props<SimpleDropdownMenuItem> {
@@ -82,7 +105,8 @@ export class SimpleDropdownMenuItem extends React.Component<DropdownMenuItemProp
 
     private renderSubMenu() {
         return (
-            <DropdownMenu isSubMenu={true} ref={(c:DropdownMenu)=>this.subMenuRef=c} alignLeft={this.props.isLastColumn}>
+            <DropdownMenu isSubMenu={true} ref={(c:DropdownMenu)=>this.subMenuRef=c}
+                          alignLeft={this.props.isLastColumn}>
                 {this.props.children}
             </DropdownMenu>
         );

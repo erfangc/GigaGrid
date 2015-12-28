@@ -24,6 +24,7 @@ describe("TableRow Components", () => {
 
         function toDOM(subtotalRow:SubtotalRow) {
             const props:SubtotalTableRowProps = {
+                dispatcher: null,
                 row: subtotalRow,
                 tableRowColumnDefs: TestUtils.getSampleTableRowColumnDefs()
             };
@@ -98,6 +99,7 @@ describe("TableRow Components", () => {
             var $tr;
             beforeEach(()=> {
                 const props:DetailTableRowProps = {
+                    dispatcher: null,
                     row: TestUtils.getDetailRow(),
                     tableRowColumnDefs: TestUtils.getSampleTableRowColumnDefs()
                 };
@@ -127,6 +129,7 @@ describe("TableRow Components", () => {
             const detailRow:DetailRow = TestUtils.getDetailRow();
             detailRow.setSectorPath(['Some Parent']);
             const props:DetailTableRowProps = {
+                dispatcher: null,
                 row: detailRow,
                 tableRowColumnDefs: TestUtils.getSampleTableRowColumnDefs()
             };
@@ -139,6 +142,7 @@ describe("TableRow Components", () => {
 
         it("should render a row with missing data", ()=> {
             const props:DetailTableRowProps = {
+                dispatcher: null,
                 row: TestUtils.getDetailRowWithMissingData(),
                 tableRowColumnDefs: TestUtils.getSampleTableRowColumnDefs()
             };

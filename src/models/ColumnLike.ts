@@ -1,6 +1,7 @@
 export enum AggregationMethod {
     SUM, AVERAGE, NONE
 }
+
 export enum ColumnFormat {
     NUMBER, STRING, CURRENCY, DATE
 }

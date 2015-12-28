@@ -6,6 +6,7 @@ import {GigaGridProps} from "../../src/components/GigaGrid";
 import {TestUtils} from "../TestUtils";
 import {NewSubtotalAction} from "../../src/store/GigaGridStateStore";
 import {GigaGridActionType} from "../../src/store/GigaGridStateStore";
+import {ClearSubtotalAction} from "../../src/store/GigaGridStateStore";
 
 describe("GigaGridStateStore", ()=> {
 
@@ -36,7 +37,7 @@ describe("GigaGridStateStore", ()=> {
         expect(state.tree.getRoot().detailRows.length).toBe(10);
     });
 
-    it("can handle new subtotal action", ()=> {
+    it("can handle NEW_SUBTOTAL action", ()=> {
         dispatcher.dispatch(newSubtotalAction);
         expect(store.getState().subtotalBys.length).toBe(1);
         expect(store.getState().subtotalBys[0]).toBe(newSubtotalAction.subtotalBys[0]);
@@ -44,6 +45,16 @@ describe("GigaGridStateStore", ()=> {
         expect(children.length).toBe(2);
         expect(store.getState().tree.getRoot().getChildByTitle("Male")).toBeDefined();
         expect(store.getState().tree.getRoot().getChildByTitle("Male")).not.toBeNull();
+    });
+
+    it("can handle CLEAR_SUBTOTAL action", ()=> {
+        dispatcher.dispatch(newSubtotalAction);
+        expect(store.getState().subtotalBys[0]).toBe(newSubtotalAction.subtotalBys[0]);
+
+        // clear subtotal
+        dispatcher.dispatch({type: GigaGridActionType.CLEAR_SUBTOTAL});
+        expect(store.getState().subtotalBys).toEqual([]);
+        expect(store.getState().tree.getRoot().getChildren.length).toBe(0);
     });
 
     // TODO write more tests

@@ -26,17 +26,21 @@ export class GigaGridStateStore extends ReduceStore<GigaGridState> {
         }
     }
 
-    reduce(state:GigaGridState, action:GigaGridAction):GigaGridState {
+    reduce(state:GigaGridState,
+           action:GigaGridAction):GigaGridState {
         switch (action.type) {
             case GigaGridActionType.NEW_SUBTOTAL:
                 return this.handleSubtotal(state, action as NewSubtotalAction);
+            case GigaGridActionType.CLEAR_SUBTOTAL:
+                return this.handleClearSubtotal(state, action as ClearSubtotalAction);
             default:
                 return state;
         }
     }
 
     // state transition handlers
-    private handleSubtotal(state:GigaGridState, action:NewSubtotalAction):GigaGridState {
+    private handleSubtotal(state:GigaGridState,
+                           action:NewSubtotalAction):GigaGridState {
         const newTree = TreeBuilder.buildTree(this.props.data, action.subtotalBys);
         SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
         return {
@@ -45,10 +49,31 @@ export class GigaGridStateStore extends ReduceStore<GigaGridState> {
         }
     }
 
+    private handleClearSubtotal(state:GigaGridState,
+                                action:ClearSubtotalAction):GigaGridState {
+        const newTree = TreeBuilder.buildTree(this.props.data, []);
+        SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
+        return {
+            subtotalBys: [],
+            tree: newTree
+        };
+    }
+
 }
 
 export enum GigaGridActionType {
-    NEW_SUBTOTAL, ADD_SUBTOTAL, CLEAR_SUBTOTAL, NEW_SORT, ADD_SORT, CLEAR_SORT, NEW_FILTER, ADD_FILTER, CLEAR_FILTER
+    NEW_SUBTOTAL,
+    ADD_SUBTOTAL,
+    CLEAR_SUBTOTAL,
+    NEW_SORT,
+    ADD_SORT,
+    CLEAR_SORT,
+    NEW_FILTER,
+    ADD_FILTER,
+    CLEAR_FILTER,
+    TOGGLE_ROW_COLLAPSE,
+    TOGGLE_DETAIL_ROW_SELECT,
+    TOGGLE_SUMMARY_ROW_SELECT
 }
 
 export interface GigaGridAction {
@@ -59,6 +84,6 @@ export interface NewSubtotalAction extends GigaGridAction {
     subtotalBys:SubtotalBy[]
 }
 
-export interface SubtotalAction extends GigaGridAction {
-    subtotalBy:SubtotalBy;
+export interface ClearSubtotalAction extends GigaGridAction {
+
 }
