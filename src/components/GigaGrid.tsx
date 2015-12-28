@@ -9,9 +9,14 @@ import {TableRowColumnDef} from "../models/ColumnLike";
 import {SubtotalRow} from "../models/Row";
 import {DetailRow} from "../models/Row";
 import {TableHeader} from "./TableHeader";
-import {GigaGridStateStore} from "../store/GigaGridStateStore";
 import {TreeRasterizer} from "../static/TreeRasterizer";
 import {Tree} from "../static/TreeBuilder";
+import {GigaGridStateStore} from "../store/GigaGridStateStore";
+import * as Flux from 'flux';
+import * as FluxUtils from 'flux/utils';
+import ReduceStore = FluxUtils.ReduceStore;
+import Dispatcher = Flux.Dispatcher;
+import {GigaGridAction} from "../store/GigaGridStateStore";
 
 export interface GigaGridProps extends React.Props<GigaGrid> {
     initialSubtotalBys?:SubtotalBy[];
@@ -41,13 +46,15 @@ export interface GigaGridState {
 
 export class GigaGrid extends React.Component<GigaGridProps, GigaGridState> {
 
-    private stateManager:GigaGridStateStore;
+
+    private store:GigaGridStateStore;
+    private dispatcher:Dispatcher<GigaGridAction>;
 
     constructor(props:GigaGridProps) {
         super(props);
-        this.stateManager = new GigaGridStateStore(props);
-        this.state = this.stateManager.getInitialState();
-        this.stateManager.registerStateChangeCallback(s=>this.setState(s));
+        this.dispatcher = new Dispatcher<GigaGridAction>();
+        this.store = new GigaGridStateStore(this.dispatcher, props);
+        this.state = this.store.getInitialState();
     }
 
     render() {
@@ -91,9 +98,6 @@ export class GigaGrid extends React.Component<GigaGridProps, GigaGridState> {
         const rows:Row[] = TreeRasterizer.rasterize(this.state.tree);
         // convert plain ColumnDef to TableRowColumnDef which has additional properties
         return rows.map((row:Row, i:number)=> {
-            // syntax highlighter will think Row cannot be coerced into its implementing classes
-            // we would need to explicitly down cast ... BUT this is JSX, the TypeScript down cast operator looks
-            // like an XML opening tag ... so we can't do that and have to live with the syntax highlight error LOL
             if (row.isDetail())
                 return <DetailTableRow key={i} tableRowColumnDefs={tableRowColumnDefs} row={row as DetailRow}/>;
             else

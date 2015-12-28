@@ -36,7 +36,7 @@
       "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
     },
     "react/react.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "a6ff9f6e195a334afd89e4b721d05e9520eee4c0"
     },
     "jasmine/jasmine.d.ts": {
       "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
@@ -48,6 +48,9 @@
       "commit": "1da639a106527e0c4010b354a1efe52a3059a291"
     },
     "eventemitter3/eventemitter3.d.ts": {
+      "commit": "a6ff9f6e195a334afd89e4b721d05e9520eee4c0"
+    },
+    "flux/flux.d.ts": {
       "commit": "a6ff9f6e195a334afd89e4b721d05e9520eee4c0"
     }
   }

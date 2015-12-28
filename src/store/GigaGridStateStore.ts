@@ -3,33 +3,54 @@ import {SubtotalAggregator} from "../static/SubtotalAggregator";
 import {Tree} from "../static/TreeBuilder";
 import {TreeBuilder} from "../static/TreeBuilder";
 import {SubtotalBy} from "../models/ColumnLike";
+import * as Flux from 'flux';
+import * as FluxUtils from 'flux/utils';
+import ReduceStore = FluxUtils.ReduceStore;
+import Dispatcher = Flux.Dispatcher;
 
-export class GigaGridStateStore {
+export class GigaGridStateStore extends ReduceStore<GigaGridState> {
 
-    private onStateChange:(GigaGridState)=>any;
     private props:GigaGridProps;
 
-    constructor(props:GigaGridProps) {
+    constructor(dispatcher:Dispatcher<GigaGridAction>, props:GigaGridProps) {
         this.props = props;
-    }
-
-    handleSubtotalby(sbs:SubtotalBy[]) {
-        const newTree:Tree = TreeBuilder.buildTree(this.props.data, sbs);
-        SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
-        const nextState:GigaGridState = {
-            subtotalBys: sbs,
-            tree: newTree
-        };
-        this.onStateChange(nextState);
+        super(dispatcher);
     }
 
     getInitialState():GigaGridState {
-        const tree:Tree = TreeBuilder.buildTree(this.props.data, this.props.initialSubtotalBys);
+        const tree = TreeBuilder.buildTree(this.props.data, this.props.initialSubtotalBys);
         SubtotalAggregator.aggregateTree(tree, this.props.columnDefs);
-        return {tree: tree, subtotalBys: this.props.initialSubtotalBys};
+        return {
+            subtotalBys: this.props.initialSubtotalBys,
+            tree: tree
+        }
     }
 
-    registerStateChangeCallback(fn:(GigaGridState)=>any):void {
-        this.onStateChange = fn;
+    reduce(state:GigaGridState, action:GigaGridAction):GigaGridState {
+        switch (action.type) {
+            case "subtotal":
+                return this.handleSubtotal(state, action as SubtotalAction);
+            default:
+                return state;
+        }
     }
+
+    // state transition handlers
+    private handleSubtotal(state:GigaGridState, action:SubtotalAction):GigaGridState {
+        const newTree = TreeBuilder.buildTree(this.props.data, action.subtotalBys);
+        SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
+        return {
+            subtotalBys: action.subtotalBys,
+            tree: newTree
+        }
+    }
+
+}
+
+export interface GigaGridAction {
+    type:string;
+}
+
+export interface SubtotalAction extends GigaGridAction {
+    subtotalBys:SubtotalBy[]
 }
