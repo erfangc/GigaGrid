@@ -4,6 +4,10 @@ import {ColumnFormat} from "../src/models/ColumnLike";
 import {AggregationMethod} from "../src/models/ColumnLike";
 import {SubtotalRow} from "../src/models/Row";
 import {TableRowColumnDef} from "../src/models/ColumnLike";
+import {TreeBuilder} from "../src/static/TreeBuilder";
+import {SubtotalAggregator} from "../src/static/SubtotalAggregator";
+import {Tree} from "../src/static/TreeBuilder";
+
 export class TestUtils {
 
     public static getSimpleRawDataWithMissing():any[] {
@@ -41,6 +45,16 @@ export class TestUtils {
             "textCol1": "R2D2",
             "textCol2": "City Wok"
         });
+    }
+
+    public static getUnsubtotaledTree():Tree {
+        return TreeBuilder.buildTree(TestUtils.getSampleData().data);
+    }
+
+    public static getTreeSubtotaledByGender():Tree {
+        const tree = TreeBuilder.buildTree(TestUtils.getSampleData().data, [{colTag: "gender"}]);
+        SubtotalAggregator.aggregateTree(tree, TestUtils.getSampleData().columnDefs);
+        return tree;
     }
 
     /**

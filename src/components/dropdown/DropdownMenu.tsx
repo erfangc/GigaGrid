@@ -4,10 +4,23 @@ import * as $ from 'jquery';
 import className = require('classnames');
 import SyntheticEvent = __React.SyntheticEvent;
 
+
 export interface DropdownMenuProps extends React.Props<DropdownMenu> {
-    toggleHandle?:()=>HTMLElement;
+    /**
+     * an no-arg function that returns the DOM Element that toggle the visibility of this dropdown menu
+     */
+    toggleHandle?:()=>Element;
+    /**
+     * indicate sub menu like styling should be used
+     */
     isSubMenu?: boolean;
+    /**
+     * makes the dropdown menu visible by default
+     */
     isInitiallyVisible?: boolean;
+    /**
+     * left align the dropdown menu (by default its style is set to left:0)
+     */
     alignLeft?: boolean;
 }
 
@@ -59,10 +72,16 @@ export class DropdownMenu extends React.Component<DropdownMenuProps, DropdownMen
     }
 
     componentDidMount() {
-        //FIXME conflicts with handler's attempt to toggle visibility, need to make sure the event does not come from the handler!
         this.clickOutsideHandler = (event:MouseEvent) => {
+            var toggleHandle = null;
+            if (this.props.toggleHandle)
+                toggleHandle = this.props.toggleHandle();
+
             if (!$(event.target).closest(ReactDOM.findDOMNode(this)).length && this.state.visible)
-                this.hide();
+                if ($(event.target).closest(toggleHandle).length) {
+                }
+                else
+                    this.hide();
         };
         if (typeof document !== "undefined")
             document.addEventListener('mousedown', this.clickOutsideHandler);
@@ -104,9 +123,11 @@ export class SimpleDropdownMenuItem extends React.Component<DropdownMenuItemProp
     }
 
     private renderSubMenu() {
+        // Note: dropdown menu need a way to reference the DOM element that activate its visibility, in this case
+        // since we are creating a sub menu that is activated by this component, this component is the visibility toggle handle
         return (
             <DropdownMenu isSubMenu={true} ref={(c:DropdownMenu)=>this.subMenuRef=c}
-                          alignLeft={this.props.isLastColumn}>
+                          alignLeft={this.props.isLastColumn} toggleHandle={()=>ReactDOM.findDOMNode(this)}>
                 {this.props.children}
             </DropdownMenu>
         );
@@ -116,7 +137,7 @@ export class SimpleDropdownMenuItem extends React.Component<DropdownMenuItemProp
         // if the component has children, render them as submenu
         return (
             <li className='dropdown-menu-item hoverable' onClick={(e)=>this.handleClick(e)}>
-                {this.props.text}
+                {this.props.text || "Menu Item"}
                 {this.props.children ? this.renderSubMenu() : null}
             </li>
         );
