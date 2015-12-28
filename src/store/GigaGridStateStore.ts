@@ -28,15 +28,15 @@ export class GigaGridStateStore extends ReduceStore<GigaGridState> {
 
     reduce(state:GigaGridState, action:GigaGridAction):GigaGridState {
         switch (action.type) {
-            case "subtotal":
-                return this.handleSubtotal(state, action as SubtotalAction);
+            case GigaGridActionType.NEW_SUBTOTAL:
+                return this.handleSubtotal(state, action as NewSubtotalAction);
             default:
                 return state;
         }
     }
 
     // state transition handlers
-    private handleSubtotal(state:GigaGridState, action:SubtotalAction):GigaGridState {
+    private handleSubtotal(state:GigaGridState, action:NewSubtotalAction):GigaGridState {
         const newTree = TreeBuilder.buildTree(this.props.data, action.subtotalBys);
         SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
         return {
@@ -47,10 +47,18 @@ export class GigaGridStateStore extends ReduceStore<GigaGridState> {
 
 }
 
+export enum GigaGridActionType {
+    NEW_SUBTOTAL, ADD_SUBTOTAL, CLEAR_SUBTOTAL, NEW_SORT, ADD_SORT, CLEAR_SORT, NEW_FILTER, ADD_FILTER, CLEAR_FILTER
+}
+
 export interface GigaGridAction {
-    type:string;
+    type:GigaGridActionType;
+}
+
+export interface NewSubtotalAction extends GigaGridAction {
+    subtotalBys:SubtotalBy[]
 }
 
 export interface SubtotalAction extends GigaGridAction {
-    subtotalBys:SubtotalBy[]
+    subtotalBy:SubtotalBy;
 }
