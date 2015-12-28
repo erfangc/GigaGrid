@@ -4,6 +4,9 @@ import {DetailRow} from "../models/Row";
 import {AggregationMethod} from "../models/ColumnLike";
 import {Tree} from "./TreeBuilder";
 
+/**
+ * these should return Tree(s) as oppose to being void ... I want to use Immutable.js to simplify things where possible
+ */
 export class SubtotalAggregator {
 
     static aggregateTree(tree:Tree, columnDefs:ColumnDef[]):void {

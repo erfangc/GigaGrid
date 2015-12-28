@@ -1,16 +1,16 @@
 import * as React from 'react';
+import * as classNames from 'classnames';
 import {DropdownMenu} from "./DropdownMenu";
 import SyntheticEvent = __React.SyntheticEvent;
 import {SimpleDropdownMenuItem} from "./DropdownMenu";
 import {TableRowColumnDef} from "../../models/ColumnLike";
 import {ColumnFormat} from "../../models/ColumnLike";
-import className = require('classnames');
 import {DropdownMenuItemProps} from "./DropdownMenu";
 import {GigaGridProps} from "../GigaGrid";
 import {GridSubcomponentProps} from "../TableHeader";
-import {GigaGridActionType} from "../../store/GigaGridStateStore";
-import {NewSubtotalAction} from "../../store/GigaGridStateStore";
-import {ClearSubtotalAction} from "../../store/GigaGridStateStore";
+import {GigaGridActionType} from "../../store/GigaGridStore";
+import {NewSubtotalAction} from "../../store/GigaGridStore";
+import {ClearSubtotalAction} from "../../store/GigaGridStore";
 
 export interface SortMenuItemProps extends GridSubcomponentProps<SortMenuItem> {
     isLastColumn?:boolean;
@@ -29,25 +29,25 @@ export class SortMenuItem extends React.Component<SortMenuItemProps, any> {
                     <span>
                         <i className="fa fa-sort-amount-asc"/>
                     </span>
-                    &nbsp;Sort
+                    &nbsp;Sort Descending
                 </li>
                 <li className="dropdown-menu-item hoverable">
                     <span>
                         <i className="fa fa-sort-amount-desc"/>
                     </span>
-                    &nbsp;Sort
+                    &nbsp;Sort Ascending
                 </li>
                 <li className="dropdown-menu-item hoverable">
                     <span>
                         <i className="fa fa-sort-amount-asc"/>
                     </span>
-                    &nbsp;Add Sort
+                    &nbsp;Add Sort Descending
                 </li>
                 <li className="dropdown-menu-item hoverable">
                     <span>
                         <i className="fa fa-sort-amount-desc"/>
                     </span>
-                    &nbsp;Add Sort
+                    &nbsp;Add Sort Ascending
                 </li>
                 <li className="dropdown-menu-item hoverable">
                     <span>
@@ -79,8 +79,6 @@ export class SubtotalByMenuItem extends React.Component<SubtotalByMenuItemProps,
     }
 
     private onSubmit(e:SyntheticEvent) {
-        e.stopPropagation();
-        e.preventDefault();
         const action:NewSubtotalAction = {
             type: GigaGridActionType.NEW_SUBTOTAL,
             subtotalBys: [{
@@ -91,17 +89,14 @@ export class SubtotalByMenuItem extends React.Component<SubtotalByMenuItemProps,
     }
 
     private onCancel(e:SyntheticEvent) {
-        e.stopPropagation();
-        e.preventDefault();
-        const action:ClearSubtotalAction = {
+        this.props.dispatcher.dispatch({
             type: GigaGridActionType.CLEAR_SUBTOTAL
-        };
-        this.props.dispatcher.dispatch(action);
+        });
     }
 
     private renderAddSubtotal() {
 
-        const cx = className({
+        const cx = classNames({
             "dropdown-menu-item": true,
             "hoverable": !this.isNumericColumn()
         });
@@ -123,20 +118,20 @@ export class SubtotalByMenuItem extends React.Component<SubtotalByMenuItemProps,
             );
         else
             return (
-                <li className="dropdown-menu-item hoverable">
+                <li onClick={e=>this.onSubmit(e)} className="dropdown-menu-item hoverable">
                     <i className="fa fa-plus"/>
                     &nbsp;
-                    <span onClick={e=>this.onSubmit(e)}>Add Subtotal</span>
+                    <span>Add Subtotal</span>
                 </li>
             );
     }
 
     private renderClearSubtotal() {
         return (
-            <li className="dropdown-menu-item hoverable">
+            <li onClick={e=>this.onCancel(e)} className="dropdown-menu-item hoverable">
                 <i className="fa fa-ban"/>
                 &nbsp;
-                <span onClick={e=>this.onCancel(e)}>Clear All Subtotal</span>
+                <span>Clear All Subtotal</span>
             </li>
         );
     }

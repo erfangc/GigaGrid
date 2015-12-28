@@ -7,8 +7,7 @@ import {SimpleDropdownMenuItem} from "./dropdown/DropdownMenu";
 import {ColumnFormat} from "../models/ColumnLike";
 import {SubtotalByMenuItem} from "./dropdown/StandardMenuItems";
 import {SortMenuItem} from "./dropdown/StandardMenuItems";
-import {GigaGridAction} from "../store/GigaGridStateStore";
-import DOMElement = __React.DOMElement;
+import {GigaGridAction} from "../store/GigaGridStore";
 import ReactDOM = __React.ReactDOM;
 
 export interface GridSubcomponentProps<T> extends React.Props<T> {
@@ -28,6 +27,7 @@ class TableHeaderState {
 export class TableHeader extends React.Component<TableHeaderProps,TableHeaderState> {
 
     private dropdownMenuRef:DropdownMenu;
+    private dropdownToggleHandleRef:HTMLElement;
 
     constructor(props:TableHeaderProps) {
         super(props);
@@ -36,18 +36,22 @@ export class TableHeader extends React.Component<TableHeaderProps,TableHeaderSta
 
     private renderDropdownMenu() {
         return (
-            <DropdownMenu ref={(c:DropdownMenu)=>this.dropdownMenuRef=c} alignLeft={this.props.isLastColumn}>
-                <SortMenuItem tableRowColumnDef={this.props.tableColumnDef} isLastColumn={this.props.isLastColumn}
-                              dispatcher={this.props.dispatcher}/>
-                <SubtotalByMenuItem tableRowColumnDef={this.props.tableColumnDef} isLastColumn={this.props.isLastColumn}
-                                    dispatcher={this.props.dispatcher}/>
-            </DropdownMenu>
+            <span style={{position:"relative"}}>
+                <DropdownMenu ref={(c:DropdownMenu)=>this.dropdownMenuRef=c} alignLeft={this.props.isLastColumn}
+                              toggleHandle={()=>this.dropdownToggleHandleRef}>
+                    <SortMenuItem tableRowColumnDef={this.props.tableColumnDef} isLastColumn={this.props.isLastColumn}
+                                  dispatcher={this.props.dispatcher}/>
+                    <SubtotalByMenuItem tableRowColumnDef={this.props.tableColumnDef}
+                                        isLastColumn={this.props.isLastColumn}
+                                        dispatcher={this.props.dispatcher}/>
+                </DropdownMenu>
+            </span>
         );
     }
 
-    private renderHeaderAddon() {
-        if (this.props.isFirstColumn)
-            return null;
+
+    render() {
+        const columnDef = this.props.tableColumnDef;
 
         const cx = classNames({
             "fa": true,
@@ -55,25 +59,21 @@ export class TableHeader extends React.Component<TableHeaderProps,TableHeaderSta
             "dropdown-menu-toggle-handle-hide": !this.state.handleVisible
         });
 
-        return (
-            <span style={{position:"relative"}}>
-                &nbsp;
-                <i className={cx} onClick={()=>this.dropdownMenuRef.toggleDisplay()}/>
-                {this.renderDropdownMenu()}
-            </span>
+        const dropdownMenuToggle = (
+            <i className={cx} ref={c=>this.dropdownToggleHandleRef=c}
+               onClick={()=>this.dropdownMenuRef.toggleDisplay()}/>
         );
-    }
 
-    render() {
-        const columnDef = this.props.tableColumnDef;
         return (
-            <th onMouseEnter={()=>this.setState({handleVisible:true})}
+            <th style={{"height":0}} onMouseEnter={()=>this.setState({handleVisible:true})}
                 onMouseLeave={()=>this.setState({handleVisible:false})}
                 className={columnDef.format === ColumnFormat.NUMBER ? "numeric" : "non-numeric"}>
+                {this.props.isLastColumn ? [dropdownMenuToggle," "] : null}
                 <span>
                     {columnDef.title || columnDef.colTag}
                 </span>
-                {this.renderHeaderAddon()}
+                {!this.props.isLastColumn ? [" ", dropdownMenuToggle] : null}
+                {this.renderDropdownMenu()}
             </th>
         );
     }

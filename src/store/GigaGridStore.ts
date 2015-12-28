@@ -1,14 +1,19 @@
+import * as Flux from 'flux';
+import * as FluxUtils from 'flux/utils';
 import {GigaGridState,GigaGridProps} from "../components/GigaGrid";
 import {SubtotalAggregator} from "../static/SubtotalAggregator";
 import {Tree} from "../static/TreeBuilder";
 import {TreeBuilder} from "../static/TreeBuilder";
 import {SubtotalBy} from "../models/ColumnLike";
-import * as Flux from 'flux';
-import * as FluxUtils from 'flux/utils';
 import ReduceStore = FluxUtils.ReduceStore;
 import Dispatcher = Flux.Dispatcher;
 
-export class GigaGridStateStore extends ReduceStore<GigaGridState> {
+/**
+ * state store for the table, relevant states and stored here. the only way to mutate these states are by sending GigaGridAction(s) through the Dispatcher given to the store at construction
+ * there are no way to direct set the state. The GigaGrid controller-view React Component draws its state updates from this store. Updates are automatically triggered for every state mutation through
+ * a callback. (i.e. all GigaGrid instances must call store.addListener(()=>this.setState(this.store.getState())) during construction)
+ */
+export class GigaGridStore extends ReduceStore<GigaGridState> {
 
     private props:GigaGridProps;
 

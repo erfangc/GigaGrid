@@ -1,17 +1,17 @@
 import * as Flux from 'flux';
 import Dispatcher = Flux.Dispatcher;
-import {GigaGridAction} from "../../src/store/GigaGridStateStore";
-import {GigaGridStateStore} from "../../src/store/GigaGridStateStore";
+import {GigaGridAction} from "../../src/store/GigaGridStore";
+import {GigaGridStore} from "../../src/store/GigaGridStore";
 import {GigaGridProps} from "../../src/components/GigaGrid";
 import {TestUtils} from "../TestUtils";
-import {NewSubtotalAction} from "../../src/store/GigaGridStateStore";
-import {GigaGridActionType} from "../../src/store/GigaGridStateStore";
-import {ClearSubtotalAction} from "../../src/store/GigaGridStateStore";
+import {NewSubtotalAction} from "../../src/store/GigaGridStore";
+import {GigaGridActionType} from "../../src/store/GigaGridStore";
+import {ClearSubtotalAction} from "../../src/store/GigaGridStore";
 
-describe("GigaGridStateStore", ()=> {
+describe("GigaGridStore", ()=> {
 
     var dispatcher:Dispatcher<GigaGridAction>;
-    var store:GigaGridStateStore;
+    var store:GigaGridStore;
     var props:GigaGridProps;
     var newSubtotalAction:NewSubtotalAction = {
         type: GigaGridActionType.NEW_SUBTOTAL,
@@ -24,7 +24,7 @@ describe("GigaGridStateStore", ()=> {
             data: TestUtils.getSampleData().data,
             columnDefs: TestUtils.getSampleData().columnDefs
         };
-        store = new GigaGridStateStore(dispatcher, props);
+        store = new GigaGridStore(dispatcher, props);
     });
 
     it("can deduce the correct initial state", ()=> {
