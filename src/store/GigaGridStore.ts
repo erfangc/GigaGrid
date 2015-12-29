@@ -7,6 +7,7 @@ import {TreeBuilder} from "../static/TreeBuilder";
 import {SubtotalBy} from "../models/ColumnLike";
 import ReduceStore = FluxUtils.ReduceStore;
 import Dispatcher = Flux.Dispatcher;
+import {SubtotalRow} from "../models/Row";
 
 /**
  * state store for the table, relevant states and stored here. the only way to mutate these states are by sending GigaGridAction(s) through the Dispatcher given to the store at construction
@@ -31,6 +32,10 @@ export class GigaGridStore extends ReduceStore<GigaGridState> {
         }
     }
 
+    areEqual(state1:GigaGridState, state2:GigaGridState): boolean {
+        return false;
+    }
+
     reduce(state:GigaGridState,
            action:GigaGridAction):GigaGridState {
         switch (action.type) {
@@ -38,12 +43,23 @@ export class GigaGridStore extends ReduceStore<GigaGridState> {
                 return this.handleSubtotal(state, action as NewSubtotalAction);
             case GigaGridActionType.CLEAR_SUBTOTAL:
                 return this.handleClearSubtotal(state, action as ClearSubtotalAction);
+            case GigaGridActionType.TOGGLE_ROW_COLLAPSE:
+                return this.handleToggleCollapse(state, action as ToggleCollapseAction);
             default:
                 return state;
         }
     }
 
-    // state transition handlers
+    /**
+     * state transition handlers
+     */
+
+    private handleToggleCollapse(state:GigaGridState, action:ToggleCollapseAction) {
+        const row = action.subtotalRow;
+        row.toggleCollapse();
+        return state;
+    }
+
     private handleSubtotal(state:GigaGridState,
                            action:NewSubtotalAction):GigaGridState {
         const newTree = TreeBuilder.buildTree(this.props.data, action.subtotalBys);
@@ -82,7 +98,11 @@ export enum GigaGridActionType {
 }
 
 export interface GigaGridAction {
-    type:GigaGridActionType;
+    type:GigaGridActionType
+}
+
+export interface ToggleCollapseAction extends GigaGridAction {
+    subtotalRow: SubtotalRow
 }
 
 export interface NewSubtotalAction extends GigaGridAction {

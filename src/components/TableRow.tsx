@@ -1,10 +1,14 @@
 import * as React from 'react';
+import * as classNames from 'classnames';
 import {SubtotalRow} from "../models/Row";
 import {TableRowColumnDef} from "../models/ColumnLike";
 import {ColumnFormat} from "../models/ColumnLike";
 import {DetailRow} from "../models/Row";
 import {Row} from "../models/Row";
 import {GridSubcomponentProps} from "./TableHeader";
+import {ToggleCollapseAction} from "../store/GigaGridStore";
+import {GigaGridActionType} from "../store/GigaGridStore";
+import SyntheticEvent = __React.SyntheticEvent;
 
 export interface SubtotalTableRowProps extends GridSubcomponentProps<SubtotalTableRow> {
     row:SubtotalRow;
@@ -25,31 +29,38 @@ export class SubtotalTableRow extends React.Component<SubtotalTableRowProps, any
         super(props);
     }
 
-    // TODO this will certainly not trigger the parent to be re-rendered
-    // we have two options, use a custom event system (Emit) or use a callback attached to props and the event will be propogated up to the parent
-    onCollapseToggle() {
-        this.props.row.toggleCollapse();
+    onCollapseToggle(e:SyntheticEvent) {
+        e.preventDefault();
+        const action:ToggleCollapseAction = {
+            type: GigaGridActionType.TOGGLE_ROW_COLLAPSE,
+            subtotalRow: this.props.row
+        };
+        this.props.dispatcher.dispatch(action);
     }
 
     render() {
         const tds = this.props.tableRowColumnDefs.map((colDef:TableRowColumnDef, i:number) => {
             const padding = TableRowUtils.calculateFirstColumnIdentation(this.props.row);
-            if (i === 0)
+            if (i === 0) {
+                const cx = classNames({
+                    "fa": true,
+                    "fa-minus": !this.props.row.isCollapsed(),
+                    "fa-plus": this.props.row.isCollapsed()
+                });
                 return (
                     <td key={i}
-                        onClick={e => this.onCollapseToggle()}
-                        style={{width: colDef.width, paddingLeft: padding}}
-                        className="giga-grid-locked-col">
-                        <strong>
+                        style={{width: colDef.width, paddingLeft: padding}}>
+                        <strong onClick={e => this.onCollapseToggle(e)}>
                             <span>
-                                <i className="fa fa-minus"/>&nbsp;
+                                <i className={cx}/>&nbsp;
                             </span>
                             {this.props.row.title}
                         </strong>
                     </td>);
+            }
             else
-                return <td key={i} className={colDef.format === ColumnFormat.NUMBER ? "numeric" : "non-numeric"}
-                           style={{width: colDef.width}}>{this.props.row.data()[colDef.colTag] || ""}</td>;
+            return <td key={i} className={colDef.format === ColumnFormat.NUMBER ? "numeric" : "non-numeric"}
+                       style={{width: colDef.width}}>{this.props.row.data()[colDef.colTag] || ""}</td>;
         });
         return <tr className="subtotal-row">{tds}</tr>
     }
