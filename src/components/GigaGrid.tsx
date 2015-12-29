@@ -53,14 +53,13 @@ export class GigaGrid extends React.Component<GigaGridProps, GigaGridState> {
         super(props);
         this.dispatcher = new Dispatcher<GigaGridAction>();
         this.store = new GigaGridStore(this.dispatcher, props);
-        this.state = this.store.getInitialState();
+        this.state = this.store.getState();
         this.store.addListener(()=> {
             this.setState(this.store.getState());
         });
     }
 
     render() {
-        // TODO first pass implementation ... need to make better, the final implementation will wrap things like scrollbar and footers
         const tableRowColumnDefs:TableRowColumnDef[] = this.props.columnDefs.map(cd => {
             return {
                 colTag: cd.colTag,

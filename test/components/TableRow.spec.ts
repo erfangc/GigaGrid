@@ -39,7 +39,6 @@ describe("TableRow Components", () => {
 
             expect($tr.length).toBe(1);
             expect($tr.find("i.fa.fa-minus").length).toBe(1);
-            expect($tr.children("td").first().hasClass('giga-grid-locked-col')).toBeTruthy();
             expect($tr.children("td").first().css('padding-left')).toEqual("0px");
             expect($tr.children("td:nth-child(2)").hasClass('numeric')).toBeTruthy();
             expect($tr.children("td:nth-child(1)").hasClass('numeric')).toBeFalsy();
@@ -55,7 +54,6 @@ describe("TableRow Components", () => {
 
                 expect($tr.length).toBe(1);
                 expect($tr.find("i.fa.fa-minus").length).toBe(1);
-                expect($tr.children("td").first().hasClass('giga-grid-locked-col')).toBeTruthy();
                 expect($tr.children("td").first().css('padding-left')).toEqual("25px");
                 expect($tr.children("td:nth-child(2)").hasClass('numeric')).toBeTruthy();
                 expect($tr.children("td:nth-child(1)").hasClass('numeric')).toBeFalsy();
@@ -69,7 +67,6 @@ describe("TableRow Components", () => {
 
                 expect($tr.length).toBe(1);
                 expect($tr.find("i.fa.fa-minus").length).toBe(1);
-                expect($tr.children("td").first().hasClass('giga-grid-locked-col')).toBeTruthy();
                 expect($tr.children("td").first().css('padding-left')).toEqual("50px");
                 expect($tr.children("td:nth-child(2)").hasClass('numeric')).toBeTruthy();
                 expect($tr.children("td:nth-child(1)").hasClass('numeric')).toBeFalsy();
@@ -83,7 +80,6 @@ describe("TableRow Components", () => {
 
                 expect($tr.length).toBe(1);
                 expect($tr.find("i.fa.fa-minus").length).toBe(1);
-                expect($tr.children("td").first().hasClass('giga-grid-locked-col')).toBeTruthy();
                 expect($tr.children("td").first().css('padding-left')).toEqual("75px");
                 expect($tr.children("td:nth-child(2)").hasClass('numeric')).toBeTruthy();
                 expect($tr.children("td:nth-child(1)").hasClass('numeric')).toBeFalsy();
@@ -113,9 +109,6 @@ describe("TableRow Components", () => {
             });
             it("should have no + icon on the first cell", () => {
                 expect($tr.find("i.fa.fa-plus").length).toBe(0);
-            });
-            it("first cell should have a lock class", ()=> {
-                expect($tr.children("td").first().hasClass('giga-grid-locked-col')).toBeFalsy();
             });
             it("should have no identation", ()=> {
                 expect($tr.children("td").first().css('padding-left')).toEqual("0px");

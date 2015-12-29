@@ -60,7 +60,7 @@ export class TableHeader extends React.Component<TableHeaderProps,TableHeaderSta
         });
 
         const dropdownMenuToggle = (
-            <i className={cx} ref={c=>this.dropdownToggleHandleRef=c}
+            <i key={1} className={cx} ref={c=>this.dropdownToggleHandleRef=c}
                onClick={()=>this.dropdownMenuRef.toggleDisplay()}/>
         );
 

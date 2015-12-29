@@ -7,6 +7,7 @@ import {TestUtils} from "../TestUtils";
 import {NewSubtotalAction} from "../../src/store/GigaGridStore";
 import {GigaGridActionType} from "../../src/store/GigaGridStore";
 import {ClearSubtotalAction} from "../../src/store/GigaGridStore";
+import {ToggleCollapseAction} from "../../src/store/GigaGridStore";
 
 describe("GigaGridStore", ()=> {
 
@@ -55,6 +56,24 @@ describe("GigaGridStore", ()=> {
         dispatcher.dispatch({type: GigaGridActionType.CLEAR_SUBTOTAL});
         expect(store.getState().subtotalBys).toEqual([]);
         expect(store.getState().tree.getRoot().getChildren.length).toBe(0);
+    });
+
+    it("can handle TOGGLE_ROW_COLLAPSE action", ()=> {
+
+        dispatcher.dispatch(newSubtotalAction);
+
+        const row = store.getState().tree.getRoot().getChildByTitle("Male");
+        const toggleRowCollapse:ToggleCollapseAction = {
+            type: GigaGridActionType.TOGGLE_ROW_COLLAPSE,
+            subtotalRow: row
+        };
+
+        expect(row.isCollapsed()).toBeFalsy();
+        dispatcher.dispatch(toggleRowCollapse);
+        expect(row.isCollapsed()).toBeTruthy();
+        dispatcher.dispatch(toggleRowCollapse);
+        expect(row.isCollapsed()).toBeFalsy();
+
     });
 
     // TODO write more tests
