@@ -6,11 +6,11 @@ import {SimpleDropdownMenuItem} from "./DropdownMenu";
 import {TableRowColumnDef} from "../../models/ColumnLike";
 import {ColumnFormat} from "../../models/ColumnLike";
 import {DropdownMenuItemProps} from "./DropdownMenu";
-import {GigaGridProps} from "../GigaGrid";
+import {GigaProps} from "../GigaGrid";
 import {GridSubcomponentProps} from "../TableHeader";
-import {GigaGridActionType} from "../../store/GigaGridStore";
-import {NewSubtotalAction} from "../../store/GigaGridStore";
-import {ClearSubtotalAction} from "../../store/GigaGridStore";
+import {GigaActionType} from "../../store/GigaStore";
+import {NewSubtotalAction} from "../../store/GigaStore";
+import {ClearSubtotalAction} from "../../store/GigaStore";
 
 export interface SortMenuItemProps extends GridSubcomponentProps<SortMenuItem> {
     isLastColumn?:boolean;
@@ -80,7 +80,7 @@ export class SubtotalByMenuItem extends React.Component<SubtotalByMenuItemProps,
 
     private onSubmit(e:SyntheticEvent) {
         const action:NewSubtotalAction = {
-            type: GigaGridActionType.NEW_SUBTOTAL,
+            type: GigaActionType.NEW_SUBTOTAL,
             subtotalBys: [{
                 colTag: this.props.tableRowColumnDef.colTag
             }]
@@ -90,7 +90,7 @@ export class SubtotalByMenuItem extends React.Component<SubtotalByMenuItemProps,
 
     private onCancel(e:SyntheticEvent) {
         this.props.dispatcher.dispatch({
-            type: GigaGridActionType.CLEAR_SUBTOTAL
+            type: GigaActionType.CLEAR_SUBTOTAL
         });
     }
 

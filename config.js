@@ -1,16 +1,26 @@
 System.config({
   defaultJSExtensions: true,
-  transpiler: false,
+  transpiler: "babel",
+  babelOptions: {
+    "optional": [
+      "runtime",
+      "optimisation.modules.system"
+    ]
+  },
   paths: {
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*"
   },
 
   map: {
+    "babel": "npm:babel-core@5.8.34",
+    "babel-runtime": "npm:babel-runtime@5.8.34",
     "classnames": "npm:classnames@2.2.1",
+    "core-js": "npm:core-js@1.2.6",
     "eventemitter3": "npm:eventemitter3@1.1.1",
     "flux": "npm:flux@2.1.1",
     "font-awesome": "npm:font-awesome@4.5.0",
+    "immutable": "npm:immutable@3.7.6",
     "jquery": "github:components/jquery@2.1.4",
     "phantomjs-polyfill": "npm:phantomjs-polyfill@0.0.1",
     "react": "npm:react@0.14.3",
@@ -52,6 +62,9 @@ System.config({
     },
     "npm:assert@1.3.0": {
       "util": "npm:util@0.10.3"
+    },
+    "npm:babel-runtime@5.8.34": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:buffer@3.6.0": {
       "base64-js": "npm:base64-js@0.0.8",

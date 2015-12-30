@@ -6,8 +6,8 @@ import {ColumnFormat} from "../models/ColumnLike";
 import {DetailRow} from "../models/Row";
 import {Row} from "../models/Row";
 import {GridSubcomponentProps} from "./TableHeader";
-import {ToggleCollapseAction} from "../store/GigaGridStore";
-import {GigaGridActionType} from "../store/GigaGridStore";
+import {ToggleCollapseAction} from "../store/GigaStore";
+import {GigaActionType} from "../store/GigaStore";
 import SyntheticEvent = __React.SyntheticEvent;
 
 export interface SubtotalTableRowProps extends GridSubcomponentProps<SubtotalTableRow> {
@@ -32,7 +32,7 @@ export class SubtotalTableRow extends React.Component<SubtotalTableRowProps, any
     onCollapseToggle(e:SyntheticEvent) {
         e.preventDefault();
         const action:ToggleCollapseAction = {
-            type: GigaGridActionType.TOGGLE_ROW_COLLAPSE,
+            type: GigaActionType.TOGGLE_ROW_COLLAPSE,
             subtotalRow: this.props.row
         };
         this.props.dispatcher.dispatch(action);
