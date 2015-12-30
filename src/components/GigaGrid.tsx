@@ -3,7 +3,6 @@ import * as Flux from 'flux';
 import * as FluxUtils from 'flux/utils';
 import * as Immutable from 'immutable';
 import ReactElement = __React.ReactElement;
-import {DetailTableRow,SubtotalTableRow} from "./TableRow";
 import {SubtotalBy} from "../models/ColumnLike";
 import {ColumnDef} from "../models/ColumnLike";
 import {ColumnFormat} from "../models/ColumnLike";
@@ -18,6 +17,7 @@ import {GigaStore} from "../store/GigaStore";
 import ReduceStore = FluxUtils.ReduceStore;
 import Dispatcher = Flux.Dispatcher;
 import {GigaAction} from "../store/GigaStore";
+import {TableRow} from "./TableRow";
 import {SortBy} from "../models/ColumnLike";
 
 export interface GigaProps extends React.Props<GigaGrid> {
@@ -112,12 +112,8 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         const rows:Row[] = TreeRasterizer.rasterize(this.state.tree);
         // convert plain ColumnDef to TableRowColumnDef which has additional properties
         return rows.map((row:Row, i:number)=> {
-            if (row.isDetail())
-                return <DetailTableRow key={i} tableRowColumnDefs={tableRowColumnDefs} row={row as DetailRow}
-                                       dispatcher={this.dispatcher}/>;
-            else
-                return <SubtotalTableRow key={i} tableRowColumnDefs={tableRowColumnDefs} row={row as SubtotalRow}
-                                         dispatcher={this.dispatcher}/>
+            return <TableRow key={i} tableRowColumnDefs={tableRowColumnDefs} row={row as DetailRow}
+                             dispatcher={this.dispatcher}/>;
         });
     }
 }

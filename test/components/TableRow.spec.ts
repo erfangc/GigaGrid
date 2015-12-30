@@ -1,13 +1,12 @@
 import * as $ from 'jquery';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {SubtotalTableRow} from "../../src/components/TableRow";
-import {SubtotalTableRowProps} from "../../src/components/TableRow";
+import {TableRow} from "../../src/components/TableRow";
+import {TableRowProps} from "../../src/components/TableRow";
 import {SubtotalRow} from "../../src/models/Row";
-import {DetailTableRowProps} from "../../src/components/TableRow";
-import {DetailTableRow} from "../../src/components/TableRow";
-import {DetailRow} from "../../src/models/Row";
 import {TestUtils} from "../TestUtils";
+import {DetailRow} from "../../src/models/Row";
+import {Row} from "../../src/models/Row";
 
 describe("TableRow Components", () => {
 
@@ -20,15 +19,15 @@ describe("TableRow Components", () => {
         $("body").append("<table><tbody id='container'></tbody></table>");
     });
 
-    describe("SubtotalTableRow", () => {
+    describe("TableRow", () => {
 
         function toDOM(subtotalRow:SubtotalRow) {
-            const props:SubtotalTableRowProps = {
+            const props:TableRowProps = {
                 dispatcher: null,
                 row: subtotalRow,
                 tableRowColumnDefs: TestUtils.getSampleTableRowColumnDefs()
             };
-            const element = React.createElement(SubtotalTableRow, props);
+            const element = React.createElement(TableRow, props);
             ReactDOM.render(element, document.getElementById('container'));
             return $("#container").find("tr");
         }
@@ -94,12 +93,12 @@ describe("TableRow Components", () => {
         describe("render correct under basic conditions", () => {
             var $tr;
             beforeEach(()=> {
-                const props:DetailTableRowProps = {
+                const props:TableRowProps = {
                     dispatcher: null,
                     row: TestUtils.getDetailRow(),
                     tableRowColumnDefs: TestUtils.getSampleTableRowColumnDefs()
                 };
-                const element = React.createElement(DetailTableRow, props);
+                const element = React.createElement(TableRow, props);
                 ReactDOM.render(element, document.getElementById('container'));
                 $tr = $("#container").find("tr");
             });
@@ -119,14 +118,14 @@ describe("TableRow Components", () => {
         });
 
         it("it should have the proper indentation if part of a subtotaled tree", () => {
-            const detailRow:DetailRow = TestUtils.getDetailRow();
+            const detailRow:Row = TestUtils.getDetailRow();
             detailRow.setSectorPath(['Some Parent']);
-            const props:DetailTableRowProps = {
+            const props:TableRowProps = {
                 dispatcher: null,
                 row: detailRow,
                 tableRowColumnDefs: TestUtils.getSampleTableRowColumnDefs()
             };
-            const element = React.createElement(DetailTableRow, props);
+            const element = React.createElement(TableRow, props);
             ReactDOM.render(element, document.getElementById('container'));
             const $tr = $("#container").find("tr");
 
@@ -134,12 +133,12 @@ describe("TableRow Components", () => {
         });
 
         it("should render a row with missing data", ()=> {
-            const props:DetailTableRowProps = {
+            const props:TableRowProps = {
                 dispatcher: null,
                 row: TestUtils.getDetailRowWithMissingData(),
                 tableRowColumnDefs: TestUtils.getSampleTableRowColumnDefs()
             };
-            const element = React.createElement(DetailTableRow, props);
+            const element = React.createElement(TableRow, props);
             ReactDOM.render(element, document.getElementById('container'));
             const $tr = $("#container").find("tr");
 

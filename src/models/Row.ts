@@ -1,8 +1,9 @@
 export interface Row {
-    data(): any;
-    isDetail(): boolean;
-    title:string;
-    sectorPath(): string[];
+    data(): any
+    isDetail(): boolean
+    title:string
+    sectorPath(): string[]
+    setSectorPath(sp:string[])
 }
 
 export class DetailRow implements Row {
