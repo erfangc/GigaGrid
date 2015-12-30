@@ -2,7 +2,7 @@ import * as $ from 'jquery';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {ColumnDef} from "../../src/models/ColumnLike";
-import {GigaGridProps} from "../../src/components/GigaGrid";
+import {GigaProps} from "../../src/components/GigaGrid";
 import {GigaGrid} from "../../src/components/GigaGrid";
 import {SubtotalBy} from "../../src/models/ColumnLike";
 import {TestUtils} from "../TestUtils";
@@ -23,7 +23,7 @@ describe('GigaGrid', ()=> {
 
         const data:any[] = TestUtils.getSampleData().data;
         const columnDefs:ColumnDef[] = TestUtils.getSampleData().columnDefs;
-        const gigaGridProps:GigaGridProps = {data: data, columnDefs: columnDefs};
+        const gigaGridProps:GigaProps = {data: data, columnDefs: columnDefs};
         const element = React.createElement(GigaGrid, gigaGridProps);
         const $container = $("#container");
 
@@ -38,10 +38,10 @@ describe('GigaGrid', ()=> {
 
         const data:any[] = TestUtils.getSampleData().data;
         const columnDefs:ColumnDef[] = TestUtils.getSampleData().columnDefs;
-        const gigaGridProps:GigaGridProps = {data: data, columnDefs: columnDefs};
+        const gigaGridProps:GigaProps = {data: data, columnDefs: columnDefs};
         gigaGridProps.initialSubtotalBys = [{colTag: "gender"}];
 
-        const element = React.createElement<GigaGridProps>(GigaGrid, gigaGridProps);
+        const element = React.createElement<GigaProps>(GigaGrid, gigaGridProps);
         const $container = $("#container");
 
         ReactDOM.render(element, document.getElementById("container"));

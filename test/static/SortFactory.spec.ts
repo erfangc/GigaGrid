@@ -1,15 +1,15 @@
 import {Tree} from "../../src/static/TreeBuilder";
 import {TestUtils} from "../TestUtils";
-import {SortDirection} from "../../src/static/SortFactory";
 import {SortFactory} from "../../src/static/SortFactory";
 import {ColumnFormat} from "../../src/models/ColumnLike";
+import {SortDirection} from "../../src/models/ColumnLike";
 
 describe("SortFactory", ()=> {
 
     const unsubtotaledTree = TestUtils.getUnsubtotaledTree();
     const subtotaledTree = TestUtils.getTreeSubtotaledByGender();
 
-    const ascSortBys = [
+    const sortByGenderGiftAsc = [
         {
             colTag: "gender",
             format: ColumnFormat.STRING,
@@ -21,29 +21,80 @@ describe("SortFactory", ()=> {
             direction: SortDirection.ASC
         }];
 
-    const descSortBys = [{
-        colTag: "gender",
-        format: ColumnFormat.STRING,
-        direction: SortDirection.DESC
-    },
+    const sortByGenderGiftDesc = [
+        {
+            colTag: "gender",
+            format: ColumnFormat.STRING,
+            direction: SortDirection.DESC
+        },
         {
             colTag: "gift",
             format: ColumnFormat.NUMBER,
             direction: SortDirection.DESC
         }];
 
-    it("can perform basic sorting on a un-subtotaled tree", ()=> {
-        const sortedTree:Tree = SortFactory.sortTree(unsubtotaledTree, ascSortBys);
-        expect(sortedTree.getRoot().detailRows[0].data()['gender']).toBe("Female");
-        expect(sortedTree.getRoot().detailRows[0].data()['gift']).toEqual(2);
+    const sortByGiftAsc = [
+        {
+            colTag: "gift",
+            format: ColumnFormat.NUMBER,
+            direction: SortDirection.ASC
+        }
+    ];
+
+    const sortByGiftDesc = [
+        {
+            colTag: "gift",
+            format: ColumnFormat.NUMBER,
+            direction: SortDirection.DESC
+        }
+    ];
+
+    describe("sort un-subtotaled tree", ()=> {
+
+        it("sort string then number columns", ()=> {
+            var sortedTree:Tree = SortFactory.sortTree(unsubtotaledTree, sortByGenderGiftAsc);
+            expect(sortedTree.getRoot().detailRows[0].data()['gender']).toBe("Female");
+            expect(sortedTree.getRoot().detailRows[0].data()['gift']).toEqual(2);
+
+            var sortedTree:Tree = SortFactory.sortTree(unsubtotaledTree, sortByGenderGiftDesc);
+            expect(sortedTree.getRoot().detailRows[0].data()['gender']).toBe("Male");
+            expect(sortedTree.getRoot().detailRows[0].data()['gift']).toEqual(9);
+        });
+
+        it("sort a number column", ()=> {
+            var sortedTree:Tree = SortFactory.sortTree(unsubtotaledTree, sortByGiftDesc);
+            expect(sortedTree.getRoot().detailRows[0].data()['gift']).toEqual(10);
+
+            var sortedTree:Tree = SortFactory.sortTree(unsubtotaledTree, sortByGiftAsc);
+            expect(sortedTree.getRoot().detailRows[0].data()['gift']).toEqual(2);
+        });
+
     });
 
-    it("can perform sorting on subtotaled a tree as well, all the subtotal rows should be sorted at each level", ()=> {
-        const sortedTree:Tree = SortFactory.sortTree(subtotaledTree, ascSortBys);
-        expect(sortedTree.getRoot().getChildAtIndex(0).title).toBe("Female");
+    describe("sort subtotaled tree", ()=> {
 
-        const descSortedTree:Tree = SortFactory.sortTree(subtotaledTree, descSortBys);
-        expect(descSortedTree.getRoot().getChildAtIndex(0).title).toBe("Male");
+        it("sort string then columns", ()=> {
+            var sortedTree = SortFactory.sortTree(subtotaledTree, sortByGenderGiftAsc);
+            expect(sortedTree.getRoot().getChildAtIndex(0).title).toBe("Female");
+
+            sortedTree = SortFactory.sortTree(subtotaledTree, sortByGenderGiftDesc);
+            expect(sortedTree.getRoot().getChildAtIndex(0).title).toBe("Male");
+        });
+
+        it("sort a number column", ()=> {
+            var sortedTree:Tree = SortFactory.sortTree(subtotaledTree, sortByGiftAsc);
+            expect(sortedTree.getRoot().getChildAtIndex(0).title).toBe("Female");
+
+            sortedTree = SortFactory.sortTree(subtotaledTree, sortByGiftDesc);
+            expect(sortedTree.getRoot().getChildAtIndex(0).title).toBe("Male");
+        });
+
     });
+
+    it("will not cause an error is sorting a blank array of SortBy", ()=> {
+        expect(SortFactory.sortTree(subtotaledTree,[])).not.toBeNull();
+        expect(SortFactory.sortTree(unsubtotaledTree,[])).not.toBeNull();
+    });
+
 
 });

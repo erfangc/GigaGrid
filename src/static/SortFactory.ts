@@ -2,17 +2,8 @@ import {Tree} from "./TreeBuilder";
 import {Row} from "../models/Row";
 import {ColumnFormat} from "../models/ColumnLike";
 import {SubtotalRow} from "../models/Row";
-
-export enum SortDirection {
-    ASC, DESC
-}
-
-export interface SortBy {
-    colTag:string;
-    format: ColumnFormat;
-    customSortFn?:(a:Row, b:Row)=>number; // UDF for sorting
-    direction: SortDirection
-}
+import {SortBy} from "../models/ColumnLike";
+import {SortDirection} from "../models/ColumnLike";
 
 export class SortFactory {
 
@@ -35,6 +26,12 @@ export class SortFactory {
     }
 
     private static createCompositeSortFn(sortBys:SortBy[]):(a:Row, b:Row)=>number {
+
+        if (!sortBys || sortBys.length === 0)
+            return function (a:Row, b:Row):number {
+                return 0;
+            };
+
         // iterate through the sortBys in order, create a sort function for each sort by
         // apply that sortBy function to the data, use the next sortBy as tie breaker
         return function (a:Row, b:Row):number {

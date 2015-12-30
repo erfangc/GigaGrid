@@ -7,11 +7,12 @@ import {SimpleDropdownMenuItem} from "./dropdown/DropdownMenu";
 import {ColumnFormat} from "../models/ColumnLike";
 import {SubtotalByMenuItem} from "./dropdown/StandardMenuItems";
 import {SortMenuItem} from "./dropdown/StandardMenuItems";
-import {GigaGridAction} from "../store/GigaGridStore";
+import {GigaAction} from "../store/GigaStore";
 import ReactDOM = __React.ReactDOM;
+import {SortDirection} from "../models/ColumnLike";
 
 export interface GridSubcomponentProps<T> extends React.Props<T> {
-    dispatcher: Dispatcher<GigaGridAction>;
+    dispatcher: Dispatcher<GigaAction>;
 }
 
 export interface TableHeaderProps extends GridSubcomponentProps<TableHeader> {
@@ -49,6 +50,20 @@ export class TableHeader extends React.Component<TableHeaderProps,TableHeaderSta
         );
     }
 
+    renderSortIcon() {
+        if (this.props.tableColumnDef.sortDirection != undefined) {
+            const cx = classNames({
+                "fa": true,
+                "fa-sort-asc": this.props.tableColumnDef.sortDirection === SortDirection.ASC,
+                "fa-sort-desc": this.props.tableColumnDef.sortDirection === SortDirection.DESC
+            });
+            return (
+                <span>
+                    <i className={cx}/>
+                </span>
+            );
+        }
+    }
 
     render() {
         const columnDef = this.props.tableColumnDef;
@@ -72,6 +87,7 @@ export class TableHeader extends React.Component<TableHeaderProps,TableHeaderSta
                 <span>
                     {columnDef.title || columnDef.colTag}
                 </span>
+                {this.renderSortIcon()}
                 {!this.props.isLastColumn ? [" ", dropdownMenuToggle] : null}
                 {this.renderDropdownMenu()}
             </th>
