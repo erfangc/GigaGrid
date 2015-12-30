@@ -11,19 +11,22 @@ import {GigaActionType} from "../store/GigaStore";
 import SyntheticEvent = __React.SyntheticEvent;
 import {Cell} from "./Cell";
 
-export interface SubtotalTableRowProps extends GridSubcomponentProps<SubtotalTableRow> {
-    row:SubtotalRow;
+export interface TableRowProps extends GridSubcomponentProps<TableRow> {
+    row:Row;
     tableRowColumnDefs:TableRowColumnDef[];
 }
 
-export class SubtotalTableRow extends React.Component<SubtotalTableRowProps, any> {
+export class TableRow extends React.Component<TableRowProps, any> {
 
-    constructor(props:SubtotalTableRowProps) {
+    constructor(props:TableRowProps) {
         super(props);
     }
 
     render() {
         const props = this.props;
+        const cx = classNames({
+            "subtotal-row": !props.row.isDetail()
+        });
         const cells = props
             .tableRowColumnDefs
             .map((colDef:TableRowColumnDef, i:number) => {
@@ -33,30 +36,6 @@ export class SubtotalTableRow extends React.Component<SubtotalTableRowProps, any
                               dispatcher={this.props.dispatcher}
                               row={this.props.row}/>)
             });
-        return <tr className="subtotal-row">{cells}</tr>
+        return <tr className={cx}>{cells}</tr>
     }
-}
-
-export interface DetailTableRowProps extends GridSubcomponentProps<DetailTableRow> {
-    row:DetailRow;
-    tableRowColumnDefs:TableRowColumnDef[];
-}
-
-export class DetailTableRow extends React.Component<DetailTableRowProps, any> {
-
-    constructor(props:DetailTableRowProps) {
-        super(props);
-    }
-
-    render() {
-        const tds = this.props.tableRowColumnDefs.map((colDef:TableRowColumnDef, i:number) => {
-            return <Cell key={i}
-                         isFirstColumn={i === 0}
-                         dispatcher={this.props.dispatcher}
-                         tableRowColumnDef={colDef}
-                         row={this.props.row}/>;
-        });
-        return <tr>{tds}</tr>
-    }
-
 }
