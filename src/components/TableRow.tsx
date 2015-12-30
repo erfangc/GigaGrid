@@ -9,19 +9,12 @@ import {GridSubcomponentProps} from "./TableHeader";
 import {ToggleCollapseAction} from "../store/GigaStore";
 import {GigaActionType} from "../store/GigaStore";
 import SyntheticEvent = __React.SyntheticEvent;
+import {Cell} from "./Cell";
 
 export interface SubtotalTableRowProps extends GridSubcomponentProps<SubtotalTableRow> {
     row:SubtotalRow;
     tableRowColumnDefs:TableRowColumnDef[];
 }
-
-class TableRowUtils {
-    public static calculateFirstColumnIdentation(row:Row) {
-        const identLevel = (row.sectorPath() || []).length;
-        return ((row.isDetail() && identLevel !== 0 ? identLevel + 1 : identLevel ) * 25) + 'px';
-    }
-}
-
 
 export class SubtotalTableRow extends React.Component<SubtotalTableRowProps, any> {
 
@@ -29,40 +22,18 @@ export class SubtotalTableRow extends React.Component<SubtotalTableRowProps, any
         super(props);
     }
 
-    onCollapseToggle(e:SyntheticEvent) {
-        e.preventDefault();
-        const action:ToggleCollapseAction = {
-            type: GigaActionType.TOGGLE_ROW_COLLAPSE,
-            subtotalRow: this.props.row
-        };
-        this.props.dispatcher.dispatch(action);
-    }
-
     render() {
-        const tds = this.props.tableRowColumnDefs.map((colDef:TableRowColumnDef, i:number) => {
-            const padding = TableRowUtils.calculateFirstColumnIdentation(this.props.row);
-            if (i === 0) {
-                const cx = classNames({
-                    "fa": true,
-                    "fa-minus": !this.props.row.isCollapsed(),
-                    "fa-plus": this.props.row.isCollapsed()
-                });
-                return (
-                    <td key={i}
-                        style={{width: colDef.width, paddingLeft: padding}}>
-                        <strong onClick={e => this.onCollapseToggle(e)}>
-                            <span>
-                                <i className={cx}/>&nbsp;
-                            </span>
-                            {this.props.row.title}
-                        </strong>
-                    </td>);
-            }
-            else
-            return <td key={i} className={colDef.format === ColumnFormat.NUMBER ? "numeric" : "non-numeric"}
-                       style={{width: colDef.width}}>{this.props.row.data()[colDef.colTag] || ""}</td>;
-        });
-        return <tr className="subtotal-row">{tds}</tr>
+        const props = this.props;
+        const cells = props
+            .tableRowColumnDefs
+            .map((colDef:TableRowColumnDef, i:number) => {
+                return (<Cell key={i}
+                              isFirstColumn={i === 0}
+                              tableRowColumnDef={colDef}
+                              dispatcher={this.props.dispatcher}
+                              row={this.props.row}/>)
+            });
+        return <tr className="subtotal-row">{cells}</tr>
     }
 }
 
@@ -79,12 +50,11 @@ export class DetailTableRow extends React.Component<DetailTableRowProps, any> {
 
     render() {
         const tds = this.props.tableRowColumnDefs.map((colDef:TableRowColumnDef, i:number) => {
-
-            var style = {width: colDef.width, paddingLeft: undefined};
-            if (i === 0)
-                style.paddingLeft = TableRowUtils.calculateFirstColumnIdentation(this.props.row);
-            return <td key={i} className={colDef.format === ColumnFormat.NUMBER ? "numeric" : "non-numeric"}
-                       style={style}>{this.props.row.data()[colDef.colTag] || ""}</td>;
+            return <Cell key={i}
+                         isFirstColumn={i === 0}
+                         dispatcher={this.props.dispatcher}
+                         tableRowColumnDef={colDef}
+                         row={this.props.row}/>;
         });
         return <tr>{tds}</tr>
     }
