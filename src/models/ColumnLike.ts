@@ -19,12 +19,13 @@ export interface ColumnDef {
 }
 
 export interface TableRowColumnDef extends ColumnDef {
-    width?:string;
-    sortDirection?: SortDirection,
-    customSortFn?:(a:Row,b:Row)=>number;
+    width?:string
+    sortDirection?: SortDirection
+    customSortFn?:(a:Row, b:Row)=>number
+    cellTemplateCreator?:(data:any, tableRowColumnDef?:TableRowColumnDef)=>JSX.Element
 }
 
-export interface SubtotalBy extends ColumnLike{
+export interface SubtotalBy extends ColumnLike {
 }
 
 export enum SortDirection {
