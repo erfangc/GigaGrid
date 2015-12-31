@@ -23,9 +23,9 @@ System.config({
     "immutable": "npm:immutable@3.7.6",
     "jquery": "github:components/jquery@2.1.4",
     "phantomjs-polyfill": "npm:phantomjs-polyfill@0.0.1",
-    "react": "npm:react@0.14.3",
+    "react": "npm:react@0.14.5",
     "react-addons-test-utils": "npm:react-addons-test-utils@0.14.3",
-    "react-dom": "npm:react-dom@0.14.3",
+    "react-dom": "npm:react-dom@0.14.5",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"
     },
@@ -120,6 +120,14 @@ System.config({
       "ua-parser-js": "npm:ua-parser-js@0.7.10",
       "whatwg-fetch": "npm:whatwg-fetch@0.9.0"
     },
+    "npm:fbjs@0.6.0": {
+      "core-js": "npm:core-js@1.2.6",
+      "loose-envify": "npm:loose-envify@1.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "promise": "npm:promise@7.1.1",
+      "ua-parser-js": "npm:ua-parser-js@0.7.10",
+      "whatwg-fetch": "npm:whatwg-fetch@0.9.0"
+    },
     "npm:flux@2.1.1": {
       "fbemitter": "npm:fbemitter@2.0.0",
       "fbjs": "npm:fbjs@0.1.0-alpha.7",
@@ -159,12 +167,17 @@ System.config({
     "npm:react-addons-test-utils@0.14.3": {
       "react": "npm:react@0.14.3"
     },
-    "npm:react-dom@0.14.3": {
-      "react": "npm:react@0.14.3"
+    "npm:react-dom@0.14.5": {
+      "react": "npm:react@0.14.5"
     },
     "npm:react@0.14.3": {
       "envify": "npm:envify@3.4.0",
       "fbjs": "npm:fbjs@0.3.2",
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:react@0.14.5": {
+      "envify": "npm:envify@3.4.0",
+      "fbjs": "npm:fbjs@0.6.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:readable-stream@1.1.13": {

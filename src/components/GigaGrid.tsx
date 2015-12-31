@@ -1,3 +1,5 @@
+///<reference path="../../jspm_packages/npm/immutable@3.7.6/dist/immutable.d.ts"/>
+
 import * as React from 'react';
 import * as Flux from 'flux';
 import * as FluxUtils from 'flux/utils';
