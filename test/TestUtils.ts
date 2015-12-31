@@ -120,7 +120,7 @@ export class TestUtils {
      * returns column definitions for two numeric columns: numCol1, numCol2, as well as two string columns: textCol1, textCol2
      * @returns {ColumnDef[]}
      */
-    public static getSampleColumnDefs():ColumnDef[] {
+    public static getSimpleColumnDefs():ColumnDef[] {
         const columnDef1:ColumnDef = {
             colTag: "numCol1",
             title: "",
@@ -156,10 +156,10 @@ export class TestUtils {
 
     /**
      * wraps around the sample columnDefs returned by another method
-     * @see getSampleColumnDefs
+     * @see getSimpleColumnDefs
      * @returns {TableRowColumnDef[]}
      */
     public static getSampleTableRowColumnDefs():TableRowColumnDef[] {
-        return TestUtils.getSampleColumnDefs();
+        return TestUtils.getSimpleColumnDefs();
     }
 }

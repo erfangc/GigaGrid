@@ -13,7 +13,6 @@ export interface CellProps extends GridSubcomponentProps<Cell> {
     row:Row
     tableRowColumnDef:TableRowColumnDef
     isFirstColumn?:boolean
-    cellTemplateCreator?:(data:any, tableRowColumnDef?:TableRowColumnDef)=>Element
 }
 
 
@@ -74,9 +73,16 @@ export class Cell extends React.Component<CellProps,any> {
         if (props.isFirstColumn && !row.isDetail())
             result = this.renderSubtotalCellWithCollapseBtn(row as SubtotalRow);
         else
-            result = (<td className={cx} style={this.calculateStyle()}>{row.data()[cd.colTag] || ""}</td>);
+            result = (<td className={cx} style={this.calculateStyle()}>{this.renderContent(row,cd)}</td>);
 
         return result;
+    }
+
+    private renderContent(row:Row, cd:TableRowColumnDef) {
+        if (cd.cellTemplateCreator)
+            return cd.cellTemplateCreator(row.data()[cd.colTag], cd);
+        else
+            return row.data()[cd.colTag] || "";
     }
 }
 
