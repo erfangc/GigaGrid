@@ -27,6 +27,8 @@ export interface GigaProps extends React.Props<GigaGrid> {
     initialSubtotalBys?:SubtotalBy[]
     initialSortBys?:SortBy[]
     initialFilterBys?:FilterBy[]
+    onRowClick?: (row:Row)=>boolean
+    onCellClick?: (row:Row,columnDef: TableRowColumnDef)=>boolean
     data:any[]
     columnDefs:ColumnDef[]
 }
@@ -63,6 +65,8 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         this.dispatcher = new Dispatcher<GigaAction>();
         this.store = new GigaStore(this.dispatcher, props);
         this.state = this.store.getState();
+        // do not call setState again, this is the only place! otherwise you are violating the principles of Flux
+        // not that would be wrong but it would break the 1 way data flow and make keeping track of mutation difficult
         this.store.addListener(()=> {
             this.setState(this.store.getState());
         });

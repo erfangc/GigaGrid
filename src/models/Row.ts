@@ -1,20 +1,33 @@
 export interface Row {
+    title:string
     data(): any
     isDetail(): boolean
-    title:string
+    isHidden(): boolean
+    toggleHide(hide?:boolean): void
     sectorPath(): string[]
     setSectorPath(sp:string[])
 }
 
-export class DetailRow implements Row {
+abstract class GenericRow implements Row {
 
     private _data:any;
     private _sectorPath:string[];
-
+    private _isHidden:boolean = false;
     public title:string = null;
 
     constructor(data:any) {
         this._data = data;
+    }
+
+    isHidden() {
+        return this._isHidden;
+    }
+
+    toggleHide(hide?:boolean) {
+        if (typeof hide !== "undefined")
+            this._isHidden = hide;
+        else
+            this._isHidden = !this._isHidden;
     }
 
     sectorPath():string[] {
@@ -25,23 +38,36 @@ export class DetailRow implements Row {
         this._sectorPath = sectorPath;
     }
 
+    data():any {
+        return this._data
+    }
+
+    setData(data:any) {
+        this._data = data;
+    }
+
+    abstract isDetail(): boolean;
+
+}
+
+export class DetailRow extends GenericRow {
+
+    constructor(data:any) {
+        super(data);
+    }
+
     isDetail():boolean {
         return true
     }
 
-    data():any {
-        return this._data
-    }
 }
 
-export class SubtotalRow implements Row {
+export class SubtotalRow extends GenericRow {
 
     public detailRows:DetailRow[];
     public title:string;
     private children:SubtotalRow[] = [];
     private childrenByTitle:{ [title: string] : SubtotalRow; } = {};
-    private _data:any = {};
-    private _sectorPath:string[];
     private _isCollapsed:boolean = false;
 
     toggleCollapse(state?:boolean) {
@@ -55,24 +81,8 @@ export class SubtotalRow implements Row {
         return this._isCollapsed;
     }
 
-    sectorPath():string[] {
-        return this._sectorPath;
-    }
-
-    setSectorPath(sectorPath:string[]) {
-        this._sectorPath = sectorPath;
-    }
-
     isDetail():boolean {
         return false;
-    }
-
-    data():any {
-        return this._data;
-    }
-
-    setData(data:any):void {
-        this._data = data;
     }
 
     private findIndex(child:SubtotalRow) {
@@ -83,6 +93,7 @@ export class SubtotalRow implements Row {
     }
 
     constructor(title:string) {
+        super({});
         this.detailRows = [];
         this.title = title;
     }
