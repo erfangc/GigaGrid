@@ -4,7 +4,6 @@ import * as $ from 'jquery';
 import className = require('classnames');
 import SyntheticEvent = __React.SyntheticEvent;
 
-
 export interface DropdownMenuProps extends React.Props<DropdownMenu> {
     /**
      * an no-arg function that returns the DOM Element that toggle the visibility of this dropdown menu
@@ -72,6 +71,10 @@ export class DropdownMenu extends React.Component<DropdownMenuProps, DropdownMen
     }
 
     componentDidMount() {
+        /*
+         * we add an event listener on the window to listen to clicks that originated outside the bounds of this menu
+         * when triggered, we hide this menu
+         */
         this.clickOutsideHandler = (event:MouseEvent) => {
             var toggleHandle = null;
             if (this.props.toggleHandle)
@@ -88,6 +91,9 @@ export class DropdownMenu extends React.Component<DropdownMenuProps, DropdownMen
     }
 
     componentWillUnmount() {
+        /*
+         * remove any lingerly event listeners
+         */
         if (typeof document !== "undefined")
             document.removeEventListener('mousedown', this.clickOutsideHandler);
     }
