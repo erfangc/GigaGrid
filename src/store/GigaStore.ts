@@ -35,6 +35,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return {
             subtotalBys: this.props.initialSubtotalBys || [],
             sortBys: this.props.initialSortBys || [],
+            filterBys: this.props.initialFilterBys || [],
             tree: tree
         }
     }
@@ -96,6 +97,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
         return {
             subtotalBys: action.subtotalBys,
+            filterBys: state.filterBys,
             sortBys: state.sortBys,
             tree: newTree
         }
@@ -108,6 +110,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return {
             subtotalBys: [],
             sortBys: state.sortBys,
+            filterBys: state.filterBys,
             tree: newTree
         };
     }
@@ -123,6 +126,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return {
             tree: newTree,
             sortBys: state.sortBys,
+            filterBys: state.filterBys,
             subtotalBys: state.subtotalBys
         };
     }
@@ -132,6 +136,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return {
             tree: newTree,
             sortBys: action.sortBys,
+            filterBys: state.filterBys,
             subtotalBys: state.subtotalBys
         };
     }
@@ -141,7 +146,8 @@ export class GigaStore extends ReduceStore<GigaState> {
         return {
             tree: newTree,
             sortBys: [],
-            subtotalBys: state.subtotalBys
+            subtotalBys: state.subtotalBys,
+            filterBys: state.filterBys
         };
     }
 

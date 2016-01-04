@@ -5,11 +5,12 @@ import {TableRowColumnDef} from "../models/ColumnLike";
 import {DropdownMenu} from "./dropdown/DropdownMenu";
 import {SimpleDropdownMenuItem} from "./dropdown/DropdownMenu";
 import {ColumnFormat} from "../models/ColumnLike";
-import {SubtotalByMenuItem} from "./dropdown/StandardMenuItems";
-import {SortMenuItem} from "./dropdown/StandardMenuItems";
+import {SortMenuItem} from "./dropdown/SortMenuItem";
 import {GigaAction} from "../store/GigaStore";
 import ReactDOM = __React.ReactDOM;
 import {SortDirection} from "../models/ColumnLike";
+import {SubtotalByMenuItem} from "./dropdown/SubtotalByMenuItem";
+import {FilterMenuItem} from "./dropdown/FilterMenuItem";
 
 export interface GridSubcomponentProps<T> extends React.Props<T> {
     dispatcher: Dispatcher<GigaAction>;
@@ -45,8 +46,12 @@ export class TableHeader extends React.Component<TableHeaderProps,TableHeaderSta
                     <SubtotalByMenuItem tableRowColumnDef={this.props.tableColumnDef}
                                         isLastColumn={this.props.isLastColumn}
                                         dispatcher={this.props.dispatcher}/>
+                    <FilterMenuItem dispatcher={this.props.dispatcher}
+                                    isLastColumn={this.props.isLastColumn}
+                                    tableRowColumnDef={this.props.tableColumnDef}/>
                 </DropdownMenu>
             </span>
+
         );
     }
 

@@ -21,10 +21,12 @@ import Dispatcher = Flux.Dispatcher;
 import {GigaAction} from "../store/GigaStore";
 import {TableRow} from "./TableRow";
 import {SortBy} from "../models/ColumnLike";
+import {FilterBy} from "../models/ColumnLike";
 
 export interface GigaProps extends React.Props<GigaGrid> {
     initialSubtotalBys?:SubtotalBy[]
     initialSortBys?:SortBy[]
+    initialFilterBys?:FilterBy[]
     data:any[]
     columnDefs:ColumnDef[]
 }
@@ -33,6 +35,7 @@ export interface GigaState {
     tree:Tree
     subtotalBys:SubtotalBy[]
     sortBys:SortBy[]
+    filterBys: FilterBy[]
 }
 
 /**
@@ -118,4 +121,5 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                              dispatcher={this.dispatcher}/>;
         });
     }
+
 }

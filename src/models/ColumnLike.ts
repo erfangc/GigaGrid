@@ -1,4 +1,5 @@
 import {Row} from "./Row";
+
 export enum AggregationMethod {
     SUM, AVERAGE, NONE
 }
@@ -9,6 +10,10 @@ export enum ColumnFormat {
 
 export interface ColumnLike {
     colTag: string
+}
+
+export enum SortDirection {
+    ASC, DESC
 }
 
 export interface ColumnDef {
@@ -25,11 +30,11 @@ export interface TableRowColumnDef extends ColumnDef {
     cellTemplateCreator?:(data:any, tableRowColumnDef?:TableRowColumnDef)=>JSX.Element
 }
 
-export interface SubtotalBy extends ColumnLike {
+export interface FilterBy extends ColumnLike {
+    predicate: (a:any)=>boolean
 }
 
-export enum SortDirection {
-    ASC, DESC
+export interface SubtotalBy extends ColumnLike {
 }
 
 export interface SortBy {
