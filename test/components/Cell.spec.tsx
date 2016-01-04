@@ -38,11 +38,11 @@ describe("Cell", ()=> {
                 </tbody>
             </table>
         );
-        const $domNode = $(ReactDOM.findDOMNode(component));
-        expect($domNode.text()).toBe("R2D2");
+        const textContent = ReactTestUtils.scryRenderedDOMComponentsWithTag(component, "td")[0].textContent;
+        expect(textContent).toBe("R2D2");
     });
 
-    it("can handle custom cell", ()=> {
+    it("can handle custom cell content", ()=> {
 
         const colDef = columnDefs[2];
         colDef.cellTemplateCreator = (data:any, tableRowColumnDef?:TableRowColumnDef):JSX.Element => {
@@ -65,9 +65,11 @@ describe("Cell", ()=> {
             </table>
         );
 
-        expect($(ReactDOM.findDOMNode(component)).find("span").length).toBe(1);
-        expect($(ReactDOM.findDOMNode(component)).find("span").text()).toBe("Hello World");
-        expect($(ReactDOM.findDOMNode(component)).find("span").css("color")).toBe("green");
+        const spans = ReactTestUtils.scryRenderedDOMComponentsWithTag(component, "span");
+
+        expect(spans.length).toBe(1);
+        expect(spans[0].textContent).toBe("Hello World");
+        expect($(spans[0]).css("color")).toBe("green");
 
     });
 
@@ -87,7 +89,7 @@ describe("Cell", ()=> {
                 </tbody>
             </table>
         );
-        expect($(ReactDOM.findDOMNode(component)).css("padding-left")).toBe("75px");
+        expect($(ReactTestUtils.findRenderedDOMComponentWithTag(component,"td")).css("padding-left")).toBe("75px");
     });
 
     it("can render a +/- for the first cell of a subtotal row", ()=> {
@@ -106,7 +108,7 @@ describe("Cell", ()=> {
                 </tbody>
             </table>
         );
-        expect($(ReactDOM.findDOMNode(component)).find("i.fa").length).toBe(1);
+        expect($(ReactTestUtils.findRenderedDOMComponentWithTag(component,"td")).find("i.fa").length).toBe(1);
     });
 
 });

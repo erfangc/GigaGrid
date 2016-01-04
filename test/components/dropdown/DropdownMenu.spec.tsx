@@ -19,7 +19,7 @@ describe("DropdownMenu", ()=> {
                     <SimpleDropdownMenuItem text="Item 1"/>
                     <SimpleDropdownMenuItem text="Item 2"/>
                 </DropdownMenu>);
-            $componentNode = $(ReactDOM.findDOMNode(component));
+            $componentNode = $(ReactTestUtils.findRenderedDOMComponentWithTag(component,"ul"));
         });
 
         it("has 2 items", ()=> {
