@@ -25,6 +25,8 @@ import {SortBy} from "../models/ColumnLike";
 import {FilterBy} from "../models/ColumnLike";
 import {TableWidthChangeAction} from "../store/GigaStore";
 import {GigaActionType} from "../store/GigaStore";
+import {WidthMeasures} from "../static/WidthMeasureCalculator";
+import {WidthMeasureCalculator} from "../static/WidthMeasureCalculator";
 
 export interface GigaProps extends React.Props<GigaGrid> {
     initialSubtotalBys?:SubtotalBy[]
@@ -34,8 +36,8 @@ export interface GigaProps extends React.Props<GigaGrid> {
     onCellClick?: (row:Row, columnDef:TableRowColumnDef)=>boolean
     data:any[]
     columnDefs:ColumnDef[]
-    height?:string
-    width?:string
+    bodyHeight?:string
+    bodyWidth?:string
 }
 
 export interface GigaState {
@@ -43,7 +45,7 @@ export interface GigaState {
     subtotalBys:SubtotalBy[]
     sortBys:SortBy[]
     filterBys: FilterBy[]
-    tableWidth:string
+    widthMeasures: WidthMeasures
 }
 
 /**
@@ -79,16 +81,17 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
     }
 
     render() {
+
         const tableRowColumnDefs:TableRowColumnDef[] = this.props.columnDefs.map(cd => {
 
-            // todo we need an algorithm to always be able to derive explicit cell width for every column
+            // todo we need an algorithm to always be able to derive explicit cell bodyWidth for every column
 
             const tableRowCD:TableRowColumnDef = {
                 colTag: cd.colTag,
                 title: cd.title,
                 aggregationMethod: cd.aggregationMethod,
                 format: cd.format,
-                width: cd.width || "auto" // todo we should always explicitly specify width, might have to be done after the component has been mounted
+                width: this.state.widthMeasures.columnWidths[cd.colTag]
             };
 
             // determine if there is an existing SortBy for this column
@@ -102,16 +105,18 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         });
 
         const bodyStyle = {
-            height: this.props.height || "100%",
-            width: this.state.tableWidth || "100%"
+            height: this.props.bodyHeight || "100%", // TODO we will need to give similar consideration to height as we did for width
+            width: this.state.widthMeasures.bodyWidth
         };
 
         return (
             <div className="giga-grid">
-                <table>
-                    {this.renderColumnHeaders(tableRowColumnDefs)}
-                </table>
-                <div className="giga-grid-scrollable" style={bodyStyle}>
+                <div style={{width: this.state.widthMeasures.bodyWidth}}>
+                    <table>
+                        {this.renderColumnHeaders(tableRowColumnDefs)}
+                    </table>
+                </div>
+                <div className="giga-grid-body-scroll-y" style={bodyStyle}>
                     <table>
                         <tbody>
                             {this.renderTableRows(tableRowColumnDefs)}
@@ -134,8 +139,9 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
     }
 
     componentDidMount() {
-        // if no width was provided, this is where we set the table's width
-        if (!this.props.width) {
+        // if no bodyWidth was provided and there are no explicit width set for columns, this is where we set the table's bodyWidth
+        // after it has been mounted and the parent width is known
+        if (!this.props.bodyWidth && !WidthMeasureCalculator.allColumnWidthProvided(this.props.columnDefs)) {
             const parentWidth = ReactDOM.findDOMNode(this).parentElement.offsetWidth + "px";
             const action = {
                 type: GigaActionType.TABLE_WIDTH_CHANGE,

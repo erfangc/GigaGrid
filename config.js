@@ -22,6 +22,7 @@ System.config({
     "font-awesome": "npm:font-awesome@4.5.0",
     "immutable": "npm:immutable@3.7.6",
     "jquery": "github:components/jquery@2.1.4",
+    "lodash": "npm:lodash@3.10.1",
     "phantomjs-polyfill": "npm:phantomjs-polyfill@0.0.1",
     "react": "npm:react@0.14.5",
     "react-addons-test-utils": "npm:react-addons-test-utils@0.14.3",
@@ -147,6 +148,9 @@ System.config({
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "source-map": "npm:source-map@0.1.31"
+    },
+    "npm:lodash@3.10.1": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:loose-envify@1.1.0": {
       "js-tokens": "npm:js-tokens@1.0.2",
