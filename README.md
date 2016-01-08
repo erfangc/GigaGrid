@@ -26,7 +26,7 @@ To compile, simply run `tsc` (TypeScript compiler)
 tsc
 
 # or watch for file changes with -w
-tsc - w
+tsc -w
 ```
 
 # Testing
