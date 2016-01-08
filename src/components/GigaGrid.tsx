@@ -27,6 +27,8 @@ import {TableWidthChangeAction} from "../store/GigaStore";
 import {GigaActionType} from "../store/GigaStore";
 import {WidthMeasures} from "../static/WidthMeasureCalculator";
 import {WidthMeasureCalculator} from "../static/WidthMeasureCalculator";
+import {parsePixelValue} from "../static/WidthMeasureCalculator";
+import {allColumnWidthProvided} from "../static/WidthMeasureCalculator";
 
 export interface GigaProps extends React.Props<GigaGrid> {
     initialSubtotalBys?:SubtotalBy[]
@@ -131,6 +133,9 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             return <TableHeader tableColumnDef={colDef} key={i} isFirstColumn={i===0}
                                 isLastColumn={i===tableRowColumnDefs.length-1} dispatcher={this.dispatcher}/>
         });
+        // add a placeholder to align the header with cells
+        // https://github.com/erfangc/GigaGrid/issues/7
+        ths.push(<th key="placeholder" style={{width:"17px"}}/>);
         return (
             <thead>
                 <tr>{ths}</tr>
@@ -141,7 +146,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
     componentDidMount() {
         // if no bodyWidth was provided and there are no explicit width set for columns, this is where we set the table's bodyWidth
         // after it has been mounted and the parent width is known
-        if (!this.props.bodyWidth && !WidthMeasureCalculator.allColumnWidthProvided(this.props.columnDefs)) {
+        if (!this.props.bodyWidth && !allColumnWidthProvided(this.props.columnDefs)) {
             const parentWidth = ReactDOM.findDOMNode(this).parentElement.offsetWidth + "px";
             const action = {
                 type: GigaActionType.TABLE_WIDTH_CHANGE,

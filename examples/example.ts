@@ -9,7 +9,7 @@ import {ColumnFormat} from "../src/models/ColumnLike";
 
 const element = React.createElement(GigaGrid, {
     bodyHeight: "250px",
-    bodyWidth: "950px",
+    bodyWidth: "800px",
     data: TestUtils.getSampleData().data,
     columnDefs: TestUtils.getSampleData().columnDefs,
     initialSubtotalBys: [{colTag: "gender"}],

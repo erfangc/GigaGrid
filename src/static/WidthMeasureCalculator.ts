@@ -7,25 +7,37 @@ export interface WidthMeasures {
     columnWidths: any
 }
 
+export function parsePixelValue(pxMeasure:string):number {
+    return parseInt(pxMeasure.substr(0, pxMeasure.length - 2));
+}
+
+export function allColumnWidthProvided(columnDefs:ColumnDef[]):boolean {
+    for (let i = 0; i < columnDefs.length; i++) {
+        if (!(columnDefs[i].width && _.endsWith(columnDefs[i].width, "px")))
+            return false;
+    }
+    return true;
+}
+
 // #7 Determine column width automatically if not passed in by the user https://github.com/erfangc/GigaGrid/issues/7
 export class WidthMeasureCalculator {
 
     static computeWidthMeasures(bodyWidth:string, columnDefs:ColumnDef[]):WidthMeasures {
-        var columnWidthProvided = WidthMeasureCalculator.allColumnWidthProvided(columnDefs);
+        var columnWidthProvided = allColumnWidthProvided(columnDefs);
 
         const measures:WidthMeasures = {
             bodyWidth: null,
             columnWidths: {}
         };
         if (columnWidthProvided) {
-            const bodyWidth = _.chain(columnDefs).map((cd)=>parseInt(cd.width.substr(0, cd.width.length - 2))).sum();
+            const bodyWidth = _.chain(columnDefs).map((cd)=>parsePixelValue(cd.width)).sum();
             measures.bodyWidth = bodyWidth + "px";
             _.forEach(columnDefs, (cd:ColumnDef)=> {
                 measures.columnWidths[cd.colTag] = cd.width;
             });
         } else if (bodyWidth) {
             measures.bodyWidth = bodyWidth;
-            const bodyWidthPx = parseInt(bodyWidth.substr(0, bodyWidth.length - 2));
+            const bodyWidthPx = parsePixelValue(bodyWidth);
             const cellWidth = round(bodyWidthPx / columnDefs.length);
             var totalCellWidth = 0;
             for (let i = 0; i < columnDefs.length - 1; i++) {
@@ -41,14 +53,6 @@ export class WidthMeasureCalculator {
             });
         }
         return measures;
-    }
-
-    static allColumnWidthProvided(columnDefs:ColumnDef[]):boolean {
-        for (let i = 0; i < columnDefs.length; i++) {
-            if (!(columnDefs[i].width && _.endsWith(columnDefs[i].width, "px")))
-                return false;
-        }
-        return true;
     }
 
 }
