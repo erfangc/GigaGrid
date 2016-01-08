@@ -13,17 +13,20 @@ cd GigaGrid
 npm install && jspm_install
 ```
 
-If you are using a IDE that does not come with TypeScript bundled, install TypeScript globally
+If you are using an IDE that does not come with TypeScript bundled, install TypeScript globally
 
 ```bash
-npm install typescript
+npm install typescript -g
 ```
 
-To compile, simply run
+To compile, simply run `tsc` (TypeScript compiler)
 
 ```bash
 # this will automatically read configuration from tsconfig.json
 tsc
+
+# or watch for file changes with -w
+tsc - w
 ```
 
 # Testing
