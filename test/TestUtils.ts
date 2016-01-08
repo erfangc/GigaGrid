@@ -90,14 +90,14 @@ export class TestUtils {
             {
                 colTag: "last_name",
                 title: "Last Name",
-                width: "150px",
+                width: "100px",
                 format: ColumnFormat.STRING,
                 aggregationMethod: AggregationMethod.NONE
             },
             {
                 colTag: "gift",
                 title: "Gift",
-                width: "100px",
+                width: "75px",
                 format: ColumnFormat.NUMBER,
                 aggregationMethod: AggregationMethod.SUM
             }

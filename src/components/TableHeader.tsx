@@ -11,15 +11,16 @@ import ReactDOM = __React.ReactDOM;
 import {SortDirection} from "../models/ColumnLike";
 import {SubtotalByMenuItem} from "./dropdown/SubtotalByMenuItem";
 import {FilterMenuItem} from "./dropdown/FilterMenuItem";
+import {parsePixelValue} from "../static/WidthMeasureCalculator";
 
 export interface GridSubcomponentProps<T> extends React.Props<T> {
     dispatcher: Dispatcher<GigaAction>;
 }
 
 export interface TableHeaderProps extends GridSubcomponentProps<TableHeader> {
-    tableColumnDef: TableRowColumnDef;
-    isFirstColumn?: boolean;
-    isLastColumn?: boolean;
+    tableColumnDef: TableRowColumnDef
+    isFirstColumn?: boolean
+    isLastColumn?: boolean
 }
 
 class TableHeaderState {
@@ -103,4 +104,5 @@ export class TableHeader extends React.Component<TableHeaderProps,TableHeaderSta
             </th>
         );
     }
+
 }
