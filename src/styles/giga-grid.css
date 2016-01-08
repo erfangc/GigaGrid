@@ -72,7 +72,6 @@ div.giga-grid .dropdown-menu-item input {
   padding-bottom: 5px;
   font-size: 13px;
 }
-@import "../../jspm_packages/npm/font-awesome@4.5.0/css/font-awesome.css";
 div.giga-grid {
   margin: 0;
   font-family: Roboto, sans-serif;
