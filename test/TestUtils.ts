@@ -76,28 +76,24 @@ export class TestUtils {
             {
                 colTag: "first_name",
                 title: "First Name",
-                width: "200px",
                 format: ColumnFormat.STRING,
                 aggregationMethod: AggregationMethod.NONE
             },
             {
                 colTag: "gender",
                 title: "Gender",
-                width: "100px",
                 format: ColumnFormat.STRING,
                 aggregationMethod: AggregationMethod.NONE
             },
             {
                 colTag: "last_name",
                 title: "Last Name",
-                width: "100px",
                 format: ColumnFormat.STRING,
                 aggregationMethod: AggregationMethod.NONE
             },
             {
                 colTag: "gift",
                 title: "Gift",
-                width: "75px",
                 format: ColumnFormat.NUMBER,
                 aggregationMethod: AggregationMethod.SUM
             }

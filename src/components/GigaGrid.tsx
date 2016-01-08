@@ -93,7 +93,8 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                 title: cd.title,
                 aggregationMethod: cd.aggregationMethod,
                 format: cd.format,
-                width: this.state.widthMeasures.columnWidths[cd.colTag]
+                width: this.state.widthMeasures.columnWidths[cd.colTag],
+                cellTemplateCreator: cd.cellTemplateCreator
             };
 
             // determine if there is an existing SortBy for this column

@@ -6,5 +6,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="GigaGrid node_modules" level="project" />
+    <orderEntry type="library" name="bootstrap" level="application" />
   </component>
 </module>
