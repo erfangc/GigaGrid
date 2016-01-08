@@ -1,4 +1,5 @@
-# GigaGrid (Under Development)
+# GigaGrid (Under Development) [![Build Status](https://travis-ci.org/erfangc/GigaGrid.svg?branch=master)](https://travis-ci.org/erfangc/GigaGrid)
+
 Massively performant, multi-layered React.js table widget Written in TypeScript
 
 # Developing
