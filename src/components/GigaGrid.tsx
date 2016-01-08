@@ -1,6 +1,7 @@
 ///<reference path="../../jspm_packages/npm/immutable@3.7.6/dist/immutable.d.ts"/>
 
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import * as Flux from 'flux';
 import * as FluxUtils from 'flux/utils';
 import * as Immutable from 'immutable';
@@ -22,15 +23,19 @@ import {GigaAction} from "../store/GigaStore";
 import {TableRow} from "./TableRow";
 import {SortBy} from "../models/ColumnLike";
 import {FilterBy} from "../models/ColumnLike";
+import {TableWidthChangeAction} from "../store/GigaStore";
+import {GigaActionType} from "../store/GigaStore";
 
 export interface GigaProps extends React.Props<GigaGrid> {
     initialSubtotalBys?:SubtotalBy[]
     initialSortBys?:SortBy[]
     initialFilterBys?:FilterBy[]
     onRowClick?: (row:Row)=>boolean
-    onCellClick?: (row:Row,columnDef: TableRowColumnDef)=>boolean
+    onCellClick?: (row:Row, columnDef:TableRowColumnDef)=>boolean
     data:any[]
     columnDefs:ColumnDef[]
+    height?:string
+    width?:string
 }
 
 export interface GigaState {
@@ -38,6 +43,7 @@ export interface GigaState {
     subtotalBys:SubtotalBy[]
     sortBys:SortBy[]
     filterBys: FilterBy[]
+    tableWidth:string
 }
 
 /**
@@ -75,12 +81,14 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
     render() {
         const tableRowColumnDefs:TableRowColumnDef[] = this.props.columnDefs.map(cd => {
 
+            // todo we need an algorithm to always be able to derive explicit cell width for every column
+
             const tableRowCD:TableRowColumnDef = {
                 colTag: cd.colTag,
                 title: cd.title,
                 aggregationMethod: cd.aggregationMethod,
                 format: cd.format,
-                width: "auto"
+                width: cd.width || "auto" // todo we should always explicitly specify width, might have to be done after the component has been mounted
             };
 
             // determine if there is an existing SortBy for this column
@@ -93,14 +101,23 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             return tableRowCD;
         });
 
+        const bodyStyle = {
+            height: this.props.height || "100%",
+            width: this.state.tableWidth || "100%"
+        };
+
         return (
             <div className="giga-grid">
                 <table>
                     {this.renderColumnHeaders(tableRowColumnDefs)}
-                    <tbody>
-                        {this.renderTableRows(tableRowColumnDefs)}
-                    </tbody>
                 </table>
+                <div className="giga-grid-scrollable" style={bodyStyle}>
+                    <table>
+                        <tbody>
+                            {this.renderTableRows(tableRowColumnDefs)}
+                        </tbody>
+                    </table>
+                </div>
             </div>);
     }
 
@@ -114,6 +131,18 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                 <tr>{ths}</tr>
             </thead>
         );
+    }
+
+    componentDidMount() {
+        // if no width was provided, this is where we set the table's width
+        if (!this.props.width) {
+            const parentWidth = ReactDOM.findDOMNode(this).parentElement.offsetWidth + "px";
+            const action = {
+                type: GigaActionType.TABLE_WIDTH_CHANGE,
+                width: parentWidth
+            };
+            this.dispatcher.dispatch(action);
+        }
     }
 
     renderTableRows(tableRowColumnDefs:TableRowColumnDef[]):ReactElement<{}>[] {

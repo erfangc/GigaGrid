@@ -33,12 +33,15 @@ export class GigaStore extends ReduceStore<GigaState> {
             tree = SortFactory.sortTree(tree, this.props.initialSortBys);
 
         return {
+            tableWidth: this.props.width || null,
             subtotalBys: this.props.initialSubtotalBys || [],
             sortBys: this.props.initialSortBys || [],
             filterBys: this.props.initialFilterBys || [],
             tree: tree
         }
     }
+
+    // TODO we should have a way to handle componentWillReceiveProps
 
     areEqual(state1:GigaState, state2:GigaState):boolean {
         return false;
@@ -48,6 +51,12 @@ export class GigaStore extends ReduceStore<GigaState> {
            action:GigaAction):GigaState {
         var newState:GigaState;
         switch (action.type) {
+            /*
+             * Width Change Action
+             */
+            case GigaActionType.TABLE_WIDTH_CHANGE:
+                newState = this.handleWidthChange(state, action as TableWidthChangeAction);
+                break;
             /*
              Subtotal Actions
              */
@@ -81,6 +90,16 @@ export class GigaStore extends ReduceStore<GigaState> {
         return newState;
     }
 
+    private handleWidthChange(state:GigaState, action:TableWidthChangeAction) {
+        return {
+            subtotalBys: state.subtotalBys,
+            filterBys: state.filterBys,
+            sortBys: state.sortBys,
+            tableWidth: action.width,
+            tree: state.tree
+        }
+    }
+
     /*
      Subtotal Action Handlers
      */
@@ -99,6 +118,7 @@ export class GigaStore extends ReduceStore<GigaState> {
             subtotalBys: action.subtotalBys,
             filterBys: state.filterBys,
             sortBys: state.sortBys,
+            tableWidth: state.tableWidth,
             tree: newTree
         }
     }
@@ -110,6 +130,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return {
             subtotalBys: [],
             sortBys: state.sortBys,
+            tableWidth: state.tableWidth,
             filterBys: state.filterBys,
             tree: newTree
         };
@@ -126,6 +147,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return {
             tree: newTree,
             sortBys: state.sortBys,
+            tableWidth: state.tableWidth,
             filterBys: state.filterBys,
             subtotalBys: state.subtotalBys
         };
@@ -136,6 +158,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return {
             tree: newTree,
             sortBys: action.sortBys,
+            tableWidth: state.tableWidth,
             filterBys: state.filterBys,
             subtotalBys: state.subtotalBys
         };
@@ -146,6 +169,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return {
             tree: newTree,
             sortBys: [],
+            tableWidth: state.tableWidth,
             subtotalBys: state.subtotalBys,
             filterBys: state.filterBys
         };
@@ -169,7 +193,8 @@ export enum GigaActionType {
     CLEAR_FILTER,
     TOGGLE_ROW_COLLAPSE,
     TOGGLE_DETAIL_ROW_SELECT,
-    TOGGLE_SUMMARY_ROW_SELECT
+    TOGGLE_SUMMARY_ROW_SELECT,
+    TABLE_WIDTH_CHANGE
 }
 
 export interface GigaAction {
@@ -198,4 +223,8 @@ export interface AddSortAction extends GigaAction {
 
 export interface NewSortAction extends GigaAction {
     sortBys:SortBy[]
+}
+
+export interface TableWidthChangeAction extends GigaAction {
+    width:string
 }

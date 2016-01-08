@@ -77,13 +77,16 @@ div.giga-grid {
   font-family: Roboto, sans-serif;
   color: #333;
 }
+div.giga-grid div.giga-grid-scrollable {
+  overflow-y: scroll;
+}
 div.giga-grid table {
   border-collapse: collapse;
   font-size: 13px;
-  width: 100%;
 }
 div.giga-grid tr td,
 div.giga-grid tr th {
+  box-sizing: border-box;
   padding: 8px 2px;
 }
 div.giga-grid th:last-child,
