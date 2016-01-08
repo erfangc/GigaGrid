@@ -1,4 +1,4 @@
-# GigaGrid
+# GigaGrid (Under Development)
 Massively performant, multi-layered React.js table widget Written in TypeScript
 
 # Developing
