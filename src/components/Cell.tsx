@@ -54,6 +54,7 @@ export class Cell extends React.Component<CellProps,any> {
     private calculateStyle() {
         return {
             width: this.props.tableRowColumnDef.width,
+            overflow: "hidden",
             paddingLeft: this.props.isFirstColumn ? TableRowUtils.calculateFirstColumnIdentation(this.props.row) : undefined
         };
     }

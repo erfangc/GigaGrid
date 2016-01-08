@@ -20,11 +20,11 @@ export interface ColumnDef {
     colTag:string
     title:string
     format:ColumnFormat
+    width?:string
     aggregationMethod:AggregationMethod
 }
 
 export interface TableRowColumnDef extends ColumnDef {
-    width?:string
     sortDirection?: SortDirection
     customSortFn?:(a:Row, b:Row)=>number
     cellTemplateCreator?:(data:any, tableRowColumnDef?:TableRowColumnDef)=>JSX.Element

@@ -79,13 +79,18 @@ export class TableHeader extends React.Component<TableHeaderProps,TableHeaderSta
             "dropdown-menu-toggle-handle-hide": !this.state.handleVisible
         });
 
+        const style = {
+            width: this.props.tableColumnDef.width,
+            overflow: "visible"
+        };
+
         const dropdownMenuToggle = (
             <i key={1} className={cx} ref={c=>this.dropdownToggleHandleRef=c}
                onClick={()=>this.dropdownMenuRef.toggleDisplay()}/>
         );
 
         return (
-            <th style={{"height":0}} onMouseEnter={()=>this.setState({handleVisible:true})}
+            <th style={style} onMouseEnter={()=>this.setState({handleVisible:true})}
                 onMouseLeave={()=>this.setState({handleVisible:false})}
                 className={columnDef.format === ColumnFormat.NUMBER ? "numeric" : "non-numeric"}>
                 {this.props.isLastColumn ? [dropdownMenuToggle," "] : null}
