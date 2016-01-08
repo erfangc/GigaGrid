@@ -29,6 +29,14 @@ tsc
 tsc -w
 ```
 
+If you are importing a `CommonJS` library, make sure you understand the difference between ES6 and `cjs` module specs
+
+See:
+
+[Stackoverflow Explanation 1](http://stackoverflow.com/questions/34622598/typescript-importing-from-libraries-written-in-es5-vs-es6)
+
+[Stackoverflow Explanation 2](http://stackoverflow.com/questions/29596714/new-es6-syntax-for-importing-commonjs-amd-modules-i-e-import-foo-require)
+
 # Testing
 
 Make sure you install `karma` any plugins and `phantomjs` globally [More Info](http://phantomjs.org/)
