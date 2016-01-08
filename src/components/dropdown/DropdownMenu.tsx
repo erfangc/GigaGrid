@@ -88,6 +88,13 @@ export class DropdownMenu extends React.Component<DropdownMenuProps, DropdownMen
         };
         if (typeof document !== "undefined")
             document.addEventListener('mousedown', this.clickOutsideHandler);
+
+        /*
+         * set z-index to be greater than parent
+         */
+        const parent = ReactDOM.findDOMNode(this).parentElement;
+        const parentZIndex = parent.style.zIndex;
+        ((ReactDOM.findDOMNode(this))as HTMLElement).style.zIndex = parentZIndex + 1;
     }
 
     componentWillUnmount() {
