@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <title>GigaGrid</title>
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="../jspm_packages/npm/font-awesome@4.5.0/css/font-awesome.css">
     <link rel="stylesheet" href="../src/styles/giga-grid.css">
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script src="../jspm_packages/system.js"></script>
 
     <!--It is important we call this before loading config.js, baseURL needs to be in the first System.config() call-->
@@ -24,7 +25,7 @@
 <body>
 <nav class="navbar navbar-default">
     <ul class="nav navbar-nav">
-        <li class="active"><a href="#basic-example">Basic Example</a></li>
+        <li><a href="#basic-example">Basic Example</a></li>
         <li><a href="#custom-cell-template">Custom Cell Template</a></li>
     </ul>
 </nav>
@@ -32,21 +33,56 @@
     <div class="card">
         <h4>Basic Example</h4>
         <div id="basic-example"></div>
+        <br>
+        <pre>
+            <code class="javascript">
+const element = React.createElement(GigaGrid, {
+    bodyHeight: "250px",
+    data: TestUtils.getSampleData().data,
+    columnDefs: TestUtils.getSampleData().columnDefs,
+    initialSubtotalBys: [{colTag: "gender"}],
+    initialSortBys: [{colTag: "gift", format: ColumnFormat.NUMBER, direction: SortDirection.ASC}]
+});
+
+ReactDOM.render(element, document.getElementById('basic-example'));
+            </code>
+        </pre>
     </div>
     <br>
     <div class="card">
         <h4>Custom Cell Template</h4>
         <div id="custom-cell-template"></div>
+        <br>
+        <pre>
+            <code class="javascript">
+const columnDefs = TestUtils.getSampleData().columnDefs;
+const customColumnDef = columnDefs[0];
+
+customColumnDef.cellTemplateCreator = (data:any) => {
+    return React.createElement("a", {className: "special-cell", onClick: ()=>{alert(`You clicked on ${data}`)}}, data);
+};
+
+const element = React.createElement(GigaGrid, {
+    bodyHeight: "250px",
+    data: TestUtils.getSampleData().data,
+    columnDefs: columnDefs,
+    initialSubtotalBys: [{colTag: "gender"}],
+    initialSortBys: [{colTag: "gift", format: ColumnFormat.NUMBER, direction: SortDirection.ASC}]
+});
+
+ReactDOM.render(element, document.getElementById('custom-cell-template'));
+            </code>
+        </pre>
     </div>
 </div>
+<br>
 <script>
-    System.import('./basic_example');
-    System.import('./custom_cell_template');
+    System.import('./examples');
 </script>
 <style>
     div.card {
         border-radius: 5px;
-        box-shadow: 0 0 2px 2px rgba(0,0,0,0.2);
+        box-shadow: 0 0 1px 1px rgba(0,0,0,0.2);
         padding: 10px 20px 10px 20px;
     }
 </style>

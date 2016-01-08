@@ -28,7 +28,7 @@ import {GigaActionType} from "../store/GigaStore";
 import {WidthMeasures} from "../static/WidthMeasureCalculator";
 import {WidthMeasureCalculator} from "../static/WidthMeasureCalculator";
 import {parsePixelValue} from "../static/WidthMeasureCalculator";
-import {allColumnWidthProvided} from "../static/WidthMeasureCalculator";
+import {validateColumnWidthProperty} from "../static/WidthMeasureCalculator";
 
 export interface GigaProps extends React.Props<GigaGrid> {
     initialSubtotalBys?:SubtotalBy[]
@@ -147,7 +147,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
     componentDidMount() {
         // if no bodyWidth was provided and there are no explicit width set for columns, this is where we set the table's bodyWidth
         // after it has been mounted and the parent width is known
-        if (!this.props.bodyWidth && !allColumnWidthProvided(this.props.columnDefs)) {
+        if (!this.props.bodyWidth && !validateColumnWidthProperty(this.props.columnDefs)) {
             const parentWidth = ReactDOM.findDOMNode(this).parentElement.offsetWidth + "px";
             const action = {
                 type: GigaActionType.TABLE_WIDTH_CHANGE,
