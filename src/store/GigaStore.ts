@@ -1,5 +1,6 @@
 import * as Flux from 'flux';
 import * as FluxUtils from 'flux/utils';
+import * as _ from 'lodash';
 import {GigaState,GigaProps} from "../components/GigaGrid";
 import {SubtotalAggregator} from "../static/SubtotalAggregator";
 import {Tree} from "../static/TreeBuilder";
@@ -10,6 +11,7 @@ import Dispatcher = Flux.Dispatcher;
 import {SubtotalRow} from "../models/Row";
 import {SortFactory} from "../static/SortFactory";
 import {SortBy} from "../models/ColumnLike";
+import {WidthMeasureCalculator} from "../static/WidthMeasureCalculator";
 
 /**
  * state store for the table, relevant states and stored here. the only way to mutate these states are by sending GigaAction(s) through the Dispatcher given to the store at construction
@@ -33,7 +35,7 @@ export class GigaStore extends ReduceStore<GigaState> {
             tree = SortFactory.sortTree(tree, this.props.initialSortBys);
 
         return {
-            tableWidth: this.props.width || null,
+            widthMeasures: WidthMeasureCalculator.computeWidthMeasures(this.props.bodyWidth, this.props.columnDefs),
             subtotalBys: this.props.initialSubtotalBys || [],
             sortBys: this.props.initialSortBys || [],
             filterBys: this.props.initialFilterBys || [],
@@ -91,11 +93,12 @@ export class GigaStore extends ReduceStore<GigaState> {
     }
 
     private handleWidthChange(state:GigaState, action:TableWidthChangeAction) {
+        const widthMeasures = WidthMeasureCalculator.computeWidthMeasures(action.width, this.props.columnDefs);
         return {
             subtotalBys: state.subtotalBys,
             filterBys: state.filterBys,
             sortBys: state.sortBys,
-            tableWidth: action.width,
+            widthMeasures: widthMeasures,
             tree: state.tree
         }
     }
@@ -118,7 +121,7 @@ export class GigaStore extends ReduceStore<GigaState> {
             subtotalBys: action.subtotalBys,
             filterBys: state.filterBys,
             sortBys: state.sortBys,
-            tableWidth: state.tableWidth,
+            widthMeasures: state.widthMeasures,
             tree: newTree
         }
     }
@@ -130,7 +133,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return {
             subtotalBys: [],
             sortBys: state.sortBys,
-            tableWidth: state.tableWidth,
+            widthMeasures: state.widthMeasures,
             filterBys: state.filterBys,
             tree: newTree
         };
@@ -147,7 +150,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return {
             tree: newTree,
             sortBys: state.sortBys,
-            tableWidth: state.tableWidth,
+            widthMeasures: state.widthMeasures,
             filterBys: state.filterBys,
             subtotalBys: state.subtotalBys
         };
@@ -158,7 +161,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return {
             tree: newTree,
             sortBys: action.sortBys,
-            tableWidth: state.tableWidth,
+            widthMeasures: state.widthMeasures,
             filterBys: state.filterBys,
             subtotalBys: state.subtotalBys
         };
@@ -169,7 +172,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return {
             tree: newTree,
             sortBys: [],
-            tableWidth: state.tableWidth,
+            widthMeasures: state.widthMeasures,
             subtotalBys: state.subtotalBys,
             filterBys: state.filterBys
         };

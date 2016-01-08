@@ -16,12 +16,13 @@ export enum SortDirection {
     ASC, DESC
 }
 
+// TODO consider which properties to make optional
 export interface ColumnDef {
     colTag:string
-    title:string
-    format:ColumnFormat
+    title?:string
+    format?:ColumnFormat
     width?:string
-    aggregationMethod:AggregationMethod
+    aggregationMethod?:AggregationMethod
 }
 
 export interface TableRowColumnDef extends ColumnDef {

@@ -90,7 +90,7 @@ export class TestUtils {
             {
                 colTag: "last_name",
                 title: "Last Name",
-                width: "100px",
+                width: "150px",
                 format: ColumnFormat.STRING,
                 aggregationMethod: AggregationMethod.NONE
             },
