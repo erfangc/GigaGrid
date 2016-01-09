@@ -27,6 +27,7 @@
     <ul class="nav navbar-nav">
         <li><a href="#basic-example">Basic Example</a></li>
         <li><a href="#custom-cell-template">Custom Cell Template</a></li>
+        <li><a href="#row-selection">Row Selection</a></li>
     </ul>
 </nav>
 <div class="container">
@@ -71,6 +72,29 @@ const element = React.createElement(GigaGrid, {
 });
 
 ReactDOM.render(element, document.getElementById('custom-cell-template'));
+            </code>
+        </pre>
+    </div>
+    <br>
+    <div class="card">
+        <h4>Row Selection</h4>
+        <div id="row-selection"></div>
+        <br>
+        <pre>
+            <code class="javascript">
+const element = React.createElement(GigaGrid, {
+    bodyHeight: "250px",
+    data: TestUtils.getSampleData().data,
+    columnDefs: TestUtils.getSampleData().columnDefs,
+    initialSubtotalBys: [{colTag: "gender"}],
+    initialSortBys: [{colTag: "gift", format: ColumnFormat.NUMBER, direction: SortDirection.ASC}],
+    onRowClick: (row:Row) => {
+        return true;
+    }
+});
+
+ReactDOM.render(element, document.getElementById('row-selection'));
+
             </code>
         </pre>
     </div>
