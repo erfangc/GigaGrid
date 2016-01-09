@@ -23,4 +23,4 @@ const element = React.createElement(GigaGrid, {
     initialSortBys: [{colTag: "gift", format: ColumnFormat.NUMBER, direction: SortDirection.ASC}]
 });
 
-ReactDOM.render(element, document.getElementById('custom-cell-template'));
+ReactDOM.render(element, document.getElementById('custom_cell_template'));

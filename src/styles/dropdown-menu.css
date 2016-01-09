@@ -2,9 +2,9 @@ div.giga-grid .dropdown-menu-align-right {
   position: absolute;
   background-color: #fff;
   top: 100%;
-  min-width: 150px;
   border: 1px solid #eee;
   border-radius: 2px;
+  white-space: nowrap;
   padding: 10px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   list-style: none;
@@ -14,9 +14,9 @@ div.giga-grid .dropdown-menu-align-left {
   position: absolute;
   background-color: #fff;
   top: 100%;
-  min-width: 150px;
   border: 1px solid #eee;
   border-radius: 2px;
+  white-space: nowrap;
   padding: 10px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   list-style: none;
@@ -26,9 +26,9 @@ div.giga-grid .dropdown-submenu-align-right {
   position: absolute;
   background-color: #fff;
   top: 100%;
-  min-width: 150px;
   border: 1px solid #eee;
   border-radius: 2px;
+  white-space: nowrap;
   padding: 10px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   list-style: none;
@@ -39,9 +39,9 @@ div.giga-grid .dropdown-submenu-align-left {
   position: absolute;
   background-color: #fff;
   top: 100%;
-  min-width: 150px;
   border: 1px solid #eee;
   border-radius: 2px;
+  white-space: nowrap;
   padding: 10px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   list-style: none;

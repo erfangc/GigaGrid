@@ -49,27 +49,28 @@ export class SubtotalByMenuItem extends React.Component<SubtotalByMenuItemProps,
         });
 
         const style = {
-            width: this.isNumericColumn() ? "13em" : null
         };
 
         if (this.isNumericColumn())
-            return (
-                <div className={cx} style={style} onClick={e=>{e.preventDefault();e.stopPropagation();}}>
+            return [
+                <div key={1} className={cx} style={style} onClick={e=>{e.preventDefault();e.stopPropagation();}}>
                     {this.renderForm()}
-                    <span className="dropdown-menu-item hoverable">
-                        <i className="fa fa-plus"/>
-                        &nbsp;
-                        <span onClick={e=>this.onSubmit(e)}>Add Subtotal</span>
-                    </span>
-                </div>
-            );
-        else
-            return (
-                <li onClick={e=>this.onSubmit(e)} className="dropdown-menu-item hoverable">
+                </div>,
+                <li key={2} className="dropdown-menu-item hoverable">
                     <i className="fa fa-plus"/>
                     &nbsp;
-                    <span>Add Subtotal</span>
+                    <span onClick={e=>this.onSubmit(e)}>Add Subtotal</span>
                 </li>
+            ];
+        else
+            return (
+                [
+                    <li key={1} onClick={e=>this.onSubmit(e)} className="dropdown-menu-item hoverable">
+                        <i className="fa fa-plus"/>
+                        &nbsp;
+                        <span>Add Subtotal</span>
+                    </li>
+                ]
             );
     }
 
@@ -85,12 +86,12 @@ export class SubtotalByMenuItem extends React.Component<SubtotalByMenuItemProps,
 
     private renderForm() {
         return (
+        <div>
             <div>
-                <label>
-                    Enter Buckets to Subtotal By
-                    <input type="text" ref={(c)=>this.input=c} placeholder="ex: 1,3,5,7,9"/>
-                </label>
+                Enter Buckets to Subtotal By
             </div>
+            <input type="text" ref={(c)=>this.input=c} placeholder="ex: 1,3,5,7,9"/>
+        </div>
         );
     }
 
