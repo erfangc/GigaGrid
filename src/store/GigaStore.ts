@@ -159,7 +159,13 @@ export class GigaStore extends ReduceStore<GigaState> {
     private handleToggleCollapse(state:GigaState, action:ToggleCollapseAction) {
         const row = action.subtotalRow;
         row.toggleCollapse();
-        return state;
+        return {
+            subtotalBys: state.subtotalBys,
+            filterBys: state.filterBys,
+            sortBys: state.sortBys,
+            widthMeasures: state.widthMeasures,
+            tree: state.tree
+        };
     }
 
     private handleSubtotal(state:GigaState,

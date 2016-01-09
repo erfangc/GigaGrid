@@ -99,7 +99,7 @@ export class DropdownMenu extends React.Component<DropdownMenuProps, DropdownMen
 
     componentWillUnmount() {
         /*
-         * remove any lingerly event listeners
+         * remove any lingering event listeners
          */
         if (typeof document !== "undefined")
             document.removeEventListener('mousedown', this.clickOutsideHandler);
@@ -139,8 +139,10 @@ export class SimpleDropdownMenuItem extends React.Component<DropdownMenuItemProp
         // Note: dropdown menu need a way to reference the DOM element that activate its visibility, in this case
         // since we are creating a sub menu that is activated by this component, this component is the visibility toggle handle
         return (
-            <DropdownMenu isSubMenu={true} ref={(c:DropdownMenu)=>this.subMenuRef=c}
-                          alignLeft={this.props.isLastColumn} toggleHandle={()=>ReactDOM.findDOMNode(this)}>
+            <DropdownMenu isSubMenu={true}
+                          ref={(c:DropdownMenu)=>this.subMenuRef=c}
+                          alignLeft={this.props.isLastColumn}
+                          toggleHandle={()=>ReactDOM.findDOMNode(this)}>
                 {this.props.children}
             </DropdownMenu>
         );

@@ -1,3 +1,4 @@
+import {ColumnDef} from "./ColumnLike";
 export interface Row {
     title:string
     data(): any
@@ -20,6 +21,10 @@ abstract class GenericRow implements Row {
 
     constructor(data:any) {
         this._data = data;
+    }
+
+    get(columnDef: ColumnDef):any {
+        return this._data[columnDef.colTag];
     }
 
     toggleSelect(select?:boolean): void {

@@ -31,7 +31,7 @@ export class Cell extends React.Component<CellProps,any> {
         this.props.dispatcher.dispatch(action);
     }
 
-    private handleOnClick() {
+    private onClick() {
         var action = {
             type: GigaActionType.TOGGLE_CELL_SELECT,
             row: this.props.row,
@@ -49,7 +49,7 @@ export class Cell extends React.Component<CellProps,any> {
         });
 
         return (
-            <td style={this.calculateStyle()} onClick={this.handleOnClick}>
+            <td style={this.calculateStyle()} onClick={e=>this.onClick()}>
                 <strong>
                     <span>
                         <i className={cx} onClick={e=>this.onCollapseToggle(e)}/>&nbsp;
@@ -83,7 +83,7 @@ export class Cell extends React.Component<CellProps,any> {
         if (props.isFirstColumn && !row.isDetail())
             result = this.renderSubtotalCellWithCollapseBtn(row as SubtotalRow);
         else
-            result = (<td className={cx} style={this.calculateStyle()}>{this.renderContent(row,cd)}</td>);
+            result = (<td className={cx} onClick={e=>this.onClick()} style={this.calculateStyle()}>{this.renderContent(row,cd)}</td>);
 
         return result;
     }

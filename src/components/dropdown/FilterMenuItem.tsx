@@ -20,10 +20,8 @@ export class FilterMenuItem extends React.Component<FilterMenuItemProps, any> {
         return (
             <SimpleDropdownMenuItem text="Filter" isLastColumn={this.props.isLastColumn}>
                 <div>
-                    <label>
-                        Enter Your Filtering Criteria
-                        <input type="text" placeholder="use >, < or =, ex: > 50"/>
-                    </label>
+                    <div>Enter Your Filtering Criteria</div>
+                    <input type="text" placeholder="use >, < or =, ex: > 50"/>
                 </div>
                 <div className="dropdown-menu-item hoverable">
                     <i className="fa fa-check"/>

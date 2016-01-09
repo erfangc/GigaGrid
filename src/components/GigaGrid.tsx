@@ -85,28 +85,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
     render() {
 
-        const tableRowColumnDefs:TableRowColumnDef[] = this.props.columnDefs.map(cd => {
-
-            // todo we need an algorithm to always be able to derive explicit cell bodyWidth for every column
-
-            const tableRowCD:TableRowColumnDef = {
-                colTag: cd.colTag,
-                title: cd.title,
-                aggregationMethod: cd.aggregationMethod,
-                format: cd.format,
-                width: this.state.widthMeasures.columnWidths[cd.colTag],
-                cellTemplateCreator: cd.cellTemplateCreator
-            };
-
-            // determine if there is an existing SortBy for this column
-            var sortBy = Immutable.List<SortBy>(this.state.sortBys).find((s)=>s.colTag === cd.colTag);
-            if (sortBy) {
-                tableRowCD.sortDirection = sortBy.direction;
-                tableRowCD.customSortFn = sortBy.customSortFn;
-            }
-
-            return tableRowCD;
-        });
+        const tableRowColumnDefs:TableRowColumnDef[] = this.transformColumnDef(this.props.columnDefs, this.state);
 
         const bodyStyle = {
             height: this.props.bodyHeight || "100%", // TODO we will need to give similar consideration to height as we did for width
@@ -130,15 +109,43 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             </div>);
     }
 
-    renderColumnHeaders(tableRowColumnDefs:TableRowColumnDef[]):ReactElement<{}> {
+    private transformColumnDef(columnDefs:ColumnDef[], state:GigaState):TableRowColumnDef[] {
+
+        return columnDefs.map(cd => {
+
+            const tableRowCD:TableRowColumnDef = {
+                colTag: cd.colTag,
+                title: cd.title,
+                aggregationMethod: cd.aggregationMethod,
+                format: cd.format,
+                width: state.widthMeasures.columnWidths[cd.colTag],
+                cellTemplateCreator: cd.cellTemplateCreator
+            };
+
+            // determine if there is an existing SortBy for this column
+            var sortBy = Immutable.List<SortBy>(state.sortBys).find((s)=>s.colTag === cd.colTag);
+            if (sortBy) {
+                tableRowCD.sortDirection = sortBy.direction;
+                tableRowCD.customSortFn = sortBy.customSortFn;
+            }
+
+            return tableRowCD;
+        });
+
+    };
+
+    private renderColumnHeaders(tableRowColumnDefs:TableRowColumnDef[]):ReactElement<{}> {
         const ths = tableRowColumnDefs.map((colDef:TableRowColumnDef, i:number)=> {
             return <TableHeader tableColumnDef={colDef} key={i} isFirstColumn={i===0}
                                 isLastColumn={i===tableRowColumnDefs.length-1} dispatcher={this.dispatcher}/>
         });
 
         const scrollBarWidth = getScrollBarWidth();
-        // add a placeholder to align the header with cells
-        // https://github.com/erfangc/GigaGrid/issues/7
+
+        /*
+         add an placeholder to align the header with cells
+         https://github.com/erfangc/GigaGrid/issues/7
+         */
         ths.push(<th key="placeholder" style={{width: scrollBarWidth + "px"}}/>);
         return (
             <thead>
@@ -147,17 +154,37 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         );
     }
 
-    componentDidMount() {
-        // if no bodyWidth was provided and there are no explicit width set for columns, this is where we set the table's bodyWidth
+    private dispatchWidthChange() {
+        // if no bodyWidth was provided through props and there are no explicit width set for columns, we need to dynamically the table's bodyWidth
         // after it has been mounted and the parent width is known
-        if (!this.props.bodyWidth && !validateColumnWidthProperty(this.props.columnDefs)) {
-            const parentWidth = ReactDOM.findDOMNode(this).parentElement.offsetWidth + "px";
-            const action = {
-                type: GigaActionType.TABLE_WIDTH_CHANGE,
-                width: parentWidth
-            };
-            this.dispatcher.dispatch(action);
-        }
+        if (this.props.bodyWidth || validateColumnWidthProperty(this.props.columnDefs))
+            return;
+
+        const parentWidth = ReactDOM.findDOMNode(this).parentElement.offsetWidth + "px";
+        const action = {
+            type: GigaActionType.TABLE_WIDTH_CHANGE,
+            width: parentWidth
+        };
+        this.dispatcher.dispatch(action);
+
+    }
+
+    componentDidMount() {
+        this.dispatchWidthChange();
+        /*
+         Trigger resize of table on window resize
+         https://github.com/erfangc/GigaGrid/issues/20
+         */
+        if (typeof window !== "undefined")
+            window.addEventListener('resize', this.dispatchWidthChange.bind(this));
+    }
+
+    componentWillUnmount() {
+        /*
+         * remove any lingering event listeners
+         */
+        if (typeof window !== "undefined")
+            window.removeEventListener('resize', this.dispatchWidthChange);
     }
 
     renderTableRows(tableRowColumnDefs:TableRowColumnDef[]):ReactElement<{}>[] {
@@ -165,7 +192,9 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         const rows:Row[] = TreeRasterizer.rasterize(this.state.tree);
         // convert plain ColumnDef to TableRowColumnDef which has additional properties
         return rows.map((row:Row, i:number)=> {
-            return <TableRow key={i} tableRowColumnDefs={tableRowColumnDefs} row={row as DetailRow}
+            return <TableRow key={i}
+                             tableRowColumnDefs={tableRowColumnDefs}
+                             row={row as DetailRow}
                              dispatcher={this.dispatcher}/>;
         });
     }

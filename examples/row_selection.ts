@@ -19,4 +19,4 @@ const element = React.createElement(GigaGrid, {
     }
 });
 
-ReactDOM.render(element, document.getElementById('row-selection'));
+ReactDOM.render(element, document.getElementById('row_selection'));

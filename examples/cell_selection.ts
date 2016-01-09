@@ -7,6 +7,7 @@ import ReactDOM = require('react-dom');
 import {SortDirection} from "../src/models/ColumnLike";
 import {ColumnFormat} from "../src/models/ColumnLike";
 import {Row} from "../src/models/Row";
+import {TableRowColumnDef} from "../src/models/ColumnLike";
 
 const element = React.createElement(GigaGrid, {
     bodyHeight: "250px",
@@ -14,6 +15,10 @@ const element = React.createElement(GigaGrid, {
     columnDefs: TestUtils.getSampleData().columnDefs,
     initialSubtotalBys: [{colTag: "gender"}],
     initialSortBys: [{colTag: "gift", format: ColumnFormat.NUMBER, direction: SortDirection.ASC}],
+    onCellClick: (row:Row, columnDef:TableRowColumnDef) => {
+        alert(`You clicked on ${row.data()[columnDef.colTag]}`);
+        return true;
+    }
 });
 
-ReactDOM.render(element, document.getElementById('basic_example'));
+ReactDOM.render(element, document.getElementById('cell_selection'));
