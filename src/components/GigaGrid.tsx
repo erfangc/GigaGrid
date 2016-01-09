@@ -188,7 +188,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
     }
 
     renderTableRows(tableRowColumnDefs:TableRowColumnDef[]):ReactElement<{}>[] {
-        // TODO consider whether this should be part of GigaStore somehow ... we don't want to always re-rasterize
+        // todo we should identify state chgs that require re-rasterization and only rasterize then
         const rows:Row[] = TreeRasterizer.rasterize(this.state.tree);
         // convert plain ColumnDef to TableRowColumnDef which has additional properties
         return rows.map((row:Row, i:number)=> {

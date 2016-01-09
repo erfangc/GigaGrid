@@ -26,9 +26,10 @@ _.forEach(examples, (example)=> {
 
     // inject example into the page
     $(`
-<div class="card" id=${example.id + "_anchor"}>
-    <h4>${example.title}</h4>
-    <div id="${example.id}"></div>
+<div id=${example.id + "_anchor"}>
+    <h1>${example.title}</h1>
+    <hr>
+    <div class="example" id="${example.id}"></div>
     <br>
     <pre><code>${example.code}</code></pre>
 </div>
