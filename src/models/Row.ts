@@ -4,6 +4,8 @@ export interface Row {
     isDetail(): boolean
     isHidden(): boolean
     toggleHide(hide?:boolean): void
+    isSelected(): boolean
+    toggleSelect(select?:boolean): void
     sectorPath(): string[]
     setSectorPath(sp:string[])
 }
@@ -12,11 +14,23 @@ abstract class GenericRow implements Row {
 
     private _data:any;
     private _sectorPath:string[];
+    private _isSelected:boolean = false;
     private _isHidden:boolean = false;
     public title:string = null;
 
     constructor(data:any) {
         this._data = data;
+    }
+
+    toggleSelect(select?:boolean): void {
+        if (typeof select !== "undefined")
+            this._isSelected =  select;
+        else
+            this._isSelected = !this._isSelected;
+    }
+
+    isSelected(): boolean {
+        return this._isSelected;
     }
 
     isHidden() {

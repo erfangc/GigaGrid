@@ -14,6 +14,9 @@ const element = React.createElement(GigaGrid, {
     columnDefs: TestUtils.getSampleData().columnDefs,
     initialSubtotalBys: [{colTag: "gender"}],
     initialSortBys: [{colTag: "gift", format: ColumnFormat.NUMBER, direction: SortDirection.ASC}],
+    onRowClick: (row:Row) => {
+        return true;
+    }
 });
 
-ReactDOM.render(element, document.getElementById('basic-example'));
+ReactDOM.render(element, document.getElementById('row-selection'));

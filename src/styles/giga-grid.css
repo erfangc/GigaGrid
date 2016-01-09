@@ -85,6 +85,12 @@ div.giga-grid table {
   border-collapse: collapse;
   font-size: 13px;
 }
+div.giga-grid tr.selected {
+  background-color: #f5f5f5;
+}
+div.giga-grid tr.subtotal-row.selected {
+  background-color: #ece9e9;
+}
 div.giga-grid tr td,
 div.giga-grid tr th {
   box-sizing: border-box;

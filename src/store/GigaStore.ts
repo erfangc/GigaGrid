@@ -12,6 +12,8 @@ import {SubtotalRow} from "../models/Row";
 import {SortFactory} from "../static/SortFactory";
 import {SortBy} from "../models/ColumnLike";
 import {WidthMeasureCalculator} from "../static/WidthMeasureCalculator";
+import {Row} from "../models/Row";
+import {TableRowColumnDef} from "../models/ColumnLike";
 
 /**
  * state store for the table, relevant states and stored here. the only way to mutate these states are by sending GigaAction(s) through the Dispatcher given to the store at construction
@@ -44,10 +46,6 @@ export class GigaStore extends ReduceStore<GigaState> {
     }
 
     // TODO we should have a way to handle componentWillReceiveProps
-
-    areEqual(state1:GigaState, state2:GigaState):boolean {
-        return false;
-    }
 
     reduce(state:GigaState,
            action:GigaAction):GigaState {
@@ -86,10 +84,61 @@ export class GigaStore extends ReduceStore<GigaState> {
             case GigaActionType.CLEAR_SORT:
                 newState = this.handleClearSort(state, action as ClearSortAction);
                 break;
+            /*
+             Selection Actions
+             */
+            case GigaActionType.TOGGLE_ROW_SELECT:
+                newState = this.handleRowSelect(state, action as ToggleRowSelectAction);
+                break;
+            case GigaActionType.TOGGLE_CELL_SELECT:
+                newState = this.handleCellSelect(state, action as ToggleCellSelectAction);
+                break;
             default:
                 newState = state;
         }
         return newState;
+    }
+
+    /*
+     Selection Action Handlers
+     */
+    private handleRowSelect(state:GigaState, action:ToggleRowSelectAction) {
+
+        if (typeof this.props.onRowClick === "function") {
+            if (!this.props.onRowClick(action.row))
+                return state;
+            else {
+                action.row.toggleSelect();
+                return {
+                    subtotalBys: state.subtotalBys,
+                    filterBys: state.filterBys,
+                    sortBys: state.sortBys,
+                    widthMeasures: state.widthMeasures,
+                    tree: state.tree
+                }
+
+            }
+        } else
+            return state;
+
+    }
+
+    private handleCellSelect(state:GigaState, action:ToggleCellSelectAction) {
+
+        if (typeof this.props.onCellClick === "function") {
+            if (!this.props.onCellClick(action.row, action.tableColumnDef))
+                return state;
+            else
+                return {
+                    subtotalBys: state.subtotalBys,
+                    filterBys: state.filterBys,
+                    sortBys: state.sortBys,
+                    widthMeasures: state.widthMeasures,
+                    tree: state.tree
+                }
+        } else
+            return state;
+
     }
 
     private handleWidthChange(state:GigaState, action:TableWidthChangeAction) {
@@ -195,8 +244,8 @@ export enum GigaActionType {
     ADD_FILTER,
     CLEAR_FILTER,
     TOGGLE_ROW_COLLAPSE,
-    TOGGLE_DETAIL_ROW_SELECT,
-    TOGGLE_SUMMARY_ROW_SELECT,
+    TOGGLE_ROW_SELECT,
+    TOGGLE_CELL_SELECT,
     TABLE_WIDTH_CHANGE
 }
 
@@ -230,4 +279,13 @@ export interface NewSortAction extends GigaAction {
 
 export interface TableWidthChangeAction extends GigaAction {
     width:string
+}
+
+export interface ToggleRowSelectAction extends GigaAction {
+    row:Row
+}
+
+export interface ToggleCellSelectAction extends GigaAction {
+    row:Row
+    tableColumnDef: TableRowColumnDef
 }

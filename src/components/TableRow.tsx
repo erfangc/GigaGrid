@@ -25,7 +25,8 @@ export class TableRow extends React.Component<TableRowProps, any> {
     render() {
         const props = this.props;
         const cx = classNames({
-            "subtotal-row": !props.row.isDetail()
+            "subtotal-row": !props.row.isDetail(),
+            "selected": props.row.isSelected()
         });
         const cells = props
             .tableRowColumnDefs
@@ -36,6 +37,12 @@ export class TableRow extends React.Component<TableRowProps, any> {
                               dispatcher={this.props.dispatcher}
                               row={this.props.row}/>)
             });
-        return <tr className={cx}>{cells}</tr>
+        return <tr className={cx} onClick={()=>{
+            var action = {
+                type: GigaActionType.TOGGLE_ROW_SELECT,
+                row: this.props.row
+            };
+            this.props.dispatcher.dispatch(action);
+        }}>{cells}</tr>
     }
 }
