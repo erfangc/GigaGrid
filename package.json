@@ -2,9 +2,9 @@
   "name": "gigagrid",
   "version": "0.0.0",
   "description": "Massively performant, multi-layered React.js table widget Written in TypeScript",
-  "main": "gigagrid.js",
+  "main": "dist/giga-grid.js",
   "scripts": {
-    "test": "npm run test",
+    "test": "karma start karma2.conf.js --single-run",
     "serve": "live-server"
   },
   "repository": {
@@ -21,8 +21,14 @@
     "subtotal"
   ],
   "dependencies": {
-    "react": "^0.14.3",
-    "react-dom": "^0.14.3"
+    "react": "^0.14.6",
+    "react-dom": "^0.14.6",
+    "classnames": "^2.2.1",
+    "flux": "^2.1.1",
+    "font-awesome": "^4.5.0",
+    "immutable": "^3.7.6",
+    "jquery": "^2.1.4",
+    "lodash": "^3.10.1"
   },
   "author": "Erfang Chen",
   "license": "MIT",
