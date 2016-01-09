@@ -29,6 +29,7 @@ import {WidthMeasures} from "../static/WidthMeasureCalculator";
 import {WidthMeasureCalculator} from "../static/WidthMeasureCalculator";
 import {parsePixelValue} from "../static/WidthMeasureCalculator";
 import {validateColumnWidthProperty} from "../static/WidthMeasureCalculator";
+import {getScrollBarWidth} from "../static/WidthMeasureCalculator";
 
 export interface GigaProps extends React.Props<GigaGrid> {
     initialSubtotalBys?:SubtotalBy[]
@@ -134,9 +135,11 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             return <TableHeader tableColumnDef={colDef} key={i} isFirstColumn={i===0}
                                 isLastColumn={i===tableRowColumnDefs.length-1} dispatcher={this.dispatcher}/>
         });
+
+        const scrollBarWidth = getScrollBarWidth();
         // add a placeholder to align the header with cells
         // https://github.com/erfangc/GigaGrid/issues/7
-        ths.push(<th key="placeholder" style={{width:"17px"}}/>);
+        ths.push(<th key="placeholder" style={{width: scrollBarWidth + "px"}}/>);
         return (
             <thead>
                 <tr>{ths}</tr>

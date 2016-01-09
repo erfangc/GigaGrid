@@ -16,7 +16,7 @@ customColumnDef.cellTemplateCreator = (data:any) => {
 };
 
 const element = React.createElement(GigaGrid, {
-    bodyHeight: "250px",
+    bodyHeight: "450px",
     data: TestUtils.getSampleData().data,
     columnDefs: columnDefs,
     initialSubtotalBys: [{colTag: "gender"}],

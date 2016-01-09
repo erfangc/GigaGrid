@@ -24,6 +24,47 @@ export function validateColumnWidthProperty(columnDefs:ColumnDef[]):boolean {
     return true;
 }
 
+var scrollBarWidth:number = null;
+
+/**
+ * uber hax to get scrollbar width
+ * see stackoverflow reference: http://stackoverflow.com/questions/986937/how-can-i-get-the-browsers-scrollbar-sizes
+ * @returns {number}
+ */
+export function getScrollBarWidth() {
+
+    function computeScrollBarWidth() {
+        var inner = document.createElement('p');
+        inner.style.width = "100%";
+        inner.style.height = "200px";
+
+        var outer = document.createElement('div');
+        outer.style.position = "absolute";
+        outer.style.top = "0px";
+        outer.style.left = "0px";
+        outer.style.visibility = "hidden";
+        outer.style.width = "200px";
+        outer.style.height = "150px";
+        outer.style.overflow = "hidden";
+        outer.appendChild(inner);
+
+        document.body.appendChild(outer);
+        var w1 = inner.offsetWidth;
+        outer.style.overflow = 'scroll';
+        var w2 = inner.offsetWidth;
+        if (w1 == w2) w2 = outer.clientWidth;
+
+        document.body.removeChild(outer);
+        return (w1 - w2);
+    }
+
+    if (scrollBarWidth === null)
+        scrollBarWidth = computeScrollBarWidth();
+
+    return scrollBarWidth;
+
+}
+
 // #7 Determine column width automatically if not passed in by the user https://github.com/erfangc/GigaGrid/issues/7
 export class WidthMeasureCalculator {
 
