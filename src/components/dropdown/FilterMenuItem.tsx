@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {GridSubcomponentProps} from "../TableHeader";
+import {GridSubcomponentProps} from "../TableHeaderCell";
 import {SimpleDropdownMenuItem} from "./DropdownMenu";
-import {TableRowColumnDef} from "../../models/ColumnLike";
+import {Column} from "../../models/ColumnLike";
 
 export interface FilterMenuItemProps extends GridSubcomponentProps<FilterMenuItem> {
     isLastColumn?:boolean;
-    tableRowColumnDef:TableRowColumnDef;
+    tableRowColumnDef:Column;
     // TODO think about what props would be needed for the filter to function
 }
 

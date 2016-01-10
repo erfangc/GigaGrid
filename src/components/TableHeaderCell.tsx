@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Dispatcher = Flux.Dispatcher;
 import * as classNames from 'classnames';
-import {TableRowColumnDef} from "../models/ColumnLike";
+import {Column} from "../models/ColumnLike";
 import {DropdownMenu} from "./dropdown/DropdownMenu";
 import {SimpleDropdownMenuItem} from "./dropdown/DropdownMenu";
 import {ColumnFormat} from "../models/ColumnLike";
@@ -17,8 +17,8 @@ export interface GridSubcomponentProps<T> extends React.Props<T> {
     dispatcher: Dispatcher<GigaAction>;
 }
 
-export interface TableHeaderProps extends GridSubcomponentProps<TableHeader> {
-    tableColumnDef: TableRowColumnDef
+export interface TableHeaderProps extends GridSubcomponentProps<TableHeaderCell> {
+    tableColumnDef: Column
     isFirstColumn?: boolean
     isLastColumn?: boolean
 }
@@ -27,7 +27,7 @@ class TableHeaderState {
     handleVisible:boolean;
 }
 
-export class TableHeader extends React.Component<TableHeaderProps,TableHeaderState> {
+export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeaderState> {
 
     private dropdownMenuRef:DropdownMenu;
     private dropdownToggleHandleRef:HTMLElement;

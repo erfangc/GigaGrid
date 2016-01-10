@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as classNames from  'classnames';
-import {GridSubcomponentProps} from "../TableHeader";
-import {TableRowColumnDef} from "../../models/ColumnLike";
+import {GridSubcomponentProps} from "../TableHeaderCell";
+import {Column} from "../../models/ColumnLike";
 import {ColumnFormat} from "../../models/ColumnLike";
 import SyntheticEvent = __React.SyntheticEvent;
 import {NewSubtotalAction} from "../../store/GigaStore";
@@ -10,7 +10,7 @@ import {SimpleDropdownMenuItem} from "./DropdownMenu";
 
 export interface SubtotalByMenuItemProps extends GridSubcomponentProps<SubtotalByMenuItem> {
     isLastColumn?:boolean;
-    tableRowColumnDef:TableRowColumnDef;
+    tableRowColumnDef:Column;
 }
 
 export class SubtotalByMenuItem extends React.Component<SubtotalByMenuItemProps, any> {

@@ -6,7 +6,7 @@ import React = require('react');
 import ReactDOM = require('react-dom');
 import {SortDirection} from "../src/models/ColumnLike";
 import {ColumnFormat} from "../src/models/ColumnLike";
-import {TableRowColumnDef} from "../src/models/ColumnLike";
+import {Column} from "../src/models/ColumnLike";
 
 const columnDefs = TestUtils.getSampleData().columnDefs;
 const customColumnDef = columnDefs[0];

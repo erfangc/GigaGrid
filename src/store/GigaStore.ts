@@ -13,7 +13,7 @@ import {SortFactory} from "../static/SortFactory";
 import {SortBy} from "../models/ColumnLike";
 import {WidthMeasureCalculator} from "../static/WidthMeasureCalculator";
 import {Row} from "../models/Row";
-import {TableRowColumnDef} from "../models/ColumnLike";
+import {Column} from "../models/ColumnLike";
 
 /**
  * state store for the table, relevant states and stored here. the only way to mutate these states are by sending GigaAction(s) through the Dispatcher given to the store at construction
@@ -293,5 +293,5 @@ export interface ToggleRowSelectAction extends GigaAction {
 
 export interface ToggleCellSelectAction extends GigaAction {
     row:Row
-    tableColumnDef: TableRowColumnDef
+    tableColumnDef: Column
 }

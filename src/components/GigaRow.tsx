@@ -1,24 +1,24 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 import {SubtotalRow} from "../models/Row";
-import {TableRowColumnDef} from "../models/ColumnLike";
+import {Column} from "../models/ColumnLike";
 import {ColumnFormat} from "../models/ColumnLike";
 import {DetailRow} from "../models/Row";
 import {Row} from "../models/Row";
-import {GridSubcomponentProps} from "./TableHeader";
+import {GridSubcomponentProps} from "./TableHeaderCell";
 import {ToggleCollapseAction} from "../store/GigaStore";
 import {GigaActionType} from "../store/GigaStore";
 import SyntheticEvent = __React.SyntheticEvent;
 import {Cell} from "./Cell";
 
-export interface TableRowProps extends GridSubcomponentProps<TableRow> {
+export interface GigaRowProps extends GridSubcomponentProps<GigaRow> {
     row:Row;
-    tableRowColumnDefs:TableRowColumnDef[];
+    columns:Column[];
 }
 
-export class TableRow extends React.Component<TableRowProps, any> {
+export class GigaRow extends React.Component<GigaRowProps, any> {
 
-    constructor(props:TableRowProps) {
+    constructor(props:GigaRowProps) {
         super(props);
     }
 
@@ -29,11 +29,11 @@ export class TableRow extends React.Component<TableRowProps, any> {
             "selected": props.row.isSelected()
         });
         const cells = props
-            .tableRowColumnDefs
-            .map((colDef:TableRowColumnDef, i:number) => {
+            .columns
+            .map((column:Column, i:number) => {
                 return (<Cell key={i}
                               isFirstColumn={i === 0}
-                              tableRowColumnDef={colDef}
+                              column={column}
                               dispatcher={this.props.dispatcher}
                               row={this.props.row}/>)
             });
