@@ -9,10 +9,12 @@ import {ColumnFormat} from "../src/models/ColumnLike";
 import {Row} from "../src/models/Row";
 import {Column} from "../src/models/ColumnLike";
 
+const peopleData = TestUtils.newPeopleTestData();
+
 const element = React.createElement(GigaGrid, {
     bodyHeight: "250px",
-    data: TestUtils.getSampleData().data,
-    columnDefs: TestUtils.getSampleData().columnDefs,
+    data: peopleData.rawData(),
+    columnDefs: peopleData.columnDefs(),
     initialSubtotalBys: [{colTag: "gender"}],
     initialSortBys: [{colTag: "gift", format: ColumnFormat.NUMBER, direction: SortDirection.ASC}],
     onCellClick: (row:Row, columnDef:Column) => {

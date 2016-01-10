@@ -83,7 +83,8 @@ export class Cell extends React.Component<CellProps,any> {
         if (props.isFirstColumn && !row.isDetail())
             result = this.renderSubtotalCellWithCollapseBtn(row as SubtotalRow);
         else
-            result = (<td className={cx} onClick={e=>this.onClick()} style={this.calculateStyle()}>{this.renderContent(row,cd)}</td>);
+            result = (<td className={cx} onClick={e=>this.onClick()}
+                          style={this.calculateStyle()}>{this.renderContent(row,cd)}</td>);
 
         return result;
     }
@@ -98,7 +99,14 @@ export class Cell extends React.Component<CellProps,any> {
 
 class TableRowUtils {
     public static calculateFirstColumnIdentation(row:Row) {
-        const identLevel = (row.sectorPath() || []).length;
-        return ((row.isDetail() && identLevel !== 0 ? identLevel + 1 : identLevel ) * 25) + 'px';
+        /*
+         handle when there are no subtotal rows
+         */
+        if ((row.sectorPath() || []).length === 0)
+            return "10px";
+        else {
+            const identLevel = (row.sectorPath() || []).length;
+            return ((row.isDetail() && identLevel !== 0 ? identLevel + 1 : identLevel ) * 25) + 'px';
+        }
     }
 }

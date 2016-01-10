@@ -25,7 +25,7 @@ describe("GigaRow Components", () => {
             const props:GigaRowProps = {
                 dispatcher: null,
                 row: subtotalRow,
-                columns: TestUtils.getSampleColumns()
+                columns: TestUtils.getSimpleColumnDefs()
             };
             const element = React.createElement(GigaRow, props);
             ReactDOM.render(element, document.getElementById('container'));
@@ -38,7 +38,7 @@ describe("GigaRow Components", () => {
 
             expect($tr.length).toBe(1);
             expect($tr.find("i.fa.fa-minus").length).toBe(1);
-            expect($tr.children("td").first().css('padding-left')).toEqual("0px");
+            expect($tr.children("td").first().css('padding-left')).toEqual("10px");
             expect($tr.children("td:nth-child(2)").hasClass('numeric')).toBeTruthy();
             expect($tr.children("td:nth-child(1)").hasClass('numeric')).toBeFalsy();
 
@@ -96,7 +96,7 @@ describe("GigaRow Components", () => {
                 const props:GigaRowProps = {
                     dispatcher: null,
                     row: TestUtils.getDetailRow(),
-                    columns: TestUtils.getSampleColumns()
+                    columns: TestUtils.getSimpleColumnDefs()
                 };
                 const element = React.createElement(GigaRow, props);
                 ReactDOM.render(element, document.getElementById('container'));
@@ -109,8 +109,8 @@ describe("GigaRow Components", () => {
             it("should have no + icon on the first cell", () => {
                 expect($tr.find("i.fa.fa-plus").length).toBe(0);
             });
-            it("should have no identation", ()=> {
-                expect($tr.children("td").first().css('padding-left')).toEqual("0px");
+            it("should have 10px", ()=> {
+                expect($tr.children("td").first().css('padding-left')).toEqual("10px");
             });
             it("first child should be a numeric child", ()=> {
                 expect($tr.children("td:nth-child(1)").hasClass('numeric')).toBeTruthy();
@@ -123,7 +123,7 @@ describe("GigaRow Components", () => {
             const props:GigaRowProps = {
                 dispatcher: null,
                 row: detailRow,
-                columns: TestUtils.getSampleColumns()
+                columns: TestUtils.getSimpleColumnDefs()
             };
             const element = React.createElement(GigaRow, props);
             ReactDOM.render(element, document.getElementById('container'));
@@ -136,7 +136,7 @@ describe("GigaRow Components", () => {
             const props:GigaRowProps = {
                 dispatcher: null,
                 row: TestUtils.getDetailRowWithMissingData(),
-                columns: TestUtils.getSampleColumns()
+                columns: TestUtils.getSimpleColumnDefs()
             };
             const element = React.createElement(GigaRow, props);
             ReactDOM.render(element, document.getElementById('container'));

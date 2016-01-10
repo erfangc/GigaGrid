@@ -22,9 +22,10 @@ describe("GigaStore", ()=> {
 
     beforeEach(()=> {
         dispatcher = new Dispatcher<GigaAction>();
+        const people = TestUtils.newPeopleTestData();
         props = {
-            data: TestUtils.getSampleData().data,
-            columnDefs: TestUtils.getSampleData().columnDefs
+            data: people.rawData(),
+            columnDefs: people.columnDefs()
         };
         store = new GigaStore(dispatcher, props);
     });

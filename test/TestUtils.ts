@@ -118,63 +118,6 @@ export class TestUtils {
         });
     }
 
-    static getUnsubtotaledTree():Tree {
-        return TreeBuilder.buildTree(TestUtils.getSampleData().data);
-    }
-
-    static getTreeSubtotaledByGender():Tree {
-        const tree = TreeBuilder.buildTree(TestUtils.getSampleData().data, [{colTag: "gender"}]);
-        SubtotalAggregator.aggregateTree(tree, TestUtils.getSampleData().columnDefs);
-        return tree;
-    }
-
-    /**
-     * return a small set of sample data
-     * @returns {{data: {gender: string, first_name: string, last_name: string, gift: number}[], columnDefs: ColumnDef[]}}
-     */
-    static getSampleData():{data: any[], columnDefs: ColumnDef[]} {
-        const data = [{"gender": "Female", "first_name": "Maria", "last_name": "Young", "gift": 2},
-            {"gender": "Female", "first_name": "Kimberly", "last_name": "Kennedy", "gift": 2},
-            {"gender": "Female", "first_name": "Lisa", "last_name": "Hall", "gift": 10},
-            {"gender": "Female", "first_name": "Andrea", "last_name": "Peterson", "gift": 4},
-            {"gender": "Male", "first_name": "Clarence", "last_name": "Cox", "gift": 9},
-            {"gender": "Male", "first_name": "Charles", "last_name": "Riley", "gift": 7},
-            {"gender": "Male", "first_name": "Bruce", "last_name": "Turner", "gift": 2},
-            {"gender": "Female", "first_name": "Shirley", "last_name": "Riley", "gift": 9},
-            {"gender": "Male", "first_name": "David", "last_name": "Hunt", "gift": 7},
-            {"gender": "Male", "first_name": "Thomas", "last_name": "Bradley", "gift": 6}];
-        const columnDefs:ColumnDef[] = [
-            {
-                colTag: "first_name",
-                title: "First Name",
-                format: ColumnFormat.STRING,
-                aggregationMethod: AggregationMethod.NONE
-            },
-            {
-                colTag: "gender",
-                title: "Gender",
-                format: ColumnFormat.STRING,
-                aggregationMethod: AggregationMethod.NONE
-            },
-            {
-                colTag: "last_name",
-                title: "Last Name",
-                format: ColumnFormat.STRING,
-                aggregationMethod: AggregationMethod.NONE
-            },
-            {
-                colTag: "gift",
-                title: "Gift",
-                format: ColumnFormat.NUMBER,
-                aggregationMethod: AggregationMethod.SUM
-            }
-        ];
-        return {
-            data: data,
-            columnDefs: columnDefs
-        };
-    }
-
     static getSimpleSubtotalRow():SubtotalRow {
         const subtotalRow:SubtotalRow = new SubtotalRow("Sector X");
         subtotalRow.setData({
@@ -222,15 +165,6 @@ export class TestUtils {
             columnDef3,
             columnDef4
         ];
-    }
-
-    /**
-     * wraps around the sample columnDefs returned by another method
-     * @see getMockColumnDefs
-     * @returns {Column[]}
-     */
-    static getSampleColumns():Column[] {
-        return this.getSimpleColumnDefs();
     }
 
     static newPeopleTestData():PeopleTestData {

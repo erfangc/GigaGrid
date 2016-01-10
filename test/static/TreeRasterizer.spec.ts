@@ -6,9 +6,10 @@ import {TreeRasterizer} from "../../src/static/TreeRasterizer";
 import {TestUtils} from "../TestUtils";
 
 describe("TreeRasterizer", ()=> {
+
     describe("can render a subtotaled tree", () => {
-        const sampleData = TestUtils.getSampleData();
-        const data:any[] = sampleData.data;
+        const peopleData = TestUtils.newPeopleTestData();
+        const data:any[] = peopleData.rawData();
         const tree:Tree = TreeBuilder.buildTree(data, [{colTag: "gender"}]);
         const rows:Row[] = TreeRasterizer.rasterize(tree);
 
@@ -28,8 +29,8 @@ describe("TreeRasterizer", ()=> {
     });
 
     describe("children of collapsed rows should not be in the rasterized row array", ()=> {
-        const sampleData = TestUtils.getSampleData();
-        const data:any[] = sampleData.data;
+        const peopleData = TestUtils.newPeopleTestData();
+        const data:any[] = peopleData.rawData();
         const tree:Tree = TreeBuilder.buildTree(data, [{colTag: "gender"}]);
         // collapse the 'Male' subtotal row
         tree.getRoot().getChildByTitle("Male").toggleCollapse();
@@ -48,8 +49,8 @@ describe("TreeRasterizer", ()=> {
     });
 
     describe("can render a un-subtotaled tree", ()=> {
-        const sampleData = TestUtils.getSampleData();
-        const data:any[] = sampleData.data;
+        const peopleData = TestUtils.newPeopleTestData();
+        const data:any[] = peopleData.rawData();
         const tree:Tree = TreeBuilder.buildTree(data, []);
         const rows:Row[] = TreeRasterizer.rasterize(tree);
 

@@ -3,11 +3,17 @@ import {TestUtils} from "../TestUtils";
 import {SortFactory} from "../../src/static/SortFactory";
 import {ColumnFormat} from "../../src/models/ColumnLike";
 import {SortDirection} from "../../src/models/ColumnLike";
+import {TreeBuilder} from "../../src/static/TreeBuilder";
+import {SubtotalAggregator} from "../../src/static/SubtotalAggregator";
 
 describe("SortFactory", ()=> {
 
-    const unsubtotaledTree = TestUtils.getUnsubtotaledTree();
-    const subtotaledTree = TestUtils.getTreeSubtotaledByGender();
+    const peopleData = TestUtils.newPeopleTestData();
+    const data:any[] = peopleData.rawData();
+
+    const unsubtotaledTree = TreeBuilder.buildTree(data);
+    const subtotaledTree = TreeBuilder.buildTree(data, [{colTag: "gender"}]);
+    SubtotalAggregator.aggregateTree(subtotaledTree, peopleData.columnDefs());
 
     const sortByGenderGiftAsc = [
         {
@@ -92,8 +98,8 @@ describe("SortFactory", ()=> {
     });
 
     it("will not cause an error is sorting a blank array of SortBy", ()=> {
-        expect(SortFactory.sortTree(subtotaledTree,[])).not.toBeNull();
-        expect(SortFactory.sortTree(unsubtotaledTree,[])).not.toBeNull();
+        expect(SortFactory.sortTree(subtotaledTree, [])).not.toBeNull();
+        expect(SortFactory.sortTree(unsubtotaledTree, [])).not.toBeNull();
     });
 
 
