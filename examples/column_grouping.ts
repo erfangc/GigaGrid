@@ -8,10 +8,12 @@ import {SortDirection} from "../src/models/ColumnLike";
 import {ColumnFormat} from "../src/models/ColumnLike";
 import {Row} from "../src/models/Row";
 
+const peopleData = TestUtils.newPeopleTestData();
+
 const element = React.createElement(GigaGrid, {
-    bodyHeight: "350px",
-    data: TestUtils.getSampleData().data,
-    columnDefs: TestUtils.getSampleData().columnDefs,
+    bodyHeight: "250px",
+    data: peopleData.rawData(),
+    columnDefs: peopleData.columnDefs(),
     columnGroups: [
         {title: "Names", columns: ["first_name", "last_name"]},
         {title: "Other Info", columns: ["gender", "gift"]}

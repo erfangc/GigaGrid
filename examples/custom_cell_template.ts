@@ -8,7 +8,8 @@ import {SortDirection} from "../src/models/ColumnLike";
 import {ColumnFormat} from "../src/models/ColumnLike";
 import {Column} from "../src/models/ColumnLike";
 
-const columnDefs = TestUtils.getSampleData().columnDefs;
+const peopleData = TestUtils.newPeopleTestData();
+const columnDefs = peopleData.columnDefs();
 const customColumnDef = columnDefs[0];
 
 customColumnDef.cellTemplateCreator = (data:any) => {
@@ -17,7 +18,7 @@ customColumnDef.cellTemplateCreator = (data:any) => {
 
 const element = React.createElement(GigaGrid, {
     bodyHeight: "450px",
-    data: TestUtils.getSampleData().data,
+    data: peopleData.rawData(),
     columnDefs: columnDefs,
     initialSubtotalBys: [{colTag: "gender"}],
     initialSortBys: [{colTag: "gift", format: ColumnFormat.NUMBER, direction: SortDirection.ASC}]

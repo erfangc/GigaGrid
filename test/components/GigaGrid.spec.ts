@@ -21,8 +21,9 @@ describe('GigaGrid', ()=> {
 
     it("can render a basic HTML table", () => {
 
-        const data:any[] = TestUtils.getSampleData().data;
-        const columnDefs:ColumnDef[] = TestUtils.getSampleData().columnDefs;
+        const peopleData = TestUtils.newPeopleTestData();
+        const data:any[] = peopleData.rawData();
+        const columnDefs:ColumnDef[] = peopleData.columnDefs();
         const gigaGridProps:GigaProps = {data: data, columnDefs: columnDefs};
         const element = React.createElement(GigaGrid, gigaGridProps);
         const $container = $("#container");
@@ -36,8 +37,9 @@ describe('GigaGrid', ()=> {
 
     it("it can render a subtotaled HTML table (as indicated by the presence of additional `tr` in the DOM)", () => {
 
-        const data:any[] = TestUtils.getSampleData().data;
-        const columnDefs:ColumnDef[] = TestUtils.getSampleData().columnDefs;
+        const peopleData = TestUtils.newPeopleTestData();
+        const data:any[] = peopleData.rawData();
+        const columnDefs:ColumnDef[] = peopleData.columnDefs();
         const gigaGridProps:GigaProps = {data: data, columnDefs: columnDefs};
         gigaGridProps.initialSubtotalBys = [{colTag: "gender"}];
 
@@ -49,8 +51,5 @@ describe('GigaGrid', ()=> {
         expect($container.find("table > tbody").find("tr").length).toBe(12);
 
     });
-
-    // TODO write addition tests for corner cases and other features
-
 
 });

@@ -23,7 +23,7 @@ describe("Cell", ()=> {
     beforeEach(()=> {
         dispatcher = new Dispatcher<GigaAction>();
         row = TestUtils.getDetailRow();
-        columns = TestUtils.getSampleColumns();
+        columns = TestUtils.getSimpleColumnDefs();
     });
 
     it("renders a td", ()=> {
