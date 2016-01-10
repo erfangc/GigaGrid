@@ -7,6 +7,7 @@ import basic_example_text = require('./basic_example.ts!text');
 import custom_cell_template = require('./custom_cell_template.ts!text');
 import row_selection = require('./row_selection.ts!text');
 import cell_selection = require('./cell_selection.ts!text');
+import column_grouping = require('./column_grouping.ts!text');
 
 function dropImports(str:string) {
     return _.chain<string>(str.split("\n"))
@@ -17,7 +18,8 @@ var examples = [
     {id: "basic_example", title: "Basic Example", code: dropImports(basic_example_text)},
     {id: "custom_cell_template", title: "Custom Cell Template", code: dropImports(custom_cell_template)},
     {id: "row_selection", title: "Row Selection", code: dropImports(row_selection)},
-    {id: "cell_selection", title: "Cell Selection", code: dropImports(cell_selection)}
+    {id: "cell_selection", title: "Cell Selection", code: dropImports(cell_selection)},
+    {id: "column_grouping", title: "Column Grouping", code: dropImports(column_grouping)}
 ];
 
 const $navbar = $("ul.nav.navbar-nav");
@@ -48,14 +50,14 @@ import './basic_example';
 import './custom_cell_template';
 import './row_selection';
 import './cell_selection';
-
+import './column_grouping';
 
 $('pre code').each(function (i, block) {
     hljs.highlightBlock(block);
 });
 
 $navbar.find("li a").on('click', (e:JQueryMouseEventObject)=> {
-    $navbar.find("li").each((idx,li)=> {
+    $navbar.find("li").each((idx, li)=> {
         $(li).removeClass("active");
     });
     $(e.target).closest("li").addClass("active");

@@ -1,5 +1,13 @@
 @import "dropdown-menu"
 
+// we use material design colors and accents
+// see: https://www.google.com/design/spec/style/color.html#color-color-palette
+main-color = #2196F3
+cell-border-color = #f5f5f5
+selected-color = #E3F2FD
+subtotal-color = selected-color
+subtotal-selected-color = #BBDEFB
+
 div.giga-grid
   margin 0
   font-family Roboto, sans-serif
@@ -14,10 +22,10 @@ div.giga-grid
     font-size 13px
 
   tr.selected
-    background-color #f5f5f5
+    background-color selected-color
 
   tr.subtotal-row.selected
-    background-color #ECE9E9
+    background-color subtotal-selected-color
 
   tr td, tr th
     box-sizing border-box
@@ -31,24 +39,29 @@ div.giga-grid
 
   tr th
     font-weight bold
-    border-bottom 2px solid #555
+    background-color: main-color
+    color #fff
+
+  tr th.column-group
+    text-align center
+    border-bottom 1px solid cell-border-color
 
   tr td
-    border 1px solid #f5f5f5
+    border 1px solid cell-border-color
     border-right none
     border-left none
 
   tr.subtotal-row
-    background-color #f5f5f5
+    background-color subtotal-color
 
   thead tr:hover, tbody tr:hover
     cursor pointer
 
   tbody tr:hover
-    background-color #f5f5f5
+    background-color selected-color
 
   tr.subtotal-row:hover
-    background-color #ECE9E9
+    background-color subtotal-selected-color
 
   .numeric
     text-align right

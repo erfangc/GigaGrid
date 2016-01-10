@@ -4,19 +4,11 @@ import {Column} from "../../src/models/ColumnLike";
 import {ColumnFactory} from "../../src/models/ColumnLike";
 import {GigaState} from "../../src/components/GigaGrid";
 import {ColumnGroupDef} from "../../src/models/ColumnLike";
+import {TestUtils} from "../TestUtils";
 
 describe("ColumnCreator", ()=> {
 
-    const simpleState:GigaState = {
-        sortBys: [],
-        subtotalBys: [],
-        filterBys: [],
-        tree: null,
-        widthMeasures: {
-            bodyWidth: null,
-            columnWidths: {"colTag1": "100px"}
-        }
-    };
+    const simpleState:GigaState = TestUtils.getMockState();
 
     describe("create Column objects from ColumnDef", ()=> {
 
@@ -48,30 +40,8 @@ describe("ColumnCreator", ()=> {
 
     it("create 2-dimensional array of columns from a sequence of ColumnGroupDef", ()=> {
 
-        const columnGroupDefs:ColumnGroupDef[] = [
-            {
-                title: "Group 1",
-                columns: ["col1", "col2"]
-            },
-            {
-                title: "Group 2",
-                columns: ["col3", "col2", "col4"] // col2 is repeated intentionally
-            }];
-
-        const columnDefs:ColumnDef[] = [
-            {
-                colTag: "col1"
-            },
-            {
-                colTag: "col2"
-            },
-            {
-                colTag: "col3"
-            },
-            {
-                colTag: "col4"
-            }
-        ];
+        const columnGroupDefs:ColumnGroupDef[] = TestUtils.getMockColumnGroupDefs();
+        const columnDefs:ColumnDef[] = TestUtils.getMockColumnDefs();
 
         const nestedColumns:Column[][] = ColumnFactory
             .createColumnsFromGroupDefinition(

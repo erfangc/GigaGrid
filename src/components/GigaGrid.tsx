@@ -30,6 +30,7 @@ import {getScrollBarWidth} from "../static/WidthMeasureCalculator";
 import {TableBody} from "./TableBody";
 import {ColumnFactory} from "../models/ColumnLike";
 import {ColumnGroupDef} from "../models/ColumnLike";
+import {TableHeader} from "./TableHeader";
 
 export interface GigaProps extends React.Props<GigaGrid> {
     initialSubtotalBys?:SubtotalBy[]
@@ -86,46 +87,32 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
     render() {
 
-        const columns:Column[] = ColumnFactory.createColumnsFromDefinition(this.props.columnDefs, this.state);
+        var columns:Column[][];
+        if (this.props.columnGroups)
+            columns = ColumnFactory.createColumnsFromGroupDefinition(this.props.columnGroups, this.props.columnDefs, this.state);
+        else
+            columns = [ColumnFactory.createColumnsFromDefinition(this.props.columnDefs, this.state)];
 
         const bodyStyle = {
-            height: this.props.bodyHeight || "100%", // TODO we will need to give similar consideration to height as we did for width
-            width: this.state.widthMeasures.bodyWidth
-        };
+                height: this.props.bodyHeight || "100%", // TODO we will need to give similar consideration to height as we did for width
+                width: this.state.widthMeasures.bodyWidth
+            }
+            ;
+        const rows:Row[] = TreeRasterizer.rasterize(this.state.tree);
 
         return (
             <div className="giga-grid">
                 <div style={{width: this.state.widthMeasures.bodyWidth}}>
                     <table>
-                        {this.renderTableHeader(columns)}
+                        <TableHeader dispatcher={this.dispatcher} columns={columns}/>
                     </table>
                 </div>
                 <div className="giga-grid-body-scroll-y" style={bodyStyle}>
                     <table>
-                        {this.renderTableBody(columns)}
+                        <TableBody dispatcher={this.dispatcher} rows={rows} columns={columns[columns.length-1]}/>
                     </table>
                 </div>
             </div>);
-    }
-
-    private renderTableHeader(columns:Column[]):ReactElement<{}> {
-        const ths = columns.map((colDef:Column, i:number)=> {
-            return <TableHeaderCell tableColumnDef={colDef} key={i} isFirstColumn={i===0}
-                                    isLastColumn={i===columns.length-1} dispatcher={this.dispatcher}/>
-        });
-
-        const scrollBarWidth = getScrollBarWidth();
-
-        /*
-         add an placeholder to align the header with cells
-         https://github.com/erfangc/GigaGrid/issues/7
-         */
-        ths.push(<th key="placeholder" style={{width: scrollBarWidth + "px"}}/>);
-        return (
-            <thead>
-                <tr>{ths}</tr>
-            </thead>
-        );
     }
 
     private dispatchWidthChange() {
@@ -159,12 +146,6 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
          */
         if (typeof window !== "undefined")
             window.removeEventListener('resize', this.dispatchWidthChange);
-    }
-
-    renderTableBody(columns:Column[]):JSX.Element {
-        // todo we should identify state chgs that require re-rasterization and only rasterize then
-        const rows:Row[] = TreeRasterizer.rasterize(this.state.tree);
-        return <TableBody dispatcher={this.dispatcher} rows={rows} columns={columns}/>;
     }
 
 }
