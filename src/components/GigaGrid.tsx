@@ -1,10 +1,7 @@
-///<reference path="../../jspm_packages/npm/immutable@3.7.6/dist/immutable.d.ts"/>
-
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as Flux from 'flux';
 import * as FluxUtils from 'flux/utils';
-import * as Immutable from 'immutable';
 import ReactElement = __React.ReactElement;
 import {SubtotalBy} from "../models/ColumnLike";
 import {ColumnDef} from "../models/ColumnLike";
@@ -31,6 +28,8 @@ import {parsePixelValue} from "../static/WidthMeasureCalculator";
 import {validateColumnWidthProperty} from "../static/WidthMeasureCalculator";
 import {getScrollBarWidth} from "../static/WidthMeasureCalculator";
 import {TableBody} from "./TableBody";
+import {ColumnFactory} from "../models/ColumnLike";
+import {ColumnGroupDef} from "../models/ColumnLike";
 
 export interface GigaProps extends React.Props<GigaGrid> {
     initialSubtotalBys?:SubtotalBy[]
@@ -40,6 +39,7 @@ export interface GigaProps extends React.Props<GigaGrid> {
     onCellClick?: (row:Row, columnDef:Column)=>boolean
     data:any[]
     columnDefs:ColumnDef[]
+    columnGroups?:ColumnGroupDef[]
     bodyHeight?:string
     bodyWidth?:string
 }
@@ -86,7 +86,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
     render() {
 
-        const columns:Column[] = this.transformColumnDef(this.props.columnDefs, this.state);
+        const columns:Column[] = ColumnFactory.createColumnsFromDefinition(this.props.columnDefs, this.state);
 
         const bodyStyle = {
             height: this.props.bodyHeight || "100%", // TODO we will need to give similar consideration to height as we did for width
@@ -107,31 +107,6 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                 </div>
             </div>);
     }
-
-    private transformColumnDef(columnDefs:ColumnDef[], state:GigaState):Column[] {
-
-        return columnDefs.map(cd => {
-
-            const column:Column = {
-                colTag: cd.colTag,
-                title: cd.title,
-                aggregationMethod: cd.aggregationMethod,
-                format: cd.format,
-                width: state.widthMeasures.columnWidths[cd.colTag],
-                cellTemplateCreator: cd.cellTemplateCreator
-            };
-
-            // determine if there is an existing SortBy for this column
-            var sortBy = Immutable.List<SortBy>(state.sortBys).find((s)=>s.colTag === cd.colTag);
-            if (sortBy) {
-                column.sortDirection = sortBy.direction;
-                column.customSortFn = sortBy.customSortFn;
-            }
-
-            return column;
-        });
-
-    };
 
     private renderTableHeader(columns:Column[]):ReactElement<{}> {
         const ths = columns.map((colDef:Column, i:number)=> {

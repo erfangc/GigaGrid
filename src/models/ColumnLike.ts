@@ -1,4 +1,6 @@
 import {Row} from "./Row";
+import {GigaState} from "../components/GigaGrid";
+import * as _ from 'lodash';
 
 export enum AggregationMethod {
     SUM, AVERAGE, NONE
@@ -10,25 +12,24 @@ export enum ColumnFormat {
 
 export interface ColumnLike {
     colTag: string
+    title?: string
+    format?: ColumnFormat
+    aggregationMethod?:AggregationMethod
 }
 
 export enum SortDirection {
     ASC, DESC
 }
 
-// TODO consider which properties to make optional
-export interface ColumnDef {
-    colTag:string
-    title?:string
-    format?:ColumnFormat
+export interface ColumnDef extends ColumnLike {
     width?:string
-    aggregationMethod?:AggregationMethod
-    cellTemplateCreator?:(data:any, tableRowColumnDef?:Column)=>JSX.Element
+    cellTemplateCreator?:(data:any, column?:Column)=>JSX.Element
 }
 
 export interface Column extends ColumnDef {
     sortDirection?: SortDirection
     customSortFn?:(a:Row, b:Row)=>number
+    colSpan?: number
 }
 
 export interface FilterBy extends ColumnLike {
@@ -43,4 +44,50 @@ export interface SortBy {
     format: ColumnFormat;
     customSortFn?:(a:Row, b:Row)=>number; // UDF for sorting
     direction: SortDirection
+}
+
+export interface ColumnGroupDef {
+    title: string
+    columns: string[] // colTags
+}
+
+export class ColumnFactory {
+
+    static createColumnsFromDefinition(columnDefs:ColumnDef[], state:GigaState):Column[] {
+        return columnDefs.map(cd => ColumnFactory.createColumnFromDefinition(cd, state));
+    }
+
+    static createColumnFromDefinition(cd:ColumnDef, state:GigaState):Column {
+        const column:Column = {
+            colTag: cd.colTag,
+            title: cd.title,
+            aggregationMethod: cd.aggregationMethod,
+            format: cd.format,
+            width: state.widthMeasures.columnWidths[cd.colTag],
+            cellTemplateCreator: cd.cellTemplateCreator
+        };
+
+        // determine if there is an existing SortBy for this column
+        var sortBy = _.find(state.sortBys, s=>s.colTag === cd.colTag);
+
+        if (sortBy) {
+            column.sortDirection = sortBy.direction;
+            column.customSortFn = sortBy.customSortFn;
+        }
+
+        return column;
+    }
+
+    static createColumnsFromGroupDefinition(columnGroupDefs: ColumnGroupDef[], columnDefs: ColumnDef[], state: GigaState):Column[][] {
+
+        const columns = ColumnFactory.createColumnsFromDefinition(columnDefs, state);
+        const columnMap = _.chain(columns).map((column:Column)=>column.colTag).object(columns).value();
+        const nestedColumns: Column[][] = [[],[]];
+        _.forEach(columnGroupDefs, (groupDef:ColumnGroupDef, i: number)=> {
+            nestedColumns[0].push({colTag: `column_group_${i+1}`, title: groupDef.title, colSpan: groupDef.columns.length});
+            _.forEach(groupDef.columns, colTag=>nestedColumns[1].push(columnMap[colTag]));
+        });
+        return nestedColumns;
+
+    }
 }
