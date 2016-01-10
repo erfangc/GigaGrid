@@ -11,7 +11,7 @@ git clone https://github.com/erfangc/GigaGrid.git
 
 cd GigaGrid
 
-npm install && jspm_install
+npm install && jspm install
 ```
 
 If you are using an IDE that does not come with TypeScript bundled, install TypeScript globally
