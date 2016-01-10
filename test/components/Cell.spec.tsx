@@ -9,7 +9,7 @@ import {GigaAction} from "../../src/store/GigaStore";
 import {DetailRow} from "../../src/models/Row";
 import {ColumnFormat} from "../../src/models/ColumnLike";
 import {TestUtils} from "../TestUtils";
-import {TableRowColumnDef} from "../../src/models/ColumnLike";
+import {Column} from "../../src/models/ColumnLike";
 import {Cell} from "../../src/components/Cell";
 import * as $ from 'jquery';
 
@@ -17,13 +17,13 @@ describe("Cell", ()=> {
 
     var dispatcher:Dispatcher<GigaAction>;
     var row:DetailRow;
-    var columnDefs:TableRowColumnDef[];
+    var columns:Column[];
     var component;
 
     beforeEach(()=> {
         dispatcher = new Dispatcher<GigaAction>();
         row = TestUtils.getDetailRow();
-        columnDefs = TestUtils.getSampleTableRowColumnDefs();
+        columns = TestUtils.getSampleColumns();
     });
 
     it("renders a td", ()=> {
@@ -32,7 +32,7 @@ describe("Cell", ()=> {
                 <tbody>
                     <tr>
                         <Cell ref={c=>component=c} isFirstColumn={true} dispatcher={dispatcher}
-                              tableRowColumnDef={columnDefs[2]}
+                              column={columns[2]}
                               row={row}/>
                     </tr>
                 </tbody>
@@ -44,8 +44,8 @@ describe("Cell", ()=> {
 
     it("can handle custom cell content", ()=> {
 
-        const colDef = columnDefs[2];
-        colDef.cellTemplateCreator = (data:any, tableRowColumnDef?:TableRowColumnDef):JSX.Element => {
+        const colDef = columns[2];
+        colDef.cellTemplateCreator = (data:any, column?:Column):JSX.Element => {
             return (
                 <span style={{"color": "green"}}>Hello World</span>
             )
@@ -58,7 +58,7 @@ describe("Cell", ()=> {
                         <Cell ref={c=>component=c}
                               isFirstColumn={false}
                               dispatcher={dispatcher}
-                              tableRowColumnDef={colDef}
+                              column={colDef}
                               row={row}/>
                     </tr>
                 </tbody>
@@ -75,7 +75,7 @@ describe("Cell", ()=> {
 
     it("can deduce the correct identation for 1st rows in a subtotaled tree", ()=> {
         row.setSectorPath(["Level 1", "Level 2"]);
-        const colDef = columnDefs[0];
+        const colDef = columns[0];
         ReactTestUtils.renderIntoDocument(
             <table>
                 <tbody>
@@ -83,7 +83,7 @@ describe("Cell", ()=> {
                         <Cell ref={c=>component=c}
                               isFirstColumn={true}
                               dispatcher={dispatcher}
-                              tableRowColumnDef={colDef}
+                              column={colDef}
                               row={row}/>
                     </tr>
                 </tbody>
@@ -93,8 +93,8 @@ describe("Cell", ()=> {
     });
 
     it("can render a +/- for the first cell of a subtotal row", ()=> {
-        const subtotalRow = TestUtils.getSampleSubtotalRow();
-        const colDef = columnDefs[0];
+        const subtotalRow = TestUtils.getSimpleSubtotalRow();
+        const colDef = columns[0];
         ReactTestUtils.renderIntoDocument(
             <table>
                 <tbody>
@@ -102,7 +102,7 @@ describe("Cell", ()=> {
                         <Cell ref={c=>component=c}
                               isFirstColumn={true}
                               dispatcher={dispatcher}
-                              tableRowColumnDef={colDef}
+                              column={colDef}
                               row={subtotalRow}/>
                     </tr>
                 </tbody>

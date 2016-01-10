@@ -3,14 +3,83 @@ import {ColumnDef} from "../src/models/ColumnLike";
 import {ColumnFormat} from "../src/models/ColumnLike";
 import {AggregationMethod} from "../src/models/ColumnLike";
 import {SubtotalRow} from "../src/models/Row";
-import {TableRowColumnDef} from "../src/models/ColumnLike";
+import {Column} from "../src/models/ColumnLike";
 import {TreeBuilder} from "../src/static/TreeBuilder";
 import {SubtotalAggregator} from "../src/static/SubtotalAggregator";
 import {Tree} from "../src/static/TreeBuilder";
+import {Row} from "../src/models/Row";
+
+interface TestDataFactory {
+    rawData():any[]
+    columnDefs():ColumnDef[]
+    tree():Tree
+    columns():Column[]
+    detailRows():Row[]
+}
+
+class PeopleTestData implements TestDataFactory {
+
+    constructor() {
+    }
+
+    rawData():any[] {
+        return [{"gender": "Female", "first_name": "Maria", "last_name": "Young", "gift": 2},
+            {"gender": "Female", "first_name": "Kimberly", "last_name": "Kennedy", "gift": 2},
+            {"gender": "Female", "first_name": "Lisa", "last_name": "Hall", "gift": 10},
+            {"gender": "Female", "first_name": "Andrea", "last_name": "Peterson", "gift": 4},
+            {"gender": "Male", "first_name": "Clarence", "last_name": "Cox", "gift": 9},
+            {"gender": "Male", "first_name": "Charles", "last_name": "Riley", "gift": 7},
+            {"gender": "Male", "first_name": "Bruce", "last_name": "Turner", "gift": 2},
+            {"gender": "Female", "first_name": "Shirley", "last_name": "Riley", "gift": 9},
+            {"gender": "Male", "first_name": "David", "last_name": "Hunt", "gift": 7},
+            {"gender": "Male", "first_name": "Thomas", "last_name": "Bradley", "gift": 6}];
+    }
+
+    columnDefs():ColumnDef[] {
+        return [
+            {
+                colTag: "first_name",
+                title: "First Name",
+                format: ColumnFormat.STRING,
+                aggregationMethod: AggregationMethod.NONE
+            },
+            {
+                colTag: "gender",
+                title: "Gender",
+                format: ColumnFormat.STRING,
+                aggregationMethod: AggregationMethod.NONE
+            },
+            {
+                colTag: "last_name",
+                title: "Last Name",
+                format: ColumnFormat.STRING,
+                aggregationMethod: AggregationMethod.NONE
+            },
+            {
+                colTag: "gift",
+                title: "Gift",
+                format: ColumnFormat.NUMBER,
+                aggregationMethod: AggregationMethod.SUM
+            }
+        ];
+    }
+
+    tree():Tree {
+        return TreeBuilder.buildTree(this.rawData(), [{colTag: "gender"}]);
+    }
+
+    columns():Column[] {
+        return this.columnDefs();
+    }
+
+    detailRows():Row[] {
+        return TreeBuilder.buildTree(this.rawData()).getRoot().detailRows;
+    }
+}
 
 export class TestUtils {
 
-    public static getSimpleRawDataWithMissing():any[] {
+    static getSimpleRawDataWithMissing():any[] {
         return [
             {"col1": "A", "col2": "C"},
             {"col1": "B"},
@@ -20,7 +89,7 @@ export class TestUtils {
         ];
     }
 
-    public static getSimpleRawData():any[] {
+    static getSimpleRawData():any[] {
         return [
             {"col1": "A", "col2": "C"},
             {"col1": "B", "col2": "C"},
@@ -30,7 +99,7 @@ export class TestUtils {
         ];
     }
 
-    public static getDetailRowWithMissingData():DetailRow {
+    static getDetailRowWithMissingData():DetailRow {
         return new DetailRow({
             "numCol1": 7,
             "textCol1": "R2D2",
@@ -38,7 +107,7 @@ export class TestUtils {
         });
     }
 
-    public static getDetailRow():DetailRow {
+    static getDetailRow():DetailRow {
         return new DetailRow({
             "numCol1": 7,
             "numCol2": 42,
@@ -47,11 +116,11 @@ export class TestUtils {
         });
     }
 
-    public static getUnsubtotaledTree():Tree {
+    static getUnsubtotaledTree():Tree {
         return TreeBuilder.buildTree(TestUtils.getSampleData().data);
     }
 
-    public static getTreeSubtotaledByGender():Tree {
+    static getTreeSubtotaledByGender():Tree {
         const tree = TreeBuilder.buildTree(TestUtils.getSampleData().data, [{colTag: "gender"}]);
         SubtotalAggregator.aggregateTree(tree, TestUtils.getSampleData().columnDefs);
         return tree;
@@ -61,7 +130,7 @@ export class TestUtils {
      * return a small set of sample data
      * @returns {{data: {gender: string, first_name: string, last_name: string, gift: number}[], columnDefs: ColumnDef[]}}
      */
-    public static getSampleData():{data: any[], columnDefs: ColumnDef[]} {
+    static getSampleData():{data: any[], columnDefs: ColumnDef[]} {
         const data = [{"gender": "Female", "first_name": "Maria", "last_name": "Young", "gift": 2},
             {"gender": "Female", "first_name": "Kimberly", "last_name": "Kennedy", "gift": 2},
             {"gender": "Female", "first_name": "Lisa", "last_name": "Hall", "gift": 10},
@@ -104,11 +173,7 @@ export class TestUtils {
         };
     }
 
-    public static regex:{ dataReact: RegExp } = {
-        dataReact: / data-react[-\w]+="[^"]+"/g
-    };
-
-    public static getSampleSubtotalRow():SubtotalRow {
+    static getSimpleSubtotalRow():SubtotalRow {
         const subtotalRow:SubtotalRow = new SubtotalRow("Sector X");
         subtotalRow.setData({
             "numCol1": 2187,
@@ -123,7 +188,7 @@ export class TestUtils {
      * returns column definitions for two numeric columns: numCol1, numCol2, as well as two string columns: textCol1, textCol2
      * @returns {ColumnDef[]}
      */
-    public static getSimpleColumnDefs():ColumnDef[] {
+    static getSimpleColumnDefs():ColumnDef[] {
         const columnDef1:ColumnDef = {
             colTag: "numCol1",
             title: "",
@@ -160,9 +225,13 @@ export class TestUtils {
     /**
      * wraps around the sample columnDefs returned by another method
      * @see getSimpleColumnDefs
-     * @returns {TableRowColumnDef[]}
+     * @returns {Column[]}
      */
-    public static getSampleTableRowColumnDefs():TableRowColumnDef[] {
+    static getSampleColumns():Column[] {
         return TestUtils.getSimpleColumnDefs();
+    }
+
+    static newPeopleTestData():PeopleTestData {
+        return new PeopleTestData();
     }
 }

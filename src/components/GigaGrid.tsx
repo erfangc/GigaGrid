@@ -10,17 +10,17 @@ import {SubtotalBy} from "../models/ColumnLike";
 import {ColumnDef} from "../models/ColumnLike";
 import {ColumnFormat} from "../models/ColumnLike";
 import {Row} from "../models/Row";
-import {TableRowColumnDef} from "../models/ColumnLike";
+import {Column} from "../models/ColumnLike";
 import {SubtotalRow} from "../models/Row";
 import {DetailRow} from "../models/Row";
-import {TableHeader} from "./TableHeader";
+import {TableHeaderCell} from "./TableHeaderCell";
 import {TreeRasterizer} from "../static/TreeRasterizer";
 import {Tree} from "../static/TreeBuilder";
 import {GigaStore} from "../store/GigaStore";
 import ReduceStore = FluxUtils.ReduceStore;
 import Dispatcher = Flux.Dispatcher;
 import {GigaAction} from "../store/GigaStore";
-import {TableRow} from "./TableRow";
+import {GigaRow} from "./GigaRow";
 import {SortBy} from "../models/ColumnLike";
 import {FilterBy} from "../models/ColumnLike";
 import {TableWidthChangeAction} from "../store/GigaStore";
@@ -30,13 +30,14 @@ import {WidthMeasureCalculator} from "../static/WidthMeasureCalculator";
 import {parsePixelValue} from "../static/WidthMeasureCalculator";
 import {validateColumnWidthProperty} from "../static/WidthMeasureCalculator";
 import {getScrollBarWidth} from "../static/WidthMeasureCalculator";
+import {TableBody} from "./TableBody";
 
 export interface GigaProps extends React.Props<GigaGrid> {
     initialSubtotalBys?:SubtotalBy[]
     initialSortBys?:SortBy[]
     initialFilterBys?:FilterBy[]
     onRowClick?: (row:Row)=>boolean
-    onCellClick?: (row:Row, columnDef:TableRowColumnDef)=>boolean
+    onCellClick?: (row:Row, columnDef:Column)=>boolean
     data:any[]
     columnDefs:ColumnDef[]
     bodyHeight?:string
@@ -85,7 +86,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
     render() {
 
-        const tableRowColumnDefs:TableRowColumnDef[] = this.transformColumnDef(this.props.columnDefs, this.state);
+        const columns:Column[] = this.transformColumnDef(this.props.columnDefs, this.state);
 
         const bodyStyle = {
             height: this.props.bodyHeight || "100%", // TODO we will need to give similar consideration to height as we did for width
@@ -96,24 +97,22 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             <div className="giga-grid">
                 <div style={{width: this.state.widthMeasures.bodyWidth}}>
                     <table>
-                        {this.renderColumnHeaders(tableRowColumnDefs)}
+                        {this.renderTableHeader(columns)}
                     </table>
                 </div>
                 <div className="giga-grid-body-scroll-y" style={bodyStyle}>
                     <table>
-                        <tbody>
-                            {this.renderTableRows(tableRowColumnDefs)}
-                        </tbody>
+                        {this.renderTableBody(columns)}
                     </table>
                 </div>
             </div>);
     }
 
-    private transformColumnDef(columnDefs:ColumnDef[], state:GigaState):TableRowColumnDef[] {
+    private transformColumnDef(columnDefs:ColumnDef[], state:GigaState):Column[] {
 
         return columnDefs.map(cd => {
 
-            const tableRowCD:TableRowColumnDef = {
+            const column:Column = {
                 colTag: cd.colTag,
                 title: cd.title,
                 aggregationMethod: cd.aggregationMethod,
@@ -125,19 +124,19 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             // determine if there is an existing SortBy for this column
             var sortBy = Immutable.List<SortBy>(state.sortBys).find((s)=>s.colTag === cd.colTag);
             if (sortBy) {
-                tableRowCD.sortDirection = sortBy.direction;
-                tableRowCD.customSortFn = sortBy.customSortFn;
+                column.sortDirection = sortBy.direction;
+                column.customSortFn = sortBy.customSortFn;
             }
 
-            return tableRowCD;
+            return column;
         });
 
     };
 
-    private renderColumnHeaders(tableRowColumnDefs:TableRowColumnDef[]):ReactElement<{}> {
-        const ths = tableRowColumnDefs.map((colDef:TableRowColumnDef, i:number)=> {
-            return <TableHeader tableColumnDef={colDef} key={i} isFirstColumn={i===0}
-                                isLastColumn={i===tableRowColumnDefs.length-1} dispatcher={this.dispatcher}/>
+    private renderTableHeader(columns:Column[]):ReactElement<{}> {
+        const ths = columns.map((colDef:Column, i:number)=> {
+            return <TableHeaderCell tableColumnDef={colDef} key={i} isFirstColumn={i===0}
+                                    isLastColumn={i===columns.length-1} dispatcher={this.dispatcher}/>
         });
 
         const scrollBarWidth = getScrollBarWidth();
@@ -187,16 +186,10 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             window.removeEventListener('resize', this.dispatchWidthChange);
     }
 
-    renderTableRows(tableRowColumnDefs:TableRowColumnDef[]):ReactElement<{}>[] {
+    renderTableBody(columns:Column[]):JSX.Element {
         // todo we should identify state chgs that require re-rasterization and only rasterize then
         const rows:Row[] = TreeRasterizer.rasterize(this.state.tree);
-        // convert plain ColumnDef to TableRowColumnDef which has additional properties
-        return rows.map((row:Row, i:number)=> {
-            return <TableRow key={i}
-                             tableRowColumnDefs={tableRowColumnDefs}
-                             row={row as DetailRow}
-                             dispatcher={this.dispatcher}/>;
-        });
+        return <TableBody dispatcher={this.dispatcher} rows={rows} columns={columns}/>;
     }
 
 }

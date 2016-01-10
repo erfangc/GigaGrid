@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import {GridSubcomponentProps} from "./TableHeader";
-import {TableRowColumnDef} from "../models/ColumnLike";
+import {GridSubcomponentProps} from "./TableHeaderCell";
+import {Column} from "../models/ColumnLike";
 import {Row} from "../models/Row";
 import {ColumnFormat} from "../models/ColumnLike";
 import {SubtotalRow} from "../models/Row";
@@ -11,7 +11,7 @@ import {GigaActionType} from "../store/GigaStore";
 
 export interface CellProps extends GridSubcomponentProps<Cell> {
     row:Row
-    tableRowColumnDef:TableRowColumnDef
+    column:Column
     isFirstColumn?:boolean
 }
 
@@ -35,7 +35,7 @@ export class Cell extends React.Component<CellProps,any> {
         var action = {
             type: GigaActionType.TOGGLE_CELL_SELECT,
             row: this.props.row,
-            tableColumnDef: this.props.tableRowColumnDef
+            tableColumnDef: this.props.column
         };
         this.props.dispatcher.dispatch(action);
     }
@@ -62,7 +62,7 @@ export class Cell extends React.Component<CellProps,any> {
 
     private calculateStyle() {
         return {
-            width: this.props.tableRowColumnDef.width,
+            width: this.props.column.width,
             overflow: "hidden",
             paddingLeft: this.props.isFirstColumn ? TableRowUtils.calculateFirstColumnIdentation(this.props.row) : undefined
         };
@@ -73,7 +73,7 @@ export class Cell extends React.Component<CellProps,any> {
         var result:JSX.Element;
         const props = this.props;
         const row = props.row;
-        const cd = props.tableRowColumnDef;
+        const cd = props.column;
         const cx = classNames({
             "numeric": cd.format === ColumnFormat.NUMBER,
             "non-numeric": cd.format !== ColumnFormat.NUMBER
@@ -88,7 +88,7 @@ export class Cell extends React.Component<CellProps,any> {
         return result;
     }
 
-    private renderContent(row:Row, cd:TableRowColumnDef) {
+    private renderContent(row:Row, cd:Column) {
         if (cd.cellTemplateCreator)
             return cd.cellTemplateCreator(row.data()[cd.colTag], cd);
         else

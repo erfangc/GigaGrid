@@ -3,11 +3,11 @@ import * as classNames from 'classnames';
 import {DropdownMenu} from "./DropdownMenu";
 import SyntheticEvent = __React.SyntheticEvent;
 import {SimpleDropdownMenuItem} from "./DropdownMenu";
-import {TableRowColumnDef} from "../../models/ColumnLike";
+import {Column} from "../../models/ColumnLike";
 import {ColumnFormat} from "../../models/ColumnLike";
 import {DropdownMenuItemProps} from "./DropdownMenu";
 import {GigaProps} from "../GigaGrid";
-import {GridSubcomponentProps} from "../TableHeader";
+import {GridSubcomponentProps} from "../TableHeaderCell";
 import {GigaActionType} from "../../store/GigaStore";
 import {NewSubtotalAction} from "../../store/GigaStore";
 import {ClearSubtotalAction} from "../../store/GigaStore";
@@ -18,7 +18,7 @@ import {SortDirection} from "../../models/ColumnLike";
 
 export interface SortMenuItemProps extends GridSubcomponentProps<SortMenuItem> {
     isLastColumn?:boolean;
-    tableRowColumnDef:TableRowColumnDef;
+    tableRowColumnDef:Column;
 }
 
 export class SortMenuItem extends React.Component<SortMenuItemProps, any> {

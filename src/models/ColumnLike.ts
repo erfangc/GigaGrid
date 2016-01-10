@@ -23,10 +23,10 @@ export interface ColumnDef {
     format?:ColumnFormat
     width?:string
     aggregationMethod?:AggregationMethod
-    cellTemplateCreator?:(data:any, tableRowColumnDef?:TableRowColumnDef)=>JSX.Element
+    cellTemplateCreator?:(data:any, tableRowColumnDef?:Column)=>JSX.Element
 }
 
-export interface TableRowColumnDef extends ColumnDef {
+export interface Column extends ColumnDef {
     sortDirection?: SortDirection
     customSortFn?:(a:Row, b:Row)=>number
 }

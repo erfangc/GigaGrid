@@ -1,14 +1,14 @@
 import * as $ from 'jquery';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {TableRow} from "../../src/components/TableRow";
-import {TableRowProps} from "../../src/components/TableRow";
+import {GigaRow} from "../../src/components/GigaRow";
+import {GigaRowProps} from "../../src/components/GigaRow";
 import {SubtotalRow} from "../../src/models/Row";
 import {TestUtils} from "../TestUtils";
 import {DetailRow} from "../../src/models/Row";
 import {Row} from "../../src/models/Row";
 
-describe("TableRow Components", () => {
+describe("GigaRow Components", () => {
 
     afterAll(()=> {
         ReactDOM.unmountComponentAtNode(document.getElementById('container'));
@@ -19,22 +19,22 @@ describe("TableRow Components", () => {
         $("body").append("<table><tbody id='container'></tbody></table>");
     });
 
-    describe("TableRow", () => {
+    describe("GigaRow", () => {
 
         function toDOM(subtotalRow:SubtotalRow) {
-            const props:TableRowProps = {
+            const props:GigaRowProps = {
                 dispatcher: null,
                 row: subtotalRow,
-                tableRowColumnDefs: TestUtils.getSampleTableRowColumnDefs()
+                columns: TestUtils.getSampleColumns()
             };
-            const element = React.createElement(TableRow, props);
+            const element = React.createElement(GigaRow, props);
             ReactDOM.render(element, document.getElementById('container'));
             return $("#container").find("tr");
         }
 
         it("should render correctly under basic conditions", ()=> {
 
-            var $tr = toDOM(TestUtils.getSampleSubtotalRow());
+            var $tr = toDOM(TestUtils.getSimpleSubtotalRow());
 
             expect($tr.length).toBe(1);
             expect($tr.find("i.fa.fa-minus").length).toBe(1);
@@ -47,7 +47,7 @@ describe("TableRow Components", () => {
         describe("should render a SubtotalRow that is N layers deep in the tree:", ()=> {
             it("2 layers", () => {
 
-                var subtotalRow = TestUtils.getSampleSubtotalRow();
+                var subtotalRow = TestUtils.getSimpleSubtotalRow();
                 subtotalRow.setSectorPath(['Sector X']);
                 var $tr = toDOM(subtotalRow);
 
@@ -60,7 +60,7 @@ describe("TableRow Components", () => {
             });
 
             it("3 layers", () => {
-                var subtotalRow = TestUtils.getSampleSubtotalRow();
+                var subtotalRow = TestUtils.getSimpleSubtotalRow();
                 subtotalRow.setSectorPath(['Sector X', 'Another']);
                 var $tr = toDOM(subtotalRow);
 
@@ -73,7 +73,7 @@ describe("TableRow Components", () => {
             });
 
             it("4 layers", () => {
-                var subtotalRow = TestUtils.getSampleSubtotalRow();
+                var subtotalRow = TestUtils.getSimpleSubtotalRow();
                 subtotalRow.setSectorPath(['Sector X', 'Another', 'Another']);
                 var $tr = toDOM(subtotalRow);
 
@@ -93,12 +93,12 @@ describe("TableRow Components", () => {
         describe("render correct under basic conditions", () => {
             var $tr;
             beforeEach(()=> {
-                const props:TableRowProps = {
+                const props:GigaRowProps = {
                     dispatcher: null,
                     row: TestUtils.getDetailRow(),
-                    tableRowColumnDefs: TestUtils.getSampleTableRowColumnDefs()
+                    columns: TestUtils.getSampleColumns()
                 };
-                const element = React.createElement(TableRow, props);
+                const element = React.createElement(GigaRow, props);
                 ReactDOM.render(element, document.getElementById('container'));
                 $tr = $("#container").find("tr");
             });
@@ -120,12 +120,12 @@ describe("TableRow Components", () => {
         it("it should have the proper indentation if part of a subtotaled tree", () => {
             const detailRow:Row = TestUtils.getDetailRow();
             detailRow.setSectorPath(['Some Parent']);
-            const props:TableRowProps = {
+            const props:GigaRowProps = {
                 dispatcher: null,
                 row: detailRow,
-                tableRowColumnDefs: TestUtils.getSampleTableRowColumnDefs()
+                columns: TestUtils.getSampleColumns()
             };
-            const element = React.createElement(TableRow, props);
+            const element = React.createElement(GigaRow, props);
             ReactDOM.render(element, document.getElementById('container'));
             const $tr = $("#container").find("tr");
 
@@ -133,12 +133,12 @@ describe("TableRow Components", () => {
         });
 
         it("should render a row with missing data", ()=> {
-            const props:TableRowProps = {
+            const props:GigaRowProps = {
                 dispatcher: null,
                 row: TestUtils.getDetailRowWithMissingData(),
-                tableRowColumnDefs: TestUtils.getSampleTableRowColumnDefs()
+                columns: TestUtils.getSampleColumns()
             };
-            const element = React.createElement(TableRow, props);
+            const element = React.createElement(GigaRow, props);
             ReactDOM.render(element, document.getElementById('container'));
             const $tr = $("#container").find("tr");
 

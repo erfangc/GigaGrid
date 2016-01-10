@@ -96,7 +96,7 @@
 	            height: this.props.bodyHeight || "100%",
 	            width: this.state.widthMeasures.bodyWidth
 	        };
-	        return (React.createElement("div", {"className": "giga-grid"}, React.createElement("div", {"style": { width: this.state.widthMeasures.bodyWidth }}, React.createElement("table", null, this.renderColumnHeaders(tableRowColumnDefs))), React.createElement("div", {"className": "giga-grid-body-scroll-y", "style": bodyStyle}, React.createElement("table", null, React.createElement("tbody", null, this.renderTableRows(tableRowColumnDefs))))));
+	        return (React.createElement("div", {"className": "giga-grid"}, React.createElement("div", {"style": { width: this.state.widthMeasures.bodyWidth }}, React.createElement("table", null, this.renderTableHeader(tableRowColumnDefs))), React.createElement("div", {"className": "giga-grid-body-scroll-y", "style": bodyStyle}, React.createElement("table", null, React.createElement("tbody", null, this.renderTableBody(tableRowColumnDefs))))));
 	    };
 	    GigaGrid.prototype.transformColumnDef = function (columnDefs, state) {
 	        return columnDefs.map(function (cd) {
@@ -159,11 +159,11 @@
 	        if (typeof window !== "undefined")
 	            window.removeEventListener('resize', this.dispatchWidthChange);
 	    };
-	    GigaGrid.prototype.renderTableRows = function (tableRowColumnDefs) {
+	    GigaGrid.prototype.renderTableBody = function (tableRowColumnDefs) {
 	        var _this = this;
 	        // TODO consider whether this should be part of GigaStore somehow ... we don't want to always re-rasterize
 	        var rows = TreeRasterizer_1.TreeRasterizer.rasterize(this.state.tree);
-	        // convert plain ColumnDef to TableRowColumnDef which has additional properties
+	        // convert plain ColumnDef to Column which has additional properties
 	        return rows.map(function (row, i) {
 	            return React.createElement(TableRow_1.TableRow, {"key": i, "tableRowColumnDefs": tableRowColumnDefs, "row": row, "dispatcher": _this.dispatcher});
 	        });
@@ -25123,7 +25123,7 @@
 	    return TableHeader;
 	})(React.Component);
 	exports.TableHeader = TableHeader;
-	//# sourceMappingURL=TableHeader.js.map
+	//# sourceMappingURL=TableHeaderCell.js.map
 
 /***/ },
 /* 164 */
@@ -35184,7 +35184,7 @@
 	            else if (dir === ColumnLike_1.SortDirection.DESC)
 	                return ColumnLike_1.SortDirection.ASC;
 	        }
-	        var cd = this.props.tableRowColumnDef;
+	        var cd = this.props.column;
 	        return {
 	            colTag: cd.colTag,
 	            format: cd.format,
@@ -49787,13 +49787,13 @@
 	        _super.call(this, props);
 	    }
 	    SubtotalByMenuItem.prototype.isNumericColumn = function () {
-	        return this.props.tableRowColumnDef.format === ColumnLike_1.ColumnFormat.NUMBER;
+	        return this.props.column.format === ColumnLike_1.ColumnFormat.NUMBER;
 	    };
 	    SubtotalByMenuItem.prototype.onSubmit = function (e) {
 	        var action = {
 	            type: GigaStore_1.GigaActionType.NEW_SUBTOTAL,
 	            subtotalBys: [{
-	                    colTag: this.props.tableRowColumnDef.colTag
+	                    colTag: this.props.column.colTag
 	                }]
 	        };
 	        this.props.dispatcher.dispatch(action);
@@ -49935,7 +49935,7 @@
 	    return TableRow;
 	})(React.Component);
 	exports.TableRow = TableRow;
-	//# sourceMappingURL=TableRow.js.map
+	//# sourceMappingURL=GigaRow.js.map
 
 /***/ },
 /* 197 */
@@ -49967,7 +49967,7 @@
 	        var action = {
 	            type: GigaStore_1.GigaActionType.TOGGLE_CELL_SELECT,
 	            row: this.props.row,
-	            tableColumnDef: this.props.tableRowColumnDef
+	            tableColumnDef: this.props.column
 	        };
 	        this.props.dispatcher.dispatch(action);
 	    };
@@ -49982,7 +49982,7 @@
 	    };
 	    Cell.prototype.calculateStyle = function () {
 	        return {
-	            width: this.props.tableRowColumnDef.width,
+	            width: this.props.column.width,
 	            overflow: "hidden",
 	            paddingLeft: this.props.isFirstColumn ? TableRowUtils.calculateFirstColumnIdentation(this.props.row) : undefined
 	        };
@@ -49992,7 +49992,7 @@
 	        var result;
 	        var props = this.props;
 	        var row = props.row;
-	        var cd = props.tableRowColumnDef;
+	        var cd = props.column;
 	        var cx = classNames({
 	            "numeric": cd.format === ColumnLike_1.ColumnFormat.NUMBER,
 	            "non-numeric": cd.format !== ColumnLike_1.ColumnFormat.NUMBER
