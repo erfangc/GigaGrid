@@ -8,6 +8,8 @@ import {TreeBuilder} from "../src/static/TreeBuilder";
 import {SubtotalAggregator} from "../src/static/SubtotalAggregator";
 import {Tree} from "../src/static/TreeBuilder";
 import {Row} from "../src/models/Row";
+import {ColumnGroupDef} from "../src/models/ColumnLike";
+import {GigaState} from "../src/components/GigaGrid";
 
 interface TestDataFactory {
     rawData():any[]
@@ -224,14 +226,63 @@ export class TestUtils {
 
     /**
      * wraps around the sample columnDefs returned by another method
-     * @see getSimpleColumnDefs
+     * @see getMockColumnDefs
      * @returns {Column[]}
      */
     static getSampleColumns():Column[] {
-        return TestUtils.getSimpleColumnDefs();
+        return this.getSimpleColumnDefs();
     }
 
     static newPeopleTestData():PeopleTestData {
         return new PeopleTestData();
+    }
+
+    private static mockColumnGroupDefinition = {
+        columnGroupDefs: [
+            {
+                title: "Group 1",
+                columns: ["col1", "col2"]
+            },
+            {
+                title: "Group 2",
+                columns: ["col3", "col2", "col4"] // col2 is repeated intentionally
+            }],
+
+        columnDefs: [
+            {
+                colTag: "col1"
+            },
+            {
+                colTag: "col2"
+            },
+            {
+                colTag: "col3"
+            },
+            {
+                colTag: "col4"
+            }
+        ],
+        state: {
+            sortBys: [],
+            subtotalBys: [],
+            filterBys: [],
+            tree: null,
+            widthMeasures: {
+                bodyWidth: null,
+                columnWidths: {"colTag1": "100px"}
+            }
+        }
+    };
+
+    static getMockColumnGroupDefs():ColumnGroupDef[] {
+        return this.mockColumnGroupDefinition.columnGroupDefs;
+    }
+
+    static getMockColumnDefs():Column[] {
+        return this.mockColumnGroupDefinition.columnDefs;
+    }
+
+    static getMockState():GigaState {
+        return this.mockColumnGroupDefinition.state;
     }
 }
