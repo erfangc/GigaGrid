@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../jspm_packages/system.js"></script>
+    <!--It is important we call this before loading config.js, baseURL needs to be in the first System.config() call-->
+    <script>
+        System.config({
+            baseURL: "../"
+        });
+    </script>
+    <script src="../config.js"></script>
+    <script>
+        System.import("./basic_example_bundled").then(function (result) {
+        });
+    </script>
+</head>
+<body>
+<div id="container"></div>
+</body>
+</html>

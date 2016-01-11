@@ -9,6 +9,7 @@
   },
   "exclude": [
     "node_modules",
-    "jspm_packages"
+    "jspm_packages",
+    "examples/examples.ts"
   ]
 }
