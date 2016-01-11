@@ -46,10 +46,20 @@ export interface GigaProps extends React.Props<GigaGrid> {
 }
 
 export interface GigaState {
+
     tree:Tree
+
     subtotalBys:SubtotalBy[]
     sortBys:SortBy[]
     filterBys: FilterBy[]
+
+    /*
+     the displayable view of the data in `tree`
+     */
+    rasterizedRows: Row[]
+    displayStart: number
+    displayEnd: number
+
     widthMeasures: WidthMeasures
 }
 
@@ -94,11 +104,9 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             columns = [ColumnFactory.createColumnsFromDefinition(this.props.columnDefs, this.state)];
 
         const bodyStyle = {
-                height: this.props.bodyHeight || "100%", // TODO we will need to give similar consideration to height as we did for width
-                width: this.state.widthMeasures.bodyWidth
-            }
-            ;
-        const rows:Row[] = TreeRasterizer.rasterize(this.state.tree);
+            height: this.props.bodyHeight || "100%", // TODO we will need to give similar consideration to height as we did for width
+            width: this.state.widthMeasures.bodyWidth
+        };
 
         return (
             <div className="giga-grid">
@@ -109,7 +117,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                 </div>
                 <div className="giga-grid-body-scroll-y" style={bodyStyle}>
                     <table>
-                        <TableBody dispatcher={this.dispatcher} rows={rows} columns={columns[columns.length-1]}/>
+                        <TableBody dispatcher={this.dispatcher} rows={this.state.rasterizedRows} columns={columns[columns.length-1]}/>
                     </table>
                 </div>
             </div>);

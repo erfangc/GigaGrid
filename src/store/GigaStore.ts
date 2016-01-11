@@ -14,6 +14,7 @@ import {SortBy} from "../models/ColumnLike";
 import {WidthMeasureCalculator} from "../static/WidthMeasureCalculator";
 import {Row} from "../models/Row";
 import {Column} from "../models/ColumnLike";
+import {TreeRasterizer} from "../static/TreeRasterizer";
 
 /**
  * state store for the table, relevant states and stored here. the only way to mutate these states are by sending GigaAction(s) through the Dispatcher given to the store at construction
@@ -36,7 +37,12 @@ export class GigaStore extends ReduceStore<GigaState> {
         if (this.props.initialSortBys)
             tree = SortFactory.sortTree(tree, this.props.initialSortBys);
 
+        const rasterizedRows:Row[] = TreeRasterizer.rasterize(tree);
+
         return {
+            rasterizedRows: rasterizedRows,
+            displayStart: 0,
+            displayEnd: rasterizedRows.length - 1,
             widthMeasures: WidthMeasureCalculator.computeWidthMeasures(this.props.bodyWidth, this.props.columnDefs),
             subtotalBys: this.props.initialSubtotalBys || [],
             sortBys: this.props.initialSortBys || [],
@@ -96,102 +102,94 @@ export class GigaStore extends ReduceStore<GigaState> {
             default:
                 newState = state;
         }
+        /*
+         determine if an action should trigger rasterization
+         */
+        if (GigaStore.shouldTriggerRasterization(action))
+            newState.rasterizedRows = TreeRasterizer.rasterize(newState.tree);
+
         return newState;
+    }
+
+    private static shouldTriggerRasterization(action:GigaAction) {
+        return [
+                GigaActionType.ADD_FILTER,
+                GigaActionType.ADD_SORT,
+                GigaActionType.ADD_SUBTOTAL,
+                GigaActionType.CLEAR_FILTER,
+                GigaActionType.CLEAR_SORT,
+                GigaActionType.CLEAR_SUBTOTAL,
+                GigaActionType.NEW_FILTER,
+                GigaActionType.NEW_SORT,
+                GigaActionType.NEW_SUBTOTAL,
+                GigaActionType.TOGGLE_ROW_COLLAPSE,
+            ].indexOf(action.type) !== -1;
     }
 
     /*
      Selection Action Handlers
      */
-    private handleRowSelect(state:GigaState, action:ToggleRowSelectAction) {
+    private handleRowSelect(state:GigaState, action:ToggleRowSelectAction):GigaState {
 
         if (typeof this.props.onRowClick === "function") {
             if (!this.props.onRowClick(action.row))
                 return state;
             else {
                 action.row.toggleSelect();
-                return {
-                    subtotalBys: state.subtotalBys,
-                    filterBys: state.filterBys,
-                    sortBys: state.sortBys,
-                    widthMeasures: state.widthMeasures,
-                    tree: state.tree
-                }
-
+                return _.clone(state);
             }
         } else
             return state;
 
     }
 
-    private handleCellSelect(state:GigaState, action:ToggleCellSelectAction) {
+    private handleCellSelect(state:GigaState, action:ToggleCellSelectAction):GigaState {
 
         if (typeof this.props.onCellClick === "function") {
             if (!this.props.onCellClick(action.row, action.tableColumnDef))
-                return state;
+                return state; // will not emit state mutation event
             else
-                return {
-                    subtotalBys: state.subtotalBys,
-                    filterBys: state.filterBys,
-                    sortBys: state.sortBys,
-                    widthMeasures: state.widthMeasures,
-                    tree: state.tree
-                }
+                return _.clone(state); // will emit state mutation event
         } else
             return state;
 
     }
 
-    private handleWidthChange(state:GigaState, action:TableWidthChangeAction) {
+    private handleWidthChange(state:GigaState, action:TableWidthChangeAction):GigaState {
         const widthMeasures = WidthMeasureCalculator.computeWidthMeasures(action.width, this.props.columnDefs);
-        return {
-            subtotalBys: state.subtotalBys,
-            filterBys: state.filterBys,
-            sortBys: state.sortBys,
-            widthMeasures: widthMeasures,
-            tree: state.tree
-        }
+        const newState = _.clone(state);
+        newState.widthMeasures = widthMeasures;
+        return newState;
     }
 
     /*
      Subtotal Action Handlers
      */
 
-    private handleToggleCollapse(state:GigaState, action:ToggleCollapseAction) {
+    private handleToggleCollapse(state:GigaState, action:ToggleCollapseAction):GigaState {
         const row = action.subtotalRow;
         row.toggleCollapse();
-        return {
-            subtotalBys: state.subtotalBys,
-            filterBys: state.filterBys,
-            sortBys: state.sortBys,
-            widthMeasures: state.widthMeasures,
-            tree: state.tree
-        };
+        return _.clone(state);
     }
 
     private handleSubtotal(state:GigaState,
                            action:NewSubtotalAction):GigaState {
         const newTree = TreeBuilder.buildTree(this.props.data, action.subtotalBys);
         SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
-        return {
-            subtotalBys: action.subtotalBys,
-            filterBys: state.filterBys,
-            sortBys: state.sortBys,
-            widthMeasures: state.widthMeasures,
-            tree: newTree
-        }
+        const newState = _.clone(state);
+        newState.tree = newTree;
+        newState.subtotalBys = action.subtotalBys;
+        return newState;
     }
 
     private handleClearSubtotal(state:GigaState,
                                 action:ClearSubtotalAction):GigaState {
         const newTree = TreeBuilder.buildTree(this.props.data, []);
         SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
-        return {
-            subtotalBys: [],
-            sortBys: state.sortBys,
-            widthMeasures: state.widthMeasures,
-            filterBys: state.filterBys,
-            tree: newTree
-        };
+        const newState = _.clone(state);
+        newState.tree = newTree;
+        newState.subtotalBys = [];
+        return newState;
     }
 
     /*
@@ -202,35 +200,25 @@ export class GigaStore extends ReduceStore<GigaState> {
         const sortBy = action.sortBy;
         state.sortBys.push(sortBy);
         const newTree:Tree = SortFactory.sortTree(state.tree, state.sortBys);
-        return {
-            tree: newTree,
-            sortBys: state.sortBys,
-            widthMeasures: state.widthMeasures,
-            filterBys: state.filterBys,
-            subtotalBys: state.subtotalBys
-        };
+        const newState = _.clone(state);
+        newState.tree = newTree;
+        return newState;
     }
 
     private handleNewSort(state:GigaState, action:NewSortAction):GigaState {
         const newTree:Tree = SortFactory.sortTree(state.tree, action.sortBys);
-        return {
-            tree: newTree,
-            sortBys: action.sortBys,
-            widthMeasures: state.widthMeasures,
-            filterBys: state.filterBys,
-            subtotalBys: state.subtotalBys
-        };
+        const newState = _.clone(state);
+        newState.tree = newTree;
+        newState.sortBys = action.sortBys;
+        return newState;
     }
 
     private handleClearSort(state:GigaState, action:ClearSortAction):GigaState {
         const newTree:Tree = SortFactory.sortTree(state.tree, []);
-        return {
-            tree: newTree,
-            sortBys: [],
-            widthMeasures: state.widthMeasures,
-            subtotalBys: state.subtotalBys,
-            filterBys: state.filterBys
-        };
+        const newState = _.clone(state);
+        newState.tree = newTree;
+        newState.sortBys = [];
+        return newState;
     }
 
 }
