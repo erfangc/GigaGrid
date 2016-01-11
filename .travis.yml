@@ -6,7 +6,7 @@ node_js:
 install:
   - npm instal jspm phantomjs karma-phantomjs-launcher karma karma-jasmine karma-jspm -g
   - npm install
-  - jspm registry export github
+  - jspm config registries.github.auth b3af6629f15660e45a0ae39122b382ed0b6f332e
   - jspm install
 
 script:
