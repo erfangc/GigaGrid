@@ -9,7 +9,6 @@ import {ColumnFormat} from "../src/models/ColumnLike";
 import {Row} from "../src/models/Row";
 
 const peopleData = TestUtils.newPeopleTestData();
-
 const element = React.createElement(GigaGrid, {
     bodyHeight: "250px",
     data: peopleData.rawData(),
