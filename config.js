@@ -19,7 +19,7 @@ System.config({
     "core-js": "npm:core-js@1.2.6",
     "flux": "npm:flux@2.1.1",
     "font-awesome": "npm:font-awesome@4.5.0",
-    "jquery": "github:components/jquery@2.1.4",
+    "jquery": "npm:jquery@2.2.0",
     "lodash": "npm:lodash@3.10.1",
     "phantomjs-polyfill": "npm:phantomjs-polyfill@0.0.1",
     "react": "npm:react@0.14.6",
