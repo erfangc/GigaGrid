@@ -2,6 +2,15 @@
 
 Massively performant, multi-layered React.js table widget Written in TypeScript
 
+# Running the Examples
+
+```bash
+npm install && jspm install
+
+# this should compile build and call webpack to bundle the project 
+npm run serve
+```
+
 # Developing
 
 Perform the following steps
