@@ -202,9 +202,12 @@ export class TestUtils {
             filterBys: [],
             tree: null,
             widthMeasures: {
-                bodyWidth: null,
+                bodyWidth: "",
                 columnWidths: {"colTag1": "100px"}
-            }
+            },
+            rasterizedRows: [],
+            displayStart: 0,
+            displayEnd: 1
         }
     };
 
