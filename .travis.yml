@@ -3,8 +3,7 @@ node_js:
 - '4.1'
 - '4.0'
 install:
-- npm instal jspm phantomjs karma-phantomjs-launcher karma karma-jasmine karma-jspm
-  -g
+- npm instal jspm phantomjs karma-phantomjs-launcher karma karma-jasmine karma-jspm -g
 - npm install
 - jspm config registries.github.auth $JSPM_GITHUB_AUTH_TOKEN
 - jspm install
