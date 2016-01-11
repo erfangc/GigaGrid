@@ -106,11 +106,12 @@ div.giga-grid td:first-child {
 }
 div.giga-grid tr th {
   font-weight: bold;
-  background-color: #2196f3;
+  background-color: #0093d1;
   color: #fff;
 }
 div.giga-grid tr th.column-group {
   text-align: center;
+  border-right: 1px solid #f5f5f5;
   border-bottom: 1px solid #f5f5f5;
 }
 div.giga-grid tr td {

@@ -8,12 +8,10 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/default.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+          crossorigin="anonymous">
 
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
 
     <link rel="stylesheet" href="../jspm_packages/npm/font-awesome@4.5.0/css/font-awesome.css">
@@ -23,7 +21,13 @@
     <!--It is important we call this before loading config.js, baseURL needs to be in the first System.config() call-->
     <script>
         System.config({
-            baseURL: "../"
+            baseURL: "../",
+            packages: {
+                "../build": {
+                    defaultExtension: "js",
+                    format: "cjs"
+                }
+            }
         });
     </script>
     <script src="../config.js"></script>
@@ -78,7 +82,7 @@
     <br>
 </div>
 <script>
-    System.import('./examples');
+    System.import('./index.es6');
 </script>
 <style>
     * {

@@ -1,6 +1,6 @@
+build
 src/**/*.js
 test/**/*.js
-examples/**/*.js
 **/*.js.map
 .idea
 node_modules

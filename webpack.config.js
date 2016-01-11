@@ -1,6 +1,6 @@
 // todo fix css loader, it not resolving giga-grid.css
 module.exports = {
-    entry: "./index.js",
+    entry: "./build/src/index.js",
     output: {
         path: "./dist",
         libraryTarget: "umd",

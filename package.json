@@ -4,11 +4,12 @@
   "description": "Massively performant, multi-layered React.js table widget Written in TypeScript",
   "main": "dist/giga-grid.js",
   "scripts": {
-    "clean": "",
-    "compile": "tsc",
+    "clean": "rm -rf ./build",
+    "styles": "mkdirp ./build/src/styles && stylus ./src/styles -o ./build/src/styles",
+    "compile": "npm run clean && tsc && npm run styles",
     "build": "npm run compile && webpack",
     "test": "karma start karma2.conf.js --single-run",
-    "serve": "live-server --open=examples"
+    "serve": "npm run build && live-server --open=examples"
   },
   "repository": {
     "type": "git",
@@ -40,8 +41,6 @@
   "devDependencies": {
     "css-loader": "^0.23.1",
     "file-loader": "^0.8.5",
-    "style-loader": "^0.13.0",
-    "url-loader": "^0.5.7",
     "jasmine-core": "^2.4.1",
     "jspm": "^0.16.19",
     "karma": "^0.13.15",
@@ -50,17 +49,19 @@
     "karma-jspm": "^2.0.2",
     "karma-phantomjs-launcher": "^0.2.1",
     "live-server": "^0.9.0",
+    "mkdirp": "^0.5.1",
     "phantomjs": "^1.9.19",
     "phantomjs-polyfill": "0.0.1",
+    "style-loader": "^0.13.0",
     "stylus": "^0.53.0",
-    "typescript": "^1.7.5"
+    "typescript": "^1.7.5",
+    "url-loader": "^0.5.7"
   },
   "jspm": {
     "dependencies": {
       "classnames": "npm:classnames@^2.2.1",
       "flux": "npm:flux@^2.1.1",
       "font-awesome": "npm:font-awesome@^4.5.0",
-      "immutable": "npm:immutable@^3.7.6",
       "jquery": "github:components/jquery@^2.1.4",
       "lodash": "npm:lodash@^3.10.1",
       "phantomjs-polyfill": "npm:phantomjs-polyfill@^0.0.1",
