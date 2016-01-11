@@ -55,7 +55,8 @@
     "style-loader": "^0.13.0",
     "stylus": "^0.53.0",
     "typescript": "^1.7.5",
-    "url-loader": "^0.5.7"
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.11"
   },
   "jspm": {
     "dependencies": {
