@@ -57,8 +57,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	__webpack_require__(1);
 	//import "./jspm_packages/npm/font-awesome@4.5.0/css/font-awesome.css";
 	var GigaGrid_1 = __webpack_require__(5);
-	var ColumnLike_1 = __webpack_require__(32);
-	var ColumnLike_2 = __webpack_require__(32);
+	var ColumnLike_1 = __webpack_require__(33);
+	var ColumnLike_2 = __webpack_require__(33);
 	exports.GigaGrid = GigaGrid_1.GigaGrid;
 	exports.ColumnFormat = ColumnLike_1.ColumnFormat;
 	exports.AggregationMethod = ColumnLike_2.AggregationMethod;
@@ -426,13 +426,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(6);
 	var ReactDOM = __webpack_require__(7);
 	var Flux = __webpack_require__(8);
-	var TreeRasterizer_1 = __webpack_require__(12);
-	var GigaStore_1 = __webpack_require__(13);
+	var GigaStore_1 = __webpack_require__(12);
 	var Dispatcher = Flux.Dispatcher;
-	var GigaStore_2 = __webpack_require__(13);
-	var WidthMeasureCalculator_1 = __webpack_require__(38);
+	var GigaStore_2 = __webpack_require__(12);
+	var WidthMeasureCalculator_1 = __webpack_require__(37);
 	var TableBody_1 = __webpack_require__(39);
-	var ColumnLike_1 = __webpack_require__(32);
+	var ColumnLike_1 = __webpack_require__(33);
 	var TableHeader_1 = __webpack_require__(43);
 	/**
 	 * The root component of this React library. assembles raw data into `Row` objects which are then translated into their
@@ -472,8 +471,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            height: this.props.bodyHeight || "100%",
 	            width: this.state.widthMeasures.bodyWidth
 	        };
-	        var rows = TreeRasterizer_1.TreeRasterizer.rasterize(this.state.tree);
-	        return (React.createElement("div", {"className": "giga-grid"}, React.createElement("div", {"style": { width: this.state.widthMeasures.bodyWidth }}, React.createElement("table", null, React.createElement(TableHeader_1.TableHeader, {"dispatcher": this.dispatcher, "columns": columns}))), React.createElement("div", {"className": "giga-grid-body-scroll-y", "style": bodyStyle}, React.createElement("table", null, React.createElement(TableBody_1.TableBody, {"dispatcher": this.dispatcher, "rows": rows, "columns": columns[columns.length - 1]})))));
+	        return (React.createElement("div", {"className": "giga-grid"}, React.createElement("div", {"style": { width: this.state.widthMeasures.bodyWidth }}, React.createElement("table", null, React.createElement(TableHeader_1.TableHeader, {"dispatcher": this.dispatcher, "columns": columns}))), React.createElement("div", {"className": "giga-grid-body-scroll-y", "style": bodyStyle}, React.createElement("table", null, React.createElement(TableBody_1.TableBody, {"dispatcher": this.dispatcher, "rows": this.state.rasterizedRows, "columns": columns[columns.length - 1]})))));
 	    };
 	    GigaGrid.prototype.dispatchWidthChange = function () {
 	        // if no bodyWidth was provided through props and there are no explicit width set for columns, we need to dynamically the table's bodyWidth
@@ -927,39 +925,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 12 */
-/***/ function(module, exports) {
-
-	var TreeRasterizer = (function () {
-	    function TreeRasterizer() {
-	    }
-	    TreeRasterizer.rasterize = function (tree) {
-	        var grandTotal = tree.getRoot();
-	        var rasterizedRows = [];
-	        // TODO implement this non-recursively ... to avoid stack related issues
-	        TreeRasterizer.rasterizeChildren(grandTotal, rasterizedRows);
-	        rasterizedRows.shift(); // remove grand total
-	        return rasterizedRows;
-	    };
-	    TreeRasterizer.rasterizeChildren = function (subtotalRow, rasterizedRows) {
-	        // push self
-	        rasterizedRows.push(subtotalRow);
-	        // push children (at which point recurse)
-	        // TODO consider when a row is masked by a filter
-	        if (!subtotalRow.isCollapsed())
-	            if (subtotalRow.getChildren().length === 0)
-	                subtotalRow.detailRows.forEach(function (detailRow) { return rasterizedRows.push(detailRow); });
-	            else
-	                subtotalRow.getChildren().forEach(function (child) {
-	                    TreeRasterizer.rasterizeChildren(child, rasterizedRows);
-	                });
-	    };
-	    return TreeRasterizer;
-	})();
-	exports.TreeRasterizer = TreeRasterizer;
-	//# sourceMappingURL=TreeRasterizer.js.map
-
-/***/ },
-/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -967,12 +932,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var FluxUtils = __webpack_require__(14);
-	var SubtotalAggregator_1 = __webpack_require__(31);
-	var TreeBuilder_1 = __webpack_require__(35);
+	var FluxUtils = __webpack_require__(13);
+	var _ = __webpack_require__(30);
+	var SubtotalAggregator_1 = __webpack_require__(32);
+	var TreeBuilder_1 = __webpack_require__(34);
 	var ReduceStore = FluxUtils.ReduceStore;
-	var SortFactory_1 = __webpack_require__(37);
-	var WidthMeasureCalculator_1 = __webpack_require__(38);
+	var SortFactory_1 = __webpack_require__(36);
+	var WidthMeasureCalculator_1 = __webpack_require__(37);
+	var TreeRasterizer_1 = __webpack_require__(38);
 	/**
 	 * state store for the table, relevant states and stored here. the only way to mutate these states are by sending GigaAction(s) through the Dispatcher given to the store at construction
 	 * there are no way to direct set the state. The GigaGrid controller-view React Component draws its state updates from this store. Updates are automatically triggered for every state mutation through
@@ -989,7 +956,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, this.props.columnDefs);
 	        if (this.props.initialSortBys)
 	            tree = SortFactory_1.SortFactory.sortTree(tree, this.props.initialSortBys);
+	        var rasterizedRows = TreeRasterizer_1.TreeRasterizer.rasterize(tree);
 	        return {
+	            rasterizedRows: rasterizedRows,
+	            displayStart: 0,
+	            displayEnd: rasterizedRows.length - 1,
 	            widthMeasures: WidthMeasureCalculator_1.WidthMeasureCalculator.computeWidthMeasures(this.props.bodyWidth, this.props.columnDefs),
 	            subtotalBys: this.props.initialSubtotalBys || [],
 	            sortBys: this.props.initialSortBys || [],
@@ -1046,7 +1017,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	            default:
 	                newState = state;
 	        }
+	        /*
+	         determine if an action should trigger rasterization
+	         */
+	        if (GigaStore.shouldTriggerRasterization(action))
+	            newState.rasterizedRows = TreeRasterizer_1.TreeRasterizer.rasterize(newState.tree);
 	        return newState;
+	    };
+	    GigaStore.shouldTriggerRasterization = function (action) {
+	        return [
+	            GigaActionType.ADD_FILTER,
+	            GigaActionType.ADD_SORT,
+	            GigaActionType.ADD_SUBTOTAL,
+	            GigaActionType.CLEAR_FILTER,
+	            GigaActionType.CLEAR_SORT,
+	            GigaActionType.CLEAR_SUBTOTAL,
+	            GigaActionType.NEW_FILTER,
+	            GigaActionType.NEW_SORT,
+	            GigaActionType.NEW_SUBTOTAL,
+	            GigaActionType.TOGGLE_ROW_COLLAPSE,
+	        ].indexOf(action.type) !== -1;
 	    };
 	    /*
 	     Selection Action Handlers
@@ -1057,13 +1047,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return state;
 	            else {
 	                action.row.toggleSelect();
-	                return {
-	                    subtotalBys: state.subtotalBys,
-	                    filterBys: state.filterBys,
-	                    sortBys: state.sortBys,
-	                    widthMeasures: state.widthMeasures,
-	                    tree: state.tree
-	                };
+	                return _.clone(state);
 	            }
 	        }
 	        else
@@ -1072,28 +1056,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GigaStore.prototype.handleCellSelect = function (state, action) {
 	        if (typeof this.props.onCellClick === "function") {
 	            if (!this.props.onCellClick(action.row, action.tableColumnDef))
-	                return state;
+	                return state; // will not emit state mutation event
 	            else
-	                return {
-	                    subtotalBys: state.subtotalBys,
-	                    filterBys: state.filterBys,
-	                    sortBys: state.sortBys,
-	                    widthMeasures: state.widthMeasures,
-	                    tree: state.tree
-	                };
+	                return _.clone(state); // will emit state mutation event
 	        }
 	        else
 	            return state;
 	    };
 	    GigaStore.prototype.handleWidthChange = function (state, action) {
 	        var widthMeasures = WidthMeasureCalculator_1.WidthMeasureCalculator.computeWidthMeasures(action.width, this.props.columnDefs);
-	        return {
-	            subtotalBys: state.subtotalBys,
-	            filterBys: state.filterBys,
-	            sortBys: state.sortBys,
-	            widthMeasures: widthMeasures,
-	            tree: state.tree
-	        };
+	        var newState = _.clone(state);
+	        newState.widthMeasures = widthMeasures;
+	        return newState;
 	    };
 	    /*
 	     Subtotal Action Handlers
@@ -1101,35 +1075,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GigaStore.prototype.handleToggleCollapse = function (state, action) {
 	        var row = action.subtotalRow;
 	        row.toggleCollapse();
-	        return {
-	            subtotalBys: state.subtotalBys,
-	            filterBys: state.filterBys,
-	            sortBys: state.sortBys,
-	            widthMeasures: state.widthMeasures,
-	            tree: state.tree
-	        };
+	        return _.clone(state);
 	    };
 	    GigaStore.prototype.handleSubtotal = function (state, action) {
 	        var newTree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, action.subtotalBys);
 	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
-	        return {
-	            subtotalBys: action.subtotalBys,
-	            filterBys: state.filterBys,
-	            sortBys: state.sortBys,
-	            widthMeasures: state.widthMeasures,
-	            tree: newTree
-	        };
+	        var newState = _.clone(state);
+	        newState.tree = newTree;
+	        newState.subtotalBys = action.subtotalBys;
+	        return newState;
 	    };
 	    GigaStore.prototype.handleClearSubtotal = function (state, action) {
 	        var newTree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, []);
 	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
-	        return {
-	            subtotalBys: [],
-	            sortBys: state.sortBys,
-	            widthMeasures: state.widthMeasures,
-	            filterBys: state.filterBys,
-	            tree: newTree
-	        };
+	        var newState = _.clone(state);
+	        newState.tree = newTree;
+	        newState.subtotalBys = [];
+	        return newState;
 	    };
 	    /*
 	     TODO test these sort handlers
@@ -1139,33 +1101,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var sortBy = action.sortBy;
 	        state.sortBys.push(sortBy);
 	        var newTree = SortFactory_1.SortFactory.sortTree(state.tree, state.sortBys);
-	        return {
-	            tree: newTree,
-	            sortBys: state.sortBys,
-	            widthMeasures: state.widthMeasures,
-	            filterBys: state.filterBys,
-	            subtotalBys: state.subtotalBys
-	        };
+	        var newState = _.clone(state);
+	        newState.tree = newTree;
+	        return newState;
 	    };
 	    GigaStore.prototype.handleNewSort = function (state, action) {
 	        var newTree = SortFactory_1.SortFactory.sortTree(state.tree, action.sortBys);
-	        return {
-	            tree: newTree,
-	            sortBys: action.sortBys,
-	            widthMeasures: state.widthMeasures,
-	            filterBys: state.filterBys,
-	            subtotalBys: state.subtotalBys
-	        };
+	        var newState = _.clone(state);
+	        newState.tree = newTree;
+	        newState.sortBys = action.sortBys;
+	        return newState;
 	    };
 	    GigaStore.prototype.handleClearSort = function (state, action) {
 	        var newTree = SortFactory_1.SortFactory.sortTree(state.tree, []);
-	        return {
-	            tree: newTree,
-	            sortBys: [],
-	            widthMeasures: state.widthMeasures,
-	            subtotalBys: state.subtotalBys,
-	            filterBys: state.filterBys
-	        };
+	        var newState = _.clone(state);
+	        newState.tree = newTree;
+	        newState.sortBys = [];
+	        return newState;
 	    };
 	    return GigaStore;
 	})(ReduceStore);
@@ -1192,7 +1144,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=GigaStore.js.map
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1204,15 +1156,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 
-	module.exports.Container = __webpack_require__(15);
-	module.exports.MapStore = __webpack_require__(18);
-	module.exports.Mixin = __webpack_require__(30);
-	module.exports.ReduceStore = __webpack_require__(19);
-	module.exports.Store = __webpack_require__(20);
+	module.exports.Container = __webpack_require__(14);
+	module.exports.MapStore = __webpack_require__(17);
+	module.exports.Mixin = __webpack_require__(29);
+	module.exports.ReduceStore = __webpack_require__(18);
+	module.exports.Store = __webpack_require__(19);
 
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -1234,10 +1186,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var FluxStoreGroup = __webpack_require__(16);
+	var FluxStoreGroup = __webpack_require__(15);
 
 	var invariant = __webpack_require__(11);
-	var shallowEqual = __webpack_require__(17);
+	var shallowEqual = __webpack_require__(16);
 
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -1395,7 +1347,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -1476,7 +1428,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports) {
 
 	/**
@@ -1531,7 +1483,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = shallowEqual;
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -1552,8 +1504,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var FluxReduceStore = __webpack_require__(19);
-	var Immutable = __webpack_require__(29);
+	var FluxReduceStore = __webpack_require__(18);
+	var Immutable = __webpack_require__(28);
 
 	var invariant = __webpack_require__(11);
 
@@ -1681,7 +1633,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -1702,9 +1654,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var FluxStore = __webpack_require__(20);
+	var FluxStore = __webpack_require__(19);
 
-	var abstractMethod = __webpack_require__(28);
+	var abstractMethod = __webpack_require__(27);
 	var invariant = __webpack_require__(11);
 
 	var FluxReduceStore = (function (_FluxStore) {
@@ -1788,7 +1740,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -1807,7 +1759,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _require = __webpack_require__(21);
+	var _require = __webpack_require__(20);
 
 	var EventEmitter = _require.EventEmitter;
 
@@ -1971,7 +1923,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1984,14 +1936,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(22)
+	  EventEmitter: __webpack_require__(21)
 	};
 
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -2010,11 +1962,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var EmitterSubscription = __webpack_require__(23);
-	var EventSubscriptionVendor = __webpack_require__(25);
+	var EmitterSubscription = __webpack_require__(22);
+	var EventSubscriptionVendor = __webpack_require__(24);
 
-	var emptyFunction = __webpack_require__(27);
-	var invariant = __webpack_require__(26);
+	var emptyFunction = __webpack_require__(26);
+	var invariant = __webpack_require__(25);
 
 	/**
 	 * @class BaseEventEmitter
@@ -2188,7 +2140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 23 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -2209,7 +2161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var EventSubscription = __webpack_require__(24);
+	var EventSubscription = __webpack_require__(23);
 
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -2241,7 +2193,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 24 */
+/* 23 */
 /***/ function(module, exports) {
 
 	/**
@@ -2295,7 +2247,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EventSubscription;
 
 /***/ },
-/* 25 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -2314,7 +2266,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var invariant = __webpack_require__(26);
+	var invariant = __webpack_require__(25);
 
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -2404,7 +2356,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -2460,7 +2412,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 27 */
+/* 26 */
 /***/ function(module, exports) {
 
 	/**
@@ -2503,7 +2455,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = emptyFunction;
 
 /***/ },
-/* 28 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -2530,7 +2482,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 29 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -7517,7 +7469,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}));
 
 /***/ },
-/* 30 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -7534,7 +7486,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var FluxStoreGroup = __webpack_require__(16);
+	var FluxStoreGroup = __webpack_require__(15);
 
 	var invariant = __webpack_require__(11);
 
@@ -7640,119 +7592,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 31 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ColumnLike_1 = __webpack_require__(32);
-	/**
-	 * these should return Tree(s) as oppose to being void ... I want to use Immutable.js to simplify things where possible
-	 */
-	var SubtotalAggregator = (function () {
-	    function SubtotalAggregator() {
-	    }
-	    SubtotalAggregator.aggregateTree = function (tree, columnDefs) {
-	        SubtotalAggregator.aggregateSubtotalRow(tree.getRoot(), columnDefs);
-	        SubtotalAggregator.aggregateChildren(tree.getRoot(), columnDefs);
-	    };
-	    /**
-	     * depth first recursive implementation of the tree traversal
-	     * @param subtotalRow
-	     * @param columnDefs
-	     */
-	    SubtotalAggregator.aggregateChildren = function (subtotalRow, columnDefs) {
-	        subtotalRow.getChildren().forEach(function (childRow) {
-	            SubtotalAggregator.aggregateSubtotalRow(childRow, columnDefs);
-	            if (childRow.getChildren().length > 0)
-	                SubtotalAggregator.aggregateChildren(childRow, columnDefs);
-	        });
-	    };
-	    SubtotalAggregator.aggregate = function (detailRows, columnDefs) {
-	        var aggregated = {};
-	        columnDefs.forEach(function (columnDef) {
-	            if (columnDef.aggregationMethod === ColumnLike_1.AggregationMethod.SUM) {
-	                var sum = 0.0;
-	                detailRows.forEach(function (row) { return sum += row.data()[columnDef.colTag]; });
-	                aggregated[columnDef.colTag] = sum;
-	            }
-	            else if (columnDef.aggregationMethod === ColumnLike_1.AggregationMethod.AVERAGE) {
-	                var sum = 0.0;
-	                detailRows.forEach(function (row) { return sum += row.data()[columnDef.colTag]; });
-	                aggregated[columnDef.colTag] = sum / detailRows.length;
-	            }
-	        });
-	        return aggregated;
-	    };
-	    SubtotalAggregator.aggregateSubtotalRow = function (subtotalRow, columnDefs) {
-	        subtotalRow.setData(SubtotalAggregator.aggregate(subtotalRow.detailRows, columnDefs));
-	    };
-	    return SubtotalAggregator;
-	})();
-	exports.SubtotalAggregator = SubtotalAggregator;
-	//# sourceMappingURL=SubtotalAggregator.js.map
-
-/***/ },
-/* 32 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var _ = __webpack_require__(33);
-	(function (AggregationMethod) {
-	    AggregationMethod[AggregationMethod["SUM"] = 0] = "SUM";
-	    AggregationMethod[AggregationMethod["AVERAGE"] = 1] = "AVERAGE";
-	    AggregationMethod[AggregationMethod["NONE"] = 2] = "NONE";
-	})(exports.AggregationMethod || (exports.AggregationMethod = {}));
-	var AggregationMethod = exports.AggregationMethod;
-	(function (ColumnFormat) {
-	    ColumnFormat[ColumnFormat["NUMBER"] = 0] = "NUMBER";
-	    ColumnFormat[ColumnFormat["STRING"] = 1] = "STRING";
-	    ColumnFormat[ColumnFormat["CURRENCY"] = 2] = "CURRENCY";
-	    ColumnFormat[ColumnFormat["DATE"] = 3] = "DATE";
-	})(exports.ColumnFormat || (exports.ColumnFormat = {}));
-	var ColumnFormat = exports.ColumnFormat;
-	(function (SortDirection) {
-	    SortDirection[SortDirection["ASC"] = 0] = "ASC";
-	    SortDirection[SortDirection["DESC"] = 1] = "DESC";
-	})(exports.SortDirection || (exports.SortDirection = {}));
-	var SortDirection = exports.SortDirection;
-	var ColumnFactory = (function () {
-	    function ColumnFactory() {
-	    }
-	    ColumnFactory.createColumnsFromDefinition = function (columnDefs, state) {
-	        return columnDefs.map(function (cd) { return ColumnFactory.createColumnFromDefinition(cd, state); });
-	    };
-	    ColumnFactory.createColumnFromDefinition = function (cd, state) {
-	        var column = {
-	            colTag: cd.colTag,
-	            title: cd.title,
-	            aggregationMethod: cd.aggregationMethod,
-	            format: cd.format,
-	            width: state.widthMeasures.columnWidths[cd.colTag],
-	            cellTemplateCreator: cd.cellTemplateCreator
-	        };
-	        // determine if there is an existing SortBy for this column
-	        var sortBy = _.find(state.sortBys, function (s) { return s.colTag === cd.colTag; });
-	        if (sortBy) {
-	            column.sortDirection = sortBy.direction;
-	            column.customSortFn = sortBy.customSortFn;
-	        }
-	        return column;
-	    };
-	    ColumnFactory.createColumnsFromGroupDefinition = function (columnGroupDefs, columnDefs, state) {
-	        var columns = ColumnFactory.createColumnsFromDefinition(columnDefs, state);
-	        var columnMap = _.chain(columns).map(function (column) { return column.colTag; }).object(columns).value();
-	        var nestedColumns = [[], []];
-	        _.forEach(columnGroupDefs, function (groupDef, i) {
-	            nestedColumns[0].push({ colTag: "column_group_" + (i + 1), title: groupDef.title, colSpan: groupDef.columns.length });
-	            _.forEach(groupDef.columns, function (colTag) { return nestedColumns[1].push(columnMap[colTag]); });
-	        });
-	        return nestedColumns;
-	    };
-	    return ColumnFactory;
-	})();
-	exports.ColumnFactory = ColumnFactory;
-	//# sourceMappingURL=ColumnLike.js.map
-
-/***/ },
-/* 33 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -20107,10 +19947,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(34)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31)(module), (function() { return this; }())))
 
 /***/ },
-/* 34 */
+/* 31 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -20126,11 +19966,123 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 35 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Row_1 = __webpack_require__(36);
-	var Row_2 = __webpack_require__(36);
+	var ColumnLike_1 = __webpack_require__(33);
+	/**
+	 * these should return Tree(s) as oppose to being void ... I want to use Immutable.js to simplify things where possible
+	 */
+	var SubtotalAggregator = (function () {
+	    function SubtotalAggregator() {
+	    }
+	    SubtotalAggregator.aggregateTree = function (tree, columnDefs) {
+	        SubtotalAggregator.aggregateSubtotalRow(tree.getRoot(), columnDefs);
+	        SubtotalAggregator.aggregateChildren(tree.getRoot(), columnDefs);
+	    };
+	    /**
+	     * depth first recursive implementation of the tree traversal
+	     * @param subtotalRow
+	     * @param columnDefs
+	     */
+	    SubtotalAggregator.aggregateChildren = function (subtotalRow, columnDefs) {
+	        subtotalRow.getChildren().forEach(function (childRow) {
+	            SubtotalAggregator.aggregateSubtotalRow(childRow, columnDefs);
+	            if (childRow.getChildren().length > 0)
+	                SubtotalAggregator.aggregateChildren(childRow, columnDefs);
+	        });
+	    };
+	    SubtotalAggregator.aggregate = function (detailRows, columnDefs) {
+	        var aggregated = {};
+	        columnDefs.forEach(function (columnDef) {
+	            if (columnDef.aggregationMethod === ColumnLike_1.AggregationMethod.SUM) {
+	                var sum = 0.0;
+	                detailRows.forEach(function (row) { return sum += row.data()[columnDef.colTag]; });
+	                aggregated[columnDef.colTag] = sum;
+	            }
+	            else if (columnDef.aggregationMethod === ColumnLike_1.AggregationMethod.AVERAGE) {
+	                var sum = 0.0;
+	                detailRows.forEach(function (row) { return sum += row.data()[columnDef.colTag]; });
+	                aggregated[columnDef.colTag] = sum / detailRows.length;
+	            }
+	        });
+	        return aggregated;
+	    };
+	    SubtotalAggregator.aggregateSubtotalRow = function (subtotalRow, columnDefs) {
+	        subtotalRow.setData(SubtotalAggregator.aggregate(subtotalRow.detailRows, columnDefs));
+	    };
+	    return SubtotalAggregator;
+	})();
+	exports.SubtotalAggregator = SubtotalAggregator;
+	//# sourceMappingURL=SubtotalAggregator.js.map
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = __webpack_require__(30);
+	(function (AggregationMethod) {
+	    AggregationMethod[AggregationMethod["SUM"] = 0] = "SUM";
+	    AggregationMethod[AggregationMethod["AVERAGE"] = 1] = "AVERAGE";
+	    AggregationMethod[AggregationMethod["NONE"] = 2] = "NONE";
+	})(exports.AggregationMethod || (exports.AggregationMethod = {}));
+	var AggregationMethod = exports.AggregationMethod;
+	(function (ColumnFormat) {
+	    ColumnFormat[ColumnFormat["NUMBER"] = 0] = "NUMBER";
+	    ColumnFormat[ColumnFormat["STRING"] = 1] = "STRING";
+	    ColumnFormat[ColumnFormat["CURRENCY"] = 2] = "CURRENCY";
+	    ColumnFormat[ColumnFormat["DATE"] = 3] = "DATE";
+	})(exports.ColumnFormat || (exports.ColumnFormat = {}));
+	var ColumnFormat = exports.ColumnFormat;
+	(function (SortDirection) {
+	    SortDirection[SortDirection["ASC"] = 0] = "ASC";
+	    SortDirection[SortDirection["DESC"] = 1] = "DESC";
+	})(exports.SortDirection || (exports.SortDirection = {}));
+	var SortDirection = exports.SortDirection;
+	var ColumnFactory = (function () {
+	    function ColumnFactory() {
+	    }
+	    ColumnFactory.createColumnsFromDefinition = function (columnDefs, state) {
+	        return columnDefs.map(function (cd) { return ColumnFactory.createColumnFromDefinition(cd, state); });
+	    };
+	    ColumnFactory.createColumnFromDefinition = function (cd, state) {
+	        var column = {
+	            colTag: cd.colTag,
+	            title: cd.title,
+	            aggregationMethod: cd.aggregationMethod,
+	            format: cd.format,
+	            width: state.widthMeasures.columnWidths[cd.colTag],
+	            cellTemplateCreator: cd.cellTemplateCreator
+	        };
+	        // determine if there is an existing SortBy for this column
+	        var sortBy = _.find(state.sortBys, function (s) { return s.colTag === cd.colTag; });
+	        if (sortBy) {
+	            column.sortDirection = sortBy.direction;
+	            column.customSortFn = sortBy.customSortFn;
+	        }
+	        return column;
+	    };
+	    ColumnFactory.createColumnsFromGroupDefinition = function (columnGroupDefs, columnDefs, state) {
+	        var columns = ColumnFactory.createColumnsFromDefinition(columnDefs, state);
+	        var columnMap = _.chain(columns).map(function (column) { return column.colTag; }).object(columns).value();
+	        var nestedColumns = [[], []];
+	        _.forEach(columnGroupDefs, function (groupDef, i) {
+	            nestedColumns[0].push({ colTag: "column_group_" + (i + 1), title: groupDef.title, colSpan: groupDef.columns.length });
+	            _.forEach(groupDef.columns, function (colTag) { return nestedColumns[1].push(columnMap[colTag]); });
+	        });
+	        return nestedColumns;
+	    };
+	    return ColumnFactory;
+	})();
+	exports.ColumnFactory = ColumnFactory;
+	//# sourceMappingURL=ColumnLike.js.map
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Row_1 = __webpack_require__(35);
+	var Row_2 = __webpack_require__(35);
 	var TreeBuilder = (function () {
 	    function TreeBuilder() {
 	    }
@@ -20208,7 +20160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=TreeBuilder.js.map
 
 /***/ },
-/* 36 */
+/* 35 */
 /***/ function(module, exports) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -20225,6 +20177,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    GenericRow.prototype.get = function (columnDef) {
 	        return this._data[columnDef.colTag];
+	    };
+	    GenericRow.prototype.getByColTag = function (colTag) {
+	        return this._data[colTag];
 	    };
 	    GenericRow.prototype.toggleSelect = function (select) {
 	        if (typeof select !== "undefined")
@@ -20331,10 +20286,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=Row.js.map
 
 /***/ },
-/* 37 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ColumnLike_1 = __webpack_require__(32);
+	var ColumnLike_1 = __webpack_require__(33);
 	var SortFactory = (function () {
 	    function SortFactory() {
 	    }
@@ -20408,10 +20363,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=SortFactory.js.map
 
 /***/ },
-/* 38 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var _ = __webpack_require__(33);
+	var _ = __webpack_require__(30);
 	var round = Math.round;
 	function parsePixelValue(pxMeasure) {
 	    return parseInt(pxMeasure.substr(0, pxMeasure.length - 2));
@@ -20525,6 +20480,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=WidthMeasureCalculator.js.map
 
 /***/ },
+/* 38 */
+/***/ function(module, exports) {
+
+	var TreeRasterizer = (function () {
+	    function TreeRasterizer() {
+	    }
+	    TreeRasterizer.rasterize = function (tree) {
+	        var grandTotal = tree.getRoot();
+	        var rasterizedRows = [];
+	        // TODO implement this non-recursively ... to avoid stack related issues
+	        TreeRasterizer.rasterizeChildren(grandTotal, rasterizedRows);
+	        rasterizedRows.shift(); // remove grand total
+	        return rasterizedRows;
+	    };
+	    TreeRasterizer.rasterizeChildren = function (subtotalRow, rasterizedRows) {
+	        // push self
+	        rasterizedRows.push(subtotalRow);
+	        // push children (at which point recurse)
+	        // TODO consider when a row is masked by a filter
+	        if (!subtotalRow.isCollapsed())
+	            if (subtotalRow.getChildren().length === 0)
+	                subtotalRow.detailRows.forEach(function (detailRow) { return rasterizedRows.push(detailRow); });
+	            else
+	                subtotalRow.getChildren().forEach(function (child) {
+	                    TreeRasterizer.rasterizeChildren(child, rasterizedRows);
+	                });
+	    };
+	    return TreeRasterizer;
+	})();
+	exports.TreeRasterizer = TreeRasterizer;
+	//# sourceMappingURL=TreeRasterizer.js.map
+
+/***/ },
 /* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -20563,7 +20551,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(6);
 	var classNames = __webpack_require__(41);
-	var GigaStore_1 = __webpack_require__(13);
+	var GigaStore_1 = __webpack_require__(12);
 	var Cell_1 = __webpack_require__(42);
 	var GigaRow = (function (_super) {
 	    __extends(GigaRow, _super);
@@ -20660,8 +20648,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(6);
 	var classNames = __webpack_require__(41);
-	var ColumnLike_1 = __webpack_require__(32);
-	var GigaStore_1 = __webpack_require__(13);
+	var ColumnLike_1 = __webpack_require__(33);
+	var GigaStore_1 = __webpack_require__(12);
 	var Cell = (function (_super) {
 	    __extends(Cell, _super);
 	    function Cell(props) {
@@ -20754,7 +20742,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(6);
 	var TableHeaderCell_1 = __webpack_require__(44);
-	var WidthMeasureCalculator_1 = __webpack_require__(38);
+	var WidthMeasureCalculator_1 = __webpack_require__(37);
 	/**
 	 * terminology: column groups are columns that can span multiple `leaf` columns and physically reside
 	 * on top of `leaf` columns
@@ -20818,9 +20806,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(6);
 	var classNames = __webpack_require__(41);
 	var DropdownMenu_1 = __webpack_require__(45);
-	var ColumnLike_1 = __webpack_require__(32);
+	var ColumnLike_1 = __webpack_require__(33);
 	var SortMenuItem_1 = __webpack_require__(47);
-	var ColumnLike_2 = __webpack_require__(32);
+	var ColumnLike_2 = __webpack_require__(33);
 	var SubtotalByMenuItem_1 = __webpack_require__(48);
 	var FilterMenuItem_1 = __webpack_require__(49);
 	var TableHeaderState = (function () {
@@ -30830,8 +30818,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(6);
 	var DropdownMenu_1 = __webpack_require__(45);
-	var GigaStore_1 = __webpack_require__(13);
-	var ColumnLike_1 = __webpack_require__(32);
+	var GigaStore_1 = __webpack_require__(12);
+	var ColumnLike_1 = __webpack_require__(33);
 	var SortMenuItem = (function (_super) {
 	    __extends(SortMenuItem, _super);
 	    function SortMenuItem(props) {
@@ -30925,8 +30913,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(6);
 	var classNames = __webpack_require__(41);
-	var ColumnLike_1 = __webpack_require__(32);
-	var GigaStore_1 = __webpack_require__(13);
+	var ColumnLike_1 = __webpack_require__(33);
+	var GigaStore_1 = __webpack_require__(12);
 	var DropdownMenu_1 = __webpack_require__(45);
 	var SubtotalByMenuItem = (function (_super) {
 	    __extends(SubtotalByMenuItem, _super);
