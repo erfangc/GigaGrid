@@ -8,7 +8,7 @@
     "styles": "mkdirp ./build/src/styles && stylus ./src/styles -o ./build/src/styles",
     "compile": "npm run clean && tsc && npm run styles",
     "build": "npm run compile && webpack",
-    "test": "karma start karma2.conf.js --single-run",
+    "test": "npm run build && karma start karma2.conf.js --single-run",
     "serve": "npm run build && live-server --open=examples"
   },
   "repository": {
