@@ -6,6 +6,8 @@ export interface Row {
     isHidden(): boolean
     toggleHide(hide?:boolean): void
     isSelected(): boolean
+    get(columnDef: ColumnDef):any
+    getByColTag(colTag: string):any
     toggleSelect(select?:boolean): void
     sectorPath(): string[]
     setSectorPath(sp:string[])
@@ -25,6 +27,10 @@ abstract class GenericRow implements Row {
 
     get(columnDef: ColumnDef):any {
         return this._data[columnDef.colTag];
+    }
+
+    getByColTag(colTag: string):any {
+        return this._data[colTag];
     }
 
     toggleSelect(select?:boolean): void {

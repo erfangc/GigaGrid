@@ -48,28 +48,39 @@ describe("GigaStore", ()=> {
         };
 
         it("can handle NEW_SUBTOTAL action", ()=> {
+            var state = store.getState();
+            expect(state.rasterizedRows.length).toBe(10);
+
             dispatcher.dispatch(newSubtotalAction);
-            expect(store.getState().subtotalBys.length).toBe(1);
-            expect(store.getState().subtotalBys[0]).toBe(newSubtotalAction.subtotalBys[0]);
-            const children = store.getState().tree.getRoot().getChildren();
+            state = store.getState();
+            expect(state.subtotalBys.length).toBe(1);
+            expect(state.subtotalBys[0]).toBe(newSubtotalAction.subtotalBys[0]);
+            const children = state.tree.getRoot().getChildren();
             expect(children.length).toBe(2);
-            expect(store.getState().tree.getRoot().getChildByTitle("Male")).toBeDefined();
-            expect(store.getState().tree.getRoot().getChildByTitle("Male")).not.toBeNull();
+            expect(state.tree.getRoot().getChildByTitle("Male")).toBeDefined();
+            expect(state.tree.getRoot().getChildByTitle("Male")).not.toBeNull();
+            expect(state.rasterizedRows.length).toBe(12);
         });
 
         it("can handle CLEAR_SUBTOTAL action", ()=> {
             dispatcher.dispatch(newSubtotalAction);
-            expect(store.getState().subtotalBys[0]).toBe(newSubtotalAction.subtotalBys[0]);
+            var state = store.getState();
+            expect(state.subtotalBys[0]).toBe(newSubtotalAction.subtotalBys[0]);
+            expect(state.rasterizedRows.length).toBe(12);
 
             // clear subtotal
             dispatcher.dispatch({type: GigaActionType.CLEAR_SUBTOTAL});
-            expect(store.getState().subtotalBys).toEqual([]);
-            expect(store.getState().tree.getRoot().getChildren.length).toBe(0);
+            state = store.getState();
+            expect(state.subtotalBys).toEqual([]);
+            expect(state.rasterizedRows.length).toBe(10);
+            expect(state.tree.getRoot().getChildren.length).toBe(0);
         });
 
         it("can handle TOGGLE_ROW_COLLAPSE action", ()=> {
 
+
             dispatcher.dispatch(newSubtotalAction);
+            expect(store.getState().rasterizedRows.length).toBe(12);
 
             const row = store.getState().tree.getRoot().getChildByTitle("Male");
             const toggleRowCollapse:ToggleCollapseAction = {
@@ -78,9 +89,13 @@ describe("GigaStore", ()=> {
             };
 
             expect(row.isCollapsed()).toBeFalsy();
+
             dispatcher.dispatch(toggleRowCollapse);
+            expect(store.getState().rasterizedRows.length).toBe(7);
             expect(row.isCollapsed()).toBeTruthy();
+
             dispatcher.dispatch(toggleRowCollapse);
+            expect(store.getState().rasterizedRows.length).toBe(12);
             expect(row.isCollapsed()).toBeFalsy();
 
         });
@@ -110,8 +125,9 @@ describe("GigaStore", ()=> {
 
             var root = store.getState().tree.getRoot();
             dispatcher.dispatch(action);
-            expect(root.detailRows[0].data()['gift']).toBe(10);
-            expect(root.detailRows[root.detailRows.length - 1].data()['gift']).toBe(2);
+            expect(store.getState().rasterizedRows[0].getByColTag('gift')).toBe(10);
+            expect(root.detailRows[0].getByColTag('gift')).toBe(10);
+            expect(root.detailRows[root.detailRows.length - 1].getByColTag('gift')).toBe(2);
             expect(store.getState().sortBys.length).toBe(1);
 
         });
@@ -125,7 +141,8 @@ describe("GigaStore", ()=> {
 
             dispatcher.dispatch(firstSort);
             var root = store.getState().tree.getRoot();
-            expect(root.detailRows[0].data()['gender']).toBe("Female");
+            expect(root.detailRows[0].getByColTag('gender')).toBe("Female");
+            expect(store.getState().rasterizedRows[0].getByColTag('gender')).toBe("Female");
 
             // add a sort
             const action:AddSortAction = {
@@ -135,8 +152,8 @@ describe("GigaStore", ()=> {
 
             dispatcher.dispatch(action);
 
-            expect(root.detailRows[0].data()['gender']).toBe("Female");
-            expect(root.detailRows[0].data()['gift']).toBe(10);
+            expect(root.detailRows[0].getByColTag('gender')).toBe("Female");
+            expect(root.detailRows[0].getByColTag('gift')).toBe(10);
 
             expect(store.getState().sortBys.length).toBe(2);
         });
