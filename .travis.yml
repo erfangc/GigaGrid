@@ -5,7 +5,9 @@ node_js:
 
 install:
   - npm instal jspm phantomjs karma-phantomjs-launcher karma karma-jasmine karma-jspm -g
-  - npm install && jspm install
+  - npm install
+  - jspm registry export github
+  - jspm install
 
 script:
   - karma start karma2.conf.js --single-run
