@@ -7,25 +7,22 @@ module.exports = function (config) {
         // base path that will be used to resolve all patterns (eg. files, exclude)
         basePath: '',
 
-
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['jspm', 'jasmine'],
-
 
         // list of files / patterns to load in the browser
         files: [
             'jspm_packages/npm/phantomjs-polyfill@0.0.1/bind-polyfill.js'
         ],
 
-
         // list of files to exclude
         exclude: [],
 
         jspm: {
             // Edit this to your needs
-            loadFiles: ['test/**/*.js'],
-            serveFiles: ['src/**/*.js']
+            loadFiles: ['build/test/**/*.js'],
+            serveFiles: ['build/src/**/*.js']
         },
 
         // preprocess matching files before serving them to the browser

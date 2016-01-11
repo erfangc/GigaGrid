@@ -11,6 +11,7 @@ System.config({
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*"
   },
+
   map: {
     "babel": "npm:babel-core@5.8.34",
     "babel-runtime": "npm:babel-runtime@5.8.34",
@@ -18,7 +19,6 @@ System.config({
     "core-js": "npm:core-js@1.2.6",
     "flux": "npm:flux@2.1.1",
     "font-awesome": "npm:font-awesome@4.5.0",
-    "immutable": "npm:immutable@3.7.6",
     "jquery": "github:components/jquery@2.1.4",
     "lodash": "npm:lodash@3.10.1",
     "phantomjs-polyfill": "npm:phantomjs-polyfill@0.0.1",
