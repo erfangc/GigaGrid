@@ -6,12 +6,11 @@
     <title>GigaGrid</title>
 
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/default.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/solarized_light.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
           crossorigin="anonymous">
 
-    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
 
     <link rel="stylesheet" href="../jspm_packages/npm/font-awesome@4.5.0/css/font-awesome.css">
@@ -54,29 +53,74 @@
     <div id="getting-started">
         <h1>Getting Started</h1>
         <hr>
-        <div class="alert alert-warning">
-            <p class="text-center">
-                Under Construction
-            </p>
-        </div>
+        <!-- Installing -->
         <h2>Installing</h2>
-        <div class="alert alert-warning">
-            <p class="text-center">
-                Under Construction
-            </p>
-        </div>
+        <p>
+            You can install the grid via <code>npm</code>
+        </p>
+        <pre><code class="bash">
+            npm install giga-grid --save
+        </code></pre>
+        <p>
+            You can also install the grid via the browser <code>script</code> tag
+        </p>
+        <pre class="code"><code class="html">
+            &lt;script src="https://fb.me/react-0.14.6.js"&gt;&lt;/script&gt;
+            &lt;script src="https://fb.me/react-dom-0.14.6.js"&gt;&lt;/script&gt;
+            &lt;script src="giga-grid.js"&gt;&lt;/script&gt;
+            &lt;!-- aont-awesome is optional --&gt;
+            &lt;link rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"&gt;
+        </code></pre>
+        <!-- CommonJS -->
         <h3>CommonJS</h3>
-        <div class="alert alert-warning">
-            <p class="text-center">
-                Under Construction
-            </p>
-        </div>
+        <p>
+            The <code>npm</code> install creates <em>giga-grid</em> under <em>node_modules</em>
+        </p>
+        <pre><code>
+            var GigaGrid = require("giga-grid").GigaGrid;
+
+            var data = [{"col1": "Foo", ... }, ... ];
+            var columnDefs = [{colTag: "col1", title:"Column 1"}, ... ];
+
+            var myGrid = React.createElement(GigaGrid, { data: data, columnDefs: columnDefs });
+            ReactDOM.render(myGrid, document.body);
+        </code></pre>
+        <!--ES6-->
+        <h3>ES6 with JSX</h3>
+        <pre><code>
+            import {GigaGrid} from 'giga-grid';
+
+            let data = [{"col1": "Foo", ... }, ... ];
+            let columnDefs = [{colTag: "col1", title:"Column 1"}, ... ];
+
+            ReactDOM.render(&lt;GigaGrid data={data} columnDefs={columnDefs} /&gt;, document.body);
+        </code></pre>
+        <!--TypeScript-->
+        <h3>TypeSciprt with JSX</h3>
+        <pre><code>
+            ///&lt;reference path="giga-grid.d.ts"/&gt;
+            // app.tsx
+            import {GigaGrid} from 'giga-grid';
+
+            let data = [{"col1": "Foo", ... }, ... ];
+            let columnDefs = [{colTag: "col1", title:"Column 1"}, ... ];
+
+            ReactDOM.render(&lt;GigaGrid data={data} columnDefs={columnDefs} /&gt;, document.body);
+        </code></pre>
+        <!-- Browsers -->
         <h3>Browsers</h3>
-        <div class="alert alert-warning">
-            <p class="text-center">
-                Under Construction
-            </p>
-        </div>
+        <p>
+            We do not recommend this approach, as it pollutes the global namespace and require manual dependency
+            management. Please consider a module loader!
+        </p>
+        <pre><code>
+            var data = [{"col1": "Foo", ... }, ... ];
+            var columnDefs = [{colTag: "col1", title:"Column 1"}, ... ];
+
+            var myGrid = React.createElement(GigaGrid, { data: data, columnDefs: columnDefs });
+            ReactDOM.render(myGrid, document.body);
+        </code></pre>
     </div>
     <div id="examples"></div>
     <br>
@@ -85,8 +129,14 @@
     System.import('./index.es6');
 </script>
 <style>
-    * {
+
+    body {
         font-family: Roboto, sans-serif;
+    }
+
+    pre {
+        /* bootstrap adds a weird background color to pre elements that we don't want with highlight.js */
+        padding: 0;
     }
 
     nav {

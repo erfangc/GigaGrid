@@ -14,7 +14,7 @@ import column_grouping from './column_grouping.ts!text';
 function dropImports(str) {
     return _.chain(str.split("\n"))
         .dropWhile((line) => _.startsWith(line.trim(), "import"))
-        .join("\n");
+        .join("\n\t");
 }
 
 var examples = [
@@ -35,7 +35,9 @@ _.forEach(examples, example => {
     <hr>
     <div class="example" id="${example.id}"></div>
     <br>
-    <pre><code>${example.code}</code></pre>
+    <pre><code>
+    ${example.code}
+    </code></pre>
 </div>
 <br>`).appendTo($("#examples"));
 

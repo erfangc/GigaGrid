@@ -1,6 +1,6 @@
 # GigaGrid (Under Development) [![Build Status](https://travis-ci.org/erfangc/GigaGrid.svg?branch=master)](https://travis-ci.org/erfangc/GigaGrid)
 
-Massively performant, multi-layered React.js table widget Written in TypeScript
+High performance, React.js table widget with Subtotals (Written in TypeScript)
 
 # Running the Examples
 
@@ -44,7 +44,6 @@ If you are importing a `CommonJS` library, make sure you understand the differen
 See:
 
 [Stackoverflow Explanation 1](http://stackoverflow.com/questions/34622598/typescript-importing-from-libraries-written-in-es5-vs-es6)
-
 [Stackoverflow Explanation 2](http://stackoverflow.com/questions/29596714/new-es6-syntax-for-importing-commonjs-amd-modules-i-e-import-foo-require)
 
 # Testing
@@ -56,4 +55,11 @@ npm instal phantomjs karma-phantomjs-launcher karma karma-jasmine karma-jspm -g
 
 # then at the project root run
 karma start karma2.conf.js
+```
+
+Alternatively, you can run
+
+```bash
+# this will clean the build directory and re-compile all the source files
+npm run test
 ```
