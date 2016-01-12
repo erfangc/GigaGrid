@@ -46,7 +46,7 @@
     </nav>
     <hr>
     <div class="jumbotron">
-        <h1><span><i class="fa fa-th fa-2x"></i></span>GigaGrid</h1>
+        <h1><span><h4 class="pre-alpha-label">Pre Alpha</h4><i class="fa fa-th fa-2x"></i></span>GigaGrid</h1>
         <a href="#getting-started" class="btn btn-primary">Getting Started</a>
         <a href="#examples" class="btn btn-primary">Jump to Examples</a>
     </div>
@@ -132,6 +132,25 @@
 
     body {
         font-family: Roboto, sans-serif;
+    }
+
+    .jumbotron span {
+        position: relative;
+    }
+    .jumbotron span h4.pre-alpha-label {
+        font-family: Consolas,serif;
+        position: relative;
+        bottom: -30px;
+        left: -30px;
+        z-index: 1;
+        transform: rotate(-25deg);
+        font-weight: bold;
+        font-size: 16px;
+        background: red;
+        padding: 5px;
+        width: 9rem;
+        border-radius: 5px;
+        margin: 0;
     }
 
     pre {
