@@ -3,7 +3,7 @@ import {GigaState} from "../components/GigaGrid";
 import * as _ from 'lodash';
 
 export enum AggregationMethod {
-    SUM, AVERAGE, NONE
+    SUM, WEIGHTED_AVERAGE, AVERAGE, RANGE, COUNT, COUNT_DISTINCT, COUNT_OR_DISTINCT, NONE
 }
 
 export enum ColumnFormat {
@@ -23,6 +23,7 @@ export enum SortDirection {
 
 export interface ColumnDef extends ColumnLike {
     width?:string
+    weightBy?:string
     cellTemplateCreator?:(data:any, column?:Column)=>JSX.Element
 }
 
