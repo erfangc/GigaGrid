@@ -105,8 +105,8 @@ div.giga-grid td:first-child {
   padding-left: 10px;
 }
 div.giga-grid tr th {
-  font-weight: bold;
-  background-color: #0093d1;
+  font-weight: normal;
+  background-color: #004c70;
   color: #fff;
 }
 div.giga-grid tr th.column-group {
