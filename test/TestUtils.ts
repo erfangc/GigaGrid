@@ -19,6 +19,233 @@ interface TestDataFactory {
     detailRows():Row[]
 }
 
+class ComprehensiveTypeData implements TestDataFactory {
+
+    constructor() {
+
+    }
+
+    rawData():any[]{
+        return [{
+            "id": 1,
+            "last_name": "George",
+            "gender": "Female",
+            "invariant": "Invariant",
+            "sum_field": 10,
+            "average_field": 10,
+            "count_or_distinct_field": "F",
+            "range_field": 2,
+            "weight_factor": "0.66"
+        },
+            {
+                "id": 2,
+                "last_name": "Wood",
+                "gender": "Female",
+                "invariant": "Invariant",
+                "sum_field": 3,
+                "average_field": 7,
+                "count_or_distinct_field": "F",
+                "range_field": 8,
+                "weight_factor": "0.68"
+            },
+            {
+                "id": 3,
+                "last_name": "Gonzales",
+                "gender": "Male",
+                "invariant": "Invariant",
+                "sum_field": 5,
+                "average_field": 4,
+                "count_or_distinct_field": "M",
+                "range_field": 4,
+                "weight_factor": "0.41"
+            },
+            {
+                "id": 4,
+                "last_name": "Boyd",
+                "gender": "Male",
+                "invariant": "Invariant",
+                "sum_field": 6,
+                "average_field": 7,
+                "count_or_distinct_field": "M",
+                "range_field": 6,
+                "weight_factor": "0.29"
+            },
+            {
+                "id": 5,
+                "last_name": "Long",
+                "gender": "Male",
+                "invariant": "Invariant",
+                "sum_field": 10,
+                "average_field": 5,
+                "count_or_distinct_field": "M",
+                "range_field": 1,
+                "weight_factor": "0.75"
+            },
+            {
+                "id": 6,
+                "last_name": "Long",
+                "gender": "Male",
+                "invariant": "Invariant",
+                "sum_field": 9,
+                "average_field": 6,
+                "count_or_distinct_field": "F",
+                "range_field": 10,
+                "weight_factor": "0.65"
+            },
+            {
+                "id": 7,
+                "last_name": "Patterson",
+                "gender": "Male",
+                "invariant": "Invariant",
+                "sum_field": 8,
+                "average_field": 2,
+                "count_or_distinct_field": "F",
+                "range_field": 2,
+                "weight_factor": "0.93"
+            },
+            {
+                "id": 8,
+                "last_name": "Ford",
+                "gender": "Female",
+                "invariant": "Invariant",
+                "sum_field": 10,
+                "average_field": 2,
+                "count_or_distinct_field": "M",
+                "range_field": 1,
+                "weight_factor": "0.77"
+            },
+            {
+                "id": 9,
+                "last_name": "Jenkins",
+                "gender": "Male",
+                "invariant": "Invariant",
+                "sum_field": 2,
+                "average_field": 9,
+                "count_or_distinct_field": "F",
+                "range_field": 6,
+                "weight_factor": "0.71"
+            },
+            {
+                "id": 10,
+                "last_name": "Moreno",
+                "gender": "Male",
+                "invariant": "Invariant",
+                "sum_field": 4,
+                "average_field": 5,
+                "count_or_distinct_field": "M",
+                "range_field": 6,
+                "weight_factor": "0.22"
+            },
+            {
+                "id": 11,
+                "last_name": "Perez",
+                "gender": "Female",
+                "invariant": "Invariant",
+                "sum_field": 10,
+                "average_field": 8,
+                "count_or_distinct_field": "F",
+                "range_field": 5,
+                "weight_factor": "0.69"
+            },
+            {
+                "id": 12,
+                "last_name": "Sims",
+                "gender": "Female",
+                "invariant": "Invariant",
+                "sum_field": 5,
+                "average_field": 2,
+                "count_or_distinct_field": "M",
+                "range_field": 1,
+                "weight_factor": "0.08"
+            },
+            {
+                "id": 13,
+                "last_name": "Phillips",
+                "gender": "Female",
+                "invariant": "Invariant",
+                "sum_field": 7,
+                "average_field": 3,
+                "count_or_distinct_field": "F",
+                "range_field": 4,
+                "weight_factor": "0.28"
+            },
+            {
+                "id": 14,
+                "last_name": "Morris",
+                "gender": "Male",
+                "invariant": "Invariant",
+                "sum_field": 8,
+                "average_field": 7,
+                "count_or_distinct_field": "F",
+                "range_field": 7,
+                "weight_factor": "0.87"
+            },
+            {
+                "id": 15,
+                "last_name": "Burns",
+                "gender": "Male",
+                "invariant": "Invariant",
+                "sum_field": 8,
+                "average_field": 4,
+                "count_or_distinct_field": "F",
+                "range_field": 3,
+                "weight_factor": "0.42"
+            }];
+    }
+
+    columnDefs():ColumnDef[] {
+        return [
+            {
+                colTag: "id",
+                format: ColumnFormat.NUMBER,
+                aggregationMethod: AggregationMethod.COUNT
+            },
+            {
+                colTag: "last_name",
+                format: ColumnFormat.STRING,
+                aggregationMethod: AggregationMethod.COUNT_DISTINCT
+            },
+            {
+                colTag: "gender",
+                format: ColumnFormat.STRING,
+                aggregationMethod: AggregationMethod.COUNT_OR_DISTINCT
+            },
+            {
+                colTag: "invariant",
+                format: ColumnFormat.STRING,
+                aggregationMethod: AggregationMethod.COUNT_OR_DISTINCT
+            },
+            {
+                colTag: "sum_field",
+                format: ColumnFormat.NUMBER,
+                aggregationMethod: AggregationMethod.SUM
+            }, {
+                colTag: "average_field",
+                format: ColumnFormat.NUMBER,
+                aggregationMethod: AggregationMethod.AVERAGE
+            },
+            {
+                colTag: "range_field",
+                format: ColumnFormat.NUMBER,
+                aggregationMethod: AggregationMethod.RANGE
+            }
+        ];
+    }
+
+    tree() {
+        return TreeBuilder.buildTree(this.rawData());
+    }
+
+    columns() {
+        return this.columnDefs();
+    }
+
+    detailRows() {
+        return this.tree().getRoot().detailRows;
+    }
+
+}
+
 class PeopleTestData implements TestDataFactory {
 
     constructor() {
@@ -169,6 +396,10 @@ export class TestUtils {
 
     static newPeopleTestData():PeopleTestData {
         return new PeopleTestData();
+    }
+
+    static newComprehensiveTypeData():ComprehensiveTypeData {
+        return new ComprehensiveTypeData();
     }
 
     private static mockColumnGroupDefinition = {

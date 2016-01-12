@@ -7,6 +7,7 @@ import {SubtotalAggregator} from "../../src/static/SubtotalAggregator";
 import {Tree} from "../../src/static/TreeBuilder";
 import {TreeBuilder} from "../../src/static/TreeBuilder";
 import {SubtotalBy} from "../../src/models/ColumnLike";
+import {TestUtils} from "../TestUtils";
 
 describe("SubtotalAggregator", () => {
 
@@ -87,6 +88,43 @@ describe("SubtotalAggregator", () => {
 
             expect(tree.getRoot().getChildByTitle("B").getChildByTitle("E")).toBeUndefined();
 
+        });
+
+    });
+
+    describe("A more complete data set", ()=> {
+
+        const data = TestUtils.newComprehensiveTypeData();
+        const detailRows = data.detailRows();
+        const columnDefs = data.columnDefs();
+        const aggregatedRow = SubtotalAggregator.aggregate(detailRows, columnDefs);
+
+        it("COUNT subtotal", () => {
+            expect(aggregatedRow["id"]).toBe(15);
+        });
+
+        it("COUNT_DISTINCT subtotal", () => {
+            expect(aggregatedRow["last_name"]).toBe(14);
+        });
+
+        it("COUNT_OR_DISTINCT subtotal (gender)", () => {
+            expect(aggregatedRow["gender"]).toBe("2/15");
+        });
+
+        it("COUNT_OR_DISTINCT subtotal (invariant)", () => {
+            expect(aggregatedRow["invariant"]).toBe("Invariant");
+        });
+
+        it("SUM subtotal", () => {
+            expect(aggregatedRow["sum_field"]).toBe(105);
+        });
+
+        it("AVERAGE subtotal", () => {
+            expect(aggregatedRow["average_field"]).toBe(5.4);
+        });
+
+        it("RANGE subtotal", () => {
+            expect(aggregatedRow["range_field"]).toBe("1 - 10");
         });
 
     });
