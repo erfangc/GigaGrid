@@ -1,4 +1,3 @@
-// todo fix css loader, it not resolving giga-grid.css
 module.exports = {
     entry: "./build/src/index.js",
     output: {
