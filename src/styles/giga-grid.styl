@@ -2,11 +2,12 @@
 
 // we use material design colors and accents
 // see: https://www.google.com/design/spec/style/color.html#color-color-palette
-main-color = #004C70
+main-color = #e0e0e0
+header-text-color=#333
 cell-border-color = #f5f5f5
-selected-color = #E3F2FD
+selected-color = #f5f5f5
 subtotal-color = selected-color
-subtotal-selected-color = #BBDEFB
+subtotal-selected-color = #e0e0e0
 
 div.giga-grid
   margin 0
@@ -20,6 +21,7 @@ div.giga-grid
   table
     border-collapse collapse
     font-size 13px
+
 
   tr.selected
     background-color selected-color
@@ -40,7 +42,7 @@ div.giga-grid
   tr th
     font-weight normal
     background-color: main-color
-    color #fff
+    color header-text-color
 
   tr th.column-group
     text-align center

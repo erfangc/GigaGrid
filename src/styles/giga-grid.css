@@ -6,7 +6,7 @@ div.giga-grid .dropdown-menu-align-right {
   border-radius: 2px;
   white-space: nowrap;
   padding: 10px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 0 2px 2px rgba(0,0,0,0.2);
   list-style: none;
   left: 0;
 }
@@ -18,7 +18,7 @@ div.giga-grid .dropdown-menu-align-left {
   border-radius: 2px;
   white-space: nowrap;
   padding: 10px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 0 2px 2px rgba(0,0,0,0.2);
   list-style: none;
   right: 0;
 }
@@ -30,7 +30,7 @@ div.giga-grid .dropdown-submenu-align-right {
   border-radius: 2px;
   white-space: nowrap;
   padding: 10px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 0 2px 2px rgba(0,0,0,0.2);
   list-style: none;
   top: 0;
   left: 100%;
@@ -43,7 +43,7 @@ div.giga-grid .dropdown-submenu-align-left {
   border-radius: 2px;
   white-space: nowrap;
   padding: 10px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 0 2px 2px rgba(0,0,0,0.2);
   list-style: none;
   top: 0;
   right: 50%;
@@ -86,10 +86,10 @@ div.giga-grid table {
   font-size: 13px;
 }
 div.giga-grid tr.selected {
-  background-color: #e3f2fd;
+  background-color: #f5f5f5;
 }
 div.giga-grid tr.subtotal-row.selected {
-  background-color: #bbdefb;
+  background-color: #e0e0e0;
 }
 div.giga-grid tr td,
 div.giga-grid tr th {
@@ -106,8 +106,8 @@ div.giga-grid td:first-child {
 }
 div.giga-grid tr th {
   font-weight: normal;
-  background-color: #004c70;
-  color: #fff;
+  background-color: #e0e0e0;
+  color: #333;
 }
 div.giga-grid tr th.column-group {
   text-align: center;
@@ -120,17 +120,17 @@ div.giga-grid tr td {
   border-left: none;
 }
 div.giga-grid tr.subtotal-row {
-  background-color: #e3f2fd;
+  background-color: #f5f5f5;
 }
 div.giga-grid thead tr:hover,
 div.giga-grid tbody tr:hover {
   cursor: pointer;
 }
 div.giga-grid tbody tr:hover {
-  background-color: #e3f2fd;
+  background-color: #f5f5f5;
 }
 div.giga-grid tr.subtotal-row:hover {
-  background-color: #bbdefb;
+  background-color: #e0e0e0;
 }
 div.giga-grid .numeric {
   text-align: right;

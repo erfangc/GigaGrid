@@ -110,7 +110,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
         return (
             <div className="giga-grid">
-                <div style={{width: this.state.widthMeasures.bodyWidth}}>
+                <div className="giga-grid-table-header-wrapper" style={{width: this.state.widthMeasures.bodyWidth}}>
                     <table>
                         <TableHeader dispatcher={this.dispatcher} columns={columns}/>
                     </table>
