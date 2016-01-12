@@ -21,6 +21,10 @@ body {
     margin: 0;
 }
 
+nav {
+    border-width: 0!important;
+}
+
 pre {
     /* bootstrap adds a weird background color to pre elements that we don't want with highlight.js */
     padding: 0;
