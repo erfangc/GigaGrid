@@ -1,15 +1,23 @@
-/**
- * Created by echen on 1/12/2016.
- */
+import * as $ from 'jquery';
+import {parsePixelValue} from "./WidthMeasureCalculator";
+
 export interface DisplayBoundaries {
     displayStart: number,
     displayEnd: number
 }
+
 export class ScrollCalculator {
     static computeDisplayBoundaries(rowHeight:string, viewport:HTMLDivElement, canvas:HTMLTableElement):DisplayBoundaries {
+        const viewportOffset = $(viewport).offset().top;
+        const canvasOffset = $(canvas).offset().top;
+        const progress = canvasOffset - viewportOffset;
+
+        const displayStart = Math.floor(progress / parsePixelValue(rowHeight));
+        const displayEnd = displayStart + Math.ceil(parsePixelValue(canvas.height) / parsePixelValue(rowHeight));
+        debugger;
         return {
-            displayStart: 0,
-            displayEnd: 0
+            displayStart: displayStart,
+            displayEnd: displayEnd
         };
     }
 }
