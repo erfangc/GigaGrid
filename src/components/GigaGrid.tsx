@@ -115,12 +115,16 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                         <TableHeader dispatcher={this.dispatcher} columns={columns}/>
                     </table>
                 </div>
-                <div className="giga-grid-body-scroll-y" style={bodyStyle}>
+                <div className="giga-grid-body-scroll-y" onScroll={this.handleScroll()} style={bodyStyle}>
                     <table>
                         <TableBody dispatcher={this.dispatcher} rows={this.state.rasterizedRows} columns={columns[columns.length-1]}/>
                     </table>
                 </div>
             </div>);
+    }
+
+    private handleScroll():any {
+        
     }
 
     private dispatchWidthChange() {
