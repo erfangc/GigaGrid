@@ -40,7 +40,6 @@ function countOrDistinct(detailRows:DetailRow[], columnDef:ColumnDef):any {
 }
 
 function countDistinct(detailRows:DetailRow[], columnDef:ColumnDef):number {
-    debugger;
     return _.chain(detailRows).map((r:DetailRow)=>r.getByColTag(columnDef.colTag)).sortBy().uniq(true).value().length;
 }
 
