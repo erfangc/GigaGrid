@@ -22,7 +22,7 @@ export interface TableHeaderProps extends GridSubcomponentProps<TableHeaderCell>
     isFirstColumn?: boolean
     isLastColumn?: boolean
 }
-
+// Comment
 class TableHeaderState {
     handleVisible:boolean;
 }
