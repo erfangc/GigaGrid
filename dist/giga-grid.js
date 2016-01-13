@@ -547,7 +547,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            height: this.props.bodyHeight || "100%",
 	            width: this.state.widthMeasures.bodyWidth
 	        };
-	        return (React.createElement("div", {"className": "giga-grid"}, React.createElement("div", {"className": "giga-grid-table-header-wrapper", "style": { width: this.state.widthMeasures.bodyWidth }}, React.createElement("table", null, React.createElement(TableHeader_1.TableHeader, {"dispatcher": this.dispatcher, "columns": columns}))), React.createElement("div", {"className": "giga-grid-body-scroll-y", "style": bodyStyle}, React.createElement("table", null, React.createElement(TableBody_1.TableBody, {"dispatcher": this.dispatcher, "rows": this.state.rasterizedRows, "columns": columns[columns.length - 1]})))));
+	        return (React.createElement("div", {"className": "giga-grid"}, React.createElement("div", {"className": "giga-grid-table-header-wrapper", "style": { width: this.state.widthMeasures.bodyWidth }}, React.createElement("table", null, React.createElement(TableHeader_1.TableHeader, {"dispatcher": this.dispatcher, "columns": columns}))), React.createElement("div", {"className": "giga-grid-body-scroll-y", "onScroll": this.handleScroll(), "style": bodyStyle}, React.createElement("table", null, React.createElement(TableBody_1.TableBody, {"dispatcher": this.dispatcher, "rows": this.state.rasterizedRows, "columns": columns[columns.length - 1]})))));
+	    };
+	    GigaGrid.prototype.handleScroll = function () {
 	    };
 	    GigaGrid.prototype.dispatchWidthChange = function () {
 	        // if no bodyWidth was provided through props and there are no explicit width set for columns, we need to dynamically the table's bodyWidth
@@ -20077,7 +20079,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return detailRows[0].getByColTag(columnDef.colTag);
 	}
 	function countDistinct(detailRows, columnDef) {
-	    debugger;
 	    return _.chain(detailRows).map(function (r) { return r.getByColTag(columnDef.colTag); }).sortBy().uniq(true).value().length;
 	}
 	function range(detailRows, columnDef) {
