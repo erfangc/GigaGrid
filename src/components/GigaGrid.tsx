@@ -31,6 +31,8 @@ import {TableBody} from "./TableBody";
 import {ColumnFactory} from "../models/ColumnLike";
 import {ColumnGroupDef} from "../models/ColumnLike";
 import {TableHeader} from "./TableHeader";
+import {ScrollCalculator} from "../static/ScrollCalculator";
+import {ChangeRowDisplayBoundsAction} from "../store/GigaStore";
 
 export interface GigaProps extends React.Props<GigaGrid> {
     initialSubtotalBys?:SubtotalBy[]
@@ -82,6 +84,8 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
     private store:GigaStore;
     private dispatcher:Dispatcher<GigaAction>;
+    private canvas:HTMLElement;
+    private viewport:HTMLElement;
 
     constructor(props:GigaProps) {
         super(props);
@@ -115,16 +119,25 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                         <TableHeader dispatcher={this.dispatcher} columns={columns}/>
                     </table>
                 </div>
-                <div className="giga-grid-body-scroll-y" onScroll={this.handleScroll()} style={bodyStyle}>
-                    <table>
-                        <TableBody dispatcher={this.dispatcher} rows={this.state.rasterizedRows} columns={columns[columns.length-1]}/>
+                <div ref={c=>this.viewport=c}
+                     className="giga-grid-body-scroll-y"
+                     onScroll={()=>this.handleScroll()}
+                     style={bodyStyle}>
+                    <table ref={c=>this.canvas=c}>
+                        <TableBody dispatcher={this.dispatcher}
+                                   rows={this.state.rasterizedRows}
+                                   columns={columns[columns.length-1]}
+                                   displayStart={this.state.displayStart}
+                                   displayEnd={this.state.displayEnd}
+                                   rowHeight={"35px"}
+                        />
                     </table>
                 </div>
             </div>);
     }
 
-    private handleScroll():any {
-        
+    private handleScroll() {
+        this.dispatchDisplayBoundChange();
     }
 
     private dispatchWidthChange() {
@@ -150,6 +163,24 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
          */
         if (typeof window !== "undefined")
             window.addEventListener('resize', this.dispatchWidthChange.bind(this));
+
+        /*
+         re-compute displayStart && displayEnd
+         */
+        this.dispatchDisplayBoundChange();
+    }
+
+    private dispatchDisplayBoundChange() {
+        // todo do not assume 35px, use a dynamically evaluated value to accomodate runtime idiosyncracies
+        const $viewport = $(this.viewport);
+        const $canvas = $(this.canvas);
+        const action:ChangeRowDisplayBoundsAction = {
+            type: GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS,
+            canvas: $canvas,
+            viewport: $viewport,
+            rowHeight: "35px"
+        };
+        this.dispatcher.dispatch(action);
     }
 
     componentWillUnmount() {

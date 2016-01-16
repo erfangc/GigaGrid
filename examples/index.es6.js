@@ -6,6 +6,7 @@ import custom_cell_template from './custom_cell_template.ts!text';
 import row_selection from './row_selection.ts!text';
 import cell_selection from './cell_selection.ts!text';
 import column_grouping from './column_grouping.ts!text';
+import larger_data_set from './larger_data_set.ts!text';
 
 /*
  setup
@@ -22,7 +23,8 @@ var examples = [
     {id: "custom_cell_template", title: "Custom Cell Template", code: dropImports(custom_cell_template)},
     {id: "row_selection", title: "Row Selection", code: dropImports(row_selection)},
     {id: "cell_selection", title: "Cell Selection", code: dropImports(cell_selection)},
-    {id: "column_grouping", title: "Column Grouping", code: dropImports(column_grouping)}
+    {id: "column_grouping", title: "Column Grouping", code: dropImports(column_grouping)},
+    {id: "larger_data_set", title: "Larger Data Set (1K)", code: dropImports(larger_data_set)}
 ];
 
 const $navbar = $("ul.nav.navbar-nav");
