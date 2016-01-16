@@ -18,7 +18,7 @@ $.ajax("data/Hotels.json").done(function (data:any[]) {
         columnDefs: columnDefs
     });
 
-    ReactDOM.render(element, document.getElementById('larger_data_set'));
+    ReactDOM.render(element, document.getElementById('custom_column_width'));
 
 });
 
@@ -27,36 +27,42 @@ const columnDefs = [
         colTag: "Location",
         title: "Location",
         aggregationMethod: AggregationMethod.NONE,
-        format: ColumnFormat.STRING
+        format: ColumnFormat.STRING,
+        width: "250px"
     },
     {
         colTag: "Beds",
         title: "Beds",
         aggregationMethod: AggregationMethod.AVERAGE,
-        format: ColumnFormat.STRING
+        format: ColumnFormat.STRING,
+        width: "300px"
     },
     {
         colTag: "Breakfast Included",
         title: "Breakfast Included",
         aggregationMethod: AggregationMethod.COUNT_OR_DISTINCT,
-        format: ColumnFormat.STRING
+        format: ColumnFormat.STRING,
+        width: "200px"
     },
     {
         colTag: "Distance to Airport",
         title: "Distance to Airport",
         aggregationMethod: AggregationMethod.AVERAGE,
-        format: ColumnFormat.NUMBER
+        format: ColumnFormat.NUMBER,
+        width: "250px"
     },
     {
         colTag: "Price / Night",
         title: "Price / Night",
         aggregationMethod: AggregationMethod.AVERAGE,
-        format: ColumnFormat.NUMBER
+        format: ColumnFormat.NUMBER,
+        width: "250px"
     },
     {
         colTag: "Rating",
         title: "Rating",
         aggregationMethod: AggregationMethod.AVERAGE,
-        format: ColumnFormat.NUMBER
+        format: ColumnFormat.NUMBER,
+        width: "100px"
     }
 ];

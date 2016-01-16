@@ -45,6 +45,7 @@ export interface GigaProps extends React.Props<GigaGrid> {
     columnGroups?:ColumnGroupDef[]
     bodyHeight?:string
     bodyWidth?:string
+    rowHeight?:string
 }
 
 export interface GigaState {
@@ -87,6 +88,16 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
     private canvas:HTMLElement;
     private viewport:HTMLElement;
 
+    static defaultProps:GigaProps = {
+        initialSubtotalBys: [],
+        initialSortBys: [],
+        initialFilterBys: [],
+        data: [],
+        columnDefs: [],
+        bodyHeight: "100%",
+        rowHeight: "35px"
+    };
+
     constructor(props:GigaProps) {
         super(props);
         this.dispatcher = new Dispatcher<GigaAction>();
@@ -108,7 +119,8 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             columns = [ColumnFactory.createColumnsFromDefinition(this.props.columnDefs, this.state)];
 
         const bodyStyle = {
-            height: this.props.bodyHeight || "100%", // TODO we will need to give similar consideration to height as we did for width
+            // TODO we will need to give similar consideration to height as we did for width
+            height: this.props.bodyHeight || "100%",
             width: this.state.widthMeasures.bodyWidth
         };
 
@@ -129,7 +141,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                                    columns={columns[columns.length-1]}
                                    displayStart={this.state.displayStart}
                                    displayEnd={this.state.displayEnd}
-                                   rowHeight={"35px"}
+                                   rowHeight={this.props.rowHeight}
                         />
                     </table>
                 </div>
@@ -171,14 +183,13 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
     }
 
     private dispatchDisplayBoundChange() {
-        // todo do not assume 35px, use a dynamically evaluated value to accomodate runtime idiosyncracies
         const $viewport = $(this.viewport);
         const $canvas = $(this.canvas);
         const action:ChangeRowDisplayBoundsAction = {
             type: GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS,
             canvas: $canvas,
             viewport: $viewport,
-            rowHeight: "35px"
+            rowHeight: this.props.rowHeight
         };
         this.dispatcher.dispatch(action);
     }

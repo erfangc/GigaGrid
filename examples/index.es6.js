@@ -7,6 +7,7 @@ import row_selection from './row_selection.ts!text';
 import cell_selection from './cell_selection.ts!text';
 import column_grouping from './column_grouping.ts!text';
 import larger_data_set from './larger_data_set.ts!text';
+import custom_column_width from './custom_column_width.ts!text';
 
 /*
  setup
@@ -24,7 +25,8 @@ var examples = [
     {id: "row_selection", title: "Row Selection", code: dropImports(row_selection)},
     {id: "cell_selection", title: "Cell Selection", code: dropImports(cell_selection)},
     {id: "column_grouping", title: "Column Grouping", code: dropImports(column_grouping)},
-    {id: "larger_data_set", title: "Larger Data Set (1K)", code: dropImports(larger_data_set)}
+    {id: "larger_data_set", title: "Larger Data Set (1K)", code: dropImports(larger_data_set)},
+    {id: "custom_column_width", title: "Custom Column Width", code: dropImports(custom_column_width)}
 ];
 
 const $navbar = $("ul.nav.navbar-nav");
