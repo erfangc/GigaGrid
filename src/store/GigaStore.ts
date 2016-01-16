@@ -15,6 +15,13 @@ import {WidthMeasureCalculator} from "../static/WidthMeasureCalculator";
 import {Row} from "../models/Row";
 import {Column} from "../models/ColumnLike";
 import {TreeRasterizer} from "../static/TreeRasterizer";
+import {ScrollCalculator} from "../static/ScrollCalculator";
+
+/*
+ define the # of rows necessary to trigger progressive rendering
+ below which all row display bound change events are ignored
+ */
+export const PROGRESSIVE_RENDERING_THRESHOLD:number = 100;
 
 /**
  * state store for the table, relevant states and stored here. the only way to mutate these states are by sending GigaAction(s) through the Dispatcher given to the store at construction
@@ -42,7 +49,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return {
             rasterizedRows: rasterizedRows,
             displayStart: 0,
-            displayEnd: rasterizedRows.length - 1,
+            displayEnd: Math.min(rasterizedRows.length - 1, PROGRESSIVE_RENDERING_THRESHOLD),
             widthMeasures: WidthMeasureCalculator.computeWidthMeasures(this.props.bodyWidth, this.props.columnDefs),
             subtotalBys: this.props.initialSubtotalBys || [],
             sortBys: this.props.initialSortBys || [],
@@ -62,6 +69,9 @@ export class GigaStore extends ReduceStore<GigaState> {
              */
             case GigaActionType.TABLE_WIDTH_CHANGE:
                 newState = this.handleWidthChange(state, action as TableWidthChangeAction);
+                break;
+            case GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS:
+                newState = this.handleChangeRowDisplayBounds(state, action as ChangeRowDisplayBoundsAction);
                 break;
             /*
              Subtotal Actions
@@ -104,6 +114,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         }
         /*
          determine if an action should trigger rasterization
+         todo I wonder if we need to re-compute display bounds after rasterization if so, viewport and canvas must become states so we can access them here
          */
         if (GigaStore.shouldTriggerRasterization(action))
             newState.rasterizedRows = TreeRasterizer.rasterize(newState.tree);
@@ -159,6 +170,14 @@ export class GigaStore extends ReduceStore<GigaState> {
         const widthMeasures = WidthMeasureCalculator.computeWidthMeasures(action.width, this.props.columnDefs);
         const newState = _.clone(state);
         newState.widthMeasures = widthMeasures;
+        return newState;
+    }
+
+    private handleChangeRowDisplayBounds(state:GigaState, action:ChangeRowDisplayBoundsAction) {
+        const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(action.rowHeight, action.viewport, action.canvas);
+        const newState = _.clone(state);
+        newState.displayStart = displayStart;
+        newState.displayEnd = displayEnd;
         return newState;
     }
 
@@ -240,7 +259,8 @@ export enum GigaActionType {
     TOGGLE_ROW_COLLAPSE,
     TOGGLE_ROW_SELECT,
     TOGGLE_CELL_SELECT,
-    TABLE_WIDTH_CHANGE
+    TABLE_WIDTH_CHANGE,
+    CHANGE_ROW_DISPLAY_BOUNDS
 }
 
 export interface GigaAction {
@@ -257,6 +277,12 @@ export interface NewSubtotalAction extends GigaAction {
 
 export interface ClearSubtotalAction extends GigaAction {
 
+}
+
+export interface ChangeRowDisplayBoundsAction extends GigaAction {
+    viewport: JQuery
+    canvas: JQuery
+    rowHeight: string
 }
 
 export interface ClearSortAction extends GigaAction {
