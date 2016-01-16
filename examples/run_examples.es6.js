@@ -8,5 +8,5 @@ import '../build/examples/custom_cell_template.js';
 import '../build/examples/row_selection.js';
 import '../build/examples/cell_selection.js';
 import '../build/examples/column_grouping.js';
-import '../build/examples/larger_data_set';
-
+import '../build/examples/larger_data_set.js';
+import '../build/examples/custom_column_width.js';
