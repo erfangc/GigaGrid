@@ -1,3 +1,9 @@
+# Demo
+
+See the Grid in Action [Here](http://erfangc.github.io/GigaGrid/)
+
+![GigaGrd](https://raw.githubusercontent.com/erfangc/GigaGrid/master/giga-grid.png)
+
 # GigaGrid (Under Development) [![Build Status](https://travis-ci.org/erfangc/GigaGrid.svg?branch=master)](https://travis-ci.org/erfangc/GigaGrid)
 
 High performance, React.js table widget with Subtotals (Written in TypeScript)
