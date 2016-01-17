@@ -10,7 +10,7 @@ import {Row} from "../src/models/Row";
 import {AggregationMethod} from "../src/models/ColumnLike";
 import {GigaProps} from "../src/components/GigaGrid";
 
-$.ajax("data/Hotels.json").done(function (data:any[]) {
+$.ajax("./examples/data/Hotels.json").done(function (data:any[]) {
 
     const element = React.createElement<GigaProps>(GigaGrid, {
         bodyHeight: "500px",
