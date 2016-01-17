@@ -9,27 +9,26 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/solarized_light.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="examples/index.css">
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
 
-    <link rel="stylesheet" href="../jspm_packages/npm/font-awesome@4.5.0/css/font-awesome.css">
-    <link rel="stylesheet" href="../build/src/styles/giga-grid.css">
-    <script src="../jspm_packages/system.js"></script>
+    <link rel="stylesheet" href="./jspm_packages/npm/font-awesome@4.5.0/css/font-awesome.css">
+    <link rel="stylesheet" href="./build/src/styles/giga-grid.css">
+    <script src="jspm_packages/system.js"></script>
 
     <!--It is important we call this before loading config.js, baseURL needs to be in the first System.config() call-->
     <script>
         System.config({
-            baseURL: "../",
             packages: {
-                "../build": {
+                "./build": {
                     defaultExtension: "js",
                     format: "cjs"
                 }
             }
         });
     </script>
-    <script src="../config.js"></script>
+    <script src="config.js"></script>
 </head>
 <body>
 <div class="container">
@@ -126,7 +125,12 @@
     <br>
 </div>
 <script>
-    System.import('./index.es6');
+    System.import('./examples/index.es6').then(function () {
+        /*
+         run
+         */
+        System.import('examples/run_examples.es6.js');
+    });
 </script>
 </body>
 </html>

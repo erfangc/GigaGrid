@@ -57,9 +57,3 @@ $navbar.find("li a").on('click', (e)=> {
     });
     $(e.target).closest("li").addClass("active");
 });
-
-/*
- run
- */
-
-System.import('./run_examples.es6');
