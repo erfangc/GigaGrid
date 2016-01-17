@@ -44,7 +44,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
                               toggleHandle={()=>this.dropdownToggleHandleRef}>
                     <SortMenuItem tableRowColumnDef={this.props.tableColumnDef} isLastColumn={this.props.isLastColumn}
                                   dispatcher={this.props.dispatcher}/>
-                    <SubtotalByMenuItem tableRowColumnDef={this.props.tableColumnDef}
+                    <SubtotalByMenuItem column={this.props.tableColumnDef}
                                         isLastColumn={this.props.isLastColumn}
                                         dispatcher={this.props.dispatcher}/>
                     <FilterMenuItem dispatcher={this.props.dispatcher}

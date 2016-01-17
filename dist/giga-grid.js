@@ -20250,7 +20250,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var columnMap = _.chain(columns).map(function (column) { return column.colTag; }).object(columns).value();
 	        var nestedColumns = [[], []];
 	        _.forEach(columnGroupDefs, function (groupDef, i) {
-	            nestedColumns[0].push({ colTag: "column_group_" + (i + 1), title: groupDef.title, colSpan: groupDef.columns.length });
+	            nestedColumns[0].push({
+	                colTag: "column_group_" + (i + 1),
+	                title: groupDef.title,
+	                colSpan: groupDef.columns.length
+	            });
 	            _.forEach(groupDef.columns, function (colTag) { return nestedColumns[1].push(columnMap[colTag]); });
 	        });
 	        return nestedColumns;
@@ -20288,38 +20292,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * to traverse the grandTotal and find the detailRow's immediate parent SubtotalRow
 	         * we store the detailRow's sector names in an ordered array
 	         */
-	        var sectors = []; // temporary array of strings to keep track sector names in sequence
+	        var subtotalTitles = []; // temporary array of strings to keep track subtotal titles names in sequence
 	        grandTotal.detailRows.push(detailedRow);
 	        subtotalBys.forEach(function (subtotalBy) {
 	            // the subtotal title
-	            var bucketTitle = detailedRow.data()[subtotalBy.colTag];
+	            var bucketTitle = TreeBuilder.resolveSubtotalTitle(subtotalBy, detailedRow);
 	            if (bucketTitle !== undefined) {
-	                sectors.push(bucketTitle);
-	                var subtotalRow = TreeBuilder.traverseOrCreate(grandTotal, sectors);
+	                subtotalTitles.push(bucketTitle);
+	                var subtotalRow = TreeBuilder.traverseOrCreate(grandTotal, subtotalTitles);
 	                subtotalRow.detailRows.push(detailedRow);
 	            }
 	        });
-	        detailedRow.setSectorPath(sectors);
+	        detailedRow.setSectorPath(subtotalTitles);
 	    };
 	    ;
 	    /**
 	     *
 	     * @param grandTotal
-	     * @param sectors
+	     * @param subtotalTitles
 	     * @returns {SubtotalRow}
 	     */
-	    TreeBuilder.traverseOrCreate = function (grandTotal, sectors) {
+	    TreeBuilder.traverseOrCreate = function (grandTotal, subtotalTitles) {
 	        // traverse to the correct SubtotalRow
 	        var currentRow = grandTotal;
-	        for (var k = 0; k < sectors.length; k++) {
+	        for (var k = 0; k < subtotalTitles.length; k++) {
 	            // update the current subtotal row
-	            if (currentRow.hasChildWithTitle(sectors[k]))
-	                currentRow = currentRow.getChildByTitle(sectors[k]);
+	            if (currentRow.hasChildWithTitle(subtotalTitles[k]))
+	                currentRow = currentRow.getChildByTitle(subtotalTitles[k]);
 	            else {
 	                // create a new sector if it is not already available
-	                var newRow = new Row_1.SubtotalRow(sectors[k]);
+	                var newRow = new Row_1.SubtotalRow(subtotalTitles[k]);
 	                // set the sector path for the new SubtotalRow we just created the length of which determines its depth
-	                newRow.setSectorPath(sectors.slice(0, k + 1));
+	                newRow.setSectorPath(subtotalTitles.slice(0, k + 1));
 	                currentRow.addChild(newRow);
 	                currentRow = newRow;
 	            }
@@ -20327,6 +20331,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return currentRow;
 	    };
 	    ;
+	    TreeBuilder.resolveSubtotalTitle = function (subtotalBy, detailedRow) {
+	        if (subtotalBy.groupBy)
+	            return subtotalBy.groupBy(detailedRow);
+	        else
+	            return detailedRow.getByColTag(subtotalBy.colTag);
+	    };
 	    return TreeBuilder;
 	})();
 	exports.TreeBuilder = TreeBuilder;
@@ -21067,7 +21077,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    TableHeaderCell.prototype.renderDropdownMenu = function () {
 	        var _this = this;
-	        return (React.createElement("span", {"style": { position: "relative" }}, React.createElement(DropdownMenu_1.DropdownMenu, {"ref": function (c) { return _this.dropdownMenuRef = c; }, "alignLeft": this.props.isLastColumn, "toggleHandle": function () { return _this.dropdownToggleHandleRef; }}, React.createElement(SortMenuItem_1.SortMenuItem, {"tableRowColumnDef": this.props.tableColumnDef, "isLastColumn": this.props.isLastColumn, "dispatcher": this.props.dispatcher}), React.createElement(SubtotalByMenuItem_1.SubtotalByMenuItem, {"tableRowColumnDef": this.props.tableColumnDef, "isLastColumn": this.props.isLastColumn, "dispatcher": this.props.dispatcher}), React.createElement(FilterMenuItem_1.FilterMenuItem, {"dispatcher": this.props.dispatcher, "isLastColumn": this.props.isLastColumn, "tableRowColumnDef": this.props.tableColumnDef}))));
+	        return (React.createElement("span", {"style": { position: "relative" }}, React.createElement(DropdownMenu_1.DropdownMenu, {"ref": function (c) { return _this.dropdownMenuRef = c; }, "alignLeft": this.props.isLastColumn, "toggleHandle": function () { return _this.dropdownToggleHandleRef; }}, React.createElement(SortMenuItem_1.SortMenuItem, {"tableRowColumnDef": this.props.tableColumnDef, "isLastColumn": this.props.isLastColumn, "dispatcher": this.props.dispatcher}), React.createElement(SubtotalByMenuItem_1.SubtotalByMenuItem, {"column": this.props.tableColumnDef, "isLastColumn": this.props.isLastColumn, "dispatcher": this.props.dispatcher}), React.createElement(FilterMenuItem_1.FilterMenuItem, {"dispatcher": this.props.dispatcher, "isLastColumn": this.props.isLastColumn, "tableRowColumnDef": this.props.tableColumnDef}))));
 	    };
 	    TableHeaderCell.prototype.renderSortIcon = function () {
 	        if (this.props.tableColumnDef.sortDirection != undefined) {
@@ -31156,6 +31166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(14);
 	var classNames = __webpack_require__(50);
+	var _ = __webpack_require__(38);
 	var ColumnLike_1 = __webpack_require__(41);
 	var GigaStore_1 = __webpack_require__(20);
 	var DropdownMenu_1 = __webpack_require__(54);
@@ -31165,14 +31176,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _super.call(this, props);
 	    }
 	    SubtotalByMenuItem.prototype.isNumericColumn = function () {
-	        return this.props.tableRowColumnDef.format === ColumnLike_1.ColumnFormat.NUMBER;
+	        return this.props.column.format === ColumnLike_1.ColumnFormat.NUMBER;
 	    };
 	    SubtotalByMenuItem.prototype.onSubmit = function (e) {
+	        var _this = this;
+	        var subtotalBy = {
+	            colTag: this.props.column.colTag
+	        };
+	        if (this.isNumericColumn()) {
+	            if (this.getInputErrors(this.input).length > 0)
+	                return;
+	            else
+	                subtotalBy.groupBy = function (detailRow) {
+	                    var cutoffs = _this.input.value.split(",").map(function (entry) { return parseFloat(entry); });
+	                    cutoffs.sort();
+	                    var column = _this.props.column;
+	                    var value = detailRow.getByColTag(column.colTag) || 0;
+	                    if (value > cutoffs[cutoffs.length - 1])
+	                        return column.title + " " + cutoffs[cutoffs.length - 1] + " +";
+	                    for (var i = cutoffs.length - 2; i >= 0; i--) {
+	                        if (cutoffs[i] < value)
+	                            return column.title + " " + cutoffs[i] + " - " + cutoffs[i + 1];
+	                    }
+	                    return column.title + " " + cutoffs[0] + " -";
+	                };
+	        }
 	        var action = {
 	            type: GigaStore_1.GigaActionType.NEW_SUBTOTAL,
-	            subtotalBys: [{
-	                    colTag: this.props.tableRowColumnDef.colTag
-	                }]
+	            subtotalBys: [subtotalBy]
 	        };
 	        this.props.dispatcher.dispatch(action);
 	    };
@@ -31204,7 +31235,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    SubtotalByMenuItem.prototype.renderForm = function () {
 	        var _this = this;
-	        return (React.createElement("div", null, React.createElement("div", null, "Enter Buckets to Subtotal By"), React.createElement("input", {"type": "text", "ref": function (c) { return _this.input = c; }, "placeholder": "ex: 1,3,5,7,9"})));
+	        return (React.createElement("div", null, React.createElement("div", null, "Enter Buckets to Subtotal By"), React.createElement("input", {"type": "text", "onChange": function (e) { return _this.handleInputChange(e); }, "ref": function (c) { return _this.input = c; }, "placeholder": "ex: 1,3,5,7,9"}), React.createElement("div", {"style": { color: "red" }}, this.errorMessage)));
+	    };
+	    SubtotalByMenuItem.prototype.getInputErrors = function (input) {
+	        // validator function
+	        function validate(entry) {
+	            if (isNaN(entry) && entry !== "")
+	                return entry;
+	            else
+	                return null;
+	        }
+	        var val = input.value;
+	        return _.compact(val.split(",").map(function (entry) { return validate(entry); }));
+	    };
+	    SubtotalByMenuItem.prototype.handleInputChange = function (e) {
+	        var errors = this.getInputErrors(e.target);
+	        if (errors.length > 0)
+	            this.errorMessage = "'" + errors.join(", ") + "' Must Be Number(s)";
+	        else
+	            this.errorMessage = "";
+	        this.setState({});
 	    };
 	    SubtotalByMenuItem.prototype.render = function () {
 	        return (React.createElement(DropdownMenu_1.SimpleDropdownMenuItem, {"text": "Subtotal", "isLastColumn": this.props.isLastColumn}, this.renderAddSubtotal(), this.renderClearSubtotal()));

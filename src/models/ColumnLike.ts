@@ -1,6 +1,7 @@
 import {Row} from "./Row";
 import {GigaState} from "../components/GigaGrid";
 import * as _ from 'lodash';
+import {DetailRow} from "./Row";
 
 export enum AggregationMethod {
     SUM, WEIGHTED_AVERAGE, AVERAGE, RANGE, COUNT, COUNT_DISTINCT, COUNT_OR_DISTINCT, NONE
@@ -38,6 +39,7 @@ export interface FilterBy extends ColumnLike {
 }
 
 export interface SubtotalBy extends ColumnLike {
+    groupBy?:(detailRow:DetailRow)=>string
 }
 
 export interface SortBy {
@@ -79,13 +81,17 @@ export class ColumnFactory {
         return column;
     }
 
-    static createColumnsFromGroupDefinition(columnGroupDefs: ColumnGroupDef[], columnDefs: ColumnDef[], state: GigaState):Column[][] {
+    static createColumnsFromGroupDefinition(columnGroupDefs:ColumnGroupDef[], columnDefs:ColumnDef[], state:GigaState):Column[][] {
 
         const columns = ColumnFactory.createColumnsFromDefinition(columnDefs, state);
         const columnMap = _.chain(columns).map((column:Column)=>column.colTag).object(columns).value();
-        const nestedColumns: Column[][] = [[],[]];
-        _.forEach(columnGroupDefs, (groupDef:ColumnGroupDef, i: number)=> {
-            nestedColumns[0].push({colTag: `column_group_${i+1}`, title: groupDef.title, colSpan: groupDef.columns.length});
+        const nestedColumns:Column[][] = [[], []];
+        _.forEach(columnGroupDefs, (groupDef:ColumnGroupDef, i:number)=> {
+            nestedColumns[0].push({
+                colTag: `column_group_${i + 1}`,
+                title: groupDef.title,
+                colSpan: groupDef.columns.length
+            });
             _.forEach(groupDef.columns, colTag=>nestedColumns[1].push(columnMap[colTag]));
         });
         return nestedColumns;
