@@ -21,44 +21,51 @@ export class TreeBuilder {
          * to traverse the grandTotal and find the detailRow's immediate parent SubtotalRow
          * we store the detailRow's sector names in an ordered array
          */
-        const sectors:string[] = []; // temporary array of strings to keep track sector names in sequence
+        const subtotalTitles:string[] = []; // temporary array of strings to keep track subtotal titles names in sequence
         grandTotal.detailRows.push(detailedRow);
         subtotalBys.forEach(subtotalBy => {
             // the subtotal title
-            const bucketTitle = detailedRow.data()[subtotalBy.colTag];
+            const bucketTitle = TreeBuilder.resolveSubtotalTitle(subtotalBy, detailedRow);
             if (bucketTitle !== undefined) {
-                sectors.push(bucketTitle);
-                const subtotalRow = TreeBuilder.traverseOrCreate(grandTotal, sectors);
+                subtotalTitles.push(bucketTitle);
+                const subtotalRow = TreeBuilder.traverseOrCreate(grandTotal, subtotalTitles);
                 subtotalRow.detailRows.push(detailedRow);
             }
         });
-        detailedRow.setSectorPath(sectors);
+        detailedRow.setSectorPath(subtotalTitles);
     };
 
     /**
      *
      * @param grandTotal
-     * @param sectors
+     * @param subtotalTitles
      * @returns {SubtotalRow}
      */
-    private static traverseOrCreate(grandTotal:SubtotalRow, sectors:string[]):SubtotalRow {
+    private static traverseOrCreate(grandTotal:SubtotalRow, subtotalTitles:string[]):SubtotalRow {
         // traverse to the correct SubtotalRow
         var currentRow:SubtotalRow = grandTotal;
-        for (let k = 0; k < sectors.length; k++) {
+        for (let k = 0; k < subtotalTitles.length; k++) {
             // update the current subtotal row
-            if (currentRow.hasChildWithTitle(sectors[k]))
-                currentRow = currentRow.getChildByTitle(sectors[k]);
+            if (currentRow.hasChildWithTitle(subtotalTitles[k]))
+                currentRow = currentRow.getChildByTitle(subtotalTitles[k]);
             else {
                 // create a new sector if it is not already available
-                const newRow = new SubtotalRow(sectors[k]);
+                const newRow = new SubtotalRow(subtotalTitles[k]);
                 // set the sector path for the new SubtotalRow we just created the length of which determines its depth
-                newRow.setSectorPath(sectors.slice(0, k + 1));
+                newRow.setSectorPath(subtotalTitles.slice(0, k + 1));
                 currentRow.addChild(newRow);
                 currentRow = newRow;
             }
         }
         return currentRow;
     };
+
+    private static resolveSubtotalTitle(subtotalBy:SubtotalBy, detailedRow:DetailRow) {
+        if (subtotalBy.groupBy)
+            return subtotalBy.groupBy(detailedRow);
+        else
+            return detailedRow.getByColTag(subtotalBy.colTag);
+    }
 
 }
 

@@ -58,5 +58,11 @@ const columnDefs = [
         title: "Rating",
         aggregationMethod: AggregationMethod.AVERAGE,
         format: ColumnFormat.NUMBER
+    },
+    {
+        colTag: "Email",
+        title: "Email",
+        aggregationMethod: AggregationMethod.AVERAGE,
+        format: ColumnFormat.STRING
     }
 ];
