@@ -64,7 +64,7 @@ npm install phantomjs karma-phantomjs-launcher karma karma-jasmine karma-jspm -g
 karma start karma2.conf.js
 ```
 
-Alternatively, you can run
+Alternatively, you can try to run
 
 ```bash
 # this will clean the build directory and re-compile all the source files
