@@ -33,7 +33,10 @@ const columnDefs = [
         colTag: "Beds",
         title: "Beds",
         aggregationMethod: AggregationMethod.AVERAGE,
-        format: ColumnFormat.STRING
+        format: ColumnFormat.STRING,
+        formatInstruction: {
+            roundTo: 0
+        }
     },
     {
         colTag: "Breakfast Included",
@@ -45,18 +48,27 @@ const columnDefs = [
         colTag: "Distance to Airport",
         title: "Distance to Airport",
         aggregationMethod: AggregationMethod.AVERAGE,
+        formatInstruction: {
+            roundTo: 2
+        },
         format: ColumnFormat.NUMBER
     },
     {
         colTag: "Price / Night",
         title: "Price / Night",
         aggregationMethod: AggregationMethod.AVERAGE,
-        format: ColumnFormat.NUMBER
+        format: ColumnFormat.NUMBER,
+        formatInstruction: {
+            roundTo: 2
+        }
     },
     {
         colTag: "Rating",
         title: "Rating",
         aggregationMethod: AggregationMethod.AVERAGE,
-        format: ColumnFormat.NUMBER
+        format: ColumnFormat.NUMBER,
+        formatInstruction: {
+            roundTo: 2
+        }
     }
 ];
