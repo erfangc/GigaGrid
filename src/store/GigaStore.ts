@@ -1,3 +1,5 @@
+///<reference path="../../typings/tsd.d.ts"/>
+
 import * as Flux from 'flux';
 import * as FluxUtils from 'flux/utils';
 import * as _ from 'lodash';
