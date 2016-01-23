@@ -22,9 +22,16 @@ export enum SortDirection {
     ASC, DESC
 }
 
+export interface FormatInstruction {
+    roundTo?:number
+    multiplier?:number
+    separator?:boolean
+}
+
 export interface ColumnDef extends ColumnLike {
     width?:string
     weightBy?:string
+    formatInstruction?: FormatInstruction
     cellTemplateCreator?:(data:any, column?:Column)=>JSX.Element
 }
 

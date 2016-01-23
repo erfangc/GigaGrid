@@ -20130,6 +20130,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var val = detailRows.map(function (r) { return r.getByColTag(columnDef.colTag); });
 	    return _.min(val) + " - " + _.max(val);
 	}
+	function format(value, fmtInstruction) {
+	    if (!fmtInstruction)
+	        return value;
+	    function addCommas(nStr) {
+	        nStr += '';
+	        var x = nStr.split('.');
+	        var x1 = x[0];
+	        var x2 = x.length > 1 ? '.' + x[1] : '';
+	        var rgx = /(\d+)(\d{3})/;
+	        while (rgx.test(x1)) {
+	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	        }
+	        return x1 + x2;
+	    }
+	    var result = value;
+	    if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result))
+	        result *= value;
+	    if (fmtInstruction.roundTo && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
+	        result = parseFloat(result.toFixed(fmtInstruction.roundTo));
+	    if (fmtInstruction.separator && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
+	        result = addCommas(result);
+	    return result;
+	}
 	/**
 	 * these should return Tree(s) as oppose to being void ... I want to use Immutable.js to simplify things where possible
 	 */
@@ -20182,7 +20205,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    value = "";
 	                    break;
 	            }
-	            aggregated[columnDef.colTag] = value;
+	            aggregated[columnDef.colTag] = format(value, columnDef.formatInstruction);
 	        });
 	        return aggregated;
 	    };

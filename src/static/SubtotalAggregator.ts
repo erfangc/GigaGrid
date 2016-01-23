@@ -4,6 +4,7 @@ import {DetailRow} from "../models/Row";
 import {AggregationMethod} from "../models/ColumnLike";
 import {Tree} from "./TreeBuilder";
 import * as _ from "lodash";
+import {FormatInstruction} from "../models/ColumnLike";
 
 function straightSum(detailRows:DetailRow[], columnDef:ColumnDef):number {
     return _.sum(detailRows.map(r=>r.getByColTag(columnDef.colTag)));
@@ -46,6 +47,34 @@ function countDistinct(detailRows:DetailRow[], columnDef:ColumnDef):number {
 function range(detailRows:DetailRow[], columnDef:ColumnDef):string {
     const val = detailRows.map((r:DetailRow)=>r.getByColTag(columnDef.colTag));
     return `${_.min(val)} - ${_.max(val)}`;
+}
+
+function format(value:any, fmtInstruction:FormatInstruction):any {
+    if (!fmtInstruction)
+        return value;
+
+    function addCommas(nStr) {
+        nStr += '';
+        var x = nStr.split('.');
+        var x1 = x[0];
+        var x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    }
+
+
+    var result = value;
+    if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result))
+        result *= value;
+    if (typeof fmtInstruction.roundTo !== "undefined" && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
+        result = parseFloat(result.toFixed(fmtInstruction.roundTo));
+    if (fmtInstruction.separator && !isNaN(result))
+        result = addCommas(result);
+
+    return result;
 }
 
 
@@ -102,7 +131,7 @@ export class SubtotalAggregator {
                     value = "";
                     break;
             }
-            aggregated[columnDef.colTag] = value;
+            aggregated[columnDef.colTag] = format(value, columnDef.formatInstruction);
         });
         return aggregated;
     }
