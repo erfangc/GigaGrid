@@ -40,6 +40,7 @@ export class GigaStore extends ReduceStore<GigaState> {
     }
 
     getInitialState():GigaState {
+        debugger;
         var tree = TreeBuilder.buildTree(this.props.data, this.props.initialSubtotalBys);
         SubtotalAggregator.aggregateTree(tree, this.props.columnDefs);
 
