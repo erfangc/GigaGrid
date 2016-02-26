@@ -1,6 +1,6 @@
 {
   "name": "giga-grid",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Massively performant, multi-layered React.js table widget Written in TypeScript",
   "main": "dist/giga-grid.js",
   "scripts": {
@@ -25,10 +25,6 @@
     "subtotal"
   ],
   "dependencies": {
-    "classnames": "^2.2.1",
-    "flux": "^2.1.1",
-    "jquery": "^2.1.4",
-    "lodash": "^3.10.1",
     "react": "^0.14.6",
     "react-dom": "^0.14.6"
   },
@@ -39,8 +35,12 @@
   },
   "homepage": "https://github.com/erfangc/GigaGrid#readme",
   "devDependencies": {
+    "classnames": "^2.2.1",
+    "jquery": "^2.1.4",
+    "lodash": "^3.10.1",
     "css-loader": "^0.23.1",
     "file-loader": "^0.8.5",
+    "flux": "^2.1.1",
     "jasmine-core": "^2.4.1",
     "jspm": "^0.16.19",
     "karma": "^0.13.15",
