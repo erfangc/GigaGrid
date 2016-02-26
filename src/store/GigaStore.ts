@@ -35,12 +35,24 @@ export class GigaStore extends ReduceStore<GigaState> {
     private props:GigaProps;
 
     constructor(dispatcher:Dispatcher<GigaAction>, props:GigaProps) {
-        this.props = props;
         super(dispatcher);
+        this.props = props;
+        dispatcher.dispatch({
+            type: GigaActionType.INITIALIZE
+        });
     }
 
     getInitialState():GigaState {
-        debugger;
+        return null;
+    }
+
+    /**
+     * ES6 disallow using `this` before `super()`, however we need the props to derive the initial state
+     * so we kind of hack around it ... the designers of the Flux paradigm never though I would use flux store to manage widget
+     * state as oppose to application state?
+     */
+    initialize():GigaState {
+
         var tree = TreeBuilder.buildTree(this.props.data, this.props.initialSubtotalBys);
         SubtotalAggregator.aggregateTree(tree, this.props.columnDefs);
 
@@ -67,6 +79,9 @@ export class GigaStore extends ReduceStore<GigaState> {
            action:GigaAction):GigaState {
         var newState:GigaState;
         switch (action.type) {
+            case GigaActionType.INITIALIZE:
+                newState = this.initialize();
+                break;
             /*
              * Width Change Action
              */
@@ -250,6 +265,7 @@ export class GigaStore extends ReduceStore<GigaState> {
  */
 
 export enum GigaActionType {
+    INITIALIZE,
     NEW_SUBTOTAL,
     ADD_SUBTOTAL,
     CLEAR_SUBTOTAL,

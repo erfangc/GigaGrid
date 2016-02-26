@@ -31,7 +31,7 @@ describe("GigaStore", ()=> {
     });
 
     it("can deduce the correct initial state", ()=> {
-        const initialState = store.getInitialState();
+        const initialState = store.initialize(); // not getInitialState()
         expect(initialState).toBeTruthy();
         expect(initialState.subtotalBys).toEqual([]);
         const state = store.getState();
