@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as Flux from 'flux';
 import * as FluxUtils from 'flux/utils';
+import $ = require('jquery');
 import ReactElement = __React.ReactElement;
 import {SubtotalBy} from "../models/ColumnLike";
 import {ColumnDef} from "../models/ColumnLike";
