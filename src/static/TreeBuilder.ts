@@ -35,6 +35,14 @@ export class TreeBuilder {
         detailedRow.setSectorPath(subtotalTitles);
     };
 
+    // TODO add tests
+    public static toggleChildrenCollapse(node:SubtotalRow, state: boolean = true) {
+        node.getChildren().forEach((child)=>{
+            child.toggleCollapse(state);
+            TreeBuilder.toggleChildrenCollapse(child);
+        });
+    }
+
     /**
      *
      * @param grandTotal
