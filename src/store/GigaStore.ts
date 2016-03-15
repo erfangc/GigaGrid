@@ -77,6 +77,7 @@ export class GigaStore extends ReduceStore<GigaState> {
 
     reduce(state:GigaState,
            action:GigaAction):GigaState {
+
         var newState:GigaState;
         switch (action.type) {
             case GigaActionType.INITIALIZE:
@@ -105,6 +106,12 @@ export class GigaStore extends ReduceStore<GigaState> {
              */
             case GigaActionType.TOGGLE_ROW_COLLAPSE:
                 newState = this.handleToggleCollapse(state, action as ToggleCollapseAction);
+                break;
+            case GigaActionType.COLLAPSE_ALL:
+                newState = this.handleToggleCollapseAll(state, action);
+                break;
+            case GigaActionType.EXPAND_ALL:
+                newState = this.handleToggleExpandAll(state, action);
                 break;
             /*
              Sort Actions
@@ -152,6 +159,8 @@ export class GigaStore extends ReduceStore<GigaState> {
                 GigaActionType.NEW_SORT,
                 GigaActionType.NEW_SUBTOTAL,
                 GigaActionType.TOGGLE_ROW_COLLAPSE,
+                GigaActionType.COLLAPSE_ALL,
+                GigaActionType.EXPAND_ALL
             ].indexOf(action.type) !== -1;
     }
 
@@ -202,6 +211,14 @@ export class GigaStore extends ReduceStore<GigaState> {
     /*
      Subtotal Action Handlers
      */
+    private handleToggleExpandAll(state:GigaState, action: GigaAction):GigaState {
+        TreeBuilder.toggleChildrenCollapse(state.tree.getRoot(), false);
+        return _.clone(state);
+    }
+    private handleToggleCollapseAll(state:GigaState, action: GigaAction):GigaState {
+        TreeBuilder.toggleChildrenCollapse(state.tree.getRoot());
+        return _.clone(state);
+    }
 
     private handleToggleCollapse(state:GigaState, action:ToggleCollapseAction):GigaState {
         const row = action.subtotalRow;
@@ -211,7 +228,9 @@ export class GigaStore extends ReduceStore<GigaState> {
 
     private handleSubtotal(state:GigaState,
                            action:NewSubtotalAction):GigaState {
-        const newTree = TreeBuilder.buildTree(this.props.data, action.subtotalBys);
+        // TODO hacky
+        state.subtotalBys.push(action.subtotalBys[0]);
+        const newTree = TreeBuilder.buildTree(this.props.data, state.subtotalBys);
         SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
         const newState = _.clone(state);
         newState.tree = newTree;
@@ -276,6 +295,8 @@ export enum GigaActionType {
     ADD_FILTER,
     CLEAR_FILTER,
     TOGGLE_ROW_COLLAPSE,
+    COLLAPSE_ALL,
+    EXPAND_ALL,
     TOGGLE_ROW_SELECT,
     TOGGLE_CELL_SELECT,
     TABLE_WIDTH_CHANGE,

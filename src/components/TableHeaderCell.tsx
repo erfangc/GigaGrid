@@ -12,6 +12,8 @@ import {SortDirection} from "../models/ColumnLike";
 import {SubtotalByMenuItem} from "./dropdown/SubtotalByMenuItem";
 import {FilterMenuItem} from "./dropdown/FilterMenuItem";
 import {parsePixelValue} from "../static/WidthMeasureCalculator";
+import {CollapseAllMenuItem} from "./dropdown/CollapseAllMenuItem";
+import {ExpandAllMenuItem} from "./dropdown/ExpandAllMenuItem";
 
 export interface GridSubcomponentProps<T> extends React.Props<T> {
     dispatcher: Dispatcher<GigaAction>;
@@ -50,6 +52,12 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
                     <FilterMenuItem dispatcher={this.props.dispatcher}
                                     isLastColumn={this.props.isLastColumn}
                                     tableRowColumnDef={this.props.tableColumnDef}/>
+                    <CollapseAllMenuItem dispatcher={this.props.dispatcher}
+                                         isLastColumn={this.props.isLastColumn}
+                                         tableRowColumnDef={this.props.tableColumnDef}/>
+                    <ExpandAllMenuItem dispatcher={this.props.dispatcher}
+                                         isLastColumn={this.props.isLastColumn}
+                                         tableRowColumnDef={this.props.tableColumnDef}/>
                 </DropdownMenu>
             </span>
 
