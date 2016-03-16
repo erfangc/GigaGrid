@@ -34,19 +34,19 @@ export class TableHeader extends React.Component<TableHeaderProps,any> {
         const trs:Element[] = [];
         var i:number;
         for (i = 0; i < this.props.columns.length - 1; i++) {
-            trs.push(this.renderColumnGroups(this.props.columns[i], i));
+            trs.push(TableHeader.renderColumnGroups(this.props.columns[i], i));
         }
         trs.push(this.renderLeafColumns(this.props.columns[i], i));
         return trs;
     }
 
-    private renderColumnGroups(columns:Column[], key:number):Element {
+    private static renderColumnGroups(columns:Column[], key:number):Element {
         const ths = columns.map((column:Column, i:number)=> {
             return (
                 <th className="column-group" key={i} colSpan={column.colSpan}>{column.title}</th>
             );
         });
-        ths.push(this.renderPlaceholder("column-group"));
+        ths.push(TableHeader.renderPlaceholder("column-group"));
         return (<tr className="column-group-row" key={key}>{ths}</tr>);
     }
 
@@ -55,11 +55,11 @@ export class TableHeader extends React.Component<TableHeaderProps,any> {
             return <TableHeaderCell tableColumnDef={colDef} key={i} isFirstColumn={i===0}
                                     isLastColumn={i===columns.length-1} dispatcher={this.props.dispatcher}/>
         });
-        ths.push(this.renderPlaceholder());
+        ths.push(TableHeader.renderPlaceholder());
         return (<tr key={key}>{ths}</tr>);
     }
 
-    private renderPlaceholder(className?:string) {
+    private static renderPlaceholder(className?:string) {
         const scrollBarWidth = getScrollBarWidth();
         /*
          add an placeholder to align the header with cells

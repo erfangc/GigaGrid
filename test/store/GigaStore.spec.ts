@@ -44,7 +44,7 @@ describe("GigaStore", ()=> {
 
         var newSubtotalAction:NewSubtotalAction = {
             type: GigaActionType.NEW_SUBTOTAL,
-            subtotalBys: [{colTag: "gender"}]
+            subtotalBy: {colTag: "gender"}
         };
 
         it("can handle NEW_SUBTOTAL action", ()=> {
@@ -54,7 +54,7 @@ describe("GigaStore", ()=> {
             dispatcher.dispatch(newSubtotalAction);
             state = store.getState();
             expect(state.subtotalBys.length).toBe(1);
-            expect(state.subtotalBys[0]).toBe(newSubtotalAction.subtotalBys[0]);
+            expect(state.subtotalBys[0]).toBe(newSubtotalAction.subtotalBy);
             const children = state.tree.getRoot().getChildren();
             expect(children.length).toBe(2);
             expect(state.tree.getRoot().getChildByTitle("Male")).toBeDefined();
@@ -65,7 +65,7 @@ describe("GigaStore", ()=> {
         it("can handle CLEAR_SUBTOTAL action", ()=> {
             dispatcher.dispatch(newSubtotalAction);
             var state = store.getState();
-            expect(state.subtotalBys[0]).toBe(newSubtotalAction.subtotalBys[0]);
+            expect(state.subtotalBys[0]).toBe(newSubtotalAction.subtotalBy);
             expect(state.rasterizedRows.length).toBe(12);
 
             // clear subtotal

@@ -83,6 +83,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
         const columnDef = this.props.tableColumnDef;
 
         const cx = classNames({
+            "dropdown-menu-toggle-handle": true,
             "fa": true,
             "fa-bars": true,
             "dropdown-menu-toggle-handle-hide": !this.state.handleVisible
@@ -90,7 +91,8 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
 
         const style = {
             width: this.props.tableColumnDef.width,
-            overflow: "visible"
+            overflow: "visible",
+            position: "relative"
         };
 
         const dropdownMenuToggle = (
@@ -103,7 +105,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
                 onMouseLeave={()=>this.setState({handleVisible:false})}
                 className={columnDef.format === ColumnFormat.NUMBER ? "numeric" : "non-numeric"}>
                 {this.props.isLastColumn ? [dropdownMenuToggle," "] : null}
-                <span>
+                <span style={{"maxWidth": columnDef.width}}>
                     {columnDef.title || columnDef.colTag}
                 </span>
                 {this.renderSortIcon()}

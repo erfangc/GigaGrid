@@ -124,6 +124,8 @@ export interface GigaState {
     displayStart: number
     displayEnd: number
 
+    columnDefMask?: ColumnDef[]
+
     widthMeasures: WidthMeasures
 }
 

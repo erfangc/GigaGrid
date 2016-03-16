@@ -7,9 +7,9 @@ import {GigaActionType} from "../../store/GigaStore";
 export interface CollapseAllMenuItemProps extends GridSubcomponentProps<CollapseAllMenuItem> {
     isLastColumn?:boolean;
     tableRowColumnDef:Column;
-    // TODO think about what props would be needed for the filter to function
 }
 
+// TODO write tests for these
 export class CollapseAllMenuItem extends React.Component<CollapseAllMenuItemProps, any> {
 
     constructor(props:CollapseAllMenuItemProps) {
