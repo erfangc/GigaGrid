@@ -54,7 +54,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
 	__webpack_require__(1);
 	__webpack_require__(5);
 	var GigaGrid_1 = __webpack_require__(13);
@@ -497,7 +496,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
@@ -555,7 +553,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            height: this.props.bodyHeight || "100%",
 	            width: this.state.widthMeasures.bodyWidth
 	        };
-	        return (React.createElement("div", {className: "giga-grid"}, React.createElement("div", {className: "giga-grid-table-header-wrapper", style: { width: this.state.widthMeasures.bodyWidth }}, React.createElement("table", null, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, className: "giga-grid-body-scroll-y", onScroll: function () { return _this.handleScroll(); }, style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: this.state.rasterizedRows, columns: columns[columns.length - 1], displayStart: this.state.displayStart, displayEnd: this.state.displayEnd, rowHeight: this.props.rowHeight})))));
+	        return (React.createElement("div", {"className": "giga-grid"}, React.createElement("div", {"className": "giga-grid-table-header-wrapper", "style": { width: this.state.widthMeasures.bodyWidth }}, React.createElement("table", null, React.createElement(TableHeader_1.TableHeader, {"dispatcher": this.dispatcher, "columns": columns}))), React.createElement("div", {"ref": function (c) { return _this.viewport = c; }, "className": "giga-grid-body-scroll-y", "onScroll": function () { return _this.handleScroll(); }, "style": bodyStyle}, React.createElement("table", {"ref": function (c) { return _this.canvas = c; }}, React.createElement(TableBody_1.TableBody, {"dispatcher": this.dispatcher, "rows": this.state.rasterizedRows, "columns": columns[columns.length - 1], "displayStart": this.state.displayStart, "displayEnd": this.state.displayEnd, "rowHeight": this.props.rowHeight})))));
 	    };
 	    GigaGrid.prototype.handleScroll = function () {
 	        this.dispatchDisplayBoundChange();
@@ -613,7 +611,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        rowHeight: "35px"
 	    };
 	    return GigaGrid;
-	}(React.Component));
+	})(React.Component);
 	exports.GigaGrid = GigaGrid;
 	//# sourceMappingURL=GigaGrid.js.map
 
@@ -10876,7 +10874,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	///<reference path="../../typings/tsd.d.ts"/>
-	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
@@ -11153,7 +11150,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return newState;
 	    };
 	    return GigaStore;
-	}(ReduceStore));
+	})(ReduceStore);
 	exports.GigaStore = GigaStore;
 	/*
 	 Public Actions API
@@ -30006,7 +30003,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
 	var ColumnLike_1 = __webpack_require__(42);
 	var _ = __webpack_require__(39);
 	function straightSum(detailRows, columnDef) {
@@ -30128,7 +30124,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        subtotalRow.setData(SubtotalAggregator.aggregate(subtotalRow.detailRows, columnDefs));
 	    };
 	    return SubtotalAggregator;
-	}());
+	})();
 	exports.SubtotalAggregator = SubtotalAggregator;
 	//# sourceMappingURL=SubtotalAggregator.js.map
 
@@ -30136,7 +30132,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
 	var _ = __webpack_require__(39);
 	(function (AggregationMethod) {
 	    AggregationMethod[AggregationMethod["SUM"] = 0] = "SUM";
@@ -30220,7 +30215,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return nestedColumns;
 	    };
 	    return ColumnFactory;
-	}());
+	})();
 	exports.ColumnFactory = ColumnFactory;
 	//# sourceMappingURL=ColumnLike.js.map
 
@@ -30228,7 +30223,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
 	var Row_1 = __webpack_require__(44);
 	var Row_2 = __webpack_require__(44);
 	var TreeBuilder = (function () {
@@ -30307,7 +30301,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return subtotalBy.title ? subtotalBy.title + " " + detailedRow.getByColTag(subtotalBy.colTag) : detailedRow.getByColTag(subtotalBy.colTag);
 	    };
 	    return TreeBuilder;
-	}());
+	})();
 	exports.TreeBuilder = TreeBuilder;
 	var Tree = (function () {
 	    function Tree(root) {
@@ -30317,7 +30311,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.root;
 	    };
 	    return Tree;
-	}());
+	})();
 	exports.Tree = Tree;
 	//# sourceMappingURL=TreeBuilder.js.map
 
@@ -30325,7 +30319,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 44 */
 /***/ function(module, exports) {
 
-	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
@@ -30375,7 +30368,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._data = data;
 	    };
 	    return GenericRow;
-	}());
+	})();
 	var DetailRow = (function (_super) {
 	    __extends(DetailRow, _super);
 	    function DetailRow(data) {
@@ -30385,7 +30378,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return true;
 	    };
 	    return DetailRow;
-	}(GenericRow));
+	})(GenericRow);
 	exports.DetailRow = DetailRow;
 	var SubtotalRow = (function (_super) {
 	    __extends(SubtotalRow, _super);
@@ -30444,7 +30437,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.getChildByTitle(title) != undefined;
 	    };
 	    return SubtotalRow;
-	}(GenericRow));
+	})(GenericRow);
 	exports.SubtotalRow = SubtotalRow;
 	//# sourceMappingURL=Row.js.map
 
@@ -30452,7 +30445,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
 	var ColumnLike_1 = __webpack_require__(42);
 	var SortFactory = (function () {
 	    function SortFactory() {
@@ -30522,7 +30514,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    };
 	    return SortFactory;
-	}());
+	})();
 	exports.SortFactory = SortFactory;
 	//# sourceMappingURL=SortFactory.js.map
 
@@ -30530,7 +30522,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
 	var _ = __webpack_require__(39);
 	var round = Math.round;
 	function parsePixelValue(pxMeasure) {
@@ -30600,7 +30591,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return measures;
 	    };
 	    return WidthMeasureCalculator;
-	}());
+	})();
 	exports.WidthMeasureCalculator = WidthMeasureCalculator;
 	function getMeasureWithEqualWidthColumn(bodyWidth, columnDefs) {
 	    var measures = {
@@ -30648,7 +30639,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 47 */
 /***/ function(module, exports) {
 
-	"use strict";
 	var TreeRasterizer = (function () {
 	    function TreeRasterizer() {
 	    }
@@ -30674,7 +30664,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                });
 	    };
 	    return TreeRasterizer;
-	}());
+	})();
 	exports.TreeRasterizer = TreeRasterizer;
 	//# sourceMappingURL=TreeRasterizer.js.map
 
@@ -30682,7 +30672,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 48 */
 /***/ function(module, exports) {
 
-	"use strict";
 	var ScrollCalculator = (function () {
 	    function ScrollCalculator() {
 	    }
@@ -30698,7 +30687,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    };
 	    return ScrollCalculator;
-	}());
+	})();
 	exports.ScrollCalculator = ScrollCalculator;
 	//# sourceMappingURL=ScrollCalculator.js.map
 
@@ -30706,7 +30695,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
@@ -30733,7 +30721,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        var rows = validateBounds() ? this.props.rows.slice(start, end + 1) : this.props.rows;
 	        return rows.map(function (row, i) {
-	            return (React.createElement(GigaRow_1.GigaRow, {key: i, columns: _this.props.columns, row: row, dispatcher: _this.props.dispatcher}));
+	            return (React.createElement(GigaRow_1.GigaRow, {"key": i, "columns": _this.props.columns, "row": row, "dispatcher": _this.props.dispatcher}));
 	        });
 	    };
 	    TableBody.prototype.render = function () {
@@ -30748,7 +30736,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	             */
 	            var rows = this.renderRows(this.props.displayStart, this.props.displayEnd);
 	            var placeholderHeights = this.calculatePlaceholderHeight();
-	            return (React.createElement("tbody", null, React.createElement("tr", {style: { height: placeholderHeights.upperPlaceholderHeight + "px" }}), rows, React.createElement("tr", {style: { height: placeholderHeights.lowerPlaceholderHeight + "px" }})));
+	            return (React.createElement("tbody", null, React.createElement("tr", {"style": { height: placeholderHeights.upperPlaceholderHeight + "px" }}), rows, React.createElement("tr", {"style": { height: placeholderHeights.lowerPlaceholderHeight + "px" }})));
 	        }
 	        else {
 	            var rows = this.renderRows();
@@ -30763,7 +30751,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    };
 	    return TableBody;
-	}(React.Component));
+	})(React.Component);
 	exports.TableBody = TableBody;
 	//# sourceMappingURL=TableBody.js.map
 
@@ -30771,7 +30759,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
@@ -30796,9 +30783,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var cells = props
 	            .columns
 	            .map(function (column, i) {
-	            return (React.createElement(Cell_1.Cell, {key: i, isFirstColumn: i === 0, column: column, dispatcher: _this.props.dispatcher, row: _this.props.row}));
+	            return (React.createElement(Cell_1.Cell, {"key": i, "isFirstColumn": i === 0, "column": column, "dispatcher": _this.props.dispatcher, "row": _this.props.row}));
 	        });
-	        return React.createElement("tr", {className: cx, onClick: function () {
+	        return React.createElement("tr", {"className": cx, "onClick": function () {
 	            var action = {
 	                type: GigaStore_1.GigaActionType.TOGGLE_ROW_SELECT,
 	                row: _this.props.row
@@ -30807,7 +30794,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }}, cells);
 	    };
 	    return GigaRow;
-	}(React.Component));
+	})(React.Component);
 	exports.GigaRow = GigaRow;
 	//# sourceMappingURL=GigaRow.js.map
 
@@ -30869,7 +30856,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
@@ -30907,7 +30893,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "fa-plus": row.isCollapsed(),
 	            "fa-minus": !row.isCollapsed()
 	        });
-	        return (React.createElement("td", {style: this.calculateStyle(), onClick: function (e) { return _this.onClick(); }}, React.createElement("strong", null, React.createElement("span", null, React.createElement("i", {className: cx, onClick: function (e) { return _this.onCollapseToggle(e); }}), " ", row.title || ""))));
+	        return (React.createElement("td", {"style": this.calculateStyle(), "onClick": function (e) { return _this.onClick(); }}, React.createElement("strong", null, React.createElement("span", null, React.createElement("i", {"className": cx, "onClick": function (e) { return _this.onCollapseToggle(e); }}), " ", row.title || ""))));
 	    };
 	    Cell.prototype.calculateStyle = function () {
 	        return {
@@ -30930,7 +30916,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (props.isFirstColumn && !row.isDetail())
 	            result = this.renderSubtotalCellWithCollapseBtn(row);
 	        else
-	            result = (React.createElement("td", {className: cx, onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, this.renderContent(row, cd)));
+	            result = (React.createElement("td", {"className": cx, "onClick": function (e) { return _this.onClick(); }, "style": this.calculateStyle()}, this.renderContent(row, cd)));
 	        return result;
 	    };
 	    Cell.prototype.renderContent = function (row, cd) {
@@ -30940,7 +30926,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return row.data()[cd.colTag] || "";
 	    };
 	    return Cell;
-	}(React.Component));
+	})(React.Component);
 	exports.Cell = Cell;
 	var TableRowUtils = (function () {
 	    function TableRowUtils() {
@@ -30957,14 +30943,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 	    return TableRowUtils;
-	}());
+	})();
 	//# sourceMappingURL=Cell.js.map
 
 /***/ },
 /* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
@@ -30998,18 +30983,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    TableHeader.renderColumnGroups = function (columns, key) {
 	        var ths = columns.map(function (column, i) {
-	            return (React.createElement("th", {className: "column-group", key: i, colSpan: column.colSpan}, column.title));
+	            return (React.createElement("th", {"className": "column-group", "key": i, "colSpan": column.colSpan}, column.title));
 	        });
 	        ths.push(TableHeader.renderPlaceholder("column-group"));
-	        return (React.createElement("tr", {className: "column-group-row", key: key}, ths));
+	        return (React.createElement("tr", {"className": "column-group-row", "key": key}, ths));
 	    };
 	    TableHeader.prototype.renderLeafColumns = function (columns, key) {
 	        var _this = this;
 	        var ths = columns.map(function (colDef, i) {
-	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {tableColumnDef: colDef, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, dispatcher: _this.props.dispatcher});
+	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {"tableColumnDef": colDef, "key": i, "isFirstColumn": i === 0, "isLastColumn": i === columns.length - 1, "dispatcher": _this.props.dispatcher});
 	        });
 	        ths.push(TableHeader.renderPlaceholder());
-	        return (React.createElement("tr", {key: key}, ths));
+	        return (React.createElement("tr", {"key": key}, ths));
 	    };
 	    TableHeader.renderPlaceholder = function (className) {
 	        var scrollBarWidth = WidthMeasureCalculator_1.getScrollBarWidth();
@@ -31017,10 +31002,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	         add an placeholder to align the header with cells
 	         https://github.com/erfangc/GigaGrid/issues/7
 	         */
-	        return (React.createElement("th", {key: "placeholder", className: className, style: { width: scrollBarWidth + "px" }}));
+	        return (React.createElement("th", {"key": "placeholder", "className": className, "style": { width: scrollBarWidth + "px" }}));
 	    };
 	    return TableHeader;
-	}(React.Component));
+	})(React.Component);
 	exports.TableHeader = TableHeader;
 	//# sourceMappingURL=TableHeader.js.map
 
@@ -31028,7 +31013,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
@@ -31049,7 +31033,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function TableHeaderState() {
 	    }
 	    return TableHeaderState;
-	}());
+	})();
 	var TableHeaderCell = (function (_super) {
 	    __extends(TableHeaderCell, _super);
 	    function TableHeaderCell(props) {
@@ -31064,15 +31048,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "fa-bars": true,
 	            "dropdown-menu-toggle-handle-hide": !this.state.handleVisible
 	        });
-	        return (React.createElement("span", {style: { position: "relative" }}, React.createElement("i", {key: 1, className: cx, ref: function (c) { return _this.dropdownToggleHandleRef = c; }, onClick: function () { return _this.dropdownMenuRef.toggleDisplay(); }}), React.createElement(DropdownMenu_1.DropdownMenu, {ref: function (c) { return _this.dropdownMenuRef = c; }, alignLeft: this.props.isLastColumn, toggleHandle: function () { return _this.dropdownToggleHandleRef; }}, React.createElement(SortMenuItem_1.SortMenuItem, {tableRowColumnDef: this.props.tableColumnDef, isLastColumn: this.props.isLastColumn, dispatcher: this.props.dispatcher}), React.createElement(SubtotalByMenuItem_1.SubtotalByMenuItem, {column: this.props.tableColumnDef, isLastColumn: this.props.isLastColumn, dispatcher: this.props.dispatcher}), React.createElement(FilterMenuItem_1.FilterMenuItem, {dispatcher: this.props.dispatcher, isLastColumn: this.props.isLastColumn, tableRowColumnDef: this.props.tableColumnDef}), React.createElement(DropdownMenu_2.SimpleDropdownMenuItem, {onClick: function () {
+	        return (React.createElement("span", {"style": { position: "absolute", right: 0 }}, React.createElement("i", {"key": 1, "className": cx, "ref": function (c) { return _this.dropdownToggleHandleRef = c; }, "onClick": function () { return _this.dropdownMenuRef.toggleDisplay(); }}), React.createElement(DropdownMenu_1.DropdownMenu, {"ref": function (c) { return _this.dropdownMenuRef = c; }, "alignLeft": this.props.isLastColumn, "toggleHandle": function () { return _this.dropdownToggleHandleRef; }}, React.createElement(SortMenuItem_1.SortMenuItem, {"tableRowColumnDef": this.props.tableColumnDef, "isLastColumn": this.props.isLastColumn, "dispatcher": this.props.dispatcher}), React.createElement(SubtotalByMenuItem_1.SubtotalByMenuItem, {"column": this.props.tableColumnDef, "isLastColumn": this.props.isLastColumn, "dispatcher": this.props.dispatcher}), React.createElement(FilterMenuItem_1.FilterMenuItem, {"dispatcher": this.props.dispatcher, "isLastColumn": this.props.isLastColumn, "tableRowColumnDef": this.props.tableColumnDef}), React.createElement(DropdownMenu_2.SimpleDropdownMenuItem, {"onClick": function () {
 	            _this.props.dispatcher.dispatch({
 	                type: GigaStore_1.GigaActionType.COLLAPSE_ALL
 	            });
-	        }, text: "Collapse All", isLastColumn: this.props.isLastColumn}), React.createElement(DropdownMenu_2.SimpleDropdownMenuItem, {onClick: function () {
+	        }, "text": "Collapse All", "isLastColumn": this.props.isLastColumn}), React.createElement(DropdownMenu_2.SimpleDropdownMenuItem, {"onClick": function () {
 	            _this.props.dispatcher.dispatch({
 	                type: GigaStore_1.GigaActionType.EXPAND_ALL
 	            });
-	        }, text: "Expand All", isLastColumn: this.props.isLastColumn}))));
+	        }, "text": "Expand All", "isLastColumn": this.props.isLastColumn}))));
 	    };
 	    TableHeaderCell.prototype.renderSortIcon = function () {
 	        if (this.props.tableColumnDef.sortDirection != undefined) {
@@ -31081,7 +31065,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                "fa-sort-asc": this.props.tableColumnDef.sortDirection === ColumnLike_2.SortDirection.ASC,
 	                "fa-sort-desc": this.props.tableColumnDef.sortDirection === ColumnLike_2.SortDirection.DESC
 	            });
-	            return (React.createElement("span", null, React.createElement("i", {className: cx})));
+	            return (React.createElement("span", null, React.createElement("i", {"className": cx})));
 	        }
 	    };
 	    TableHeaderCell.prototype.render = function () {
@@ -31092,10 +31076,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            overflow: "visible",
 	            position: "relative"
 	        };
-	        return (React.createElement("th", {style: style, onMouseEnter: function () { return _this.setState({ handleVisible: true }); }, onMouseLeave: function () { return _this.setState({ handleVisible: false }); }, className: columnDef.format === ColumnLike_1.ColumnFormat.NUMBER ? "numeric" : "non-numeric"}, React.createElement("span", {style: { "maxWidth": columnDef.width }}, columnDef.title || columnDef.colTag), this.renderSortIcon(), this.renderDropdownMenu()));
+	        return (React.createElement("th", {"style": style, "onMouseEnter": function () { return _this.setState({ handleVisible: true }); }, "onMouseLeave": function () { return _this.setState({ handleVisible: false }); }, "className": columnDef.format === ColumnLike_1.ColumnFormat.NUMBER ? "numeric" : "non-numeric"}, React.createElement("span", {"style": { "maxWidth": columnDef.width }}, columnDef.title || columnDef.colTag), this.renderSortIcon(), this.renderDropdownMenu()));
 	    };
 	    return TableHeaderCell;
-	}(React.Component));
+	})(React.Component);
 	exports.TableHeaderCell = TableHeaderCell;
 	//# sourceMappingURL=TableHeaderCell.js.map
 
@@ -31103,7 +31087,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
@@ -31144,7 +31127,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "dropdown-submenu-align-left": this.props.isSubMenu && this.props.alignLeft
 	        });
 	        // a click outside the ul should close the dropdown menu
-	        return (React.createElement("ul", {style: style, className: cx}, this.props.children));
+	        return (React.createElement("ul", {"style": style, "className": cx}, this.props.children));
 	    };
 	    DropdownMenu.prototype.componentDidMount = function () {
 	        var _this = this;
@@ -31179,7 +31162,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            document.removeEventListener('mousedown', this.clickOutsideHandler);
 	    };
 	    return DropdownMenu;
-	}(React.Component));
+	})(React.Component);
 	exports.DropdownMenu = DropdownMenu;
 	/**
 	 * generic simple menu item on a dropdown menu that can optionally expand
@@ -31202,15 +31185,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _this = this;
 	        // Note: dropdown menu need a way to reference the DOM element that activate its visibility, in this case
 	        // since we are creating a sub menu that is activated by this component, this component is the visibility toggle handle
-	        return (React.createElement(DropdownMenu, {isSubMenu: true, ref: function (c) { return _this.subMenuRef = c; }, alignLeft: this.props.isLastColumn, toggleHandle: function () { return ReactDOM.findDOMNode(_this); }}, this.props.children));
+	        return (React.createElement(DropdownMenu, {"isSubMenu": true, "ref": function (c) { return _this.subMenuRef = c; }, "alignLeft": this.props.isLastColumn, "toggleHandle": function () { return ReactDOM.findDOMNode(_this); }}, this.props.children));
 	    };
 	    SimpleDropdownMenuItem.prototype.render = function () {
 	        var _this = this;
 	        // if the component has children, render them as submenu
-	        return (React.createElement("li", {className: 'dropdown-menu-item hoverable', onClick: function (e) { return _this.handleClick(e); }}, this.props.text || "Menu Item", this.props.children ? this.renderSubMenu() : null));
+	        return (React.createElement("li", {"className": 'dropdown-menu-item hoverable', "onClick": function (e) { return _this.handleClick(e); }}, this.props.text || "Menu Item", this.props.children ? this.renderSubMenu() : null));
 	    };
 	    return SimpleDropdownMenuItem;
-	}(React.Component));
+	})(React.Component);
 	exports.SimpleDropdownMenuItem = SimpleDropdownMenuItem;
 	//# sourceMappingURL=DropdownMenu.js.map
 
@@ -31218,7 +31201,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
@@ -31255,58 +31237,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    SortMenuItem.prototype.renderSortAscending = function () {
 	        var _this = this;
-	        return (React.createElement("li", {className: "dropdown-menu-item hoverable", onClick: function () {
+	        return (React.createElement("li", {"className": "dropdown-menu-item hoverable", "onClick": function () {
 	            var action = {
 	                sortBys: [_this.createSortByFromColumnDef(ColumnLike_1.SortDirection.ASC)],
 	                type: GigaStore_1.GigaActionType.NEW_SORT
 	            };
 	            _this.dispatchSortAction(action);
-	        }}, React.createElement("span", null, React.createElement("i", {className: "fa fa-sort-amount-asc"})), " Sort Ascending"));
+	        }}, React.createElement("span", null, React.createElement("i", {"className": "fa fa-sort-amount-asc"})), " Sort Ascending"));
 	    };
 	    SortMenuItem.prototype.renderSortDescending = function () {
 	        var _this = this;
-	        return (React.createElement("li", {className: "dropdown-menu-item hoverable", onClick: function () {
+	        return (React.createElement("li", {"className": "dropdown-menu-item hoverable", "onClick": function () {
 	            var action = {
 	                sortBys: [_this.createSortByFromColumnDef(ColumnLike_1.SortDirection.DESC)],
 	                type: GigaStore_1.GigaActionType.NEW_SORT
 	            };
 	            _this.dispatchSortAction(action);
-	        }}, React.createElement("span", null, React.createElement("i", {className: "fa fa-sort-amount-desc"})), " Sort Descending"));
+	        }}, React.createElement("span", null, React.createElement("i", {"className": "fa fa-sort-amount-desc"})), " Sort Descending"));
 	    };
 	    SortMenuItem.prototype.renderAddSortAscending = function () {
 	        var _this = this;
-	        return (React.createElement("li", {className: "dropdown-menu-item hoverable", onClick: function () {
+	        return (React.createElement("li", {"className": "dropdown-menu-item hoverable", "onClick": function () {
 	            var action = {
 	                sortBy: _this.createSortByFromColumnDef(ColumnLike_1.SortDirection.ASC),
 	                type: GigaStore_1.GigaActionType.ADD_SORT
 	            };
 	            _this.dispatchSortAction(action);
-	        }}, React.createElement("span", null, React.createElement("i", {className: "fa fa-sort-amount-asc"})), " Add Sort Ascending"));
+	        }}, React.createElement("span", null, React.createElement("i", {"className": "fa fa-sort-amount-asc"})), " Add Sort Ascending"));
 	    };
 	    SortMenuItem.prototype.renderAddSortDescending = function () {
 	        var _this = this;
-	        return (React.createElement("li", {className: "dropdown-menu-item hoverable", onClick: function () {
+	        return (React.createElement("li", {"className": "dropdown-menu-item hoverable", "onClick": function () {
 	            var action = {
 	                sortBys: _this.createSortByFromColumnDef(ColumnLike_1.SortDirection.DESC),
 	                type: GigaStore_1.GigaActionType.ADD_SORT
 	            };
 	            _this.dispatchSortAction(action);
-	        }}, React.createElement("span", null, React.createElement("i", {className: "fa fa-sort-amount-desc"})), " Add Sort Descending"));
+	        }}, React.createElement("span", null, React.createElement("i", {"className": "fa fa-sort-amount-desc"})), " Add Sort Descending"));
 	    };
 	    SortMenuItem.prototype.renderClearSort = function () {
 	        var _this = this;
-	        return (React.createElement("li", {className: "dropdown-menu-item hoverable", onClick: function () {
+	        return (React.createElement("li", {"className": "dropdown-menu-item hoverable", "onClick": function () {
 	            var action = {
 	                type: GigaStore_1.GigaActionType.CLEAR_SORT
 	            };
 	            _this.dispatchSortAction(action);
-	        }}, React.createElement("span", null, React.createElement("i", {className: "fa fa-ban"})), " Clear All Sort"));
+	        }}, React.createElement("span", null, React.createElement("i", {"className": "fa fa-ban"})), " Clear All Sort"));
 	    };
 	    SortMenuItem.prototype.render = function () {
-	        return (React.createElement(DropdownMenu_1.SimpleDropdownMenuItem, {text: "Sort", isLastColumn: this.props.isLastColumn}, this.renderSortDescending(), this.renderSortAscending(), this.renderAddSortDescending(), this.renderAddSortAscending(), this.renderClearSort()));
+	        return (React.createElement(DropdownMenu_1.SimpleDropdownMenuItem, {"text": "Sort", "isLastColumn": this.props.isLastColumn}, this.renderSortDescending(), this.renderSortAscending(), this.renderAddSortDescending(), this.renderAddSortAscending(), this.renderClearSort()));
 	    };
 	    return SortMenuItem;
-	}(React.Component));
+	})(React.Component);
 	exports.SortMenuItem = SortMenuItem;
 	//# sourceMappingURL=SortMenuItem.js.map
 
@@ -31314,7 +31296,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
@@ -31378,21 +31359,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var style = {};
 	        if (this.isNumericColumn())
 	            return [
-	                React.createElement("div", {key: 1, className: cx, style: style, onClick: function (e) { e.preventDefault(); e.stopPropagation(); }}, this.renderForm()),
-	                React.createElement("li", {key: 2, className: "dropdown-menu-item hoverable"}, React.createElement("i", {className: "fa fa-plus"}), " ", React.createElement("span", {onClick: function (e) { return _this.onSubmit(e); }}, "Add Subtotal"))
+	                React.createElement("div", {"key": 1, "className": cx, "style": style, "onClick": function (e) { e.preventDefault(); e.stopPropagation(); }}, this.renderForm()),
+	                React.createElement("li", {"key": 2, "className": "dropdown-menu-item hoverable"}, React.createElement("i", {"className": "fa fa-plus"}), " ", React.createElement("span", {"onClick": function (e) { return _this.onSubmit(e); }}, "Add Subtotal"))
 	            ];
 	        else
 	            return ([
-	                React.createElement("li", {key: 1, onClick: function (e) { return _this.onSubmit(e); }, className: "dropdown-menu-item hoverable"}, React.createElement("i", {className: "fa fa-plus"}), " ", React.createElement("span", null, "Add Subtotal"))
+	                React.createElement("li", {"key": 1, "onClick": function (e) { return _this.onSubmit(e); }, "className": "dropdown-menu-item hoverable"}, React.createElement("i", {"className": "fa fa-plus"}), " ", React.createElement("span", null, "Add Subtotal"))
 	            ]);
 	    };
 	    SubtotalByMenuItem.prototype.renderClearSubtotal = function () {
 	        var _this = this;
-	        return (React.createElement("li", {onClick: function (e) { return _this.onCancel(e); }, className: "dropdown-menu-item hoverable"}, React.createElement("i", {className: "fa fa-ban"}), " ", React.createElement("span", null, "Clear All Subtotal")));
+	        return (React.createElement("li", {"onClick": function (e) { return _this.onCancel(e); }, "className": "dropdown-menu-item hoverable"}, React.createElement("i", {"className": "fa fa-ban"}), " ", React.createElement("span", null, "Clear All Subtotal")));
 	    };
 	    SubtotalByMenuItem.prototype.renderForm = function () {
 	        var _this = this;
-	        return (React.createElement("div", null, React.createElement("div", null, "Enter Buckets to Subtotal By"), React.createElement("input", {type: "text", onChange: function (e) { return _this.handleInputChange(e); }, ref: function (c) { return _this.input = c; }, placeholder: "ex: 1,3,5,7,9"}), React.createElement("div", {style: { color: "red" }}, this.errorMessage)));
+	        return (React.createElement("div", null, React.createElement("div", null, "Enter Buckets to Subtotal By"), React.createElement("input", {"type": "text", "onChange": function (e) { return _this.handleInputChange(e); }, "ref": function (c) { return _this.input = c; }, "placeholder": "ex: 1,3,5,7,9"}), React.createElement("div", {"style": { color: "red" }}, this.errorMessage)));
 	    };
 	    SubtotalByMenuItem.prototype.getInputErrors = function (input) {
 	        // validator function
@@ -31414,10 +31395,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.setState({});
 	    };
 	    SubtotalByMenuItem.prototype.render = function () {
-	        return (React.createElement(DropdownMenu_1.SimpleDropdownMenuItem, {text: "Subtotal", isLastColumn: this.props.isLastColumn}, this.renderAddSubtotal(), this.renderClearSubtotal()));
+	        return (React.createElement(DropdownMenu_1.SimpleDropdownMenuItem, {"text": "Subtotal", "isLastColumn": this.props.isLastColumn}, this.renderAddSubtotal(), this.renderClearSubtotal()));
 	    };
 	    return SubtotalByMenuItem;
-	}(React.Component));
+	})(React.Component);
 	exports.SubtotalByMenuItem = SubtotalByMenuItem;
 	//# sourceMappingURL=SubtotalByMenuItem.js.map
 
@@ -31425,7 +31406,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
@@ -31440,10 +31420,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    FilterMenuItem.prototype.render = function () {
 	        // TODO wire up behavior
-	        return (React.createElement(DropdownMenu_1.SimpleDropdownMenuItem, {text: "Filter", isLastColumn: this.props.isLastColumn}, React.createElement("h4", {style: { color: "red" }}, "This Feature is Not Functional Yet"), React.createElement("div", null, React.createElement("div", null, "Enter Your Filtering Criteria"), React.createElement("input", {type: "text", placeholder: "use >, < or =, ex: > 50"})), React.createElement("div", {className: "dropdown-menu-item hoverable"}, React.createElement("i", {className: "fa fa-check"}), " ", React.createElement("span", null, "Apply")), React.createElement("div", {className: "dropdown-menu-item hoverable"}, React.createElement("i", {className: "fa fa-ban"}), " ", React.createElement("span", null, "Clear"))));
+	        return (React.createElement(DropdownMenu_1.SimpleDropdownMenuItem, {"text": "Filter", "isLastColumn": this.props.isLastColumn}, React.createElement("h4", {"style": { color: "red" }}, "This Feature is Not Functional Yet"), React.createElement("div", null, React.createElement("div", null, "Enter Your Filtering Criteria"), React.createElement("input", {"type": "text", "placeholder": "use >, < or =, ex: > 50"})), React.createElement("div", {"className": "dropdown-menu-item hoverable"}, React.createElement("i", {"className": "fa fa-check"}), " ", React.createElement("span", null, "Apply")), React.createElement("div", {"className": "dropdown-menu-item hoverable"}, React.createElement("i", {"className": "fa fa-ban"}), " ", React.createElement("span", null, "Clear"))));
 	    };
 	    return FilterMenuItem;
-	}(React.Component));
+	})(React.Component);
 	exports.FilterMenuItem = FilterMenuItem;
 	//# sourceMappingURL=FilterMenuItem.js.map
 

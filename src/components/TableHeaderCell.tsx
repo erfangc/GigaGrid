@@ -48,7 +48,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
         });
 
         return (
-            <span style={{position:"relative"}}>
+            <span style={{position:"absolute", right: 0}}>
                 <i key={1} className={cx} ref={c=>this.dropdownToggleHandleRef=c}
                    onClick={()=>this.dropdownMenuRef.toggleDisplay()}/>
                 <DropdownMenu ref={(c:DropdownMenu)=>this.dropdownMenuRef=c} alignLeft={this.props.isLastColumn}
