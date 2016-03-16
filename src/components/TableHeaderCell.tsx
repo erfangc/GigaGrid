@@ -48,7 +48,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
         });
 
         return (
-            <span style={{position:"absolute", right: 0}}>
+            <span style={{position:"absolute", right: "5px"}}>
                 <i key={1} className={cx} ref={c=>this.dropdownToggleHandleRef=c}
                    onClick={()=>this.dropdownMenuRef.toggleDisplay()}/>
                 <DropdownMenu ref={(c:DropdownMenu)=>this.dropdownMenuRef=c} alignLeft={this.props.isLastColumn}
@@ -105,7 +105,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
             <th style={style} onMouseEnter={()=>this.setState({handleVisible:true})}
                 onMouseLeave={()=>this.setState({handleVisible:false})}
                 className={columnDef.format === ColumnFormat.NUMBER ? "numeric" : "non-numeric"}>
-                <span style={{"maxWidth": columnDef.width}}>
+                <span style={{"maxWidth": columnDef.width}} className="header-text">
                     {columnDef.title || columnDef.colTag}
                 </span>
                 {this.renderSortIcon()}

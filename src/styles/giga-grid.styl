@@ -31,10 +31,11 @@ div.giga-grid
 
   tr td, tr th
     box-sizing border-box
-    padding 8px 2px
+    padding 8px 5px
 
   th:last-child, td:last-child
     padding-right 10px
+    border-left none
 
   th:first-child, td:first-child
     padding-left 10px
@@ -43,6 +44,7 @@ div.giga-grid
     font-weight normal
     background-color: main-color
     color header-text-color
+    border-left: 1px solid white
 
   tr th.column-group
     text-align center
@@ -72,3 +74,6 @@ div.giga-grid
 
   .non-numeric
     text-align left
+
+  span.header-text
+    padding-right: 15px
