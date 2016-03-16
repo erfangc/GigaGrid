@@ -33,6 +33,7 @@ export class SubtotalByMenuItem extends React.Component<SubtotalByMenuItemProps,
 
     private onSubmit(e:SyntheticEvent) {
         var subtotalBy:SubtotalBy = {
+            title: this.props.column.title,
             colTag: this.props.column.colTag
         };
         if (this.isNumericColumn()) {

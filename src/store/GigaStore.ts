@@ -18,6 +18,7 @@ import {Row} from "../models/Row";
 import {Column} from "../models/ColumnLike";
 import {TreeRasterizer} from "../static/TreeRasterizer";
 import {ScrollCalculator} from "../static/ScrollCalculator";
+import {GigaGrid} from "../components/GigaGrid";
 
 /*
  define the # of rows necessary to trigger progressive rendering
@@ -53,7 +54,14 @@ export class GigaStore extends ReduceStore<GigaState> {
      */
     initialize():GigaState {
 
-        var tree = TreeBuilder.buildTree(this.props.data, this.props.initialSubtotalBys);
+        const subtotalByWithTitle:SubtotalBy[] = (this.props.initialSubtotalBys || []).map(sb => {
+            const col = _.find(this.props.columnDefs, cd=>cd.colTag === sb.colTag);
+            return {
+                colTag: sb.colTag,
+                title: col.title
+            }
+        });
+        var tree = TreeBuilder.buildTree(this.props.data, subtotalByWithTitle);
         SubtotalAggregator.aggregateTree(tree, this.props.columnDefs);
 
         if (this.props.initialSortBys)
@@ -73,6 +81,21 @@ export class GigaStore extends ReduceStore<GigaState> {
         }
     }
 
+    columnMaskSubReducer(state:GigaState, subtotalBy:SubtotalBy):any {
+        // TODO in the future, if we decide to maintain this library, we should think about how this should work in the presence of column grouping
+        // we now mask the column and recompute column size
+        const columnDefMask = subtotalBy ? (state.columnDefMask || []) : [];
+        columnDefMask.push(subtotalBy);
+        const maskedColumnDefs = this.props.columnDefs.filter(cd=>columnDefMask.map(m=>m.colTag).indexOf(cd.colTag) === -1);
+        // re-compute proportion, this might not work for all width configurations
+        const widthMeasures = WidthMeasureCalculator.computeWidthMeasures(state.widthMeasures.bodyWidth, maskedColumnDefs);
+        return {
+            widthMeasures,
+            columnDefMask
+        };
+
+    }
+
     // TODO we should have a way to handle componentWillReceiveProps
 
     reduce(state:GigaState,
@@ -90,7 +113,7 @@ export class GigaStore extends ReduceStore<GigaState> {
                 newState = this.handleWidthChange(state, action as TableWidthChangeAction);
                 break;
             case GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS:
-                newState = this.handleChangeRowDisplayBounds(state, action as ChangeRowDisplayBoundsAction);
+                newState = GigaStore.handleChangeRowDisplayBounds(state, action as ChangeRowDisplayBoundsAction);
                 break;
             /*
              Subtotal Actions
@@ -200,7 +223,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return newState;
     }
 
-    private handleChangeRowDisplayBounds(state:GigaState, action:ChangeRowDisplayBoundsAction) {
+    private static handleChangeRowDisplayBounds(state:GigaState, action:ChangeRowDisplayBoundsAction) {
         const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(action.rowHeight, action.viewport, action.canvas);
         const newState = _.clone(state);
         newState.displayStart = displayStart;
@@ -211,11 +234,12 @@ export class GigaStore extends ReduceStore<GigaState> {
     /*
      Subtotal Action Handlers
      */
-    private static handleToggleExpandAll(state:GigaState, action: GigaAction):GigaState {
+    private static handleToggleExpandAll(state:GigaState, action:GigaAction):GigaState {
         TreeBuilder.toggleChildrenCollapse(state.tree.getRoot(), false);
         return _.clone(state);
     }
-    private static handleToggleCollapseAll(state:GigaState, action: GigaAction):GigaState {
+
+    private static handleToggleCollapseAll(state:GigaState, action:GigaAction):GigaState {
         TreeBuilder.toggleChildrenCollapse(state.tree.getRoot());
         return _.clone(state);
     }
@@ -228,7 +252,13 @@ export class GigaStore extends ReduceStore<GigaState> {
 
     private handleSubtotal(state:GigaState,
                            action:NewSubtotalAction):GigaState {
-        // TODO hacky please fix
+        // TODO this handler is very please fix, it not only randomly mutate state but introduce a dependency on a new state columnDefMask
+        if (!this.props.columnGroups && this.props.hideColumnOnSubtotal) {
+            var {widthMeasures, columnDefMask} = this.columnMaskSubReducer(state, action.subtotalBy);
+            state.widthMeasures = widthMeasures;
+            state.columnDefMask = columnDefMask;
+        }
+
         state.subtotalBys.push(action.subtotalBy);
         const newTree = TreeBuilder.buildTree(this.props.data, state.subtotalBys);
         SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
@@ -239,6 +269,14 @@ export class GigaStore extends ReduceStore<GigaState> {
 
     private handleClearSubtotal(state:GigaState,
                                 action:ClearSubtotalAction):GigaState {
+
+        if (!this.props.columnGroups && this.props.hideColumnOnSubtotal) {
+            // TODO in the future, if we decide to maintain this library, we should think about how this should work in the presence of column grouping
+            var {widthMeasures, columnDefMask} = this.columnMaskSubReducer(state, null);
+            state.widthMeasures = widthMeasures;
+            state.columnDefMask = columnDefMask;
+        }
+
         const newTree = TreeBuilder.buildTree(this.props.data, []);
         SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
         const newState = _.clone(state);

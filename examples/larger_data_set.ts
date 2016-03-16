@@ -15,7 +15,8 @@ $.ajax("./examples/data/Hotels.json").done(function (data:any[]) {
     const element = React.createElement<GigaProps>(GigaGrid, {
         bodyHeight: "500px",
         data: data,
-        columnDefs: columnDefs
+        columnDefs: columnDefs,
+        hideColumnOnSubtotal: true
     });
 
     ReactDOM.render(element, document.getElementById('larger_data_set'));

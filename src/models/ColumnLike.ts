@@ -63,10 +63,24 @@ export interface ColumnGroupDef {
 
 export class ColumnFactory {
 
+    /**
+     * create an array of Column from definitions
+     * @param columnDefs
+     * @param state
+     * @returns {Column[]}
+     */
     static createColumnsFromDefinition(columnDefs:ColumnDef[], state:GigaState):Column[] {
-        return columnDefs.map(cd => ColumnFactory.createColumnFromDefinition(cd, state));
+        const maskedTags = (state.columnDefMask || []).map(m=>m.colTag);
+        return columnDefs.filter(cd=>maskedTags.indexOf(cd.colTag) === -1).map(cd => ColumnFactory.createColumnFromDefinition(cd, state));
     }
 
+    /**
+     * creates a single Column object from a ColumnDef (definition)
+     * Column objects contain more rendering hints than ColumnDef objects which are passed in by the user
+     * @param cd
+     * @param state
+     * @returns {Column}
+     */
     static createColumnFromDefinition(cd:ColumnDef, state:GigaState):Column {
         const column:Column = {
             colTag: cd.colTag,
@@ -88,6 +102,13 @@ export class ColumnFactory {
         return column;
     }
 
+    /**
+     * Create a 2-dimensional structure of Column(s), this allow us to group column headers
+     * @param columnGroupDefs
+     * @param columnDefs
+     * @param state
+     * @returns {Column[][]}
+     */
     static createColumnsFromGroupDefinition(columnGroupDefs:ColumnGroupDef[], columnDefs:ColumnDef[], state:GigaState):Column[][] {
 
         const columns = ColumnFactory.createColumnsFromDefinition(columnDefs, state);

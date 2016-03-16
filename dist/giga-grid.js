@@ -102,7 +102,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "div.giga-grid .dropdown-menu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  left: 0;\n}\ndiv.giga-grid .dropdown-menu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  right: 0;\n}\ndiv.giga-grid .dropdown-submenu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  left: 100%;\n}\ndiv.giga-grid .dropdown-submenu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  right: 50%;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle {\n  position: absolute;\n  right: 0;\n  top: 25%;\n  background-color: #e0e0e0;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle-hide {\n  opacity: 0;\n}\ndiv.giga-grid .dropdown-menu-item {\n  position: relative;\n  padding-bottom: 5px;\n  padding-left: 10px;\n  padding-top: 5px;\n  color: #666;\n  border-radius: 2px;\n}\ndiv.giga-grid .dropdown-menu-item.hoverable:hover {\n  cursor: pointer;\n  background-color: #eee;\n}\ndiv.giga-grid .dropdown-menu-item input {\n  border: none;\n  border-bottom: 2px solid #666;\n  margin-top: 10px;\n  margin-bottom: 10px;\n  padding-top: 5px;\n  padding-bottom: 5px;\n  font-size: 13px;\n}\ndiv.giga-grid {\n  margin: 0;\n  font-family: Roboto, sans-serif;\n  color: #333;\n  overflow-x: auto;\n}\ndiv.giga-grid div.giga-grid-body-scroll-y {\n  overflow-y: auto;\n}\ndiv.giga-grid table {\n  border-collapse: collapse;\n  font-size: 13px;\n  table-layout: fixed;\n}\ndiv.giga-grid tr.selected {\n  background-color: #f5f5f5;\n}\ndiv.giga-grid tr.subtotal-row.selected {\n  background-color: #e0e0e0;\n}\ndiv.giga-grid tr td,\ndiv.giga-grid tr th {\n  box-sizing: border-box;\n  padding: 8px 2px;\n}\ndiv.giga-grid th:last-child,\ndiv.giga-grid td:last-child {\n  padding-right: 10px;\n}\ndiv.giga-grid th:first-child,\ndiv.giga-grid td:first-child {\n  padding-left: 10px;\n}\ndiv.giga-grid tr th {\n  font-weight: normal;\n  background-color: #e0e0e0;\n  color: #333;\n}\ndiv.giga-grid tr th.column-group {\n  text-align: center;\n  border-right: 1px solid #f5f5f5;\n  border-bottom: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr td {\n  white-space: nowrap;\n  border: 1px solid #f5f5f5;\n  border-right: none;\n  border-left: none;\n}\ndiv.giga-grid tr.subtotal-row {\n  background-color: #f5f5f5;\n}\ndiv.giga-grid thead tr:hover,\ndiv.giga-grid tbody tr:hover {\n  cursor: pointer;\n}\ndiv.giga-grid tbody tr:hover {\n  background-color: #f5f5f5;\n}\ndiv.giga-grid tr.subtotal-row:hover {\n  background-color: #e0e0e0;\n}\ndiv.giga-grid .numeric {\n  text-align: right;\n}\ndiv.giga-grid .non-numeric {\n  text-align: left;\n}\n", ""]);
+	exports.push([module.id, "div.giga-grid .dropdown-menu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  left: 0;\n}\ndiv.giga-grid .dropdown-menu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  right: 0;\n}\ndiv.giga-grid .dropdown-submenu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  left: 100%;\n}\ndiv.giga-grid .dropdown-submenu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  right: 50%;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle {\n  position: absolute;\n  right: 0;\n  background-color: #e0e0e0;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle-hide {\n  opacity: 0;\n}\ndiv.giga-grid .dropdown-menu-item {\n  position: relative;\n  padding-bottom: 5px;\n  padding-left: 10px;\n  padding-top: 5px;\n  color: #666;\n  border-radius: 2px;\n}\ndiv.giga-grid .dropdown-menu-item.hoverable:hover {\n  cursor: pointer;\n  background-color: #eee;\n}\ndiv.giga-grid .dropdown-menu-item input {\n  border: none;\n  border-bottom: 2px solid #666;\n  margin-top: 10px;\n  margin-bottom: 10px;\n  padding-top: 5px;\n  padding-bottom: 5px;\n  font-size: 13px;\n}\ndiv.giga-grid {\n  margin: 0;\n  font-family: Roboto, sans-serif;\n  color: #333;\n  overflow-x: auto;\n}\ndiv.giga-grid div.giga-grid-body-scroll-y {\n  overflow-y: auto;\n}\ndiv.giga-grid table {\n  border-collapse: collapse;\n  font-size: 13px;\n  table-layout: fixed;\n}\ndiv.giga-grid tr.selected {\n  background-color: #f5f5f5;\n}\ndiv.giga-grid tr.subtotal-row.selected {\n  background-color: #e0e0e0;\n}\ndiv.giga-grid tr td,\ndiv.giga-grid tr th {\n  box-sizing: border-box;\n  padding: 8px 2px;\n}\ndiv.giga-grid th:last-child,\ndiv.giga-grid td:last-child {\n  padding-right: 10px;\n}\ndiv.giga-grid th:first-child,\ndiv.giga-grid td:first-child {\n  padding-left: 10px;\n}\ndiv.giga-grid tr th {\n  font-weight: normal;\n  background-color: #e0e0e0;\n  color: #333;\n}\ndiv.giga-grid tr th.column-group {\n  text-align: center;\n  border-right: 1px solid #f5f5f5;\n  border-bottom: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr td {\n  white-space: nowrap;\n  border: 1px solid #f5f5f5;\n  border-right: none;\n  border-left: none;\n}\ndiv.giga-grid tr.subtotal-row {\n  background-color: #f5f5f5;\n}\ndiv.giga-grid thead tr:hover,\ndiv.giga-grid tbody tr:hover {\n  cursor: pointer;\n}\ndiv.giga-grid tbody tr:hover {\n  background-color: #f5f5f5;\n}\ndiv.giga-grid tr.subtotal-row:hover {\n  background-color: #e0e0e0;\n}\ndiv.giga-grid .numeric {\n  text-align: right;\n}\ndiv.giga-grid .non-numeric {\n  text-align: left;\n}\n", ""]);
 
 	// exports
 
@@ -546,6 +546,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _this = this;
 	        var columns;
 	        if (this.props.columnGroups)
+	            // TODO we need column groups to be aware of masks as well ... I think ...
 	            columns = ColumnLike_1.ColumnFactory.createColumnsFromGroupDefinition(this.props.columnGroups, this.props.columnDefs, this.state);
 	        else
 	            columns = [ColumnLike_1.ColumnFactory.createColumnsFromDefinition(this.props.columnDefs, this.state)];
@@ -10918,7 +10919,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * state as oppose to application state?
 	     */
 	    GigaStore.prototype.initialize = function () {
-	        var tree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, this.props.initialSubtotalBys);
+	        var _this = this;
+	        var subtotalByWithTitle = (this.props.initialSubtotalBys || []).map(function (sb) {
+	            var col = _.find(_this.props.columnDefs, function (cd) { return cd.colTag === sb.colTag; });
+	            return {
+	                colTag: sb.colTag,
+	                title: col.title
+	            };
+	        });
+	        var tree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, subtotalByWithTitle);
 	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, this.props.columnDefs);
 	        if (this.props.initialSortBys)
 	            tree = SortFactory_1.SortFactory.sortTree(tree, this.props.initialSortBys);
@@ -10932,6 +10941,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            sortBys: this.props.initialSortBys || [],
 	            filterBys: this.props.initialFilterBys || [],
 	            tree: tree
+	        };
+	    };
+	    GigaStore.prototype.columnMaskSubReducer = function (state, subtotalBy) {
+	        // TODO in the future, if we decide to maintain this library, we should think about how this should work in the presence of column grouping
+	        // we now mask the column and recompute column size
+	        var columnDefMask = subtotalBy ? (state.columnDefMask || []) : [];
+	        columnDefMask.push(subtotalBy);
+	        var maskedColumnDefs = this.props.columnDefs.filter(function (cd) { return columnDefMask.map(function (m) { return m.colTag; }).indexOf(cd.colTag) === -1; });
+	        // re-compute proportion, this might not work for all width configurations
+	        var widthMeasures = WidthMeasureCalculator_1.WidthMeasureCalculator.computeWidthMeasures(state.widthMeasures.bodyWidth, maskedColumnDefs);
+	        return {
+	            widthMeasures: widthMeasures,
+	            columnDefMask: columnDefMask
 	        };
 	    };
 	    // TODO we should have a way to handle componentWillReceiveProps
@@ -10948,7 +10970,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                newState = this.handleWidthChange(state, action);
 	                break;
 	            case GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS:
-	                newState = this.handleChangeRowDisplayBounds(state, action);
+	                newState = GigaStore.handleChangeRowDisplayBounds(state, action);
 	                break;
 	            /*
 	             Subtotal Actions
@@ -11050,7 +11072,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        newState.widthMeasures = widthMeasures;
 	        return newState;
 	    };
-	    GigaStore.prototype.handleChangeRowDisplayBounds = function (state, action) {
+	    GigaStore.handleChangeRowDisplayBounds = function (state, action) {
 	        var _a = ScrollCalculator_1.ScrollCalculator.computeDisplayBoundaries(action.rowHeight, action.viewport, action.canvas), displayStart = _a.displayStart, displayEnd = _a.displayEnd;
 	        var newState = _.clone(state);
 	        newState.displayStart = displayStart;
@@ -11074,7 +11096,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _.clone(state);
 	    };
 	    GigaStore.prototype.handleSubtotal = function (state, action) {
-	        // TODO hacky please fix
+	        // TODO this handler is very please fix, it not only randomly mutate state but introduce a dependency on a new state columnDefMask
+	        if (!this.props.columnGroups && this.props.hideColumnOnSubtotal) {
+	            var _a = this.columnMaskSubReducer(state, action.subtotalBy), widthMeasures = _a.widthMeasures, columnDefMask = _a.columnDefMask;
+	            state.widthMeasures = widthMeasures;
+	            state.columnDefMask = columnDefMask;
+	        }
 	        state.subtotalBys.push(action.subtotalBy);
 	        var newTree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, state.subtotalBys);
 	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
@@ -11083,6 +11110,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return newState;
 	    };
 	    GigaStore.prototype.handleClearSubtotal = function (state, action) {
+	        if (!this.props.columnGroups && this.props.hideColumnOnSubtotal) {
+	            // TODO in the future, if we decide to maintain this library, we should think about how this should work in the presence of column grouping
+	            var _a = this.columnMaskSubReducer(state, null), widthMeasures = _a.widthMeasures, columnDefMask = _a.columnDefMask;
+	            state.widthMeasures = widthMeasures;
+	            state.columnDefMask = columnDefMask;
+	        }
 	        var newTree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, []);
 	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
 	        var newState = _.clone(state);
@@ -30128,9 +30161,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ColumnFactory = (function () {
 	    function ColumnFactory() {
 	    }
+	    /**
+	     * create an array of Column from definitions
+	     * @param columnDefs
+	     * @param state
+	     * @returns {Column[]}
+	     */
 	    ColumnFactory.createColumnsFromDefinition = function (columnDefs, state) {
-	        return columnDefs.map(function (cd) { return ColumnFactory.createColumnFromDefinition(cd, state); });
+	        var maskedTags = (state.columnDefMask || []).map(function (m) { return m.colTag; });
+	        return columnDefs.filter(function (cd) { return maskedTags.indexOf(cd.colTag) === -1; }).map(function (cd) { return ColumnFactory.createColumnFromDefinition(cd, state); });
 	    };
+	    /**
+	     * creates a single Column object from a ColumnDef (definition)
+	     * Column objects contain more rendering hints than ColumnDef objects which are passed in by the user
+	     * @param cd
+	     * @param state
+	     * @returns {Column}
+	     */
 	    ColumnFactory.createColumnFromDefinition = function (cd, state) {
 	        var column = {
 	            colTag: cd.colTag,
@@ -30148,6 +30195,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return column;
 	    };
+	    /**
+	     * Create a 2-dimensional structure of Column(s), this allow us to group column headers
+	     * @param columnGroupDefs
+	     * @param columnDefs
+	     * @param state
+	     * @returns {Column[][]}
+	     */
 	    ColumnFactory.createColumnsFromGroupDefinition = function (columnGroupDefs, columnDefs, state) {
 	        var columns = ColumnFactory.createColumnsFromDefinition(columnDefs, state);
 	        var columnMap = _.chain(columns).map(function (column) { return column.colTag; }).object(columns).value();
@@ -30247,7 +30301,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (subtotalBy.groupBy)
 	            return subtotalBy.groupBy(detailedRow);
 	        else
-	            return detailedRow.getByColTag(subtotalBy.colTag);
+	            return subtotalBy.title ? subtotalBy.title + " " + detailedRow.getByColTag(subtotalBy.colTag) : detailedRow.getByColTag(subtotalBy.colTag);
 	    };
 	    return TreeBuilder;
 	}());
@@ -31001,7 +31055,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    TableHeaderCell.prototype.renderDropdownMenu = function () {
 	        var _this = this;
-	        return (React.createElement("span", {style: { position: "relative" }}, React.createElement(DropdownMenu_1.DropdownMenu, {ref: function (c) { return _this.dropdownMenuRef = c; }, alignLeft: this.props.isLastColumn, toggleHandle: function () { return _this.dropdownToggleHandleRef; }}, React.createElement(SortMenuItem_1.SortMenuItem, {tableRowColumnDef: this.props.tableColumnDef, isLastColumn: this.props.isLastColumn, dispatcher: this.props.dispatcher}), React.createElement(SubtotalByMenuItem_1.SubtotalByMenuItem, {column: this.props.tableColumnDef, isLastColumn: this.props.isLastColumn, dispatcher: this.props.dispatcher}), React.createElement(FilterMenuItem_1.FilterMenuItem, {dispatcher: this.props.dispatcher, isLastColumn: this.props.isLastColumn, tableRowColumnDef: this.props.tableColumnDef}), React.createElement(CollapseAllMenuItem_1.CollapseAllMenuItem, {dispatcher: this.props.dispatcher, isLastColumn: this.props.isLastColumn, tableRowColumnDef: this.props.tableColumnDef}), React.createElement(ExpandAllMenuItem_1.ExpandAllMenuItem, {dispatcher: this.props.dispatcher, isLastColumn: this.props.isLastColumn, tableRowColumnDef: this.props.tableColumnDef}))));
+	        var cx = classNames({
+	            "dropdown-menu-toggle-handle": true,
+	            "fa": true,
+	            "fa-bars": true,
+	            "dropdown-menu-toggle-handle-hide": !this.state.handleVisible
+	        });
+	        return (React.createElement("span", {style: { position: "relative" }}, React.createElement("i", {key: 1, className: cx, ref: function (c) { return _this.dropdownToggleHandleRef = c; }, onClick: function () { return _this.dropdownMenuRef.toggleDisplay(); }}), React.createElement(DropdownMenu_1.DropdownMenu, {ref: function (c) { return _this.dropdownMenuRef = c; }, alignLeft: this.props.isLastColumn, toggleHandle: function () { return _this.dropdownToggleHandleRef; }}, React.createElement(SortMenuItem_1.SortMenuItem, {tableRowColumnDef: this.props.tableColumnDef, isLastColumn: this.props.isLastColumn, dispatcher: this.props.dispatcher}), React.createElement(SubtotalByMenuItem_1.SubtotalByMenuItem, {column: this.props.tableColumnDef, isLastColumn: this.props.isLastColumn, dispatcher: this.props.dispatcher}), React.createElement(FilterMenuItem_1.FilterMenuItem, {dispatcher: this.props.dispatcher, isLastColumn: this.props.isLastColumn, tableRowColumnDef: this.props.tableColumnDef}), React.createElement(CollapseAllMenuItem_1.CollapseAllMenuItem, {dispatcher: this.props.dispatcher, isLastColumn: this.props.isLastColumn, tableRowColumnDef: this.props.tableColumnDef}), React.createElement(ExpandAllMenuItem_1.ExpandAllMenuItem, {dispatcher: this.props.dispatcher, isLastColumn: this.props.isLastColumn, tableRowColumnDef: this.props.tableColumnDef}))));
 	    };
 	    TableHeaderCell.prototype.renderSortIcon = function () {
 	        if (this.props.tableColumnDef.sortDirection != undefined) {
@@ -31016,19 +31076,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    TableHeaderCell.prototype.render = function () {
 	        var _this = this;
 	        var columnDef = this.props.tableColumnDef;
-	        var cx = classNames({
-	            "dropdown-menu-toggle-handle": true,
-	            "fa": true,
-	            "fa-bars": true,
-	            "dropdown-menu-toggle-handle-hide": !this.state.handleVisible
-	        });
 	        var style = {
 	            width: this.props.tableColumnDef.width,
 	            overflow: "visible",
 	            position: "relative"
 	        };
-	        var dropdownMenuToggle = (React.createElement("i", {key: 1, className: cx, ref: function (c) { return _this.dropdownToggleHandleRef = c; }, onClick: function () { return _this.dropdownMenuRef.toggleDisplay(); }}));
-	        return (React.createElement("th", {style: style, onMouseEnter: function () { return _this.setState({ handleVisible: true }); }, onMouseLeave: function () { return _this.setState({ handleVisible: false }); }, className: columnDef.format === ColumnLike_1.ColumnFormat.NUMBER ? "numeric" : "non-numeric"}, this.props.isLastColumn ? [dropdownMenuToggle, " "] : null, React.createElement("span", {style: { "maxWidth": columnDef.width }}, columnDef.title || columnDef.colTag), this.renderSortIcon(), !this.props.isLastColumn ? [" ", dropdownMenuToggle] : null, this.renderDropdownMenu()));
+	        return (React.createElement("th", {style: style, onMouseEnter: function () { return _this.setState({ handleVisible: true }); }, onMouseLeave: function () { return _this.setState({ handleVisible: false }); }, className: columnDef.format === ColumnLike_1.ColumnFormat.NUMBER ? "numeric" : "non-numeric"}, React.createElement("span", {style: { "maxWidth": columnDef.width }}, columnDef.title || columnDef.colTag), this.renderSortIcon(), this.renderDropdownMenu()));
 	    };
 	    return TableHeaderCell;
 	}(React.Component));
@@ -31273,6 +31326,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    SubtotalByMenuItem.prototype.onSubmit = function (e) {
 	        var _this = this;
 	        var subtotalBy = {
+	            title: this.props.column.title,
 	            colTag: this.props.column.colTag
 	        };
 	        if (this.isNumericColumn()) {

@@ -56,6 +56,11 @@ export interface GigaProps extends React.Props<GigaGrid> {
     initialFilterBys?:FilterBy[]
 
     /**
+     * if set to true, we will not render the column that is used in subtotals
+     */
+    hideColumnOnSubtotal?:boolean
+
+    /**
      * Callback that fires when a row is clicked, return `false` in the passed callback function to suppress
      * default behavior (highlights the row)
      * @param row the `Row` object associated with the row the user clicked on
@@ -177,6 +182,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
         var columns:Column[][];
         if (this.props.columnGroups)
+            // TODO we need column groups to be aware of masks as well ... I think ...
             columns = ColumnFactory.createColumnsFromGroupDefinition(this.props.columnGroups, this.props.columnDefs, this.state);
         else
             columns = [ColumnFactory.createColumnsFromDefinition(this.props.columnDefs, this.state)];
