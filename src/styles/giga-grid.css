@@ -51,7 +51,6 @@ div.giga-grid .dropdown-submenu-align-left {
 div.giga-grid .dropdown-menu-toggle-handle {
   position: absolute;
   right: 0;
-  top: 25%;
   background-color: #e0e0e0;
 }
 div.giga-grid .dropdown-menu-toggle-handle-hide {
@@ -101,11 +100,12 @@ div.giga-grid tr.subtotal-row.selected {
 div.giga-grid tr td,
 div.giga-grid tr th {
   box-sizing: border-box;
-  padding: 8px 2px;
+  padding: 8px 5px;
 }
 div.giga-grid th:last-child,
 div.giga-grid td:last-child {
   padding-right: 10px;
+  border-left: none;
 }
 div.giga-grid th:first-child,
 div.giga-grid td:first-child {
@@ -115,6 +115,7 @@ div.giga-grid tr th {
   font-weight: normal;
   background-color: #e0e0e0;
   color: #333;
+  border-left: 1px solid #fff;
 }
 div.giga-grid tr th.column-group {
   text-align: center;
@@ -145,4 +146,7 @@ div.giga-grid .numeric {
 }
 div.giga-grid .non-numeric {
   text-align: left;
+}
+div.giga-grid span.header-text {
+  padding-right: 15px;
 }
