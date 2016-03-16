@@ -12,8 +12,7 @@ import {SortDirection} from "../models/ColumnLike";
 import {SubtotalByMenuItem} from "./dropdown/SubtotalByMenuItem";
 import {FilterMenuItem} from "./dropdown/FilterMenuItem";
 import {parsePixelValue} from "../static/WidthMeasureCalculator";
-import {CollapseAllMenuItem} from "./dropdown/CollapseAllMenuItem";
-import {ExpandAllMenuItem} from "./dropdown/ExpandAllMenuItem";
+import {GigaActionType} from "../store/GigaStore";
 
 export interface GridSubcomponentProps<T> extends React.Props<T> {
     dispatcher: Dispatcher<GigaAction>;
@@ -62,12 +61,16 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
                     <FilterMenuItem dispatcher={this.props.dispatcher}
                                     isLastColumn={this.props.isLastColumn}
                                     tableRowColumnDef={this.props.tableColumnDef}/>
-                    <CollapseAllMenuItem dispatcher={this.props.dispatcher}
-                                         isLastColumn={this.props.isLastColumn}
-                                         tableRowColumnDef={this.props.tableColumnDef}/>
-                    <ExpandAllMenuItem dispatcher={this.props.dispatcher}
-                                         isLastColumn={this.props.isLastColumn}
-                                         tableRowColumnDef={this.props.tableColumnDef}/>
+                    <SimpleDropdownMenuItem onClick={()=>{
+                                this.props.dispatcher.dispatch({
+                                type: GigaActionType.COLLAPSE_ALL
+                                })
+                        }} text="Collapse All" isLastColumn={this.props.isLastColumn}/>
+                    <SimpleDropdownMenuItem onClick={()=>{
+                                this.props.dispatcher.dispatch({
+                                    type: GigaActionType.EXPAND_ALL
+                                })
+                        }} text="Expand All" isLastColumn={this.props.isLastColumn}/>
                 </DropdownMenu>
             </span>
 

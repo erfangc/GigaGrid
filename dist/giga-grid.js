@@ -10919,15 +10919,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * state as oppose to application state?
 	     */
 	    GigaStore.prototype.initialize = function () {
-	        var _this = this;
-	        var subtotalByWithTitle = (this.props.initialSubtotalBys || []).map(function (sb) {
-	            var col = _.find(_this.props.columnDefs, function (cd) { return cd.colTag === sb.colTag; });
-	            return {
-	                colTag: sb.colTag,
-	                title: col.title
-	            };
-	        });
-	        var tree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, subtotalByWithTitle);
+	        var tree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, this.appendSubtotalBysWithTitle(this.props.initialSubtotalBys));
 	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, this.props.columnDefs);
 	        if (this.props.initialSortBys)
 	            tree = SortFactory_1.SortFactory.sortTree(tree, this.props.initialSortBys);
@@ -10943,6 +10935,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            tree: tree
 	        };
 	    };
+	    GigaStore.prototype.appendSubtotalBysWithTitle = function (subtotalBys) {
+	        var _this = this;
+	        return (subtotalBys || []).map(function (sb) {
+	            var col = _.find(_this.props.columnDefs, function (cd) { return cd.colTag === sb.colTag; });
+	            return {
+	                colTag: sb.colTag,
+	                title: col.title
+	            };
+	        });
+	    };
+	    ;
 	    GigaStore.prototype.columnMaskSubReducer = function (state, subtotalBy) {
 	        // TODO in the future, if we decide to maintain this library, we should think about how this should work in the presence of column grouping
 	        // we now mask the column and recompute column size
@@ -10988,10 +10991,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                newState = GigaStore.handleToggleCollapse(state, action);
 	                break;
 	            case GigaActionType.COLLAPSE_ALL:
-	                newState = GigaStore.handleToggleCollapseAll(state, action);
+	                newState = GigaStore.handleToggleCollapseAll(state);
 	                break;
 	            case GigaActionType.EXPAND_ALL:
-	                newState = GigaStore.handleToggleExpandAll(state, action);
+	                newState = GigaStore.handleToggleExpandAll(state);
 	                break;
 	            /*
 	             Sort Actions
@@ -11082,11 +11085,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /*
 	     Subtotal Action Handlers
 	     */
-	    GigaStore.handleToggleExpandAll = function (state, action) {
+	    GigaStore.handleToggleExpandAll = function (state) {
 	        TreeBuilder_1.TreeBuilder.toggleChildrenCollapse(state.tree.getRoot(), false);
 	        return _.clone(state);
 	    };
-	    GigaStore.handleToggleCollapseAll = function (state, action) {
+	    GigaStore.handleToggleCollapseAll = function (state) {
 	        TreeBuilder_1.TreeBuilder.toggleChildrenCollapse(state.tree.getRoot());
 	        return _.clone(state);
 	    };
@@ -31034,13 +31037,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(14);
 	var classNames = __webpack_require__(51);
 	var DropdownMenu_1 = __webpack_require__(55);
+	var DropdownMenu_2 = __webpack_require__(55);
 	var ColumnLike_1 = __webpack_require__(42);
 	var SortMenuItem_1 = __webpack_require__(56);
 	var ColumnLike_2 = __webpack_require__(42);
 	var SubtotalByMenuItem_1 = __webpack_require__(57);
 	var FilterMenuItem_1 = __webpack_require__(58);
-	var CollapseAllMenuItem_1 = __webpack_require__(59);
-	var ExpandAllMenuItem_1 = __webpack_require__(60);
+	var GigaStore_1 = __webpack_require__(21);
 	// Comment
 	var TableHeaderState = (function () {
 	    function TableHeaderState() {
@@ -31061,7 +31064,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "fa-bars": true,
 	            "dropdown-menu-toggle-handle-hide": !this.state.handleVisible
 	        });
-	        return (React.createElement("span", {style: { position: "relative" }}, React.createElement("i", {key: 1, className: cx, ref: function (c) { return _this.dropdownToggleHandleRef = c; }, onClick: function () { return _this.dropdownMenuRef.toggleDisplay(); }}), React.createElement(DropdownMenu_1.DropdownMenu, {ref: function (c) { return _this.dropdownMenuRef = c; }, alignLeft: this.props.isLastColumn, toggleHandle: function () { return _this.dropdownToggleHandleRef; }}, React.createElement(SortMenuItem_1.SortMenuItem, {tableRowColumnDef: this.props.tableColumnDef, isLastColumn: this.props.isLastColumn, dispatcher: this.props.dispatcher}), React.createElement(SubtotalByMenuItem_1.SubtotalByMenuItem, {column: this.props.tableColumnDef, isLastColumn: this.props.isLastColumn, dispatcher: this.props.dispatcher}), React.createElement(FilterMenuItem_1.FilterMenuItem, {dispatcher: this.props.dispatcher, isLastColumn: this.props.isLastColumn, tableRowColumnDef: this.props.tableColumnDef}), React.createElement(CollapseAllMenuItem_1.CollapseAllMenuItem, {dispatcher: this.props.dispatcher, isLastColumn: this.props.isLastColumn, tableRowColumnDef: this.props.tableColumnDef}), React.createElement(ExpandAllMenuItem_1.ExpandAllMenuItem, {dispatcher: this.props.dispatcher, isLastColumn: this.props.isLastColumn, tableRowColumnDef: this.props.tableColumnDef}))));
+	        return (React.createElement("span", {style: { position: "relative" }}, React.createElement("i", {key: 1, className: cx, ref: function (c) { return _this.dropdownToggleHandleRef = c; }, onClick: function () { return _this.dropdownMenuRef.toggleDisplay(); }}), React.createElement(DropdownMenu_1.DropdownMenu, {ref: function (c) { return _this.dropdownMenuRef = c; }, alignLeft: this.props.isLastColumn, toggleHandle: function () { return _this.dropdownToggleHandleRef; }}, React.createElement(SortMenuItem_1.SortMenuItem, {tableRowColumnDef: this.props.tableColumnDef, isLastColumn: this.props.isLastColumn, dispatcher: this.props.dispatcher}), React.createElement(SubtotalByMenuItem_1.SubtotalByMenuItem, {column: this.props.tableColumnDef, isLastColumn: this.props.isLastColumn, dispatcher: this.props.dispatcher}), React.createElement(FilterMenuItem_1.FilterMenuItem, {dispatcher: this.props.dispatcher, isLastColumn: this.props.isLastColumn, tableRowColumnDef: this.props.tableColumnDef}), React.createElement(DropdownMenu_2.SimpleDropdownMenuItem, {onClick: function () {
+	            _this.props.dispatcher.dispatch({
+	                type: GigaStore_1.GigaActionType.COLLAPSE_ALL
+	            });
+	        }, text: "Collapse All", isLastColumn: this.props.isLastColumn}), React.createElement(DropdownMenu_2.SimpleDropdownMenuItem, {onClick: function () {
+	            _this.props.dispatcher.dispatch({
+	                type: GigaStore_1.GigaActionType.EXPAND_ALL
+	            });
+	        }, text: "Expand All", isLastColumn: this.props.isLastColumn}))));
 	    };
 	    TableHeaderCell.prototype.renderSortIcon = function () {
 	        if (this.props.tableColumnDef.sortDirection != undefined) {
@@ -31429,75 +31440,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    FilterMenuItem.prototype.render = function () {
 	        // TODO wire up behavior
-	        return (React.createElement(DropdownMenu_1.SimpleDropdownMenuItem, {text: "Filter", isLastColumn: this.props.isLastColumn}, React.createElement("div", null, React.createElement("div", null, "Enter Your Filtering Criteria"), React.createElement("input", {type: "text", placeholder: "use >, < or =, ex: > 50"})), React.createElement("div", {className: "dropdown-menu-item hoverable"}, React.createElement("i", {className: "fa fa-check"}), " ", React.createElement("span", null, "Apply")), React.createElement("div", {className: "dropdown-menu-item hoverable"}, React.createElement("i", {className: "fa fa-ban"}), " ", React.createElement("span", null, "Clear"))));
+	        return (React.createElement(DropdownMenu_1.SimpleDropdownMenuItem, {text: "Filter", isLastColumn: this.props.isLastColumn}, React.createElement("h4", {style: { color: "red" }}, "This Feature is Not Functional Yet"), React.createElement("div", null, React.createElement("div", null, "Enter Your Filtering Criteria"), React.createElement("input", {type: "text", placeholder: "use >, < or =, ex: > 50"})), React.createElement("div", {className: "dropdown-menu-item hoverable"}, React.createElement("i", {className: "fa fa-check"}), " ", React.createElement("span", null, "Apply")), React.createElement("div", {className: "dropdown-menu-item hoverable"}, React.createElement("i", {className: "fa fa-ban"}), " ", React.createElement("span", null, "Clear"))));
 	    };
 	    return FilterMenuItem;
 	}(React.Component));
 	exports.FilterMenuItem = FilterMenuItem;
 	//# sourceMappingURL=FilterMenuItem.js.map
-
-/***/ },
-/* 59 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var React = __webpack_require__(14);
-	var DropdownMenu_1 = __webpack_require__(55);
-	var GigaStore_1 = __webpack_require__(21);
-	// TODO write tests for these
-	var CollapseAllMenuItem = (function (_super) {
-	    __extends(CollapseAllMenuItem, _super);
-	    function CollapseAllMenuItem(props) {
-	        _super.call(this, props);
-	    }
-	    CollapseAllMenuItem.prototype.render = function () {
-	        var _this = this;
-	        return (React.createElement(DropdownMenu_1.SimpleDropdownMenuItem, {onClick: function (e) {
-	            _this.props.dispatcher.dispatch({
-	                type: GigaStore_1.GigaActionType.COLLAPSE_ALL
-	            });
-	        }, text: "Collapse All", isLastColumn: this.props.isLastColumn}));
-	    };
-	    return CollapseAllMenuItem;
-	}(React.Component));
-	exports.CollapseAllMenuItem = CollapseAllMenuItem;
-	//# sourceMappingURL=CollapseAllMenuItem.js.map
-
-/***/ },
-/* 60 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var React = __webpack_require__(14);
-	var DropdownMenu_1 = __webpack_require__(55);
-	var GigaStore_1 = __webpack_require__(21);
-	var ExpandAllMenuItem = (function (_super) {
-	    __extends(ExpandAllMenuItem, _super);
-	    function ExpandAllMenuItem(props) {
-	        _super.call(this, props);
-	    }
-	    ExpandAllMenuItem.prototype.render = function () {
-	        var _this = this;
-	        return (React.createElement(DropdownMenu_1.SimpleDropdownMenuItem, {onClick: function (e) {
-	            _this.props.dispatcher.dispatch({
-	                type: GigaStore_1.GigaActionType.EXPAND_ALL
-	            });
-	        }, text: "Expand All", isLastColumn: this.props.isLastColumn}));
-	    };
-	    return ExpandAllMenuItem;
-	}(React.Component));
-	exports.ExpandAllMenuItem = ExpandAllMenuItem;
-	//# sourceMappingURL=ExpandAllMenuItem.js.map
 
 /***/ }
 /******/ ])
