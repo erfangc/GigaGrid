@@ -72,7 +72,7 @@ export class TreeBuilder {
         if (subtotalBy.groupBy)
             return subtotalBy.groupBy(detailedRow);
         else
-            return detailedRow.getByColTag(subtotalBy.colTag);
+            return subtotalBy.title ?  `${subtotalBy.title} ${detailedRow.getByColTag(subtotalBy.colTag)}` : detailedRow.getByColTag(subtotalBy.colTag);
     }
 
 }

@@ -40,8 +40,18 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
     }
 
     private renderDropdownMenu() {
+
+        const cx = classNames({
+            "dropdown-menu-toggle-handle": true,
+            "fa": true,
+            "fa-bars": true,
+            "dropdown-menu-toggle-handle-hide": !this.state.handleVisible
+        });
+
         return (
             <span style={{position:"relative"}}>
+                <i key={1} className={cx} ref={c=>this.dropdownToggleHandleRef=c}
+                   onClick={()=>this.dropdownMenuRef.toggleDisplay()}/>
                 <DropdownMenu ref={(c:DropdownMenu)=>this.dropdownMenuRef=c} alignLeft={this.props.isLastColumn}
                               toggleHandle={()=>this.dropdownToggleHandleRef}>
                     <SortMenuItem tableRowColumnDef={this.props.tableColumnDef} isLastColumn={this.props.isLastColumn}
@@ -82,34 +92,20 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
     render() {
         const columnDef = this.props.tableColumnDef;
 
-        const cx = classNames({
-            "dropdown-menu-toggle-handle": true,
-            "fa": true,
-            "fa-bars": true,
-            "dropdown-menu-toggle-handle-hide": !this.state.handleVisible
-        });
-
         const style = {
             width: this.props.tableColumnDef.width,
             overflow: "visible",
             position: "relative"
         };
 
-        const dropdownMenuToggle = (
-            <i key={1} className={cx} ref={c=>this.dropdownToggleHandleRef=c}
-               onClick={()=>this.dropdownMenuRef.toggleDisplay()}/>
-        );
-
         return (
             <th style={style} onMouseEnter={()=>this.setState({handleVisible:true})}
                 onMouseLeave={()=>this.setState({handleVisible:false})}
                 className={columnDef.format === ColumnFormat.NUMBER ? "numeric" : "non-numeric"}>
-                {this.props.isLastColumn ? [dropdownMenuToggle," "] : null}
                 <span style={{"maxWidth": columnDef.width}}>
                     {columnDef.title || columnDef.colTag}
                 </span>
                 {this.renderSortIcon()}
-                {!this.props.isLastColumn ? [" ", dropdownMenuToggle] : null}
                 {this.renderDropdownMenu()}
             </th>
         );
