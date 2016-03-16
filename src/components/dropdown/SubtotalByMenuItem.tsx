@@ -56,7 +56,7 @@ export class SubtotalByMenuItem extends React.Component<SubtotalByMenuItemProps,
         }
         const action:NewSubtotalAction = {
             type: GigaActionType.NEW_SUBTOTAL,
-            subtotalBys: [subtotalBy]
+            subtotalBy: subtotalBy
         };
         this.props.dispatcher.dispatch(action);
     }

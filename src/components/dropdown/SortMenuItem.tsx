@@ -9,7 +9,6 @@ import {DropdownMenuItemProps} from "./DropdownMenu";
 import {GigaProps} from "../GigaGrid";
 import {GridSubcomponentProps} from "../TableHeaderCell";
 import {GigaActionType} from "../../store/GigaStore";
-import {NewSubtotalAction} from "../../store/GigaStore";
 import {ClearSubtotalAction} from "../../store/GigaStore";
 import {NewSortAction} from "../../store/GigaStore";
 import {GigaAction} from "../../store/GigaStore";

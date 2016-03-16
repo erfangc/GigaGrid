@@ -105,25 +105,25 @@ export class GigaStore extends ReduceStore<GigaState> {
              Row Level Actions
              */
             case GigaActionType.TOGGLE_ROW_COLLAPSE:
-                newState = this.handleToggleCollapse(state, action as ToggleCollapseAction);
+                newState = GigaStore.handleToggleCollapse(state, action as ToggleCollapseAction);
                 break;
             case GigaActionType.COLLAPSE_ALL:
-                newState = this.handleToggleCollapseAll(state, action);
+                newState = GigaStore.handleToggleCollapseAll(state, action);
                 break;
             case GigaActionType.EXPAND_ALL:
-                newState = this.handleToggleExpandAll(state, action);
+                newState = GigaStore.handleToggleExpandAll(state, action);
                 break;
             /*
              Sort Actions
              */
             case GigaActionType.ADD_SORT:
-                newState = this.handleAddSort(state, action as AddSortAction);
+                newState = GigaStore.handleAddSort(state, action as AddSortAction);
                 break;
             case GigaActionType.NEW_SORT:
-                newState = this.handleNewSort(state, action as NewSortAction);
+                newState = GigaStore.handleNewSort(state, action as NewSortAction);
                 break;
             case GigaActionType.CLEAR_SORT:
-                newState = this.handleClearSort(state, action as ClearSortAction);
+                newState = GigaStore.handleClearSort(state, action as ClearSortAction);
                 break;
             /*
              Selection Actions
@@ -211,16 +211,16 @@ export class GigaStore extends ReduceStore<GigaState> {
     /*
      Subtotal Action Handlers
      */
-    private handleToggleExpandAll(state:GigaState, action: GigaAction):GigaState {
+    private static handleToggleExpandAll(state:GigaState, action: GigaAction):GigaState {
         TreeBuilder.toggleChildrenCollapse(state.tree.getRoot(), false);
         return _.clone(state);
     }
-    private handleToggleCollapseAll(state:GigaState, action: GigaAction):GigaState {
+    private static handleToggleCollapseAll(state:GigaState, action: GigaAction):GigaState {
         TreeBuilder.toggleChildrenCollapse(state.tree.getRoot());
         return _.clone(state);
     }
 
-    private handleToggleCollapse(state:GigaState, action:ToggleCollapseAction):GigaState {
+    private static handleToggleCollapse(state:GigaState, action:ToggleCollapseAction):GigaState {
         const row = action.subtotalRow;
         row.toggleCollapse();
         return _.clone(state);
@@ -228,13 +228,12 @@ export class GigaStore extends ReduceStore<GigaState> {
 
     private handleSubtotal(state:GigaState,
                            action:NewSubtotalAction):GigaState {
-        // TODO hacky
-        state.subtotalBys.push(action.subtotalBys[0]);
+        // TODO hacky please fix
+        state.subtotalBys.push(action.subtotalBy);
         const newTree = TreeBuilder.buildTree(this.props.data, state.subtotalBys);
         SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
         const newState = _.clone(state);
         newState.tree = newTree;
-        newState.subtotalBys = action.subtotalBys;
         return newState;
     }
 
@@ -252,7 +251,7 @@ export class GigaStore extends ReduceStore<GigaState> {
      TODO test these sort handlers
      Sort Action Handlers
      */
-    private handleAddSort(state:GigaState, action:AddSortAction):GigaState {
+    private static handleAddSort(state:GigaState, action:AddSortAction):GigaState {
         const sortBy = action.sortBy;
         state.sortBys.push(sortBy);
         const newTree:Tree = SortFactory.sortTree(state.tree, state.sortBys);
@@ -261,7 +260,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return newState;
     }
 
-    private handleNewSort(state:GigaState, action:NewSortAction):GigaState {
+    private static handleNewSort(state:GigaState, action:NewSortAction):GigaState {
         const newTree:Tree = SortFactory.sortTree(state.tree, action.sortBys);
         const newState = _.clone(state);
         newState.tree = newTree;
@@ -269,7 +268,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return newState;
     }
 
-    private handleClearSort(state:GigaState, action:ClearSortAction):GigaState {
+    private static handleClearSort(state:GigaState, action:ClearSortAction):GigaState {
         const newTree:Tree = SortFactory.sortTree(state.tree, []);
         const newState = _.clone(state);
         newState.tree = newTree;
@@ -312,7 +311,7 @@ export interface ToggleCollapseAction extends GigaAction {
 }
 
 export interface NewSubtotalAction extends GigaAction {
-    subtotalBys:SubtotalBy[]
+    subtotalBy:SubtotalBy
 }
 
 export interface ClearSubtotalAction extends GigaAction {
