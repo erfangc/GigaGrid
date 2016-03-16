@@ -54,14 +54,7 @@ export class GigaStore extends ReduceStore<GigaState> {
      */
     initialize():GigaState {
 
-        const subtotalByWithTitle:SubtotalBy[] = (this.props.initialSubtotalBys || []).map(sb => {
-            const col = _.find(this.props.columnDefs, cd=>cd.colTag === sb.colTag);
-            return {
-                colTag: sb.colTag,
-                title: col.title
-            }
-        });
-        var tree = TreeBuilder.buildTree(this.props.data, subtotalByWithTitle);
+        var tree = TreeBuilder.buildTree(this.props.data, this.appendSubtotalBysWithTitle(this.props.initialSubtotalBys));
         SubtotalAggregator.aggregateTree(tree, this.props.columnDefs);
 
         if (this.props.initialSortBys)
@@ -80,6 +73,16 @@ export class GigaStore extends ReduceStore<GigaState> {
             tree: tree
         }
     }
+
+    private appendSubtotalBysWithTitle(subtotalBys:SubtotalBy[]) {
+        return (subtotalBys || []).map(sb => {
+            const col = _.find(this.props.columnDefs, cd=>cd.colTag === sb.colTag);
+            return {
+                colTag: sb.colTag,
+                title: col.title
+            }
+        });
+    };
 
     columnMaskSubReducer(state:GigaState, subtotalBy:SubtotalBy):any {
         // TODO in the future, if we decide to maintain this library, we should think about how this should work in the presence of column grouping
@@ -131,10 +134,10 @@ export class GigaStore extends ReduceStore<GigaState> {
                 newState = GigaStore.handleToggleCollapse(state, action as ToggleCollapseAction);
                 break;
             case GigaActionType.COLLAPSE_ALL:
-                newState = GigaStore.handleToggleCollapseAll(state, action);
+                newState = GigaStore.handleToggleCollapseAll(state);
                 break;
             case GigaActionType.EXPAND_ALL:
-                newState = GigaStore.handleToggleExpandAll(state, action);
+                newState = GigaStore.handleToggleExpandAll(state);
                 break;
             /*
              Sort Actions
@@ -234,12 +237,12 @@ export class GigaStore extends ReduceStore<GigaState> {
     /*
      Subtotal Action Handlers
      */
-    private static handleToggleExpandAll(state:GigaState, action:GigaAction):GigaState {
+    private static handleToggleExpandAll(state:GigaState):GigaState {
         TreeBuilder.toggleChildrenCollapse(state.tree.getRoot(), false);
         return _.clone(state);
     }
 
-    private static handleToggleCollapseAll(state:GigaState, action:GigaAction):GigaState {
+    private static handleToggleCollapseAll(state:GigaState):GigaState {
         TreeBuilder.toggleChildrenCollapse(state.tree.getRoot());
         return _.clone(state);
     }
