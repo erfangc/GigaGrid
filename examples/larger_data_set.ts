@@ -1,22 +1,15 @@
-import {GigaGrid} from "../src/components/GigaGrid";
-import {TestUtils} from "../test/TestUtils";
-import {SubtotalBy} from "../src/models/ColumnLike";
-import * as $ from 'jquery';
+import {GigaGrid, GigaProps} from "../src/components/GigaGrid";
+import {ColumnFormat, AggregationMethod} from "../src/models/ColumnLike";
+import * as $ from "jquery";
 import React = require('react');
 import ReactDOM = require('react-dom');
-import {SortDirection} from "../src/models/ColumnLike";
-import {ColumnFormat} from "../src/models/ColumnLike";
-import {Row} from "../src/models/Row";
-import {AggregationMethod} from "../src/models/ColumnLike";
-import {GigaProps} from "../src/components/GigaGrid";
 
 $.ajax("./examples/data/Hotels.json").done(function (data:any[]) {
 
     const element = React.createElement<GigaProps>(GigaGrid, {
         bodyHeight: "500px",
         data: data,
-        columnDefs: columnDefs,
-        hideColumnOnSubtotal: true
+        columnDefs: columnDefs
     });
 
     ReactDOM.render(element, document.getElementById('larger_data_set'));
@@ -34,7 +27,7 @@ const columnDefs = [
         colTag: "Beds",
         title: "Beds",
         aggregationMethod: AggregationMethod.AVERAGE,
-        format: ColumnFormat.STRING,
+        format: ColumnFormat.NUMBER,
         formatInstruction: {
             roundTo: 0
         }

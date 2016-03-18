@@ -27,7 +27,8 @@ describe('GigaGrid', ()=> {
         const columnDefs:ColumnDef[] = peopleData.columnDefs();
         const component = ReactTestUtils.renderIntoDocument(<GigaGrid data={data} columnDefs={columnDefs} initialSubtotalBys={[{colTag: "gender"}]}/>);
         const trs = ReactTestUtils.scryRenderedDOMComponentsWithTag(component, "tr");
-        expect(trs.length).toBe(13);
+        expect(trs.length).toBe(3); // collapsed by default
+        // TODO add test for expanded columns
 
     });
 

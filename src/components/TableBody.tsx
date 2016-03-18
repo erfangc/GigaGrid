@@ -60,9 +60,9 @@ export class TableBody extends React.Component<TableBodyProps,any> {
 
             return (
                 <tbody>
-                    <tr style={{height: placeholderHeights.upperPlaceholderHeight + "px"}}/>
+                    <tr style={{height: placeholderHeights.upperPlaceholderHeight + "px"}} className="placeholder"/>
                     {rows}
-                    <tr style={{height: placeholderHeights.lowerPlaceholderHeight + "px"}}/>
+                    <tr style={{height: placeholderHeights.lowerPlaceholderHeight + "px"}} className="placeholder"/>
                 </tbody>
             );
 

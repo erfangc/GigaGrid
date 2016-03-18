@@ -1,18 +1,13 @@
-import * as React from 'react';
-import Dispatcher = Flux.Dispatcher;
-import * as classNames from 'classnames';
-import {Column} from "../models/ColumnLike";
-import {DropdownMenu} from "./dropdown/DropdownMenu";
-import {SimpleDropdownMenuItem} from "./dropdown/DropdownMenu";
-import {ColumnFormat} from "../models/ColumnLike";
+import * as React from "react";
+import * as classNames from "classnames";
+import {Column, ColumnFormat, SortDirection} from "../models/ColumnLike";
+import {DropdownMenu, SimpleDropdownMenuItem} from "./dropdown/DropdownMenu";
 import {SortMenuItem} from "./dropdown/SortMenuItem";
-import {GigaAction} from "../store/GigaStore";
-import ReactDOM = __React.ReactDOM;
-import {SortDirection} from "../models/ColumnLike";
+import {GigaAction, GigaActionType} from "../store/GigaStore";
 import {SubtotalByMenuItem} from "./dropdown/SubtotalByMenuItem";
 import {FilterMenuItem} from "./dropdown/FilterMenuItem";
-import {parsePixelValue} from "../static/WidthMeasureCalculator";
-import {GigaActionType} from "../store/GigaStore";
+import Dispatcher = Flux.Dispatcher;
+import ReactDOM = __React.ReactDOM;
 
 export interface GridSubcomponentProps<T> extends React.Props<T> {
     dispatcher: Dispatcher<GigaAction>;
@@ -96,16 +91,21 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
         const columnDef = this.props.tableColumnDef;
 
         const style = {
-            width: this.props.tableColumnDef.width,
             overflow: "visible",
             position: "relative"
         };
 
+        const cx = classNames({
+            "table-header": true,
+            "numeric": columnDef.format === ColumnFormat.NUMBER,
+            "non-numeric": columnDef.format !== ColumnFormat.NUMBER
+        });
+
         return (
             <th style={style} onMouseEnter={()=>this.setState({handleVisible:true})}
                 onMouseLeave={()=>this.setState({handleVisible:false})}
-                className={columnDef.format === ColumnFormat.NUMBER ? "numeric" : "non-numeric"}>
-                <span style={{"maxWidth": columnDef.width}} className="header-text">
+                className={cx}>
+                <span className="header-text">
                     {columnDef.title || columnDef.colTag}
                 </span>
                 {this.renderSortIcon()}

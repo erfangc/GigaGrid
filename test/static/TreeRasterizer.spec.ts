@@ -1,6 +1,4 @@
-import {Tree} from "../../src/static/TreeBuilder";
-import {TreeBuilder} from "../../src/static/TreeBuilder";
-import {SubtotalBy} from "../../src/models/ColumnLike";
+import {Tree, TreeBuilder} from "../../src/static/TreeBuilder";
 import {Row} from "../../src/models/Row";
 import {TreeRasterizer} from "../../src/static/TreeRasterizer";
 import {TestUtils} from "../TestUtils";
@@ -14,16 +12,13 @@ describe("TreeRasterizer", ()=> {
         const rows:Row[] = TreeRasterizer.rasterize(tree);
 
         it("can render the correct number of rows including subtotal rows", ()=> {
-            expect(rows.length).toBe(12);
+            expect(rows.length).toBe(2); // collapsed by default
+            // TODO add more test for expanding
         });
 
         it("the first row in a subtotaled data set should be a subtotal row", ()=> {
             expect(rows[0].title).toMatch(/Male|Female/);
             expect(rows[0].isDetail()).toBeFalsy();
-        });
-
-        it("the second row in a subtotaled data set should not be a subtotal row", () => {
-            expect(rows[1].isDetail()).toBeTruthy();
         });
 
     });
