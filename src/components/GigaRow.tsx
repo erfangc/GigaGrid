@@ -13,6 +13,7 @@ import {Cell} from "./Cell";
 
 export interface GigaRowProps extends GridSubcomponentProps<GigaRow> {
     row:Row;
+    rowHeight: string;
     columns:Column[];
 }
 
@@ -34,10 +35,11 @@ export class GigaRow extends React.Component<GigaRowProps, any> {
                 return (<Cell key={i}
                               isFirstColumn={i === 0}
                               column={column}
+                              rowHeight={this.props.rowHeight}
                               dispatcher={this.props.dispatcher}
                               row={this.props.row}/>)
             });
-        return <tr className={cx} onClick={()=>{
+        return <tr className={cx} style={{height: this.props.rowHeight}} onClick={()=>{
             var action = {
                 type: GigaActionType.TOGGLE_ROW_SELECT,
                 row: this.props.row

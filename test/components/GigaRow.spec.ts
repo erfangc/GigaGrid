@@ -23,6 +23,7 @@ describe("GigaRow Components", () => {
 
         function toDOM(subtotalRow:SubtotalRow) {
             const props:GigaRowProps = {
+                rowHeight: "",
                 dispatcher: null,
                 row: subtotalRow,
                 columns: TestUtils.getSimpleColumnDefs()
@@ -94,6 +95,7 @@ describe("GigaRow Components", () => {
             var $tr;
             beforeEach(()=> {
                 const props:GigaRowProps = {
+                    rowHeight: "",
                     dispatcher: null,
                     row: TestUtils.getDetailRow(),
                     columns: TestUtils.getSimpleColumnDefs()
@@ -122,6 +124,7 @@ describe("GigaRow Components", () => {
             detailRow.setSectorPath(['Some Parent']);
             const props:GigaRowProps = {
                 dispatcher: null,
+                rowHeight: "",
                 row: detailRow,
                 columns: TestUtils.getSimpleColumnDefs()
             };
@@ -135,6 +138,7 @@ describe("GigaRow Components", () => {
         it("should render a row with missing data", ()=> {
             const props:GigaRowProps = {
                 dispatcher: null,
+                rowHeight: "",
                 row: TestUtils.getDetailRowWithMissingData(),
                 columns: TestUtils.getSimpleColumnDefs()
             };

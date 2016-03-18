@@ -31,7 +31,7 @@ describe("Cell", ()=> {
             <table>
                 <tbody>
                     <tr>
-                        <Cell ref={c=>component=c} isFirstColumn={true} dispatcher={dispatcher}
+                        <Cell ref={c=>component=c} rowHeight={""} isFirstColumn={true} dispatcher={dispatcher}
                               column={columns[2]}
                               row={row}/>
                     </tr>
@@ -57,6 +57,7 @@ describe("Cell", ()=> {
                     <tr>
                         <Cell ref={c=>component=c}
                               isFirstColumn={false}
+                              rowHeight={""}
                               dispatcher={dispatcher}
                               column={colDef}
                               row={row}/>
@@ -81,6 +82,7 @@ describe("Cell", ()=> {
                 <tbody>
                     <tr>
                         <Cell ref={c=>component=c}
+                              rowHeight={""}
                               isFirstColumn={true}
                               dispatcher={dispatcher}
                               column={colDef}
@@ -100,6 +102,7 @@ describe("Cell", ()=> {
                 <tbody>
                     <tr>
                         <Cell ref={c=>component=c}
+                              rowHeight={""}
                               isFirstColumn={true}
                               dispatcher={dispatcher}
                               column={colDef}
