@@ -37,6 +37,7 @@ export class SubtotalByMenuItem extends React.Component<SubtotalByMenuItemProps,
             colTag: this.props.column.colTag
         };
         if (this.isNumericColumn()) {
+            // TODO test these functions they are clearly not working!
             if (this.getInputErrors(this.input).length > 0)
                 return;
             else // create a bucketing function that will produce the correct sector title for every detail row
@@ -52,7 +53,7 @@ export class SubtotalByMenuItem extends React.Component<SubtotalByMenuItemProps,
                         if (cutoffs[i] < value)
                             return `${column.title} ${cutoffs[i]} - ${cutoffs[i + 1]}`
                     }
-                    return `${column.title} ${cutoffs[0]} -`;
+                    return `${column.title} ${cutoffs[0]} - `;
                 }
         }
         const action:NewSubtotalAction = {
@@ -60,6 +61,7 @@ export class SubtotalByMenuItem extends React.Component<SubtotalByMenuItemProps,
             subtotalBy: subtotalBy
         };
         this.props.dispatcher.dispatch(action);
+        
     }
 
     private onCancel(e:SyntheticEvent) {

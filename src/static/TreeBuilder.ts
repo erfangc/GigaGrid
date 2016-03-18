@@ -36,10 +36,31 @@ export class TreeBuilder {
     };
 
     // TODO add tests
-    public static toggleChildrenCollapse(node:SubtotalRow, state: boolean = true) {
-        node.getChildren().forEach((child)=>{
-            child.toggleCollapse(state);
-            TreeBuilder.toggleChildrenCollapse(child);
+    /**
+     * recurisvely collapse the given node
+     * @param node
+     * @param shouldCollapse
+     */
+    public static recursivelyToggleChildrenCollapse(node:SubtotalRow, shouldCollapse:boolean = true) {
+        /**
+         *
+         * @param node
+         * @param shouldCollapse
+         * @private
+         */
+        function _toggleCollapse(node, shouldCollapse) {
+            node.toggleCollapse(shouldCollapse);
+            TreeBuilder.recursivelyToggleChildrenCollapse(node, shouldCollapse);
+        }
+
+        node.getChildren().forEach((child)=> {
+            if (shouldCollapse) {
+                _toggleCollapse(child, shouldCollapse);
+            } else { // expand all
+                if (child.getChildren().length || child.sectorPath().length === 1) {
+                    _toggleCollapse(child, shouldCollapse);
+                }
+            }
         });
     }
 
@@ -59,6 +80,7 @@ export class TreeBuilder {
             else {
                 // create a new sector if it is not already available
                 const newRow = new SubtotalRow(subtotalTitles[k]);
+                newRow.toggleCollapse(true);
                 // set the sector path for the new SubtotalRow we just created the length of which determines its depth
                 newRow.setSectorPath(subtotalTitles.slice(0, k + 1));
                 currentRow.addChild(newRow);
@@ -72,7 +94,7 @@ export class TreeBuilder {
         if (subtotalBy.groupBy)
             return subtotalBy.groupBy(detailedRow);
         else
-            return subtotalBy.title ?  `${subtotalBy.title} ${detailedRow.getByColTag(subtotalBy.colTag)}` : detailedRow.getByColTag(subtotalBy.colTag);
+            return subtotalBy.title ? `${subtotalBy.title}: ${detailedRow.getByColTag(subtotalBy.colTag)}` : detailedRow.getByColTag(subtotalBy.colTag);
     }
 
 }

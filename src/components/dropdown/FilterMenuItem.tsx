@@ -19,7 +19,7 @@ export class FilterMenuItem extends React.Component<FilterMenuItemProps, any> {
         // TODO wire up behavior
         return (
             <SimpleDropdownMenuItem text="Filter" isLastColumn={this.props.isLastColumn}>
-                <h4 style={{color:"red"}}>This Feature is Not Functional Yet</h4>
+                <h5 style={{color:"red"}}>This Feature is Not Functional Yet</h5>
                 <div>
                     <div>Enter Your Filtering Criteria</div>
                     <input type="text" placeholder="use >, < or =, ex: > 50"/>

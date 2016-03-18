@@ -67,9 +67,9 @@ export class GigaStore extends ReduceStore<GigaState> {
             displayStart: 0,
             displayEnd: Math.min(rasterizedRows.length - 1, PROGRESSIVE_RENDERING_THRESHOLD),
             widthMeasures: WidthMeasureCalculator.computeWidthMeasures(this.props.bodyWidth, this.props.columnDefs),
-            subtotalBys: this.props.initialSubtotalBys || [],
-            sortBys: this.props.initialSortBys || [],
-            filterBys: this.props.initialFilterBys || [],
+            subtotalBys: _.cloneDeep(this.props.initialSubtotalBys) || [],
+            sortBys: _.cloneDeep(this.props.initialSortBys) || [],
+            filterBys: _.cloneDeep(this.props.initialFilterBys) || [],
             tree: tree
         }
     }
@@ -125,7 +125,7 @@ export class GigaStore extends ReduceStore<GigaState> {
                 newState = this.handleSubtotal(state, action as NewSubtotalAction);
                 break;
             case GigaActionType.CLEAR_SUBTOTAL:
-                newState = this.handleClearSubtotal(state, action as ClearSubtotalAction);
+                newState = this.handleClearSubtotal(state);
                 break;
             /*
              Row Level Actions
@@ -163,6 +163,11 @@ export class GigaStore extends ReduceStore<GigaState> {
             default:
                 newState = state;
         }
+
+        // record the action
+        if (newState !== state)
+            newState.lastAction = action;
+
         /*
          determine if an action should trigger rasterization
          todo I wonder if we need to re-compute display bounds after rasterization if so, viewport and canvas must become states so we can access them here
@@ -238,12 +243,12 @@ export class GigaStore extends ReduceStore<GigaState> {
      Subtotal Action Handlers
      */
     private static handleToggleExpandAll(state:GigaState):GigaState {
-        TreeBuilder.toggleChildrenCollapse(state.tree.getRoot(), false);
+        TreeBuilder.recursivelyToggleChildrenCollapse(state.tree.getRoot(), false);
         return _.clone(state);
     }
 
     private static handleToggleCollapseAll(state:GigaState):GigaState {
-        TreeBuilder.toggleChildrenCollapse(state.tree.getRoot());
+        TreeBuilder.recursivelyToggleChildrenCollapse(state.tree.getRoot());
         return _.clone(state);
     }
 
@@ -264,15 +269,14 @@ export class GigaStore extends ReduceStore<GigaState> {
 
         state.subtotalBys.push(action.subtotalBy);
         const newTree = TreeBuilder.buildTree(this.props.data, state.subtotalBys);
+        TreeBuilder.recursivelyToggleChildrenCollapse(newTree.getRoot(), false);
         SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
         const newState = _.clone(state);
         newState.tree = newTree;
         return newState;
     }
 
-    private handleClearSubtotal(state:GigaState,
-                                action:ClearSubtotalAction):GigaState {
-
+    private handleClearSubtotal(state:GigaState):GigaState {
         if (!this.props.columnGroups && this.props.hideColumnOnSubtotal) {
             // TODO in the future, if we decide to maintain this library, we should think about how this should work in the presence of column grouping
             var {widthMeasures, columnDefMask} = this.columnMaskSubReducer(state, null);

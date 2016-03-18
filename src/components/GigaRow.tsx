@@ -26,6 +26,7 @@ export class GigaRow extends React.Component<GigaRowProps, any> {
     render() {
         const props = this.props;
         const cx = classNames({
+            "placeholder-false": true,
             "subtotal-row": !props.row.isDetail(),
             "selected": props.row.isSelected()
         });

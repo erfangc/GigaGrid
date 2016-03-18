@@ -1,38 +1,28 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as Flux from 'flux';
+import * as _ from "lodash";
 import * as FluxUtils from 'flux/utils';
 import $ = require('jquery');
 import ReactElement = __React.ReactElement;
 import {SubtotalBy} from "../models/ColumnLike";
 import {ColumnDef} from "../models/ColumnLike";
-import {ColumnFormat} from "../models/ColumnLike";
 import {Row} from "../models/Row";
 import {Column} from "../models/ColumnLike";
-import {SubtotalRow} from "../models/Row";
-import {DetailRow} from "../models/Row";
-import {TableHeaderCell} from "./TableHeaderCell";
-import {TreeRasterizer} from "../static/TreeRasterizer";
 import {Tree} from "../static/TreeBuilder";
 import {GigaStore} from "../store/GigaStore";
 import ReduceStore = FluxUtils.ReduceStore;
 import Dispatcher = Flux.Dispatcher;
 import {GigaAction} from "../store/GigaStore";
-import {GigaRow} from "./GigaRow";
 import {SortBy} from "../models/ColumnLike";
 import {FilterBy} from "../models/ColumnLike";
-import {TableWidthChangeAction} from "../store/GigaStore";
 import {GigaActionType} from "../store/GigaStore";
 import {WidthMeasures} from "../static/WidthMeasureCalculator";
-import {WidthMeasureCalculator} from "../static/WidthMeasureCalculator";
-import {parsePixelValue} from "../static/WidthMeasureCalculator";
 import {validateColumnWidthProperty} from "../static/WidthMeasureCalculator";
-import {getScrollBarWidth} from "../static/WidthMeasureCalculator";
 import {TableBody} from "./TableBody";
 import {ColumnFactory} from "../models/ColumnLike";
 import {ColumnGroupDef} from "../models/ColumnLike";
 import {TableHeader} from "./TableHeader";
-import {ScrollCalculator} from "../static/ScrollCalculator";
 import {ChangeRowDisplayBoundsAction} from "../store/GigaStore";
 
 /**
@@ -65,7 +55,7 @@ export interface GigaProps extends React.Props<GigaGrid> {
      * default behavior (highlights the row)
      * @param row the `Row` object associated with the row the user clicked on
      */
-    onRowClick?: (row:Row)=>boolean
+    onRowClick?:(row:Row)=>boolean
 
     /**
      * Callback that fires when a cell is clicked, return `false` in the passed callback function to suppress
@@ -84,7 +74,7 @@ export interface GigaProps extends React.Props<GigaGrid> {
      * @param row
      * @param columnDef
      */
-    onCellClick?: (row:Row, columnDef:Column)=>boolean
+    onCellClick?:(row:Row, columnDef:Column)=>boolean
 
     /**
      * array of object literals representing the raw un-subtotaled data
@@ -120,18 +110,19 @@ export interface GigaState {
 
     subtotalBys:SubtotalBy[]
     sortBys:SortBy[]
-    filterBys: FilterBy[]
+    filterBys:FilterBy[]
 
     /*
      the displayable view of the data in `tree`
      */
-    rasterizedRows: Row[]
-    displayStart: number
-    displayEnd: number
+    rasterizedRows:Row[]
+    displayStart:number
+    displayEnd:number
 
-    columnDefMask?: ColumnDef[]
+    columnDefMask?:ColumnDef[]
+    lastAction?:GigaAction
 
-    widthMeasures: WidthMeasures
+    widthMeasures:WidthMeasures
 }
 
 /**
@@ -182,7 +173,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
         var columns:Column[][];
         if (this.props.columnGroups)
-            // TODO we need column groups to be aware of masks as well ... I think ...
+        // TODO we need column groups to be aware of masks as well ... I think ...
             columns = ColumnFactory.createColumnsFromGroupDefinition(this.props.columnGroups, this.props.columnDefs, this.state);
         else
             columns = [ColumnFactory.createColumnsFromDefinition(this.props.columnDefs, this.state)];
@@ -233,7 +224,23 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             width: parentWidth
         };
         this.dispatcher.dispatch(action);
+    }
 
+    /**
+     * on component update, we use jquery to align table headers
+     * this is the "give up" solution, implemented in 0.1.7
+     */
+    componentDidUpdate() {
+        if (this.state.lastAction && this.state.lastAction.type === GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS && this.state.displayStart != 0)
+            return;
+        const node = ReactDOM.findDOMNode(this);
+        const $tableHeaders = $(node).find("th.table-header");
+        const $firstRowInBody = $(node).find("tbody tr.placeholder-false:first td");
+        _.chain($tableHeaders).zip($firstRowInBody).each((pair)=> {
+            const $th = $(pair[0]);
+            const $td = $(pair[1]);
+            $th.innerWidth($td.innerWidth());
+        }).value();
     }
 
     componentDidMount() {

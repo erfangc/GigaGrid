@@ -4,7 +4,7 @@ var round = Math.round;
 
 export interface WidthMeasures {
     bodyWidth:string
-    columnWidths: any
+    columnWidths:any
 }
 
 export function parsePixelValue(pxMeasure:string):number {
@@ -68,6 +68,14 @@ export function getScrollBarWidth() {
 // #7 Determine column width automatically if not passed in by the user https://github.com/erfangc/GigaGrid/issues/7
 export class WidthMeasureCalculator {
 
+    /**
+     * takes a bodyWidth (which could be empty or null) and a set of column definitions
+     * determines how to ration bodyWidth amongst the columns. Columns could specify preferred width through the `width` property
+     * this only tries to affect the cell width not the header width ... header width as of v0.1.7 is sync-ed to cell width via a callback on componentDidUpdate
+     * @param bodyWidth
+     * @param columnDefs
+     * @returns {WidthMeasures}
+     */
     static computeWidthMeasures(bodyWidth:string, columnDefs:ColumnDef[]):WidthMeasures {
         var columnWidthProvided = validateColumnWidthProperty(columnDefs);
 
