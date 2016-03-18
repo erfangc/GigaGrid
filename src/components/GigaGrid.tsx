@@ -163,7 +163,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         data: [],
         columnDefs: [],
         bodyHeight: "100%",
-        rowHeight: "35px"
+        rowHeight: "25px"
     };
 
     constructor(props:GigaProps) {

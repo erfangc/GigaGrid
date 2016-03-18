@@ -1,13 +1,11 @@
 @import "dropdown-menu"
 
-// we use material design colors and accents
-// see: https://www.google.com/design/spec/style/color.html#color-color-palette
-main-color = #e0e0e0
-header-text-color=#333
+main-color = #4a5564
+header-text-color=#fff
 cell-border-color = #f5f5f5
-selected-color = #f5f5f5
-subtotal-color = selected-color
-subtotal-selected-color = #e0e0e0
+selected-color = rgba(74, 85, 100, 0.50)
+subtotal-color = #fff
+subtotal-selected-color = rgba(74, 85, 100, 0.65)
 
 div.giga-grid
   margin 0
@@ -20,7 +18,7 @@ div.giga-grid
 
   table
     border-collapse collapse
-    font-size 13px
+    font-size 11px
     table-layout:fixed
 
   tr.selected
@@ -31,7 +29,7 @@ div.giga-grid
 
   tr td, tr th
     box-sizing border-box
-    padding 8px 5px
+    padding 2px 5px
 
   th:last-child, td:last-child
     padding-right 10px

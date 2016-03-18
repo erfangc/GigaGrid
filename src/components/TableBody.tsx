@@ -28,7 +28,7 @@ export class TableBody extends React.Component<TableBodyProps,any> {
         );
     }
 
-    private renderRows(start?:number, end?:number) {
+    private renderRows(rowHeight: number, start?:number, end?:number) {
         function validateBounds() {
             return typeof start !== "undefined" && typeof end !== "undefined";
         }
@@ -38,6 +38,7 @@ export class TableBody extends React.Component<TableBodyProps,any> {
             return (<GigaRow key={i}
                              columns={this.props.columns}
                              row={row}
+                             rowHeight={`${rowHeight}`}
                              dispatcher={this.props.dispatcher}/>);
         });
     }
@@ -54,7 +55,7 @@ export class TableBody extends React.Component<TableBodyProps,any> {
 
              this allow us to preserve the total height of contents in tbody without actually rendering every row
              */
-            const rows = this.renderRows(this.props.displayStart, this.props.displayEnd);
+            const rows = this.renderRows(parseInt(this.props.rowHeight), this.props.displayStart, this.props.displayEnd);
             const placeholderHeights = this.calculatePlaceholderHeight();
 
             return (
@@ -66,7 +67,7 @@ export class TableBody extends React.Component<TableBodyProps,any> {
             );
 
         } else {
-            const rows = this.renderRows();
+            const rows = this.renderRows(parseInt(this.props.rowHeight));
             return (
                 <tbody>
                     {rows}
