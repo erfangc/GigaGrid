@@ -1,7 +1,7 @@
 // Karma configuration
 // Generated on Mon Dec 21 2015 16:09:58 GMT-0500 (Eastern Standard Time)
 
-var webpackConfig = require("./webpack.config.js");
+var webpackConfig = require("./webpack.common.js");
 delete webpackConfig.entry; // no need for entry, test files are the entry points
 
 module.exports = function (config) {
@@ -14,7 +14,6 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'jspm_packages/npm/phantomjs-polyfill@0.0.1/bind-polyfill.js',
             'test/**/*.spec.ts',
             'test/**/*.spec.tsx'
         ],
