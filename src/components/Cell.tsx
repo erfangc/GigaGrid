@@ -65,7 +65,6 @@ export class Cell extends React.Component<CellProps,any> {
         return {
             width: this.props.column.width,
             height: this.props.rowHeight,
-            overflow: "hidden",
             paddingLeft: this.props.isFirstColumn ? TableRowUtils.calculateFirstColumnIdentation(this.props.row) : undefined
         };
     }

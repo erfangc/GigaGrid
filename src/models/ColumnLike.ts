@@ -87,7 +87,6 @@ export class ColumnFactory {
             title: cd.title,
             aggregationMethod: cd.aggregationMethod,
             format: cd.format,
-            width: state.widthMeasures.columnWidths[cd.colTag],
             cellTemplateCreator: cd.cellTemplateCreator
         };
 

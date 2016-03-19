@@ -1,6 +1,3 @@
-import * as $ from 'jquery';
-import {parsePixelValue} from "./WidthMeasureCalculator";
-
 export interface DisplayBoundaries {
     displayStart: number,
     displayEnd: number

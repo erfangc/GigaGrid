@@ -4,7 +4,6 @@ import {GridSubcomponentProps} from "../../src/components/TableHeaderCell";
 import {Column} from "../../src/models/ColumnLike";
 import Element = JSX.Element;
 import {TableHeaderCell} from "./TableHeaderCell";
-import {getScrollBarWidth} from "../static/WidthMeasureCalculator";
 
 export interface TableHeaderProps extends GridSubcomponentProps<TableHeader> {
     columns: Column[][]
@@ -46,7 +45,6 @@ export class TableHeader extends React.Component<TableHeaderProps,any> {
                 <th className="column-group" key={i} colSpan={column.colSpan}>{column.title}</th>
             );
         });
-        ths.push(TableHeader.renderPlaceholder("column-group"));
         return (<tr className="column-group-row" key={key}>{ths}</tr>);
     }
 
@@ -55,18 +53,7 @@ export class TableHeader extends React.Component<TableHeaderProps,any> {
             return <TableHeaderCell tableColumnDef={colDef} key={i} isFirstColumn={i===0}
                                     isLastColumn={i===columns.length-1} dispatcher={this.props.dispatcher}/>
         });
-        ths.push(TableHeader.renderPlaceholder());
         return (<tr key={key}>{ths}</tr>);
-    }
-
-    private static renderPlaceholder(className?:string) {
-        const scrollBarWidth = getScrollBarWidth();
-        /*
-         add an placeholder to align the header with cells
-         https://github.com/erfangc/GigaGrid/issues/7
-         */
-        return (<th key="placeholder" className={className}
-                    style={{width: scrollBarWidth + "px"}}/>);
     }
 
 }
