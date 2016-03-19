@@ -1,13 +1,19 @@
 module.exports = {
-    entry: "./build/src/index.js",
+    entry: "./src/index.ts",
     output: {
         path: "./dist",
         libraryTarget: "umd",
         library: "GigaGrid",
         filename: "giga-grid.js"
     },
+    resolve: {
+        extensions: ['', 'webpack.js', '.web.js', 'js', '.ts', '.tsx']
+    },
     module: {
         loaders: [
+            {
+                test: /\.tsx?$/, loader: "ts-loader"
+            },
             {
                 test: /\.css$/, loader: "style-loader!css-loader"
             },

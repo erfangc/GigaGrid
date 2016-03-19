@@ -1,8 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import * as Flux from 'flux';
 import * as _ from "lodash";
-import * as FluxUtils from 'flux/utils';
 import $ = require('jquery');
 import ReactElement = __React.ReactElement;
 import {SubtotalBy} from "../models/ColumnLike";
@@ -11,8 +9,7 @@ import {Row} from "../models/Row";
 import {Column} from "../models/ColumnLike";
 import {Tree} from "../static/TreeBuilder";
 import {GigaStore} from "../store/GigaStore";
-import ReduceStore = FluxUtils.ReduceStore;
-import Dispatcher = Flux.Dispatcher;
+import {Dispatcher} from 'flux';
 import {GigaAction} from "../store/GigaStore";
 import {SortBy} from "../models/ColumnLike";
 import {FilterBy} from "../models/ColumnLike";
