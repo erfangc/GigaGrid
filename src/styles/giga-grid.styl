@@ -11,15 +11,16 @@ div.giga-grid
   margin 0
   font-family Roboto, sans-serif
   color #333
-  overflow-x auto
-
-  div.giga-grid-body-scroll-y
-    overflow-y auto
 
   table
     border-collapse collapse
     font-size 11px
-    table-layout:fixed
+
+  div.giga-grid-body-viewport
+    overflow-y auto
+
+  table.header-table
+    table-layout fixed
 
   tr.selected
     background-color selected-color
@@ -30,6 +31,7 @@ div.giga-grid
   tr td, tr th
     box-sizing border-box
     padding 2px 5px
+    min-width 10em
 
   th:last-child, td:last-child
     padding-right 10px

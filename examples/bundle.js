@@ -47,6 +47,8 @@
 	"use strict";
 	var basic_example_tsx_1 = __webpack_require__(1);
 	basic_example_tsx_1.default();
+	var larger_data_set_1 = __webpack_require__(205);
+	larger_data_set_1.default();
 
 
 /***/ },
@@ -19907,7 +19909,7 @@
 
 
 	// module
-	exports.push([module.id, "div.giga-grid .dropdown-menu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  left: 0;\n}\ndiv.giga-grid .dropdown-menu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  right: 0;\n}\ndiv.giga-grid .dropdown-submenu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  left: 100%;\n}\ndiv.giga-grid .dropdown-submenu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  right: 50%;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle {\n  position: absolute;\n  right: 0;\n  background-color: #4a5564;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle-hide {\n  opacity: 0;\n}\ndiv.giga-grid .dropdown-menu-item {\n  position: relative;\n  padding-bottom: 5px;\n  padding-left: 10px;\n  padding-top: 5px;\n  color: #666;\n  border-radius: 2px;\n}\ndiv.giga-grid .dropdown-menu-item.hoverable:hover {\n  cursor: pointer;\n  background-color: #eee;\n}\ndiv.giga-grid .dropdown-menu-item input {\n  border: none;\n  border-bottom: 2px solid #666;\n  margin-top: 10px;\n  margin-bottom: 10px;\n  padding-top: 5px;\n  padding-bottom: 5px;\n  font-size: 13px;\n}\ndiv.giga-grid {\n  margin: 0;\n  font-family: Roboto, sans-serif;\n  color: #333;\n  overflow-x: auto;\n}\ndiv.giga-grid div.giga-grid-body-scroll-y {\n  overflow-y: auto;\n}\ndiv.giga-grid table {\n  border-collapse: collapse;\n  font-size: 11px;\n  table-layout: fixed;\n}\ndiv.giga-grid tr.selected {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row.selected {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid tr td,\ndiv.giga-grid tr th {\n  box-sizing: border-box;\n  padding: 2px 5px;\n}\ndiv.giga-grid th:last-child,\ndiv.giga-grid td:last-child {\n  padding-right: 10px;\n  border-left: none;\n}\ndiv.giga-grid th:first-child,\ndiv.giga-grid td:first-child {\n  padding-left: 10px;\n}\ndiv.giga-grid tr th {\n  font-weight: normal;\n  background-color: #4a5564;\n  color: #fff;\n  border-left: 1px solid #fff;\n}\ndiv.giga-grid tr th.column-group {\n  text-align: center;\n  border-right: 1px solid #f5f5f5;\n  border-bottom: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr td {\n  white-space: nowrap;\n  border: 1px solid #f5f5f5;\n  border-right: none;\n  border-left: none;\n}\ndiv.giga-grid tr.subtotal-row {\n  background-color: #fff;\n}\ndiv.giga-grid thead tr:hover,\ndiv.giga-grid tbody tr:hover {\n  cursor: pointer;\n}\ndiv.giga-grid tbody tr:hover {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row:hover {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid .numeric {\n  text-align: right;\n}\ndiv.giga-grid .non-numeric {\n  text-align: left;\n}\ndiv.giga-grid span.header-text {\n  padding-right: 15px;\n}\n", ""]);
+	exports.push([module.id, "div.giga-grid .dropdown-menu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  left: 0;\n}\ndiv.giga-grid .dropdown-menu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  right: 0;\n}\ndiv.giga-grid .dropdown-submenu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  left: 100%;\n}\ndiv.giga-grid .dropdown-submenu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  right: 50%;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle {\n  position: absolute;\n  right: 0;\n  background-color: #4a5564;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle-hide {\n  opacity: 0;\n}\ndiv.giga-grid .dropdown-menu-item {\n  position: relative;\n  padding-bottom: 5px;\n  padding-left: 10px;\n  padding-top: 5px;\n  color: #666;\n  border-radius: 2px;\n}\ndiv.giga-grid .dropdown-menu-item.hoverable:hover {\n  cursor: pointer;\n  background-color: #eee;\n}\ndiv.giga-grid .dropdown-menu-item input {\n  border: none;\n  border-bottom: 2px solid #666;\n  margin-top: 10px;\n  margin-bottom: 10px;\n  padding-top: 5px;\n  padding-bottom: 5px;\n  font-size: 13px;\n}\ndiv.giga-grid {\n  margin: 0;\n  font-family: Roboto, sans-serif;\n  color: #333;\n}\ndiv.giga-grid table {\n  border-collapse: collapse;\n  font-size: 11px;\n}\ndiv.giga-grid div.giga-grid-body-viewport {\n  overflow-y: auto;\n}\ndiv.giga-grid table.header-table {\n  table-layout: fixed;\n}\ndiv.giga-grid tr.selected {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row.selected {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid tr td,\ndiv.giga-grid tr th {\n  box-sizing: border-box;\n  padding: 2px 5px;\n  min-width: 10em;\n}\ndiv.giga-grid th:last-child,\ndiv.giga-grid td:last-child {\n  padding-right: 10px;\n  border-left: none;\n}\ndiv.giga-grid th:first-child,\ndiv.giga-grid td:first-child {\n  padding-left: 10px;\n}\ndiv.giga-grid tr th {\n  font-weight: normal;\n  background-color: #4a5564;\n  color: #fff;\n  border-left: 1px solid #fff;\n}\ndiv.giga-grid tr th.column-group {\n  text-align: center;\n  border-right: 1px solid #f5f5f5;\n  border-bottom: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr td {\n  white-space: nowrap;\n  border: 1px solid #f5f5f5;\n  border-right: none;\n  border-left: none;\n}\ndiv.giga-grid tr.subtotal-row {\n  background-color: #fff;\n}\ndiv.giga-grid thead tr:hover,\ndiv.giga-grid tbody tr:hover {\n  cursor: pointer;\n}\ndiv.giga-grid tbody tr:hover {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row:hover {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid .numeric {\n  text-align: right;\n}\ndiv.giga-grid .non-numeric {\n  text-align: left;\n}\ndiv.giga-grid span.header-text {\n  padding-right: 15px;\n}\n", ""]);
 
 	// exports
 
@@ -20237,12 +20239,11 @@
 	var _ = __webpack_require__(166);
 	var $ = __webpack_require__(168);
 	var GigaStore_1 = __webpack_require__(169);
-	var flux_1 = __webpack_require__(194);
+	var flux_1 = __webpack_require__(193);
 	var GigaStore_2 = __webpack_require__(169);
-	var WidthMeasureCalculator_1 = __webpack_require__(191);
-	var TableBody_1 = __webpack_require__(196);
+	var TableBody_1 = __webpack_require__(195);
 	var ColumnLike_1 = __webpack_require__(171);
-	var TableHeader_1 = __webpack_require__(200);
+	var TableHeader_1 = __webpack_require__(199);
 	/**
 	 * The root component of this React library. assembles raw data into `Row` objects which are then translated into their
 	 * virtual DOM representation
@@ -20282,30 +20283,23 @@
 	        var bodyStyle = {
 	            // TODO we will need to give similar consideration to height as we did for width
 	            height: this.props.bodyHeight || "100%",
-	            width: this.state.widthMeasures.bodyWidth
 	        };
-	        return (React.createElement("div", {className: "giga-grid"}, React.createElement("div", {className: "giga-grid-table-header-wrapper", style: { width: this.state.widthMeasures.bodyWidth }}, React.createElement("table", null, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, className: "giga-grid-body-scroll-y", onScroll: function () { return _this.handleScroll(); }, style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: this.state.rasterizedRows, columns: columns[columns.length - 1], displayStart: this.state.displayStart, displayEnd: this.state.displayEnd, rowHeight: this.props.rowHeight})))));
+	        return (React.createElement("div", {className: "giga-grid"}, React.createElement("div", {className: "giga-grid-table-header-wrapper"}, React.createElement("table", {style: { width: "100%" }, className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, onScroll: function () { return _this.handleScroll(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }, style: { width: "100%" }}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: this.state.rasterizedRows, columns: columns[columns.length - 1], displayStart: this.state.displayStart, displayEnd: this.state.displayEnd, rowHeight: this.props.rowHeight})))));
 	    };
 	    GigaGrid.prototype.handleScroll = function () {
 	        this.dispatchDisplayBoundChange();
-	    };
-	    GigaGrid.prototype.dispatchWidthChange = function () {
-	        // if no bodyWidth was provided through props and there are no explicit width set for columns, we need to dynamically the table's bodyWidth
-	        // after it has been mounted and the parent width is known
-	        if (this.props.bodyWidth || WidthMeasureCalculator_1.validateColumnWidthProperty(this.props.columnDefs))
-	            return;
-	        var parentWidth = ReactDOM.findDOMNode(this).parentElement.offsetWidth + "px";
-	        var action = {
-	            type: GigaStore_2.GigaActionType.TABLE_WIDTH_CHANGE,
-	            width: parentWidth
-	        };
-	        this.dispatcher.dispatch(action);
 	    };
 	    /**
 	     * on component update, we use jquery to align table headers
 	     * this is the "give up" solution, implemented in 0.1.7
 	     */
 	    GigaGrid.prototype.componentDidUpdate = function () {
+	        this.synchTableHeaderWidthToFirstRow();
+	    };
+	    /**
+	     * yes this is still a thing!
+	     */
+	    GigaGrid.prototype.synchTableHeaderWidthToFirstRow = function () {
 	        if (this.state.lastAction && this.state.lastAction.type === GigaStore_2.GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS && this.state.displayStart != 0)
 	            return;
 	        var node = ReactDOM.findDOMNode(this);
@@ -20318,17 +20312,22 @@
 	        }).value();
 	    };
 	    GigaGrid.prototype.componentDidMount = function () {
-	        this.dispatchWidthChange();
 	        /*
-	         Trigger resize of table on window resize
-	         https://github.com/erfangc/GigaGrid/issues/20
+	         * subscribe to window.resize
 	         */
 	        if (typeof window !== "undefined")
-	            window.addEventListener('resize', this.dispatchWidthChange.bind(this));
+	            window.addEventListener('resize', this.synchTableHeaderWidthToFirstRow.bind(this));
 	        /*
 	         re-compute displayStart && displayEnd
 	         */
 	        this.dispatchDisplayBoundChange();
+	    };
+	    GigaGrid.prototype.componentWillUnmount = function () {
+	        /*
+	         * unsubscribe to window.resize
+	         */
+	        if (typeof window !== "undefined")
+	            window.removeEventListener('resize', this.synchTableHeaderWidthToFirstRow);
 	    };
 	    GigaGrid.prototype.dispatchDisplayBoundChange = function () {
 	        var $viewport = $(this.viewport);
@@ -20340,13 +20339,6 @@
 	            rowHeight: this.props.rowHeight
 	        };
 	        this.dispatcher.dispatch(action);
-	    };
-	    GigaGrid.prototype.componentWillUnmount = function () {
-	        /*
-	         * remove any lingering event listeners
-	         */
-	        if (typeof window !== "undefined")
-	            window.removeEventListener('resize', this.dispatchWidthChange);
 	    };
 	    GigaGrid.defaultProps = {
 	        initialSubtotalBys: [],
@@ -42600,9 +42592,8 @@
 	var TreeBuilder_1 = __webpack_require__(172);
 	var utils_1 = __webpack_require__(174);
 	var SortFactory_1 = __webpack_require__(190);
-	var WidthMeasureCalculator_1 = __webpack_require__(191);
-	var TreeRasterizer_1 = __webpack_require__(192);
-	var ScrollCalculator_1 = __webpack_require__(193);
+	var TreeRasterizer_1 = __webpack_require__(191);
+	var ScrollCalculator_1 = __webpack_require__(192);
 	/*
 	 define the # of rows necessary to trigger progressive rendering
 	 below which all row display bound change events are ignored
@@ -42640,7 +42631,6 @@
 	            rasterizedRows: rasterizedRows,
 	            displayStart: 0,
 	            displayEnd: Math.min(rasterizedRows.length - 1, exports.PROGRESSIVE_RENDERING_THRESHOLD),
-	            widthMeasures: WidthMeasureCalculator_1.WidthMeasureCalculator.computeWidthMeasures(this.props.bodyWidth, this.props.columnDefs),
 	            subtotalBys: _.cloneDeep(this.props.initialSubtotalBys) || [],
 	            sortBys: _.cloneDeep(this.props.initialSortBys) || [],
 	            filterBys: _.cloneDeep(this.props.initialFilterBys) || [],
@@ -42658,31 +42648,11 @@
 	        });
 	    };
 	    ;
-	    GigaStore.prototype.columnMaskSubReducer = function (state, subtotalBy) {
-	        // TODO in the future, if we decide to maintain this library, we should think about how this should work in the presence of column grouping
-	        // we now mask the column and recompute column size
-	        var columnDefMask = subtotalBy ? (state.columnDefMask || []) : [];
-	        columnDefMask.push(subtotalBy);
-	        var maskedColumnDefs = this.props.columnDefs.filter(function (cd) { return columnDefMask.map(function (m) { return m.colTag; }).indexOf(cd.colTag) === -1; });
-	        // re-compute proportion, this might not work for all width configurations
-	        var widthMeasures = WidthMeasureCalculator_1.WidthMeasureCalculator.computeWidthMeasures(state.widthMeasures.bodyWidth, maskedColumnDefs);
-	        return {
-	            widthMeasures: widthMeasures,
-	            columnDefMask: columnDefMask
-	        };
-	    };
-	    // TODO we should have a way to handle componentWillReceiveProps
 	    GigaStore.prototype.reduce = function (state, action) {
 	        var newState;
 	        switch (action.type) {
 	            case GigaActionType.INITIALIZE:
 	                newState = this.initialize();
-	                break;
-	            /*
-	             * Width Change Action
-	             */
-	            case GigaActionType.TABLE_WIDTH_CHANGE:
-	                newState = this.handleWidthChange(state, action);
 	                break;
 	            case GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS:
 	                newState = GigaStore.handleChangeRowDisplayBounds(state, action);
@@ -42784,12 +42754,6 @@
 	        else
 	            return state;
 	    };
-	    GigaStore.prototype.handleWidthChange = function (state, action) {
-	        var widthMeasures = WidthMeasureCalculator_1.WidthMeasureCalculator.computeWidthMeasures(action.width, this.props.columnDefs);
-	        var newState = _.clone(state);
-	        newState.widthMeasures = widthMeasures;
-	        return newState;
-	    };
 	    GigaStore.handleChangeRowDisplayBounds = function (state, action) {
 	        var _a = ScrollCalculator_1.ScrollCalculator.computeDisplayBoundaries(action.rowHeight, action.viewport, action.canvas), displayStart = _a.displayStart, displayEnd = _a.displayEnd;
 	        var newState = _.clone(state);
@@ -42814,12 +42778,6 @@
 	        return _.clone(state);
 	    };
 	    GigaStore.prototype.handleSubtotal = function (state, action) {
-	        // TODO this handler is very please fix, it not only randomly mutate state but introduce a dependency on a new state columnDefMask
-	        if (!this.props.columnGroups && this.props.hideColumnOnSubtotal) {
-	            var _a = this.columnMaskSubReducer(state, action.subtotalBy), widthMeasures = _a.widthMeasures, columnDefMask = _a.columnDefMask;
-	            state.widthMeasures = widthMeasures;
-	            state.columnDefMask = columnDefMask;
-	        }
 	        state.subtotalBys.push(action.subtotalBy);
 	        var newTree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, state.subtotalBys);
 	        TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(newTree.getRoot(), false);
@@ -42829,12 +42787,6 @@
 	        return newState;
 	    };
 	    GigaStore.prototype.handleClearSubtotal = function (state) {
-	        if (!this.props.columnGroups && this.props.hideColumnOnSubtotal) {
-	            // TODO in the future, if we decide to maintain this library, we should think about how this should work in the presence of column grouping
-	            var _a = this.columnMaskSubReducer(state, null), widthMeasures = _a.widthMeasures, columnDefMask = _a.columnDefMask;
-	            state.widthMeasures = widthMeasures;
-	            state.columnDefMask = columnDefMask;
-	        }
 	        var newTree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, []);
 	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
 	        var newState = _.clone(state);
@@ -43081,7 +43033,6 @@
 	            title: cd.title,
 	            aggregationMethod: cd.aggregationMethod,
 	            format: cd.format,
-	            width: state.widthMeasures.columnWidths[cd.colTag],
 	            cellTemplateCreator: cd.cellTemplateCreator
 	        };
 	        // determine if there is an existing SortBy for this column
@@ -49848,132 +49799,6 @@
 
 /***/ },
 /* 191 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var _ = __webpack_require__(166);
-	var round = Math.round;
-	function parsePixelValue(pxMeasure) {
-	    return parseInt(pxMeasure.substr(0, pxMeasure.length - 2));
-	}
-	exports.parsePixelValue = parsePixelValue;
-	/**
-	 * returns true if every column in columnDefs defines a width property in pixels
-	 * @param columnDefs
-	 * @returns {boolean}
-	 */
-	function validateColumnWidthProperty(columnDefs) {
-	    for (var i = 0; i < columnDefs.length; i++) {
-	        if (!(columnDefs[i].width && _.endsWith(columnDefs[i].width, "px")))
-	            return false;
-	    }
-	    return true;
-	}
-	exports.validateColumnWidthProperty = validateColumnWidthProperty;
-	var scrollBarWidth = null;
-	/**
-	 * uber hax to get scrollbar width
-	 * see stackoverflow reference: http://stackoverflow.com/questions/986937/how-can-i-get-the-browsers-scrollbar-sizes
-	 * @returns {number}
-	 */
-	function getScrollBarWidth() {
-	    function computeScrollBarWidth() {
-	        var inner = document.createElement('p');
-	        inner.style.width = "100%";
-	        inner.style.height = "200px";
-	        var outer = document.createElement('div');
-	        outer.style.position = "absolute";
-	        outer.style.top = "0px";
-	        outer.style.left = "0px";
-	        outer.style.visibility = "hidden";
-	        outer.style.width = "200px";
-	        outer.style.height = "150px";
-	        outer.style.overflow = "hidden";
-	        outer.appendChild(inner);
-	        document.body.appendChild(outer);
-	        var w1 = inner.offsetWidth;
-	        outer.style.overflow = 'scroll';
-	        var w2 = inner.offsetWidth;
-	        if (w1 == w2)
-	            w2 = outer.clientWidth;
-	        document.body.removeChild(outer);
-	        return (w1 - w2);
-	    }
-	    if (scrollBarWidth === null)
-	        scrollBarWidth = computeScrollBarWidth();
-	    return scrollBarWidth;
-	}
-	exports.getScrollBarWidth = getScrollBarWidth;
-	// #7 Determine column width automatically if not passed in by the user https://github.com/erfangc/GigaGrid/issues/7
-	var WidthMeasureCalculator = (function () {
-	    function WidthMeasureCalculator() {
-	    }
-	    /**
-	     * takes a bodyWidth (which could be empty or null) and a set of column definitions
-	     * determines how to ration bodyWidth amongst the columns. Columns could specify preferred width through the `width` property
-	     * this only tries to affect the cell width not the header width ... header width as of v0.1.7 is sync-ed to cell width via a callback on componentDidUpdate
-	     * @param bodyWidth
-	     * @param columnDefs
-	     * @returns {WidthMeasures}
-	     */
-	    WidthMeasureCalculator.computeWidthMeasures = function (bodyWidth, columnDefs) {
-	        var columnWidthProvided = validateColumnWidthProperty(columnDefs);
-	        var measures;
-	        if (columnWidthProvided)
-	            measures = getMeasureAsSumOfColumnWidth(columnDefs);
-	        else if (bodyWidth)
-	            measures = getMeasureWithEqualWidthColumn(bodyWidth, columnDefs);
-	        else
-	            measures = getDefaultWidthMeasure(columnDefs);
-	        return measures;
-	    };
-	    return WidthMeasureCalculator;
-	}());
-	exports.WidthMeasureCalculator = WidthMeasureCalculator;
-	function getMeasureWithEqualWidthColumn(bodyWidth, columnDefs) {
-	    var measures = {
-	        bodyWidth: null,
-	        columnWidths: {}
-	    };
-	    measures.bodyWidth = bodyWidth;
-	    var bodyWidthPx = parsePixelValue(bodyWidth);
-	    var cellWidth = round(bodyWidthPx / columnDefs.length);
-	    var totalCellWidth = 0;
-	    for (var i = 0; i < columnDefs.length - 1; i++) {
-	        measures.columnWidths[columnDefs[i].colTag] = cellWidth + "px";
-	        totalCellWidth += cellWidth;
-	    }
-	    var lastColTag = columnDefs[columnDefs.length - 1].colTag;
-	    measures.columnWidths[lastColTag] = (bodyWidthPx - totalCellWidth) + "px";
-	    return measures;
-	}
-	function getDefaultWidthMeasure(columnDefs) {
-	    var measures = {
-	        bodyWidth: null,
-	        columnWidths: {}
-	    };
-	    measures.bodyWidth = "100%";
-	    _.forEach(columnDefs, function (cd) {
-	        measures.columnWidths[cd.colTag] = "auto";
-	    });
-	    return measures;
-	}
-	function getMeasureAsSumOfColumnWidth(columnDefs) {
-	    var bodyWidth = _.chain(columnDefs).map(function (cd) { return parsePixelValue(cd.width); }).sum();
-	    var measures = {
-	        bodyWidth: null,
-	        columnWidths: {}
-	    };
-	    measures.bodyWidth = bodyWidth + "px";
-	    _.forEach(columnDefs, function (cd) {
-	        measures.columnWidths[cd.colTag] = cd.width;
-	    });
-	    return measures;
-	}
-
-
-/***/ },
-/* 192 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -50007,7 +49832,7 @@
 
 
 /***/ },
-/* 193 */
+/* 192 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -50031,7 +49856,7 @@
 
 
 /***/ },
-/* 194 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -50043,11 +49868,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 
-	module.exports.Dispatcher = __webpack_require__(195);
+	module.exports.Dispatcher = __webpack_require__(194);
 
 
 /***/ },
-/* 195 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -50284,7 +50109,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 196 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50294,7 +50119,7 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var GigaRow_1 = __webpack_require__(197);
+	var GigaRow_1 = __webpack_require__(196);
 	var GigaStore_1 = __webpack_require__(169);
 	var TableBody = (function (_super) {
 	    __extends(TableBody, _super);
@@ -50349,7 +50174,7 @@
 
 
 /***/ },
-/* 197 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50359,9 +50184,9 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(198);
+	var classNames = __webpack_require__(197);
 	var GigaStore_1 = __webpack_require__(169);
-	var Cell_1 = __webpack_require__(199);
+	var Cell_1 = __webpack_require__(198);
 	var GigaRow = (function (_super) {
 	    __extends(GigaRow, _super);
 	    function GigaRow(props) {
@@ -50394,7 +50219,7 @@
 
 
 /***/ },
-/* 198 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -50448,7 +50273,7 @@
 
 
 /***/ },
-/* 199 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50458,7 +50283,7 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(198);
+	var classNames = __webpack_require__(197);
 	var ColumnLike_1 = __webpack_require__(171);
 	var GigaStore_1 = __webpack_require__(169);
 	var Cell = (function (_super) {
@@ -50495,7 +50320,6 @@
 	        return {
 	            width: this.props.column.width,
 	            height: this.props.rowHeight,
-	            overflow: "hidden",
 	            paddingLeft: this.props.isFirstColumn ? TableRowUtils.calculateFirstColumnIdentation(this.props.row) : undefined
 	        };
 	    };
@@ -50513,10 +50337,10 @@
 	        if (props.isFirstColumn && !row.isDetail())
 	            result = this.renderSubtotalCellWithCollapseBtn(row);
 	        else
-	            result = (React.createElement("td", {className: cx, onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, this.renderContent(row, cd)));
+	            result = (React.createElement("td", {className: cx, onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, Cell.renderContent(row, cd)));
 	        return result;
 	    };
-	    Cell.prototype.renderContent = function (row, cd) {
+	    Cell.renderContent = function (row, cd) {
 	        if (cd.cellTemplateCreator)
 	            return cd.cellTemplateCreator(row.data()[cd.colTag], cd);
 	        else
@@ -50544,7 +50368,7 @@
 
 
 /***/ },
-/* 200 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50554,8 +50378,7 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var TableHeaderCell_1 = __webpack_require__(201);
-	var WidthMeasureCalculator_1 = __webpack_require__(191);
+	var TableHeaderCell_1 = __webpack_require__(200);
 	/**
 	 * terminology: column groups are columns that can span multiple `leaf` columns and physically reside
 	 * on top of `leaf` columns
@@ -50583,7 +50406,6 @@
 	        var ths = columns.map(function (column, i) {
 	            return (React.createElement("th", {className: "column-group", key: i, colSpan: column.colSpan}, column.title));
 	        });
-	        ths.push(TableHeader.renderPlaceholder("column-group"));
 	        return (React.createElement("tr", {className: "column-group-row", key: key}, ths));
 	    };
 	    TableHeader.prototype.renderLeafColumns = function (columns, key) {
@@ -50591,16 +50413,7 @@
 	        var ths = columns.map(function (colDef, i) {
 	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {tableColumnDef: colDef, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, dispatcher: _this.props.dispatcher});
 	        });
-	        ths.push(TableHeader.renderPlaceholder());
 	        return (React.createElement("tr", {key: key}, ths));
-	    };
-	    TableHeader.renderPlaceholder = function (className) {
-	        var scrollBarWidth = WidthMeasureCalculator_1.getScrollBarWidth();
-	        /*
-	         add an placeholder to align the header with cells
-	         https://github.com/erfangc/GigaGrid/issues/7
-	         */
-	        return (React.createElement("th", {key: "placeholder", className: className, style: { width: scrollBarWidth + "px" }}));
 	    };
 	    return TableHeader;
 	}(React.Component));
@@ -50608,7 +50421,7 @@
 
 
 /***/ },
-/* 201 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50618,13 +50431,13 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(198);
+	var classNames = __webpack_require__(197);
 	var ColumnLike_1 = __webpack_require__(171);
-	var DropdownMenu_1 = __webpack_require__(202);
-	var SortMenuItem_1 = __webpack_require__(203);
+	var DropdownMenu_1 = __webpack_require__(201);
+	var SortMenuItem_1 = __webpack_require__(202);
 	var GigaStore_1 = __webpack_require__(169);
-	var SubtotalByMenuItem_1 = __webpack_require__(204);
-	var FilterMenuItem_1 = __webpack_require__(205);
+	var SubtotalByMenuItem_1 = __webpack_require__(203);
+	var FilterMenuItem_1 = __webpack_require__(204);
 	// Comment
 	var TableHeaderState = (function () {
 	    function TableHeaderState() {
@@ -50685,7 +50498,7 @@
 
 
 /***/ },
-/* 202 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50697,7 +50510,7 @@
 	var React = __webpack_require__(2);
 	var ReactDOM = __webpack_require__(159);
 	var $ = __webpack_require__(168);
-	var className = __webpack_require__(198);
+	var className = __webpack_require__(197);
 	/**
 	 * a generic dropdown menu component that can be reused in any context
 	 */
@@ -50800,7 +50613,7 @@
 
 
 /***/ },
-/* 203 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50810,7 +50623,7 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var DropdownMenu_1 = __webpack_require__(202);
+	var DropdownMenu_1 = __webpack_require__(201);
 	var GigaStore_1 = __webpack_require__(169);
 	var ColumnLike_1 = __webpack_require__(171);
 	var SortMenuItem = (function (_super) {
@@ -50896,7 +50709,7 @@
 
 
 /***/ },
-/* 204 */
+/* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50906,11 +50719,11 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(198);
+	var classNames = __webpack_require__(197);
 	var _ = __webpack_require__(166);
 	var ColumnLike_1 = __webpack_require__(171);
 	var GigaStore_1 = __webpack_require__(169);
-	var DropdownMenu_1 = __webpack_require__(202);
+	var DropdownMenu_1 = __webpack_require__(201);
 	var SubtotalByMenuItem = (function (_super) {
 	    __extends(SubtotalByMenuItem, _super);
 	    function SubtotalByMenuItem(props) {
@@ -51008,7 +50821,7 @@
 
 
 /***/ },
-/* 205 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51018,7 +50831,7 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var DropdownMenu_1 = __webpack_require__(202);
+	var DropdownMenu_1 = __webpack_require__(201);
 	var FilterMenuItem = (function (_super) {
 	    __extends(FilterMenuItem, _super);
 	    function FilterMenuItem(props) {
@@ -51031,6 +50844,80 @@
 	    return FilterMenuItem;
 	}(React.Component));
 	exports.FilterMenuItem = FilterMenuItem;
+
+
+/***/ },
+/* 205 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var index_1 = __webpack_require__(160);
+	var ColumnLike_1 = __webpack_require__(171);
+	var $ = __webpack_require__(168);
+	var React = __webpack_require__(2);
+	var ReactDOM = __webpack_require__(159);
+	function run() {
+	    $.ajax("./examples/data/Hotels.json").done(function (data) {
+	        var element = React.createElement(index_1.GigaGrid, {
+	            bodyHeight: "500px",
+	            data: data,
+	            columnDefs: columnDefs
+	        });
+	        ReactDOM.render(element, document.getElementById('larger_data_set'));
+	    });
+	}
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = run;
+	var columnDefs = [
+	    {
+	        colTag: "Location",
+	        title: "Location",
+	        aggregationMethod: ColumnLike_1.AggregationMethod.NONE,
+	        format: ColumnLike_1.ColumnFormat.STRING
+	    },
+	    {
+	        colTag: "Beds",
+	        title: "Beds",
+	        aggregationMethod: ColumnLike_1.AggregationMethod.AVERAGE,
+	        format: ColumnLike_1.ColumnFormat.NUMBER,
+	        formatInstruction: {
+	            roundTo: 0
+	        }
+	    },
+	    {
+	        colTag: "Breakfast Included",
+	        title: "Breakfast Included",
+	        aggregationMethod: ColumnLike_1.AggregationMethod.COUNT_OR_DISTINCT,
+	        format: ColumnLike_1.ColumnFormat.STRING
+	    },
+	    {
+	        colTag: "Distance to Airport",
+	        title: "Distance to Airport",
+	        aggregationMethod: ColumnLike_1.AggregationMethod.AVERAGE,
+	        formatInstruction: {
+	            roundTo: 2
+	        },
+	        format: ColumnLike_1.ColumnFormat.NUMBER
+	    },
+	    {
+	        colTag: "Price / Night",
+	        title: "Price / Night",
+	        aggregationMethod: ColumnLike_1.AggregationMethod.AVERAGE,
+	        format: ColumnLike_1.ColumnFormat.NUMBER,
+	        formatInstruction: {
+	            roundTo: 2
+	        }
+	    },
+	    {
+	        colTag: "Rating",
+	        title: "Rating",
+	        aggregationMethod: ColumnLike_1.AggregationMethod.AVERAGE,
+	        format: ColumnLike_1.ColumnFormat.NUMBER,
+	        formatInstruction: {
+	            roundTo: 2
+	        }
+	    }
+	];
 
 
 /***/ }

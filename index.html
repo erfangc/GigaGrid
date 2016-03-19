@@ -16,97 +16,99 @@
 </head>
 <body>
 <div class="container">
-    <nav class="navbar navbar-fixed-top">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
-                <i class="fa fa-bars"></i>
-            </button>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav"></ul>
-        </div>
-    </nav>
+    <!--<nav class="navbar navbar-fixed-top">-->
+        <!--<div class="navbar-header">-->
+            <!--<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"-->
+                    <!--aria-expanded="false" aria-controls="navbar">-->
+                <!--<i class="fa fa-bars"></i>-->
+            <!--</button>-->
+        <!--</div>-->
+        <!--<div id="navbar" class="collapse navbar-collapse">-->
+            <!--<ul class="nav navbar-nav"></ul>-->
+        <!--</div>-->
+    <!--</nav>-->
     <div style="height: 50px;"></div>
-    <div class="jumbotron">
-        <h1><span><h4 class="pre-alpha-label">Pre Alpha</h4><i class="fa fa-th fa-2x"></i></span>GigaGrid</h1>
-        <a href="#getting-started" class="btn btn-primary">Getting Started</a>
-        <a href="#examples" class="btn btn-primary">Jump to Examples</a>
-    </div>
-    <div id="getting-started">
-        <h1>Getting Started</h1>
-        <hr>
-        <!-- Installing -->
-        <h2>Installing</h2>
-        <p>
-            You can install the grid via <code>npm</code>
-        </p>
-        <pre><code class="bash">
-            npm install giga-grid --save
-        </code></pre>
-        <p>
-            You can also install the grid via the browser <code>script</code> tag
-        </p>
-        <pre class="code"><code class="html">
-            &lt;script src="https://fb.me/react-0.14.6.js"&gt;&lt;/script&gt;
-            &lt;script src="https://fb.me/react-dom-0.14.6.js"&gt;&lt;/script&gt;
-            &lt;script src="giga-grid.js"&gt;&lt;/script&gt;
-            &lt;!-- we will try to make font-awesome optional --&gt;
-            &lt;link rel="stylesheet"
-            href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"&gt;
-        </code></pre>
-        <!-- CommonJS -->
-        <h3>CommonJS</h3>
-        <p>
-            The <code>npm</code> install creates <em>giga-grid</em> under <em>node_modules</em>
-        </p>
-        <pre><code>
-            var GigaGrid = require("giga-grid").GigaGrid;
+    <!--<div class="jumbotron">-->
+        <!--<h1><span><h4 class="pre-alpha-label">Pre Alpha</h4><i class="fa fa-th fa-2x"></i></span>GigaGrid</h1>-->
+        <!--<a href="#getting-started" class="btn btn-primary">Getting Started</a>-->
+        <!--<a href="#examples" class="btn btn-primary">Jump to Examples</a>-->
+    <!--</div>-->
+    <!--<div id="getting-started">-->
+        <!--<h1>Getting Started</h1>-->
+        <!--<hr>-->
+        <!--&lt;!&ndash; Installing &ndash;&gt;-->
+        <!--<h2>Installing</h2>-->
+        <!--<p>-->
+            <!--You can install the grid via <code>npm</code>-->
+        <!--</p>-->
+        <!--<pre><code class="bash">-->
+            <!--npm install giga-grid &#45;&#45;save-->
+        <!--</code></pre>-->
+        <!--<p>-->
+            <!--You can also install the grid via the browser <code>script</code> tag-->
+        <!--</p>-->
+        <!--<pre class="code"><code class="html">-->
+            <!--&lt;script src="https://fb.me/react-0.14.6.js"&gt;&lt;/script&gt;-->
+            <!--&lt;script src="https://fb.me/react-dom-0.14.6.js"&gt;&lt;/script&gt;-->
+            <!--&lt;script src="giga-grid.js"&gt;&lt;/script&gt;-->
+            <!--&lt;!&#45;&#45; we will try to make font-awesome optional &#45;&#45;&gt;-->
+            <!--&lt;link rel="stylesheet"-->
+            <!--href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"&gt;-->
+        <!--</code></pre>-->
+        <!--&lt;!&ndash; CommonJS &ndash;&gt;-->
+        <!--<h3>CommonJS</h3>-->
+        <!--<p>-->
+            <!--The <code>npm</code> install creates <em>giga-grid</em> under <em>node_modules</em>-->
+        <!--</p>-->
+        <!--<pre><code>-->
+            <!--var GigaGrid = require("giga-grid").GigaGrid;-->
 
-            var data = [{"col1": "Foo", ... }, ... ];
-            var columnDefs = [{colTag: "col1", title:"Column 1"}, ... ];
+            <!--var data = [{"col1": "Foo", ... }, ... ];-->
+            <!--var columnDefs = [{colTag: "col1", title:"Column 1"}, ... ];-->
 
-            var myGrid = React.createElement(GigaGrid, { data: data, columnDefs: columnDefs });
-            ReactDOM.render(myGrid, document.body);
-        </code></pre>
-        <!--ES6-->
-        <h3>ES6 with JSX</h3>
-        <pre><code>
-            import {GigaGrid} from 'giga-grid';
+            <!--var myGrid = React.createElement(GigaGrid, { data: data, columnDefs: columnDefs });-->
+            <!--ReactDOM.render(myGrid, document.body);-->
+        <!--</code></pre>-->
+        <!--&lt;!&ndash;ES6&ndash;&gt;-->
+        <!--<h3>ES6 with JSX</h3>-->
+        <!--<pre><code>-->
+            <!--import {GigaGrid} from 'giga-grid';-->
 
-            let data = [{"col1": "Foo", ... }, ... ];
-            let columnDefs = [{colTag: "col1", title:"Column 1"}, ... ];
+            <!--let data = [{"col1": "Foo", ... }, ... ];-->
+            <!--let columnDefs = [{colTag: "col1", title:"Column 1"}, ... ];-->
 
-            ReactDOM.render(&lt;GigaGrid data={data} columnDefs={columnDefs} /&gt;, document.body);
-        </code></pre>
-        <!--TypeScript-->
-        <h3>TypeSciprt with JSX</h3>
-        <pre><code>
-            ///&lt;reference path="giga-grid.d.ts"/&gt;
-            // app.tsx
-            import {GigaGrid} from 'giga-grid';
+            <!--ReactDOM.render(&lt;GigaGrid data={data} columnDefs={columnDefs} /&gt;, document.body);-->
+        <!--</code></pre>-->
+        <!--&lt;!&ndash;TypeScript&ndash;&gt;-->
+        <!--<h3>TypeSciprt with JSX</h3>-->
+        <!--<pre><code>-->
+            <!--///&lt;reference path="giga-grid.d.ts"/&gt;-->
+            <!--// app.tsx-->
+            <!--import {GigaGrid} from 'giga-grid';-->
 
-            let data = [{"col1": "Foo", ... }, ... ];
-            let columnDefs = [{colTag: "col1", title:"Column 1"}, ... ];
+            <!--let data = [{"col1": "Foo", ... }, ... ];-->
+            <!--let columnDefs = [{colTag: "col1", title:"Column 1"}, ... ];-->
 
-            ReactDOM.render(&lt;GigaGrid data={data} columnDefs={columnDefs} /&gt;, document.body);
-        </code></pre>
-        <!-- Browsers -->
-        <h3>Browsers</h3>
-        <p>
-            We do not recommend this approach, as it pollutes the global namespace and require manual dependency
-            management. Please consider a module loader!
-        </p>
-        <pre><code>
-            var data = [{"col1": "Foo", ... }, ... ];
-            var columnDefs = [{colTag: "col1", title:"Column 1"}, ... ];
+            <!--ReactDOM.render(&lt;GigaGrid data={data} columnDefs={columnDefs} /&gt;, document.body);-->
+        <!--</code></pre>-->
+        <!--&lt;!&ndash; Browsers &ndash;&gt;-->
+        <!--<h3>Browsers</h3>-->
+        <!--<p>-->
+            <!--We do not recommend this approach, as it pollutes the global namespace and require manual dependency-->
+            <!--management. Please consider a module loader!-->
+        <!--</p>-->
+        <!--<pre><code>-->
+            <!--var data = [{"col1": "Foo", ... }, ... ];-->
+            <!--var columnDefs = [{colTag: "col1", title:"Column 1"}, ... ];-->
 
-            var myGrid = React.createElement(GigaGrid, { data: data, columnDefs: columnDefs });
-            ReactDOM.render(myGrid, document.body);
-        </code></pre>
-    </div>
+            <!--var myGrid = React.createElement(GigaGrid, { data: data, columnDefs: columnDefs });-->
+            <!--ReactDOM.render(myGrid, document.body);-->
+        <!--</code></pre>-->
+    <!--</div>-->
     <div id="examples">
         <div id="basic_example"></div>
+        <br>
+        <div id="larger_data_set"></div>
     </div>
     <br>
 </div>

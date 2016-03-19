@@ -1,6 +1,5 @@
 import {ScrollCalculator} from "../../src/static/ScrollCalculator";
 import * as $ from 'jquery';
-import {getScrollBarWidth} from "../../src/static/WidthMeasureCalculator";
 
 describe("ScrollCalculator", ()=> {
 
@@ -50,7 +49,7 @@ describe("ScrollCalculator", ()=> {
         });
 
         it("can compute the correct displayStart, displayEnd when the viewport are scrolled all the way", ()=> {
-            $(viewport).scrollTop(canvas.height() - viewport.height() - getScrollBarWidth());
+            $(viewport).scrollTop(canvas.height() - viewport.height());
             const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(rowHeight, viewport, canvas);
             expect(displayStart).toBe(numRows - expectedRowsInViewPort);
             expect(displayEnd).toBe(numRows);
