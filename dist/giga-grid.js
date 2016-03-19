@@ -58,14 +58,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	__webpack_require__(1);
 	__webpack_require__(5);
 	var GigaGrid_1 = __webpack_require__(13);
-	var ColumnLike_1 = __webpack_require__(21);
-	var ColumnLike_2 = __webpack_require__(21);
-	var ColumnLike_3 = __webpack_require__(21);
+	var ColumnLike_1 = __webpack_require__(42);
+	var ColumnLike_2 = __webpack_require__(42);
+	var ColumnLike_3 = __webpack_require__(42);
 	exports.GigaGrid = GigaGrid_1.GigaGrid;
 	exports.ColumnFormat = ColumnLike_1.ColumnFormat;
 	exports.AggregationMethod = ColumnLike_2.AggregationMethod;
 	exports.SortDirection = ColumnLike_3.SortDirection;
-
+	//# sourceMappingURL=index.js.map
 
 /***/ },
 /* 1 */
@@ -83,8 +83,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./giga-grid.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./giga-grid.css");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./giga-grid.css", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./giga-grid.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -433,8 +433,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../css-loader/index.js!./font-awesome.css", function() {
-				var newContent = require("!!./../../css-loader/index.js!./font-awesome.css");
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./font-awesome.css", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./font-awesome.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -505,14 +505,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(14);
 	var ReactDOM = __webpack_require__(15);
-	var _ = __webpack_require__(16);
-	var $ = __webpack_require__(18);
-	var GigaStore_1 = __webpack_require__(19);
-	var flux_1 = __webpack_require__(47);
-	var GigaStore_2 = __webpack_require__(19);
-	var WidthMeasureCalculator_1 = __webpack_require__(44);
+	var Flux = __webpack_require__(16);
+	var _ = __webpack_require__(20);
+	var $ = __webpack_require__(22);
+	var GigaStore_1 = __webpack_require__(23);
+	var Dispatcher = Flux.Dispatcher;
+	var GigaStore_2 = __webpack_require__(23);
+	var WidthMeasureCalculator_1 = __webpack_require__(46);
 	var TableBody_1 = __webpack_require__(49);
-	var ColumnLike_1 = __webpack_require__(21);
+	var ColumnLike_1 = __webpack_require__(42);
 	var TableHeader_1 = __webpack_require__(53);
 	/**
 	 * The root component of this React library. assembles raw data into `Row` objects which are then translated into their
@@ -533,7 +534,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function GigaGrid(props) {
 	        var _this = this;
 	        _super.call(this, props);
-	        this.dispatcher = new flux_1.Dispatcher();
+	        this.dispatcher = new Dispatcher();
 	        this.store = new GigaStore_1.GigaStore(this.dispatcher, props);
 	        this.state = this.store.getState();
 	        // do not call setState again, this is the only place! otherwise you are violating the principles of Flux
@@ -631,7 +632,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return GigaGrid;
 	}(React.Component));
 	exports.GigaGrid = GigaGrid;
-
+	//# sourceMappingURL=GigaGrid.js.map
 
 /***/ },
 /* 14 */
@@ -647,6 +648,411 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	module.exports.Dispatcher = __webpack_require__(17);
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule Dispatcher
+	 * 
+	 * @preventMunge
+	 */
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var invariant = __webpack_require__(19);
+
+	var _prefix = 'ID_';
+
+	/**
+	 * Dispatcher is used to broadcast payloads to registered callbacks. This is
+	 * different from generic pub-sub systems in two ways:
+	 *
+	 *   1) Callbacks are not subscribed to particular events. Every payload is
+	 *      dispatched to every registered callback.
+	 *   2) Callbacks can be deferred in whole or part until other callbacks have
+	 *      been executed.
+	 *
+	 * For example, consider this hypothetical flight destination form, which
+	 * selects a default city when a country is selected:
+	 *
+	 *   var flightDispatcher = new Dispatcher();
+	 *
+	 *   // Keeps track of which country is selected
+	 *   var CountryStore = {country: null};
+	 *
+	 *   // Keeps track of which city is selected
+	 *   var CityStore = {city: null};
+	 *
+	 *   // Keeps track of the base flight price of the selected city
+	 *   var FlightPriceStore = {price: null}
+	 *
+	 * When a user changes the selected city, we dispatch the payload:
+	 *
+	 *   flightDispatcher.dispatch({
+	 *     actionType: 'city-update',
+	 *     selectedCity: 'paris'
+	 *   });
+	 *
+	 * This payload is digested by `CityStore`:
+	 *
+	 *   flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'city-update') {
+	 *       CityStore.city = payload.selectedCity;
+	 *     }
+	 *   });
+	 *
+	 * When the user selects a country, we dispatch the payload:
+	 *
+	 *   flightDispatcher.dispatch({
+	 *     actionType: 'country-update',
+	 *     selectedCountry: 'australia'
+	 *   });
+	 *
+	 * This payload is digested by both stores:
+	 *
+	 *   CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'country-update') {
+	 *       CountryStore.country = payload.selectedCountry;
+	 *     }
+	 *   });
+	 *
+	 * When the callback to update `CountryStore` is registered, we save a reference
+	 * to the returned token. Using this token with `waitFor()`, we can guarantee
+	 * that `CountryStore` is updated before the callback that updates `CityStore`
+	 * needs to query its data.
+	 *
+	 *   CityStore.dispatchToken = flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'country-update') {
+	 *       // `CountryStore.country` may not be updated.
+	 *       flightDispatcher.waitFor([CountryStore.dispatchToken]);
+	 *       // `CountryStore.country` is now guaranteed to be updated.
+	 *
+	 *       // Select the default city for the new country
+	 *       CityStore.city = getDefaultCityForCountry(CountryStore.country);
+	 *     }
+	 *   });
+	 *
+	 * The usage of `waitFor()` can be chained, for example:
+	 *
+	 *   FlightPriceStore.dispatchToken =
+	 *     flightDispatcher.register(function(payload) {
+	 *       switch (payload.actionType) {
+	 *         case 'country-update':
+	 *         case 'city-update':
+	 *           flightDispatcher.waitFor([CityStore.dispatchToken]);
+	 *           FlightPriceStore.price =
+	 *             getFlightPriceStore(CountryStore.country, CityStore.city);
+	 *           break;
+	 *     }
+	 *   });
+	 *
+	 * The `country-update` payload will be guaranteed to invoke the stores'
+	 * registered callbacks in order: `CountryStore`, `CityStore`, then
+	 * `FlightPriceStore`.
+	 */
+
+	var Dispatcher = (function () {
+	  function Dispatcher() {
+	    _classCallCheck(this, Dispatcher);
+
+	    this._callbacks = {};
+	    this._isDispatching = false;
+	    this._isHandled = {};
+	    this._isPending = {};
+	    this._lastID = 1;
+	  }
+
+	  /**
+	   * Registers a callback to be invoked with every dispatched payload. Returns
+	   * a token that can be used with `waitFor()`.
+	   */
+
+	  Dispatcher.prototype.register = function register(callback) {
+	    var id = _prefix + this._lastID++;
+	    this._callbacks[id] = callback;
+	    return id;
+	  };
+
+	  /**
+	   * Removes a callback based on its token.
+	   */
+
+	  Dispatcher.prototype.unregister = function unregister(id) {
+	    !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.unregister(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
+	    delete this._callbacks[id];
+	  };
+
+	  /**
+	   * Waits for the callbacks specified to be invoked before continuing execution
+	   * of the current callback. This method should only be used by a callback in
+	   * response to a dispatched payload.
+	   */
+
+	  Dispatcher.prototype.waitFor = function waitFor(ids) {
+	    !this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Must be invoked while dispatching.') : invariant(false) : undefined;
+	    for (var ii = 0; ii < ids.length; ii++) {
+	      var id = ids[ii];
+	      if (this._isPending[id]) {
+	        !this._isHandled[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Circular dependency detected while ' + 'waiting for `%s`.', id) : invariant(false) : undefined;
+	        continue;
+	      }
+	      !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
+	      this._invokeCallback(id);
+	    }
+	  };
+
+	  /**
+	   * Dispatches a payload to all registered callbacks.
+	   */
+
+	  Dispatcher.prototype.dispatch = function dispatch(payload) {
+	    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.') : invariant(false) : undefined;
+	    this._startDispatching(payload);
+	    try {
+	      for (var id in this._callbacks) {
+	        if (this._isPending[id]) {
+	          continue;
+	        }
+	        this._invokeCallback(id);
+	      }
+	    } finally {
+	      this._stopDispatching();
+	    }
+	  };
+
+	  /**
+	   * Is this Dispatcher currently dispatching.
+	   */
+
+	  Dispatcher.prototype.isDispatching = function isDispatching() {
+	    return this._isDispatching;
+	  };
+
+	  /**
+	   * Call the callback stored with the given id. Also do some internal
+	   * bookkeeping.
+	   *
+	   * @internal
+	   */
+
+	  Dispatcher.prototype._invokeCallback = function _invokeCallback(id) {
+	    this._isPending[id] = true;
+	    this._callbacks[id](this._pendingPayload);
+	    this._isHandled[id] = true;
+	  };
+
+	  /**
+	   * Set up bookkeeping needed when dispatching.
+	   *
+	   * @internal
+	   */
+
+	  Dispatcher.prototype._startDispatching = function _startDispatching(payload) {
+	    for (var id in this._callbacks) {
+	      this._isPending[id] = false;
+	      this._isHandled[id] = false;
+	    }
+	    this._pendingPayload = payload;
+	    this._isDispatching = true;
+	  };
+
+	  /**
+	   * Clear bookkeeping used for dispatching.
+	   *
+	   * @internal
+	   */
+
+	  Dispatcher.prototype._stopDispatching = function _stopDispatching() {
+	    delete this._pendingPayload;
+	    this._isDispatching = false;
+	  };
+
+	  return Dispatcher;
+	})();
+
+	module.exports = Dispatcher;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	// shim for using process in browser
+
+	var process = module.exports = {};
+	var queue = [];
+	var draining = false;
+	var currentQueue;
+	var queueIndex = -1;
+
+	function cleanUpNextTick() {
+	    draining = false;
+	    if (currentQueue.length) {
+	        queue = currentQueue.concat(queue);
+	    } else {
+	        queueIndex = -1;
+	    }
+	    if (queue.length) {
+	        drainQueue();
+	    }
+	}
+
+	function drainQueue() {
+	    if (draining) {
+	        return;
+	    }
+	    var timeout = setTimeout(cleanUpNextTick);
+	    draining = true;
+
+	    var len = queue.length;
+	    while(len) {
+	        currentQueue = queue;
+	        queue = [];
+	        while (++queueIndex < len) {
+	            if (currentQueue) {
+	                currentQueue[queueIndex].run();
+	            }
+	        }
+	        queueIndex = -1;
+	        len = queue.length;
+	    }
+	    currentQueue = null;
+	    draining = false;
+	    clearTimeout(timeout);
+	}
+
+	process.nextTick = function (fun) {
+	    var args = new Array(arguments.length - 1);
+	    if (arguments.length > 1) {
+	        for (var i = 1; i < arguments.length; i++) {
+	            args[i - 1] = arguments[i];
+	        }
+	    }
+	    queue.push(new Item(fun, args));
+	    if (queue.length === 1 && !draining) {
+	        setTimeout(drainQueue, 0);
+	    }
+	};
+
+	// v8 likes predictible objects
+	function Item(fun, array) {
+	    this.fun = fun;
+	    this.array = array;
+	}
+	Item.prototype.run = function () {
+	    this.fun.apply(null, this.array);
+	};
+	process.title = 'browser';
+	process.browser = true;
+	process.env = {};
+	process.argv = [];
+	process.version = ''; // empty string to avoid regexp issues
+	process.versions = {};
+
+	function noop() {}
+
+	process.on = noop;
+	process.addListener = noop;
+	process.once = noop;
+	process.off = noop;
+	process.removeListener = noop;
+	process.removeAllListeners = noop;
+	process.emit = noop;
+
+	process.binding = function (name) {
+	    throw new Error('process.binding is not supported');
+	};
+
+	process.cwd = function () { return '/' };
+	process.chdir = function (dir) {
+	    throw new Error('process.chdir is not supported');
+	};
+	process.umask = function() { return 0; };
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule invariant
+	 */
+
+	"use strict";
+
+	/**
+	 * Use invariant() to assert state which your program assumes to be true.
+	 *
+	 * Provide sprintf-style format (only %s is supported) and arguments
+	 * to provide information about what broke and what you were
+	 * expecting.
+	 *
+	 * The invariant message will be stripped in production, but the invariant
+	 * will remain to ensure logic does not differ in production.
+	 */
+
+	var invariant = function (condition, format, a, b, c, d, e, f) {
+	  if (process.env.NODE_ENV !== 'production') {
+	    if (format === undefined) {
+	      throw new Error('invariant requires an error message argument');
+	    }
+	  }
+
+	  if (!condition) {
+	    var error;
+	    if (format === undefined) {
+	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+	    } else {
+	      var args = [a, b, c, d, e, f];
+	      var argIndex = 0;
+	      error = new Error('Invariant Violation: ' + format.replace(/%s/g, function () {
+	        return args[argIndex++];
+	      }));
+	    }
+
+	    error.framesToPop = 1; // we don't care about invariant's own frame
+	    throw error;
+	  }
+	};
+
+	module.exports = invariant;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
+
+/***/ },
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -13001,10 +13407,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)(module), (function() { return this; }())))
 
 /***/ },
-/* 17 */
+/* 21 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -13020,7 +13426,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 18 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -22868,7 +23274,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 19 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	///<reference path="../../typings/tsd.d.ts"/>
@@ -22878,14 +23284,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var _ = __webpack_require__(16);
-	var SubtotalAggregator_1 = __webpack_require__(20);
-	var TreeBuilder_1 = __webpack_require__(22);
-	var utils_1 = __webpack_require__(24);
-	var SortFactory_1 = __webpack_require__(43);
-	var WidthMeasureCalculator_1 = __webpack_require__(44);
-	var TreeRasterizer_1 = __webpack_require__(45);
-	var ScrollCalculator_1 = __webpack_require__(46);
+	var FluxUtils = __webpack_require__(24);
+	var _ = __webpack_require__(20);
+	var SubtotalAggregator_1 = __webpack_require__(41);
+	var TreeBuilder_1 = __webpack_require__(43);
+	var ReduceStore = FluxUtils.ReduceStore;
+	var SortFactory_1 = __webpack_require__(45);
+	var WidthMeasureCalculator_1 = __webpack_require__(46);
+	var TreeRasterizer_1 = __webpack_require__(47);
+	var ScrollCalculator_1 = __webpack_require__(48);
 	/*
 	 define the # of rows necessary to trigger progressive rendering
 	 below which all row display bound change events are ignored
@@ -23152,7 +23559,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return newState;
 	    };
 	    return GigaStore;
-	}(utils_1.ReduceStore));
+	}(ReduceStore));
 	exports.GigaStore = GigaStore;
 	/*
 	 Public Actions API
@@ -23177,475 +23584,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GigaActionType[GigaActionType["CHANGE_ROW_DISPLAY_BOUNDS"] = 16] = "CHANGE_ROW_DISPLAY_BOUNDS";
 	})(exports.GigaActionType || (exports.GigaActionType = {}));
 	var GigaActionType = exports.GigaActionType;
-
-
-/***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var ColumnLike_1 = __webpack_require__(21);
-	var _ = __webpack_require__(16);
-	function straightSum(detailRows, columnDef) {
-	    return _.sum(detailRows.map(function (r) { return r.getByColTag(columnDef.colTag); }));
-	}
-	function weightedAverage(detailRows, columnDef) {
-	    var denom = 0.0;
-	    var sumproduct = 0.0;
-	    for (var i = 0; i < detailRows.length; i++) {
-	        denom = denom + detailRows[i].getByColTag(columnDef.colTag);
-	        sumproduct = sumproduct + detailRows[i].getByColTag(columnDef.colTag) * detailRows[i].getByColTag(columnDef.weightBy);
-	    }
-	    if (denom !== 0.0)
-	        return sumproduct / denom;
-	}
-	function average(detailRows, columnDef) {
-	    if (detailRows.length === 0)
-	        return 0;
-	    return straightSum(detailRows, columnDef) / detailRows.length;
-	}
-	function count(detailRows, columnDefs) {
-	    return detailRows.length;
-	}
-	function countOrDistinct(detailRows, columnDef) {
-	    var distinctCount = countDistinct(detailRows, columnDef);
-	    var c = count(detailRows, columnDef);
-	    if (distinctCount !== 1)
-	        return distinctCount + "/" + c;
-	    else
-	        return detailRows[0].getByColTag(columnDef.colTag);
-	}
-	function countDistinct(detailRows, columnDef) {
-	    return _.chain(detailRows).map(function (r) { return r.getByColTag(columnDef.colTag); }).sortBy().uniq(true).value().length;
-	}
-	function range(detailRows, columnDef) {
-	    var val = detailRows.map(function (r) { return r.getByColTag(columnDef.colTag); });
-	    return _.min(val) + " - " + _.max(val);
-	}
-	function format(value, fmtInstruction) {
-	    if (!fmtInstruction)
-	        return value;
-	    function addCommas(nStr) {
-	        nStr += '';
-	        var x = nStr.split('.');
-	        var x1 = x[0];
-	        var x2 = x.length > 1 ? '.' + x[1] : '';
-	        var rgx = /(\d+)(\d{3})/;
-	        while (rgx.test(x1)) {
-	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
-	        }
-	        return x1 + x2;
-	    }
-	    var result = value;
-	    if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result))
-	        result *= value;
-	    if (typeof fmtInstruction.roundTo !== "undefined" && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
-	        result = parseFloat(result.toFixed(fmtInstruction.roundTo));
-	    if (fmtInstruction.separator && !isNaN(result))
-	        result = addCommas(result);
-	    return result;
-	}
-	/**
-	 * these should return Tree(s) as oppose to being void ... I want to use Immutable.js to simplify things where possible
-	 */
-	var SubtotalAggregator = (function () {
-	    function SubtotalAggregator() {
-	    }
-	    SubtotalAggregator.aggregateTree = function (tree, columnDefs) {
-	        SubtotalAggregator.aggregateSubtotalRow(tree.getRoot(), columnDefs);
-	        SubtotalAggregator.aggregateChildren(tree.getRoot(), columnDefs);
-	    };
-	    /**
-	     * depth first recursive implementation of the tree traversal
-	     * @param subtotalRow
-	     * @param columnDefs
-	     */
-	    SubtotalAggregator.aggregateChildren = function (subtotalRow, columnDefs) {
-	        subtotalRow.getChildren().forEach(function (childRow) {
-	            SubtotalAggregator.aggregateSubtotalRow(childRow, columnDefs);
-	            if (childRow.getChildren().length > 0)
-	                SubtotalAggregator.aggregateChildren(childRow, columnDefs);
-	        });
-	    };
-	    SubtotalAggregator.aggregate = function (detailRows, columnDefs) {
-	        var aggregated = {};
-	        columnDefs.forEach(function (columnDef) {
-	            var value;
-	            switch (columnDef.aggregationMethod) {
-	                case ColumnLike_1.AggregationMethod.AVERAGE:
-	                    value = average(detailRows, columnDef);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.COUNT:
-	                    value = count(detailRows, columnDef);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.COUNT_DISTINCT:
-	                    value = countDistinct(detailRows, columnDef);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.COUNT_OR_DISTINCT:
-	                    value = countOrDistinct(detailRows, columnDef);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.RANGE:
-	                    value = range(detailRows, columnDef);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.SUM:
-	                    value = straightSum(detailRows, columnDef);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE:
-	                    value = weightedAverage(detailRows, columnDef);
-	                    break;
-	                default:
-	                    value = "";
-	                    break;
-	            }
-	            aggregated[columnDef.colTag] = format(value, columnDef.formatInstruction);
-	        });
-	        return aggregated;
-	    };
-	    SubtotalAggregator.aggregateSubtotalRow = function (subtotalRow, columnDefs) {
-	        subtotalRow.setData(SubtotalAggregator.aggregate(subtotalRow.detailRows, columnDefs));
-	    };
-	    return SubtotalAggregator;
-	}());
-	exports.SubtotalAggregator = SubtotalAggregator;
-
-
-/***/ },
-/* 21 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var _ = __webpack_require__(16);
-	(function (AggregationMethod) {
-	    AggregationMethod[AggregationMethod["SUM"] = 0] = "SUM";
-	    AggregationMethod[AggregationMethod["WEIGHTED_AVERAGE"] = 1] = "WEIGHTED_AVERAGE";
-	    AggregationMethod[AggregationMethod["AVERAGE"] = 2] = "AVERAGE";
-	    AggregationMethod[AggregationMethod["RANGE"] = 3] = "RANGE";
-	    AggregationMethod[AggregationMethod["COUNT"] = 4] = "COUNT";
-	    AggregationMethod[AggregationMethod["COUNT_DISTINCT"] = 5] = "COUNT_DISTINCT";
-	    AggregationMethod[AggregationMethod["COUNT_OR_DISTINCT"] = 6] = "COUNT_OR_DISTINCT";
-	    AggregationMethod[AggregationMethod["NONE"] = 7] = "NONE";
-	})(exports.AggregationMethod || (exports.AggregationMethod = {}));
-	var AggregationMethod = exports.AggregationMethod;
-	(function (ColumnFormat) {
-	    ColumnFormat[ColumnFormat["NUMBER"] = 0] = "NUMBER";
-	    ColumnFormat[ColumnFormat["STRING"] = 1] = "STRING";
-	    ColumnFormat[ColumnFormat["CURRENCY"] = 2] = "CURRENCY";
-	    ColumnFormat[ColumnFormat["DATE"] = 3] = "DATE";
-	})(exports.ColumnFormat || (exports.ColumnFormat = {}));
-	var ColumnFormat = exports.ColumnFormat;
-	(function (SortDirection) {
-	    SortDirection[SortDirection["ASC"] = 0] = "ASC";
-	    SortDirection[SortDirection["DESC"] = 1] = "DESC";
-	})(exports.SortDirection || (exports.SortDirection = {}));
-	var SortDirection = exports.SortDirection;
-	var ColumnFactory = (function () {
-	    function ColumnFactory() {
-	    }
-	    /**
-	     * create an array of Column from definitions
-	     * @param columnDefs
-	     * @param state
-	     * @returns {Column[]}
-	     */
-	    ColumnFactory.createColumnsFromDefinition = function (columnDefs, state) {
-	        var maskedTags = (state.columnDefMask || []).map(function (m) { return m.colTag; });
-	        return columnDefs.filter(function (cd) { return maskedTags.indexOf(cd.colTag) === -1; }).map(function (cd) { return ColumnFactory.createColumnFromDefinition(cd, state); });
-	    };
-	    /**
-	     * creates a single Column object from a ColumnDef (definition)
-	     * Column objects contain more rendering hints than ColumnDef objects which are passed in by the user
-	     * @param cd
-	     * @param state
-	     * @returns {Column}
-	     */
-	    ColumnFactory.createColumnFromDefinition = function (cd, state) {
-	        var column = {
-	            colTag: cd.colTag,
-	            title: cd.title,
-	            aggregationMethod: cd.aggregationMethod,
-	            format: cd.format,
-	            width: state.widthMeasures.columnWidths[cd.colTag],
-	            cellTemplateCreator: cd.cellTemplateCreator
-	        };
-	        // determine if there is an existing SortBy for this column
-	        var sortBy = _.find(state.sortBys, function (s) { return s.colTag === cd.colTag; });
-	        if (sortBy) {
-	            column.sortDirection = sortBy.direction;
-	            column.customSortFn = sortBy.customSortFn;
-	        }
-	        return column;
-	    };
-	    /**
-	     * Create a 2-dimensional structure of Column(s), this allow us to group column headers
-	     * @param columnGroupDefs
-	     * @param columnDefs
-	     * @param state
-	     * @returns {Column[][]}
-	     */
-	    ColumnFactory.createColumnsFromGroupDefinition = function (columnGroupDefs, columnDefs, state) {
-	        var columns = ColumnFactory.createColumnsFromDefinition(columnDefs, state);
-	        var columnMap = _.chain(columns).map(function (column) { return column.colTag; }).object(columns).value();
-	        var nestedColumns = [[], []];
-	        _.forEach(columnGroupDefs, function (groupDef, i) {
-	            nestedColumns[0].push({
-	                colTag: "column_group_" + (i + 1),
-	                title: groupDef.title,
-	                colSpan: groupDef.columns.length
-	            });
-	            _.forEach(groupDef.columns, function (colTag) { return nestedColumns[1].push(columnMap[colTag]); });
-	        });
-	        return nestedColumns;
-	    };
-	    return ColumnFactory;
-	}());
-	exports.ColumnFactory = ColumnFactory;
-
-
-/***/ },
-/* 22 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var Row_1 = __webpack_require__(23);
-	var Row_2 = __webpack_require__(23);
-	var TreeBuilder = (function () {
-	    function TreeBuilder() {
-	    }
-	    TreeBuilder.buildTree = function (data, subtotalBys, grandTotal) {
-	        var _this = this;
-	        if (subtotalBys === void 0) { subtotalBys = []; }
-	        /*
-	         * the way we create a Tree is as follows
-	         * since each detailRow in data can only belong to ONE SubtotalRow and each SubtotalRow can have only 1 parent
-	         * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
-	         * parent SubtotalRow (in other words, find the detailRow's "bucket") and append said detailRow to the parent
-	         */
-	        grandTotal = grandTotal || new Row_1.SubtotalRow("Grand Total");
-	        grandTotal.setSectorPath([]);
-	        data.forEach(function (datum) { return _this.bucketDetailRow(subtotalBys, new Row_2.DetailRow(datum), grandTotal); });
-	        return new Tree(grandTotal);
-	    };
-	    TreeBuilder.bucketDetailRow = function (subtotalBys, detailedRow, grandTotal) {
-	        /*
-	         * to traverse the grandTotal and find the detailRow's immediate parent SubtotalRow
-	         * we store the detailRow's sector names in an ordered array
-	         */
-	        var subtotalTitles = []; // temporary array of strings to keep track subtotal titles names in sequence
-	        grandTotal.detailRows.push(detailedRow);
-	        subtotalBys.forEach(function (subtotalBy) {
-	            // the subtotal title
-	            var bucketTitle = TreeBuilder.resolveSubtotalTitle(subtotalBy, detailedRow);
-	            if (bucketTitle !== undefined) {
-	                subtotalTitles.push(bucketTitle);
-	                var subtotalRow = TreeBuilder.traverseOrCreate(grandTotal, subtotalTitles);
-	                subtotalRow.detailRows.push(detailedRow);
-	            }
-	        });
-	        detailedRow.setSectorPath(subtotalTitles);
-	    };
-	    ;
-	    // TODO add tests
-	    /**
-	     * recurisvely collapse the given node
-	     * @param node
-	     * @param shouldCollapse
-	     */
-	    TreeBuilder.recursivelyToggleChildrenCollapse = function (node, shouldCollapse) {
-	        if (shouldCollapse === void 0) { shouldCollapse = true; }
-	        /**
-	         *
-	         * @param node
-	         * @param shouldCollapse
-	         * @private
-	         */
-	        function _toggleCollapse(node, shouldCollapse) {
-	            node.toggleCollapse(shouldCollapse);
-	            TreeBuilder.recursivelyToggleChildrenCollapse(node, shouldCollapse);
-	        }
-	        node.getChildren().forEach(function (child) {
-	            if (shouldCollapse) {
-	                _toggleCollapse(child, shouldCollapse);
-	            }
-	            else {
-	                if (child.getChildren().length || child.sectorPath().length === 1) {
-	                    _toggleCollapse(child, shouldCollapse);
-	                }
-	            }
-	        });
-	    };
-	    /**
-	     *
-	     * @param grandTotal
-	     * @param subtotalTitles
-	     * @returns {SubtotalRow}
-	     */
-	    TreeBuilder.traverseOrCreate = function (grandTotal, subtotalTitles) {
-	        // traverse to the correct SubtotalRow
-	        var currentRow = grandTotal;
-	        for (var k = 0; k < subtotalTitles.length; k++) {
-	            // update the current subtotal row
-	            if (currentRow.hasChildWithTitle(subtotalTitles[k]))
-	                currentRow = currentRow.getChildByTitle(subtotalTitles[k]);
-	            else {
-	                // create a new sector if it is not already available
-	                var newRow = new Row_1.SubtotalRow(subtotalTitles[k]);
-	                newRow.toggleCollapse(true);
-	                // set the sector path for the new SubtotalRow we just created the length of which determines its depth
-	                newRow.setSectorPath(subtotalTitles.slice(0, k + 1));
-	                currentRow.addChild(newRow);
-	                currentRow = newRow;
-	            }
-	        }
-	        return currentRow;
-	    };
-	    ;
-	    TreeBuilder.resolveSubtotalTitle = function (subtotalBy, detailedRow) {
-	        if (subtotalBy.groupBy)
-	            return subtotalBy.groupBy(detailedRow);
-	        else
-	            return subtotalBy.title ? subtotalBy.title + ": " + detailedRow.getByColTag(subtotalBy.colTag) : detailedRow.getByColTag(subtotalBy.colTag);
-	    };
-	    return TreeBuilder;
-	}());
-	exports.TreeBuilder = TreeBuilder;
-	var Tree = (function () {
-	    function Tree(root) {
-	        this.root = root;
-	    }
-	    Tree.prototype.getRoot = function () {
-	        return this.root;
-	    };
-	    return Tree;
-	}());
-	exports.Tree = Tree;
-
-
-/***/ },
-/* 23 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var GenericRow = (function () {
-	    function GenericRow(data) {
-	        this._isSelected = false;
-	        this._isHidden = false;
-	        this.title = null;
-	        this._data = data;
-	    }
-	    GenericRow.prototype.get = function (columnDef) {
-	        return this._data[columnDef.colTag];
-	    };
-	    GenericRow.prototype.getByColTag = function (colTag) {
-	        return this._data[colTag];
-	    };
-	    GenericRow.prototype.toggleSelect = function (select) {
-	        if (typeof select !== "undefined")
-	            this._isSelected = select;
-	        else
-	            this._isSelected = !this._isSelected;
-	    };
-	    GenericRow.prototype.isSelected = function () {
-	        return this._isSelected;
-	    };
-	    GenericRow.prototype.isHidden = function () {
-	        return this._isHidden;
-	    };
-	    GenericRow.prototype.toggleHide = function (hide) {
-	        if (typeof hide !== "undefined")
-	            this._isHidden = hide;
-	        else
-	            this._isHidden = !this._isHidden;
-	    };
-	    GenericRow.prototype.sectorPath = function () {
-	        return this._sectorPath;
-	    };
-	    GenericRow.prototype.setSectorPath = function (sectorPath) {
-	        this._sectorPath = sectorPath;
-	    };
-	    GenericRow.prototype.data = function () {
-	        return this._data;
-	    };
-	    GenericRow.prototype.setData = function (data) {
-	        this._data = data;
-	    };
-	    return GenericRow;
-	}());
-	var DetailRow = (function (_super) {
-	    __extends(DetailRow, _super);
-	    function DetailRow(data) {
-	        _super.call(this, data);
-	    }
-	    DetailRow.prototype.isDetail = function () {
-	        return true;
-	    };
-	    return DetailRow;
-	}(GenericRow));
-	exports.DetailRow = DetailRow;
-	var SubtotalRow = (function (_super) {
-	    __extends(SubtotalRow, _super);
-	    function SubtotalRow(title) {
-	        _super.call(this, {});
-	        this.children = [];
-	        this.childrenByTitle = {};
-	        this._isCollapsed = false;
-	        this.detailRows = [];
-	        this.title = title;
-	    }
-	    SubtotalRow.prototype.toggleCollapse = function (state) {
-	        if (state != undefined)
-	            this._isCollapsed = state;
-	        else
-	            this._isCollapsed = !this._isCollapsed;
-	    };
-	    SubtotalRow.prototype.isCollapsed = function () {
-	        return this._isCollapsed;
-	    };
-	    SubtotalRow.prototype.isDetail = function () {
-	        return false;
-	    };
-	    SubtotalRow.prototype.findIndex = function (child) {
-	        for (var i = 0; i < this.children.length; i++)
-	            if (this.children[i].title === child.title)
-	                return i;
-	        return -1;
-	    };
-	    SubtotalRow.prototype.addChild = function (child) {
-	        // if already exist, pop it from the children array
-	        this.removeChild(child);
-	        this.children.push(child);
-	        this.childrenByTitle[child.title] = child;
-	    };
-	    SubtotalRow.prototype.removeChild = function (child) {
-	        if (this.childrenByTitle[child.title] != undefined) {
-	            var idx = this.findIndex(child);
-	            this.children.splice(idx, 1);
-	            this.childrenByTitle[child.title] = undefined;
-	        }
-	    };
-	    SubtotalRow.prototype.getChildByTitle = function (title) {
-	        return this.childrenByTitle[title];
-	    };
-	    SubtotalRow.prototype.getNumChildren = function () {
-	        return this.children.length;
-	    };
-	    SubtotalRow.prototype.getChildren = function () {
-	        return this.children;
-	    };
-	    SubtotalRow.prototype.getChildAtIndex = function (idx) {
-	        return this.children[idx];
-	    };
-	    SubtotalRow.prototype.hasChildWithTitle = function (title) {
-	        return this.getChildByTitle(title) != undefined;
-	    };
-	    return SubtotalRow;
-	}(GenericRow));
-	exports.SubtotalRow = SubtotalRow;
-
+	//# sourceMappingURL=GigaStore.js.map
 
 /***/ },
 /* 24 */
@@ -23661,10 +23600,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	module.exports.Container = __webpack_require__(25);
-	module.exports.MapStore = __webpack_require__(30);
-	module.exports.Mixin = __webpack_require__(42);
-	module.exports.ReduceStore = __webpack_require__(31);
-	module.exports.Store = __webpack_require__(32);
+	module.exports.MapStore = __webpack_require__(28);
+	module.exports.Mixin = __webpack_require__(40);
+	module.exports.ReduceStore = __webpack_require__(29);
+	module.exports.Store = __webpack_require__(30);
 
 
 /***/ },
@@ -23690,10 +23629,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var FluxStoreGroup = __webpack_require__(27);
+	var FluxStoreGroup = __webpack_require__(26);
 
-	var invariant = __webpack_require__(28);
-	var shallowEqual = __webpack_require__(29);
+	var invariant = __webpack_require__(19);
+	var shallowEqual = __webpack_require__(27);
 
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -23848,107 +23787,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	module.exports = { create: create };
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
 /* 26 */
-/***/ function(module, exports) {
-
-	// shim for using process in browser
-
-	var process = module.exports = {};
-	var queue = [];
-	var draining = false;
-	var currentQueue;
-	var queueIndex = -1;
-
-	function cleanUpNextTick() {
-	    draining = false;
-	    if (currentQueue.length) {
-	        queue = currentQueue.concat(queue);
-	    } else {
-	        queueIndex = -1;
-	    }
-	    if (queue.length) {
-	        drainQueue();
-	    }
-	}
-
-	function drainQueue() {
-	    if (draining) {
-	        return;
-	    }
-	    var timeout = setTimeout(cleanUpNextTick);
-	    draining = true;
-
-	    var len = queue.length;
-	    while(len) {
-	        currentQueue = queue;
-	        queue = [];
-	        while (++queueIndex < len) {
-	            if (currentQueue) {
-	                currentQueue[queueIndex].run();
-	            }
-	        }
-	        queueIndex = -1;
-	        len = queue.length;
-	    }
-	    currentQueue = null;
-	    draining = false;
-	    clearTimeout(timeout);
-	}
-
-	process.nextTick = function (fun) {
-	    var args = new Array(arguments.length - 1);
-	    if (arguments.length > 1) {
-	        for (var i = 1; i < arguments.length; i++) {
-	            args[i - 1] = arguments[i];
-	        }
-	    }
-	    queue.push(new Item(fun, args));
-	    if (queue.length === 1 && !draining) {
-	        setTimeout(drainQueue, 0);
-	    }
-	};
-
-	// v8 likes predictible objects
-	function Item(fun, array) {
-	    this.fun = fun;
-	    this.array = array;
-	}
-	Item.prototype.run = function () {
-	    this.fun.apply(null, this.array);
-	};
-	process.title = 'browser';
-	process.browser = true;
-	process.env = {};
-	process.argv = [];
-	process.version = ''; // empty string to avoid regexp issues
-	process.versions = {};
-
-	function noop() {}
-
-	process.on = noop;
-	process.addListener = noop;
-	process.once = noop;
-	process.off = noop;
-	process.removeListener = noop;
-	process.removeAllListeners = noop;
-	process.emit = noop;
-
-	process.binding = function (name) {
-	    throw new Error('process.binding is not supported');
-	};
-
-	process.cwd = function () { return '/' };
-	process.chdir = function (dir) {
-	    throw new Error('process.chdir is not supported');
-	};
-	process.umask = function() { return 0; };
-
-
-/***/ },
-/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -23967,7 +23809,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var invariant = __webpack_require__(28);
+	var invariant = __webpack_require__(19);
 
 	/**
 	 * FluxStoreGroup allows you to execute a callback on every dispatch after
@@ -24026,65 +23868,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	module.exports = FluxStoreGroup;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 28 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule invariant
-	 */
-
-	"use strict";
-
-	/**
-	 * Use invariant() to assert state which your program assumes to be true.
-	 *
-	 * Provide sprintf-style format (only %s is supported) and arguments
-	 * to provide information about what broke and what you were
-	 * expecting.
-	 *
-	 * The invariant message will be stripped in production, but the invariant
-	 * will remain to ensure logic does not differ in production.
-	 */
-
-	var invariant = function (condition, format, a, b, c, d, e, f) {
-	  if (process.env.NODE_ENV !== 'production') {
-	    if (format === undefined) {
-	      throw new Error('invariant requires an error message argument');
-	    }
-	  }
-
-	  if (!condition) {
-	    var error;
-	    if (format === undefined) {
-	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
-	    } else {
-	      var args = [a, b, c, d, e, f];
-	      var argIndex = 0;
-	      error = new Error('Invariant Violation: ' + format.replace(/%s/g, function () {
-	        return args[argIndex++];
-	      }));
-	    }
-
-	    error.framesToPop = 1; // we don't care about invariant's own frame
-	    throw error;
-	  }
-	};
-
-	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
-
-/***/ },
-/* 29 */
+/* 27 */
 /***/ function(module, exports) {
 
 	/**
@@ -24139,7 +23926,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = shallowEqual;
 
 /***/ },
-/* 30 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24160,10 +23947,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var FluxReduceStore = __webpack_require__(31);
-	var Immutable = __webpack_require__(41);
+	var FluxReduceStore = __webpack_require__(29);
+	var Immutable = __webpack_require__(39);
 
-	var invariant = __webpack_require__(28);
+	var invariant = __webpack_require__(19);
 
 	/**
 	 * This is a simple store. It allows caching key value pairs. An implementation
@@ -24286,10 +24073,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(FluxReduceStore);
 
 	module.exports = FluxMapStore;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 31 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24310,10 +24097,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var FluxStore = __webpack_require__(32);
+	var FluxStore = __webpack_require__(30);
 
-	var abstractMethod = __webpack_require__(40);
-	var invariant = __webpack_require__(28);
+	var abstractMethod = __webpack_require__(38);
+	var invariant = __webpack_require__(19);
 
 	var FluxReduceStore = (function (_FluxStore) {
 	  _inherits(FluxReduceStore, _FluxStore);
@@ -24393,10 +24180,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(FluxStore);
 
 	module.exports = FluxReduceStore;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 32 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24415,11 +24202,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _require = __webpack_require__(33);
+	var _require = __webpack_require__(31);
 
 	var EventEmitter = _require.EventEmitter;
 
-	var invariant = __webpack_require__(28);
+	var invariant = __webpack_require__(19);
 
 	/**
 	 * This class should be extended by the stores in your application, like so:
@@ -24576,10 +24363,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	// private
 
 	// protected, available to subclasses
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 33 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24592,14 +24379,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(34)
+	  EventEmitter: __webpack_require__(32)
 	};
 
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 34 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24618,11 +24405,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var EmitterSubscription = __webpack_require__(35);
-	var EventSubscriptionVendor = __webpack_require__(37);
+	var EmitterSubscription = __webpack_require__(33);
+	var EventSubscriptionVendor = __webpack_require__(35);
 
-	var emptyFunction = __webpack_require__(39);
-	var invariant = __webpack_require__(38);
+	var emptyFunction = __webpack_require__(37);
+	var invariant = __webpack_require__(36);
 
 	/**
 	 * @class BaseEventEmitter
@@ -24793,10 +24580,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 
 	module.exports = BaseEventEmitter;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 35 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24817,7 +24604,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var EventSubscription = __webpack_require__(36);
+	var EventSubscription = __webpack_require__(34);
 
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -24849,7 +24636,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 36 */
+/* 34 */
 /***/ function(module, exports) {
 
 	/**
@@ -24903,7 +24690,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EventSubscription;
 
 /***/ },
-/* 37 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24922,7 +24709,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var invariant = __webpack_require__(38);
+	var invariant = __webpack_require__(36);
 
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -25009,10 +24796,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 
 	module.exports = EventSubscriptionVendor;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 38 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25065,10 +24852,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 39 */
+/* 37 */
 /***/ function(module, exports) {
 
 	/**
@@ -25111,7 +24898,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = emptyFunction;
 
 /***/ },
-/* 40 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25128,17 +24915,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var invariant = __webpack_require__(28);
+	var invariant = __webpack_require__(19);
 
 	function abstractMethod(className, methodName) {
 	   true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Subclasses of %s must override %s() with their own implementation.', className, methodName) : invariant(false) : undefined;
 	}
 
 	module.exports = abstractMethod;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 41 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -30125,7 +29912,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}));
 
 /***/ },
-/* 42 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -30142,9 +29929,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var FluxStoreGroup = __webpack_require__(27);
+	var FluxStoreGroup = __webpack_require__(26);
 
-	var invariant = __webpack_require__(28);
+	var invariant = __webpack_require__(19);
 
 	/**
 	 * `FluxContainer` should be preferred over this mixin, but it requires using
@@ -30245,14 +30032,482 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	module.exports = FluxMixinLegacy;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
+
+/***/ },
+/* 41 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var ColumnLike_1 = __webpack_require__(42);
+	var _ = __webpack_require__(20);
+	function straightSum(detailRows, columnDef) {
+	    return _.sum(detailRows.map(function (r) { return r.getByColTag(columnDef.colTag); }));
+	}
+	function weightedAverage(detailRows, columnDef) {
+	    var denom = 0.0;
+	    var sumproduct = 0.0;
+	    for (var i = 0; i < detailRows.length; i++) {
+	        denom = denom + detailRows[i].getByColTag(columnDef.colTag);
+	        sumproduct = sumproduct + detailRows[i].getByColTag(columnDef.colTag) * detailRows[i].getByColTag(columnDef.weightBy);
+	    }
+	    if (denom !== 0.0)
+	        return sumproduct / denom;
+	}
+	function average(detailRows, columnDef) {
+	    if (detailRows.length === 0)
+	        return 0;
+	    return straightSum(detailRows, columnDef) / detailRows.length;
+	}
+	function count(detailRows, columnDefs) {
+	    return detailRows.length;
+	}
+	function countOrDistinct(detailRows, columnDef) {
+	    var distinctCount = countDistinct(detailRows, columnDef);
+	    var c = count(detailRows, columnDef);
+	    if (distinctCount !== 1)
+	        return distinctCount + "/" + c;
+	    else
+	        return detailRows[0].getByColTag(columnDef.colTag);
+	}
+	function countDistinct(detailRows, columnDef) {
+	    return _.chain(detailRows).map(function (r) { return r.getByColTag(columnDef.colTag); }).sortBy().uniq(true).value().length;
+	}
+	function range(detailRows, columnDef) {
+	    var val = detailRows.map(function (r) { return r.getByColTag(columnDef.colTag); });
+	    return _.min(val) + " - " + _.max(val);
+	}
+	function format(value, fmtInstruction) {
+	    if (!fmtInstruction)
+	        return value;
+	    function addCommas(nStr) {
+	        nStr += '';
+	        var x = nStr.split('.');
+	        var x1 = x[0];
+	        var x2 = x.length > 1 ? '.' + x[1] : '';
+	        var rgx = /(\d+)(\d{3})/;
+	        while (rgx.test(x1)) {
+	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	        }
+	        return x1 + x2;
+	    }
+	    var result = value;
+	    if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result))
+	        result *= value;
+	    if (typeof fmtInstruction.roundTo !== "undefined" && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
+	        result = parseFloat(result.toFixed(fmtInstruction.roundTo));
+	    if (fmtInstruction.separator && !isNaN(result))
+	        result = addCommas(result);
+	    return result;
+	}
+	/**
+	 * these should return Tree(s) as oppose to being void ... I want to use Immutable.js to simplify things where possible
+	 */
+	var SubtotalAggregator = (function () {
+	    function SubtotalAggregator() {
+	    }
+	    SubtotalAggregator.aggregateTree = function (tree, columnDefs) {
+	        SubtotalAggregator.aggregateSubtotalRow(tree.getRoot(), columnDefs);
+	        SubtotalAggregator.aggregateChildren(tree.getRoot(), columnDefs);
+	    };
+	    /**
+	     * depth first recursive implementation of the tree traversal
+	     * @param subtotalRow
+	     * @param columnDefs
+	     */
+	    SubtotalAggregator.aggregateChildren = function (subtotalRow, columnDefs) {
+	        subtotalRow.getChildren().forEach(function (childRow) {
+	            SubtotalAggregator.aggregateSubtotalRow(childRow, columnDefs);
+	            if (childRow.getChildren().length > 0)
+	                SubtotalAggregator.aggregateChildren(childRow, columnDefs);
+	        });
+	    };
+	    SubtotalAggregator.aggregate = function (detailRows, columnDefs) {
+	        var aggregated = {};
+	        columnDefs.forEach(function (columnDef) {
+	            var value;
+	            switch (columnDef.aggregationMethod) {
+	                case ColumnLike_1.AggregationMethod.AVERAGE:
+	                    value = average(detailRows, columnDef);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.COUNT:
+	                    value = count(detailRows, columnDef);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.COUNT_DISTINCT:
+	                    value = countDistinct(detailRows, columnDef);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.COUNT_OR_DISTINCT:
+	                    value = countOrDistinct(detailRows, columnDef);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.RANGE:
+	                    value = range(detailRows, columnDef);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.SUM:
+	                    value = straightSum(detailRows, columnDef);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE:
+	                    value = weightedAverage(detailRows, columnDef);
+	                    break;
+	                default:
+	                    value = "";
+	                    break;
+	            }
+	            aggregated[columnDef.colTag] = format(value, columnDef.formatInstruction);
+	        });
+	        return aggregated;
+	    };
+	    SubtotalAggregator.aggregateSubtotalRow = function (subtotalRow, columnDefs) {
+	        subtotalRow.setData(SubtotalAggregator.aggregate(subtotalRow.detailRows, columnDefs));
+	    };
+	    return SubtotalAggregator;
+	}());
+	exports.SubtotalAggregator = SubtotalAggregator;
+	//# sourceMappingURL=SubtotalAggregator.js.map
+
+/***/ },
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var _ = __webpack_require__(20);
+	(function (AggregationMethod) {
+	    AggregationMethod[AggregationMethod["SUM"] = 0] = "SUM";
+	    AggregationMethod[AggregationMethod["WEIGHTED_AVERAGE"] = 1] = "WEIGHTED_AVERAGE";
+	    AggregationMethod[AggregationMethod["AVERAGE"] = 2] = "AVERAGE";
+	    AggregationMethod[AggregationMethod["RANGE"] = 3] = "RANGE";
+	    AggregationMethod[AggregationMethod["COUNT"] = 4] = "COUNT";
+	    AggregationMethod[AggregationMethod["COUNT_DISTINCT"] = 5] = "COUNT_DISTINCT";
+	    AggregationMethod[AggregationMethod["COUNT_OR_DISTINCT"] = 6] = "COUNT_OR_DISTINCT";
+	    AggregationMethod[AggregationMethod["NONE"] = 7] = "NONE";
+	})(exports.AggregationMethod || (exports.AggregationMethod = {}));
+	var AggregationMethod = exports.AggregationMethod;
+	(function (ColumnFormat) {
+	    ColumnFormat[ColumnFormat["NUMBER"] = 0] = "NUMBER";
+	    ColumnFormat[ColumnFormat["STRING"] = 1] = "STRING";
+	    ColumnFormat[ColumnFormat["CURRENCY"] = 2] = "CURRENCY";
+	    ColumnFormat[ColumnFormat["DATE"] = 3] = "DATE";
+	})(exports.ColumnFormat || (exports.ColumnFormat = {}));
+	var ColumnFormat = exports.ColumnFormat;
+	(function (SortDirection) {
+	    SortDirection[SortDirection["ASC"] = 0] = "ASC";
+	    SortDirection[SortDirection["DESC"] = 1] = "DESC";
+	})(exports.SortDirection || (exports.SortDirection = {}));
+	var SortDirection = exports.SortDirection;
+	var ColumnFactory = (function () {
+	    function ColumnFactory() {
+	    }
+	    /**
+	     * create an array of Column from definitions
+	     * @param columnDefs
+	     * @param state
+	     * @returns {Column[]}
+	     */
+	    ColumnFactory.createColumnsFromDefinition = function (columnDefs, state) {
+	        var maskedTags = (state.columnDefMask || []).map(function (m) { return m.colTag; });
+	        return columnDefs.filter(function (cd) { return maskedTags.indexOf(cd.colTag) === -1; }).map(function (cd) { return ColumnFactory.createColumnFromDefinition(cd, state); });
+	    };
+	    /**
+	     * creates a single Column object from a ColumnDef (definition)
+	     * Column objects contain more rendering hints than ColumnDef objects which are passed in by the user
+	     * @param cd
+	     * @param state
+	     * @returns {Column}
+	     */
+	    ColumnFactory.createColumnFromDefinition = function (cd, state) {
+	        var column = {
+	            colTag: cd.colTag,
+	            title: cd.title,
+	            aggregationMethod: cd.aggregationMethod,
+	            format: cd.format,
+	            width: state.widthMeasures.columnWidths[cd.colTag],
+	            cellTemplateCreator: cd.cellTemplateCreator
+	        };
+	        // determine if there is an existing SortBy for this column
+	        var sortBy = _.find(state.sortBys, function (s) { return s.colTag === cd.colTag; });
+	        if (sortBy) {
+	            column.sortDirection = sortBy.direction;
+	            column.customSortFn = sortBy.customSortFn;
+	        }
+	        return column;
+	    };
+	    /**
+	     * Create a 2-dimensional structure of Column(s), this allow us to group column headers
+	     * @param columnGroupDefs
+	     * @param columnDefs
+	     * @param state
+	     * @returns {Column[][]}
+	     */
+	    ColumnFactory.createColumnsFromGroupDefinition = function (columnGroupDefs, columnDefs, state) {
+	        var columns = ColumnFactory.createColumnsFromDefinition(columnDefs, state);
+	        var columnMap = _.chain(columns).map(function (column) { return column.colTag; }).object(columns).value();
+	        var nestedColumns = [[], []];
+	        _.forEach(columnGroupDefs, function (groupDef, i) {
+	            nestedColumns[0].push({
+	                colTag: "column_group_" + (i + 1),
+	                title: groupDef.title,
+	                colSpan: groupDef.columns.length
+	            });
+	            _.forEach(groupDef.columns, function (colTag) { return nestedColumns[1].push(columnMap[colTag]); });
+	        });
+	        return nestedColumns;
+	    };
+	    return ColumnFactory;
+	}());
+	exports.ColumnFactory = ColumnFactory;
+	//# sourceMappingURL=ColumnLike.js.map
 
 /***/ },
 /* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var ColumnLike_1 = __webpack_require__(21);
+	var Row_1 = __webpack_require__(44);
+	var Row_2 = __webpack_require__(44);
+	var TreeBuilder = (function () {
+	    function TreeBuilder() {
+	    }
+	    TreeBuilder.buildTree = function (data, subtotalBys, grandTotal) {
+	        var _this = this;
+	        if (subtotalBys === void 0) { subtotalBys = []; }
+	        /*
+	         * the way we create a Tree is as follows
+	         * since each detailRow in data can only belong to ONE SubtotalRow and each SubtotalRow can have only 1 parent
+	         * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
+	         * parent SubtotalRow (in other words, find the detailRow's "bucket") and append said detailRow to the parent
+	         */
+	        grandTotal = grandTotal || new Row_1.SubtotalRow("Grand Total");
+	        grandTotal.setSectorPath([]);
+	        data.forEach(function (datum) { return _this.bucketDetailRow(subtotalBys, new Row_2.DetailRow(datum), grandTotal); });
+	        return new Tree(grandTotal);
+	    };
+	    TreeBuilder.bucketDetailRow = function (subtotalBys, detailedRow, grandTotal) {
+	        /*
+	         * to traverse the grandTotal and find the detailRow's immediate parent SubtotalRow
+	         * we store the detailRow's sector names in an ordered array
+	         */
+	        var subtotalTitles = []; // temporary array of strings to keep track subtotal titles names in sequence
+	        grandTotal.detailRows.push(detailedRow);
+	        subtotalBys.forEach(function (subtotalBy) {
+	            // the subtotal title
+	            var bucketTitle = TreeBuilder.resolveSubtotalTitle(subtotalBy, detailedRow);
+	            if (bucketTitle !== undefined) {
+	                subtotalTitles.push(bucketTitle);
+	                var subtotalRow = TreeBuilder.traverseOrCreate(grandTotal, subtotalTitles);
+	                subtotalRow.detailRows.push(detailedRow);
+	            }
+	        });
+	        detailedRow.setSectorPath(subtotalTitles);
+	    };
+	    ;
+	    // TODO add tests
+	    /**
+	     * recurisvely collapse the given node
+	     * @param node
+	     * @param shouldCollapse
+	     */
+	    TreeBuilder.recursivelyToggleChildrenCollapse = function (node, shouldCollapse) {
+	        if (shouldCollapse === void 0) { shouldCollapse = true; }
+	        /**
+	         *
+	         * @param node
+	         * @param shouldCollapse
+	         * @private
+	         */
+	        function _toggleCollapse(node, shouldCollapse) {
+	            node.toggleCollapse(shouldCollapse);
+	            TreeBuilder.recursivelyToggleChildrenCollapse(node, shouldCollapse);
+	        }
+	        node.getChildren().forEach(function (child) {
+	            if (shouldCollapse) {
+	                _toggleCollapse(child, shouldCollapse);
+	            }
+	            else {
+	                if (child.getChildren().length || child.sectorPath().length === 1) {
+	                    _toggleCollapse(child, shouldCollapse);
+	                }
+	            }
+	        });
+	    };
+	    /**
+	     *
+	     * @param grandTotal
+	     * @param subtotalTitles
+	     * @returns {SubtotalRow}
+	     */
+	    TreeBuilder.traverseOrCreate = function (grandTotal, subtotalTitles) {
+	        // traverse to the correct SubtotalRow
+	        var currentRow = grandTotal;
+	        for (var k = 0; k < subtotalTitles.length; k++) {
+	            // update the current subtotal row
+	            if (currentRow.hasChildWithTitle(subtotalTitles[k]))
+	                currentRow = currentRow.getChildByTitle(subtotalTitles[k]);
+	            else {
+	                // create a new sector if it is not already available
+	                var newRow = new Row_1.SubtotalRow(subtotalTitles[k]);
+	                newRow.toggleCollapse(true);
+	                // set the sector path for the new SubtotalRow we just created the length of which determines its depth
+	                newRow.setSectorPath(subtotalTitles.slice(0, k + 1));
+	                currentRow.addChild(newRow);
+	                currentRow = newRow;
+	            }
+	        }
+	        return currentRow;
+	    };
+	    ;
+	    TreeBuilder.resolveSubtotalTitle = function (subtotalBy, detailedRow) {
+	        if (subtotalBy.groupBy)
+	            return subtotalBy.groupBy(detailedRow);
+	        else
+	            return subtotalBy.title ? subtotalBy.title + ": " + detailedRow.getByColTag(subtotalBy.colTag) : detailedRow.getByColTag(subtotalBy.colTag);
+	    };
+	    return TreeBuilder;
+	}());
+	exports.TreeBuilder = TreeBuilder;
+	var Tree = (function () {
+	    function Tree(root) {
+	        this.root = root;
+	    }
+	    Tree.prototype.getRoot = function () {
+	        return this.root;
+	    };
+	    return Tree;
+	}());
+	exports.Tree = Tree;
+	//# sourceMappingURL=TreeBuilder.js.map
+
+/***/ },
+/* 44 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var GenericRow = (function () {
+	    function GenericRow(data) {
+	        this._isSelected = false;
+	        this._isHidden = false;
+	        this.title = null;
+	        this._data = data;
+	    }
+	    GenericRow.prototype.get = function (columnDef) {
+	        return this._data[columnDef.colTag];
+	    };
+	    GenericRow.prototype.getByColTag = function (colTag) {
+	        return this._data[colTag];
+	    };
+	    GenericRow.prototype.toggleSelect = function (select) {
+	        if (typeof select !== "undefined")
+	            this._isSelected = select;
+	        else
+	            this._isSelected = !this._isSelected;
+	    };
+	    GenericRow.prototype.isSelected = function () {
+	        return this._isSelected;
+	    };
+	    GenericRow.prototype.isHidden = function () {
+	        return this._isHidden;
+	    };
+	    GenericRow.prototype.toggleHide = function (hide) {
+	        if (typeof hide !== "undefined")
+	            this._isHidden = hide;
+	        else
+	            this._isHidden = !this._isHidden;
+	    };
+	    GenericRow.prototype.sectorPath = function () {
+	        return this._sectorPath;
+	    };
+	    GenericRow.prototype.setSectorPath = function (sectorPath) {
+	        this._sectorPath = sectorPath;
+	    };
+	    GenericRow.prototype.data = function () {
+	        return this._data;
+	    };
+	    GenericRow.prototype.setData = function (data) {
+	        this._data = data;
+	    };
+	    return GenericRow;
+	}());
+	var DetailRow = (function (_super) {
+	    __extends(DetailRow, _super);
+	    function DetailRow(data) {
+	        _super.call(this, data);
+	    }
+	    DetailRow.prototype.isDetail = function () {
+	        return true;
+	    };
+	    return DetailRow;
+	}(GenericRow));
+	exports.DetailRow = DetailRow;
+	var SubtotalRow = (function (_super) {
+	    __extends(SubtotalRow, _super);
+	    function SubtotalRow(title) {
+	        _super.call(this, {});
+	        this.children = [];
+	        this.childrenByTitle = {};
+	        this._isCollapsed = false;
+	        this.detailRows = [];
+	        this.title = title;
+	    }
+	    SubtotalRow.prototype.toggleCollapse = function (state) {
+	        if (state != undefined)
+	            this._isCollapsed = state;
+	        else
+	            this._isCollapsed = !this._isCollapsed;
+	    };
+	    SubtotalRow.prototype.isCollapsed = function () {
+	        return this._isCollapsed;
+	    };
+	    SubtotalRow.prototype.isDetail = function () {
+	        return false;
+	    };
+	    SubtotalRow.prototype.findIndex = function (child) {
+	        for (var i = 0; i < this.children.length; i++)
+	            if (this.children[i].title === child.title)
+	                return i;
+	        return -1;
+	    };
+	    SubtotalRow.prototype.addChild = function (child) {
+	        // if already exist, pop it from the children array
+	        this.removeChild(child);
+	        this.children.push(child);
+	        this.childrenByTitle[child.title] = child;
+	    };
+	    SubtotalRow.prototype.removeChild = function (child) {
+	        if (this.childrenByTitle[child.title] != undefined) {
+	            var idx = this.findIndex(child);
+	            this.children.splice(idx, 1);
+	            this.childrenByTitle[child.title] = undefined;
+	        }
+	    };
+	    SubtotalRow.prototype.getChildByTitle = function (title) {
+	        return this.childrenByTitle[title];
+	    };
+	    SubtotalRow.prototype.getNumChildren = function () {
+	        return this.children.length;
+	    };
+	    SubtotalRow.prototype.getChildren = function () {
+	        return this.children;
+	    };
+	    SubtotalRow.prototype.getChildAtIndex = function (idx) {
+	        return this.children[idx];
+	    };
+	    SubtotalRow.prototype.hasChildWithTitle = function (title) {
+	        return this.getChildByTitle(title) != undefined;
+	    };
+	    return SubtotalRow;
+	}(GenericRow));
+	exports.SubtotalRow = SubtotalRow;
+	//# sourceMappingURL=Row.js.map
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var ColumnLike_1 = __webpack_require__(42);
 	var SortFactory = (function () {
 	    function SortFactory() {
 	    }
@@ -30323,14 +30578,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return SortFactory;
 	}());
 	exports.SortFactory = SortFactory;
-
+	//# sourceMappingURL=SortFactory.js.map
 
 /***/ },
-/* 44 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var _ = __webpack_require__(16);
+	var _ = __webpack_require__(20);
 	var round = Math.round;
 	function parsePixelValue(pxMeasure) {
 	    return parseInt(pxMeasure.substr(0, pxMeasure.length - 2));
@@ -30400,8 +30655,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var measures;
 	        if (columnWidthProvided)
 	            measures = getMeasureAsSumOfColumnWidth(columnDefs);
-	        else if (bodyWidth)
-	            measures = getMeasureWithEqualWidthColumn(bodyWidth, columnDefs);
 	        else
 	            measures = getDefaultWidthMeasure(columnDefs);
 	        return measures;
@@ -30449,10 +30702,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	    return measures;
 	}
-
+	//# sourceMappingURL=WidthMeasureCalculator.js.map
 
 /***/ },
-/* 45 */
+/* 47 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -30483,10 +30736,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return TreeRasterizer;
 	}());
 	exports.TreeRasterizer = TreeRasterizer;
-
+	//# sourceMappingURL=TreeRasterizer.js.map
 
 /***/ },
-/* 46 */
+/* 48 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -30507,260 +30760,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return ScrollCalculator;
 	}());
 	exports.ScrollCalculator = ScrollCalculator;
-
-
-/***/ },
-/* 47 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright (c) 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 */
-
-	module.exports.Dispatcher = __webpack_require__(48);
-
-
-/***/ },
-/* 48 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright (c) 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule Dispatcher
-	 * 
-	 * @preventMunge
-	 */
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	var invariant = __webpack_require__(28);
-
-	var _prefix = 'ID_';
-
-	/**
-	 * Dispatcher is used to broadcast payloads to registered callbacks. This is
-	 * different from generic pub-sub systems in two ways:
-	 *
-	 *   1) Callbacks are not subscribed to particular events. Every payload is
-	 *      dispatched to every registered callback.
-	 *   2) Callbacks can be deferred in whole or part until other callbacks have
-	 *      been executed.
-	 *
-	 * For example, consider this hypothetical flight destination form, which
-	 * selects a default city when a country is selected:
-	 *
-	 *   var flightDispatcher = new Dispatcher();
-	 *
-	 *   // Keeps track of which country is selected
-	 *   var CountryStore = {country: null};
-	 *
-	 *   // Keeps track of which city is selected
-	 *   var CityStore = {city: null};
-	 *
-	 *   // Keeps track of the base flight price of the selected city
-	 *   var FlightPriceStore = {price: null}
-	 *
-	 * When a user changes the selected city, we dispatch the payload:
-	 *
-	 *   flightDispatcher.dispatch({
-	 *     actionType: 'city-update',
-	 *     selectedCity: 'paris'
-	 *   });
-	 *
-	 * This payload is digested by `CityStore`:
-	 *
-	 *   flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'city-update') {
-	 *       CityStore.city = payload.selectedCity;
-	 *     }
-	 *   });
-	 *
-	 * When the user selects a country, we dispatch the payload:
-	 *
-	 *   flightDispatcher.dispatch({
-	 *     actionType: 'country-update',
-	 *     selectedCountry: 'australia'
-	 *   });
-	 *
-	 * This payload is digested by both stores:
-	 *
-	 *   CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'country-update') {
-	 *       CountryStore.country = payload.selectedCountry;
-	 *     }
-	 *   });
-	 *
-	 * When the callback to update `CountryStore` is registered, we save a reference
-	 * to the returned token. Using this token with `waitFor()`, we can guarantee
-	 * that `CountryStore` is updated before the callback that updates `CityStore`
-	 * needs to query its data.
-	 *
-	 *   CityStore.dispatchToken = flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'country-update') {
-	 *       // `CountryStore.country` may not be updated.
-	 *       flightDispatcher.waitFor([CountryStore.dispatchToken]);
-	 *       // `CountryStore.country` is now guaranteed to be updated.
-	 *
-	 *       // Select the default city for the new country
-	 *       CityStore.city = getDefaultCityForCountry(CountryStore.country);
-	 *     }
-	 *   });
-	 *
-	 * The usage of `waitFor()` can be chained, for example:
-	 *
-	 *   FlightPriceStore.dispatchToken =
-	 *     flightDispatcher.register(function(payload) {
-	 *       switch (payload.actionType) {
-	 *         case 'country-update':
-	 *         case 'city-update':
-	 *           flightDispatcher.waitFor([CityStore.dispatchToken]);
-	 *           FlightPriceStore.price =
-	 *             getFlightPriceStore(CountryStore.country, CityStore.city);
-	 *           break;
-	 *     }
-	 *   });
-	 *
-	 * The `country-update` payload will be guaranteed to invoke the stores'
-	 * registered callbacks in order: `CountryStore`, `CityStore`, then
-	 * `FlightPriceStore`.
-	 */
-
-	var Dispatcher = (function () {
-	  function Dispatcher() {
-	    _classCallCheck(this, Dispatcher);
-
-	    this._callbacks = {};
-	    this._isDispatching = false;
-	    this._isHandled = {};
-	    this._isPending = {};
-	    this._lastID = 1;
-	  }
-
-	  /**
-	   * Registers a callback to be invoked with every dispatched payload. Returns
-	   * a token that can be used with `waitFor()`.
-	   */
-
-	  Dispatcher.prototype.register = function register(callback) {
-	    var id = _prefix + this._lastID++;
-	    this._callbacks[id] = callback;
-	    return id;
-	  };
-
-	  /**
-	   * Removes a callback based on its token.
-	   */
-
-	  Dispatcher.prototype.unregister = function unregister(id) {
-	    !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.unregister(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
-	    delete this._callbacks[id];
-	  };
-
-	  /**
-	   * Waits for the callbacks specified to be invoked before continuing execution
-	   * of the current callback. This method should only be used by a callback in
-	   * response to a dispatched payload.
-	   */
-
-	  Dispatcher.prototype.waitFor = function waitFor(ids) {
-	    !this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Must be invoked while dispatching.') : invariant(false) : undefined;
-	    for (var ii = 0; ii < ids.length; ii++) {
-	      var id = ids[ii];
-	      if (this._isPending[id]) {
-	        !this._isHandled[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Circular dependency detected while ' + 'waiting for `%s`.', id) : invariant(false) : undefined;
-	        continue;
-	      }
-	      !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
-	      this._invokeCallback(id);
-	    }
-	  };
-
-	  /**
-	   * Dispatches a payload to all registered callbacks.
-	   */
-
-	  Dispatcher.prototype.dispatch = function dispatch(payload) {
-	    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.') : invariant(false) : undefined;
-	    this._startDispatching(payload);
-	    try {
-	      for (var id in this._callbacks) {
-	        if (this._isPending[id]) {
-	          continue;
-	        }
-	        this._invokeCallback(id);
-	      }
-	    } finally {
-	      this._stopDispatching();
-	    }
-	  };
-
-	  /**
-	   * Is this Dispatcher currently dispatching.
-	   */
-
-	  Dispatcher.prototype.isDispatching = function isDispatching() {
-	    return this._isDispatching;
-	  };
-
-	  /**
-	   * Call the callback stored with the given id. Also do some internal
-	   * bookkeeping.
-	   *
-	   * @internal
-	   */
-
-	  Dispatcher.prototype._invokeCallback = function _invokeCallback(id) {
-	    this._isPending[id] = true;
-	    this._callbacks[id](this._pendingPayload);
-	    this._isHandled[id] = true;
-	  };
-
-	  /**
-	   * Set up bookkeeping needed when dispatching.
-	   *
-	   * @internal
-	   */
-
-	  Dispatcher.prototype._startDispatching = function _startDispatching(payload) {
-	    for (var id in this._callbacks) {
-	      this._isPending[id] = false;
-	      this._isHandled[id] = false;
-	    }
-	    this._pendingPayload = payload;
-	    this._isDispatching = true;
-	  };
-
-	  /**
-	   * Clear bookkeeping used for dispatching.
-	   *
-	   * @internal
-	   */
-
-	  Dispatcher.prototype._stopDispatching = function _stopDispatching() {
-	    delete this._pendingPayload;
-	    this._isDispatching = false;
-	  };
-
-	  return Dispatcher;
-	})();
-
-	module.exports = Dispatcher;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
+	//# sourceMappingURL=ScrollCalculator.js.map
 
 /***/ },
 /* 49 */
@@ -30774,7 +30774,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(14);
 	var GigaRow_1 = __webpack_require__(50);
-	var GigaStore_1 = __webpack_require__(19);
+	var GigaStore_1 = __webpack_require__(23);
 	var TableBody = (function (_super) {
 	    __extends(TableBody, _super);
 	    function TableBody(props) {
@@ -30825,7 +30825,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return TableBody;
 	}(React.Component));
 	exports.TableBody = TableBody;
-
+	//# sourceMappingURL=TableBody.js.map
 
 /***/ },
 /* 50 */
@@ -30839,7 +30839,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(14);
 	var classNames = __webpack_require__(51);
-	var GigaStore_1 = __webpack_require__(19);
+	var GigaStore_1 = __webpack_require__(23);
 	var Cell_1 = __webpack_require__(52);
 	var GigaRow = (function (_super) {
 	    __extends(GigaRow, _super);
@@ -30870,7 +30870,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return GigaRow;
 	}(React.Component));
 	exports.GigaRow = GigaRow;
-
+	//# sourceMappingURL=GigaRow.js.map
 
 /***/ },
 /* 51 */
@@ -30938,8 +30938,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(14);
 	var classNames = __webpack_require__(51);
-	var ColumnLike_1 = __webpack_require__(21);
-	var GigaStore_1 = __webpack_require__(19);
+	var ColumnLike_1 = __webpack_require__(42);
+	var GigaStore_1 = __webpack_require__(23);
 	var Cell = (function (_super) {
 	    __extends(Cell, _super);
 	    function Cell(props) {
@@ -30992,7 +30992,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (props.isFirstColumn && !row.isDetail())
 	            result = this.renderSubtotalCellWithCollapseBtn(row);
 	        else
-	            result = (React.createElement("td", {className: cx, onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, this.renderContent(row, cd)));
+	            result = (React.createElement("td", {className: cx, onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, Cell.renderContent(row, cd)));
 	        return result;
 	    };
 	    Cell.prototype.renderContent = function (row, cd) {
@@ -31020,7 +31020,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    return TableRowUtils;
 	}());
-
+	//# sourceMappingURL=Cell.js.map
 
 /***/ },
 /* 53 */
@@ -31034,7 +31034,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(14);
 	var TableHeaderCell_1 = __webpack_require__(54);
-	var WidthMeasureCalculator_1 = __webpack_require__(44);
+	var WidthMeasureCalculator_1 = __webpack_require__(46);
 	/**
 	 * terminology: column groups are columns that can span multiple `leaf` columns and physically reside
 	 * on top of `leaf` columns
@@ -31084,7 +31084,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return TableHeader;
 	}(React.Component));
 	exports.TableHeader = TableHeader;
-
+	//# sourceMappingURL=TableHeader.js.map
 
 /***/ },
 /* 54 */
@@ -31098,10 +31098,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(14);
 	var classNames = __webpack_require__(51);
-	var ColumnLike_1 = __webpack_require__(21);
+	var ColumnLike_1 = __webpack_require__(42);
 	var DropdownMenu_1 = __webpack_require__(55);
 	var SortMenuItem_1 = __webpack_require__(56);
-	var GigaStore_1 = __webpack_require__(19);
+	var GigaStore_1 = __webpack_require__(23);
 	var SubtotalByMenuItem_1 = __webpack_require__(57);
 	var FilterMenuItem_1 = __webpack_require__(58);
 	// Comment
@@ -31161,7 +31161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return TableHeaderCell;
 	}(React.Component));
 	exports.TableHeaderCell = TableHeaderCell;
-
+	//# sourceMappingURL=TableHeaderCell.js.map
 
 /***/ },
 /* 55 */
@@ -31175,7 +31175,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(14);
 	var ReactDOM = __webpack_require__(15);
-	var $ = __webpack_require__(18);
+	var $ = __webpack_require__(22);
 	var className = __webpack_require__(51);
 	/**
 	 * a generic dropdown menu component that can be reused in any context
@@ -31276,7 +31276,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return SimpleDropdownMenuItem;
 	}(React.Component));
 	exports.SimpleDropdownMenuItem = SimpleDropdownMenuItem;
-
+	//# sourceMappingURL=DropdownMenu.js.map
 
 /***/ },
 /* 56 */
@@ -31290,8 +31290,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(14);
 	var DropdownMenu_1 = __webpack_require__(55);
-	var GigaStore_1 = __webpack_require__(19);
-	var ColumnLike_1 = __webpack_require__(21);
+	var GigaStore_1 = __webpack_require__(23);
+	var ColumnLike_1 = __webpack_require__(42);
 	var SortMenuItem = (function (_super) {
 	    __extends(SortMenuItem, _super);
 	    function SortMenuItem(props) {
@@ -31372,7 +31372,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return SortMenuItem;
 	}(React.Component));
 	exports.SortMenuItem = SortMenuItem;
-
+	//# sourceMappingURL=SortMenuItem.js.map
 
 /***/ },
 /* 57 */
@@ -31386,9 +31386,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(14);
 	var classNames = __webpack_require__(51);
-	var _ = __webpack_require__(16);
-	var ColumnLike_1 = __webpack_require__(21);
-	var GigaStore_1 = __webpack_require__(19);
+	var _ = __webpack_require__(20);
+	var ColumnLike_1 = __webpack_require__(42);
+	var GigaStore_1 = __webpack_require__(23);
 	var DropdownMenu_1 = __webpack_require__(55);
 	var SubtotalByMenuItem = (function (_super) {
 	    __extends(SubtotalByMenuItem, _super);
@@ -31484,7 +31484,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return SubtotalByMenuItem;
 	}(React.Component));
 	exports.SubtotalByMenuItem = SubtotalByMenuItem;
-
+	//# sourceMappingURL=SubtotalByMenuItem.js.map
 
 /***/ },
 /* 58 */
@@ -31510,7 +31510,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return FilterMenuItem;
 	}(React.Component));
 	exports.FilterMenuItem = FilterMenuItem;
-
+	//# sourceMappingURL=FilterMenuItem.js.map
 
 /***/ }
 /******/ ])

@@ -65,7 +65,6 @@ export class Cell extends React.Component<CellProps,any> {
         return {
             width: this.props.column.width,
             height: this.props.rowHeight,
-            overflow: "hidden",
             paddingLeft: this.props.isFirstColumn ? TableRowUtils.calculateFirstColumnIdentation(this.props.row) : undefined
         };
     }
@@ -86,12 +85,12 @@ export class Cell extends React.Component<CellProps,any> {
             result = this.renderSubtotalCellWithCollapseBtn(row as SubtotalRow);
         else
             result = (<td className={cx} onClick={e=>this.onClick()}
-                          style={this.calculateStyle()}>{this.renderContent(row,cd)}</td>);
+                          style={this.calculateStyle()}>{Cell.renderContent(row,cd)}</td>);
 
         return result;
     }
 
-    private renderContent(row:Row, cd:Column) {
+    private static renderContent(row:Row, cd:Column) {
         if (cd.cellTemplateCreator)
             return cd.cellTemplateCreator(row.data()[cd.colTag], cd);
         else
