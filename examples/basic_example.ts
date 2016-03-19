@@ -3,7 +3,7 @@ import {TestUtils} from "../test/TestUtils";
 import {SortDirection, ColumnFormat} from "../src/models/ColumnLike";
 import React = require('react');
 import ReactDOM = require('react-dom');
-// Chris is a Calca who Bundas pretty hard!
+
 const peopleData = TestUtils.newPeopleTestData();
 const element = React.createElement(GigaGrid, {
     bodyHeight: "250px",

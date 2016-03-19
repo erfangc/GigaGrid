@@ -1,13 +1,6 @@
 module.exports = {
-    entry: "./src/index.ts",
-    output: {
-        path: "./dist",
-        libraryTarget: "umd",
-        library: "GigaGrid",
-        filename: "giga-grid.js"
-    },
     resolve: {
-        extensions: ['', 'webpack.js', '.web.js', 'js', '.ts', '.tsx']
+        extensions: ['', 'webpack.js', '.web.js', '.js', '.ts', '.tsx']
     },
     module: {
         loaders: [
@@ -34,19 +27,5 @@ module.exports = {
                 loader: "url?limit=10000&mimetype=image/svg+xml"
             }
         ]
-    },
-    externals: {
-        "react": {
-            commonjs: 'react',
-            commonjs2: 'react',
-            amd: 'react',
-            root: 'React'
-        },
-        "react-dom": {
-            commonjs: 'react-dom',
-            commonjs2: 'react-dom',
-            amd: 'react-dom',
-            root: 'ReactDOM'
-        }
     }
 };
