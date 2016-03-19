@@ -30655,8 +30655,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var measures;
 	        if (columnWidthProvided)
 	            measures = getMeasureAsSumOfColumnWidth(columnDefs);
-	        else if (bodyWidth)
-	            measures = getMeasureWithEqualWidthColumn(bodyWidth, columnDefs);
 	        else
 	            measures = getDefaultWidthMeasure(columnDefs);
 	        return measures;
