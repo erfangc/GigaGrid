@@ -22,6 +22,6 @@ commonConfig.output = {
     filename: "giga-grid.js"
 };
 
-commonConfig.entry = "./src/index.ts";
+commonConfig.entry = "./src/index.js";
 
 module.exports = commonConfig;
