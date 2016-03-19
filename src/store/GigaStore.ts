@@ -1,15 +1,13 @@
 ///<reference path="../../typings/tsd.d.ts"/>
 
-import * as Flux from 'flux';
-import * as FluxUtils from 'flux/utils';
 import * as _ from 'lodash';
 import {GigaState,GigaProps} from "../components/GigaGrid";
 import {SubtotalAggregator} from "../static/SubtotalAggregator";
 import {Tree} from "../static/TreeBuilder";
 import {TreeBuilder} from "../static/TreeBuilder";
 import {SubtotalBy} from "../models/ColumnLike";
-import ReduceStore = FluxUtils.ReduceStore;
-import Dispatcher = Flux.Dispatcher;
+import {ReduceStore} from 'flux/utils';
+import {Dispatcher} from 'flux';
 import {SubtotalRow} from "../models/Row";
 import {SortFactory} from "../static/SortFactory";
 import {SortBy} from "../models/ColumnLike";
@@ -18,7 +16,6 @@ import {Row} from "../models/Row";
 import {Column} from "../models/ColumnLike";
 import {TreeRasterizer} from "../static/TreeRasterizer";
 import {ScrollCalculator} from "../static/ScrollCalculator";
-import {GigaGrid} from "../components/GigaGrid";
 
 /*
  define the # of rows necessary to trigger progressive rendering
