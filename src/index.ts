@@ -1,5 +1,4 @@
-import "./styles/giga-grid.css";
-import "../node_modules/font-awesome/css/font-awesome.css";
+import "./styles/giga-grid";
 import {GigaGrid as GG} from "./components/GigaGrid";
 import {ColumnFormat as CF} from "./models/ColumnLike";
 import {AggregationMethod as AM} from "./models/ColumnLike";
