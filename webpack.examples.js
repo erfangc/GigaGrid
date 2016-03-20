@@ -8,6 +8,6 @@ commonConfig.output = {
 /*
  * watch a different entry
  */
-commonConfig.entry = "./examples/index.ts";
+commonConfig.entry = "./examples/Examples.tsx";
 
 module.exports = commonConfig;
