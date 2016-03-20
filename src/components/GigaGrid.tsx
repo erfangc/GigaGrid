@@ -78,7 +78,6 @@ export interface GigaProps extends React.Props<GigaGrid> {
     columnDefs:ColumnDef[]
     columnGroups?:ColumnGroupDef[]
     bodyHeight?:string
-    bodyWidth?:string
     rowHeight?:string
 }
 
@@ -175,7 +174,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                     </table>
                 </div>
                 <div ref={c=>this.viewport=c}
-                     onScroll={()=>this.handleScroll()}
+                     onScroll={()=>this.dispatchDisplayBoundChange()}
                      className="giga-grid-body-viewport"
                      style={bodyStyle}>
                     <table ref={c=>this.canvas=c} className="giga-grid-body-canvas">
@@ -191,10 +190,6 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             </div>);
     }
 
-    private handleScroll() {
-        this.dispatchDisplayBoundChange();
-    }
-
     /**
      * on component update, we use jquery to align table headers
      * this is the "give up" solution, implemented in 0.1.7
@@ -207,19 +202,17 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
      * yes this is still a thing!
      */
     synchTableHeaderWidthToFirstRow() {
-        const node = ReactDOM.findDOMNode(this);
-        var $canvas = $(node).find("table.giga-grid-body-canvas");
+        const node:Element = ReactDOM.findDOMNode<Element>(this);
+        const $canvas = $(node).find("table.giga-grid-body-canvas");
+        /*
+         * EXPERIMENTAL, traverse parent DOM nodes until we find one whose width is not zero
+         */
+        const rootNodeWidth = findParentWidth(node);
 
-        // set header row width to table body width
-        const rootNodeWidth = $(node).innerWidth();
-        var canvasWidth = $canvas.innerWidth();
-        if (rootNodeWidth > canvasWidth) {
-            const newWCanvasWidth = rootNodeWidth - getScrollBarWidth();
-            $canvas.innerWidth(newWCanvasWidth);
-            canvasWidth = newWCanvasWidth;
-        }
-
+        const canvasWidth = computeCanvasWidth($canvas, rootNodeWidth);
+        $canvas.innerWidth(canvasWidth);
         $(node).find("table.header-table").innerWidth(canvasWidth);
+
         const $tableHeaders = $(node).find("th.table-header");
         const $firstRowInBody = $(node).find("tbody tr.placeholder-false:first td");
         _.chain($tableHeaders).zip($firstRowInBody).each((pair)=> {
@@ -227,7 +220,6 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             const $td = $(pair[1]);
             $th.innerWidth($td.innerWidth());
         }).value();
-
     }
 
     componentDidMount() {
@@ -241,6 +233,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
          re-compute displayStart && displayEnd
          */
         this.dispatchDisplayBoundChange();
+        this.synchTableHeaderWidthToFirstRow();
     }
 
     componentWillUnmount() {
@@ -304,4 +297,33 @@ function getScrollBarWidth() {
 
     return scrollBarWidth;
 
+}
+
+/**
+ * traverse the node until a viable parent with a non-zero width is found
+ * stops until the node run out of parent (i.e. reaches the <html/> element
+ * @param node
+ * @returns {number}
+ */
+function findParentWidth(node: Element) {
+    var rootNodeWidth = $(node).innerWidth();
+    var $parent = $(node).parent();
+    while ($parent && rootNodeWidth === 0) {
+        rootNodeWidth = $parent.innerWidth();
+        $parent = $parent.parent();
+    }
+    return rootNodeWidth;
+}
+
+/**
+ * Computes the canvas (table)'s width given the root node of the grid's width
+ * @param $canvas
+ * @param rootNodeWidth
+ * @returns {number}
+ */
+function computeCanvasWidth($canvas:JQuery, rootNodeWidth:number) {
+    var canvasWidth = $canvas.innerWidth();
+    if (rootNodeWidth > canvasWidth)
+        canvasWidth = rootNodeWidth - getScrollBarWidth();
+    return canvasWidth;
 }

@@ -1,106 +1,66 @@
-import {Tree} from "../../src/static/TreeBuilder";
-import {TestUtils} from "../TestUtils";
+import {Tree, TreeBuilder} from "../../src/static/TreeBuilder";
 import {SortFactory} from "../../src/static/SortFactory";
-import {ColumnFormat} from "../../src/models/ColumnLike";
-import {SortDirection} from "../../src/models/ColumnLike";
-import {TreeBuilder} from "../../src/static/TreeBuilder";
-import {SubtotalAggregator} from "../../src/static/SubtotalAggregator";
+import {ColumnFormat, SortBy, SortDirection} from "../../src/models/ColumnLike";
+import UKBudget from "../../examples/data/UKBudget";
 
 describe("SortFactory", ()=> {
 
-    const peopleData = TestUtils.newPeopleTestData();
-    const data:any[] = peopleData.rawData();
-
-    const unsubtotaledTree = TreeBuilder.buildTree(data);
-    const subtotaledTree = TreeBuilder.buildTree(data, [{colTag: "gender"}]);
-    SubtotalAggregator.aggregateTree(subtotaledTree, peopleData.columnDefs());
-
-    const sortByGenderGiftAsc = [
+    const byAgeThenChildrenDESC = [
         {
-            colTag: "gender",
-            format: ColumnFormat.STRING,
-            direction: SortDirection.ASC
-        },
-        {
-            colTag: "gift",
+            colTag: "Age",
             format: ColumnFormat.NUMBER,
-            direction: SortDirection.ASC
-        }];
-
-    const sortByGenderGiftDesc = [
-        {
-            colTag: "gender",
-            format: ColumnFormat.STRING,
             direction: SortDirection.DESC
         },
         {
-            colTag: "gift",
+            colTag: "Children",
             format: ColumnFormat.NUMBER,
             direction: SortDirection.DESC
         }];
 
-    const sortByGiftAsc = [
-        {
-            colTag: "gift",
-            format: ColumnFormat.NUMBER,
+    const byAgeThenChildrenASC = byAgeThenChildrenDESC.map((sortBy: SortBy)=> {
+        return {
+            colTag: sortBy.colTag,
+            format: sortBy.format,
             direction: SortDirection.ASC
         }
-    ];
-
-    const sortByGiftDesc = [
-        {
-            colTag: "gift",
-            format: ColumnFormat.NUMBER,
-            direction: SortDirection.DESC
-        }
-    ];
-
-    describe("sort un-subtotaled tree", ()=> {
-
-        it("sort string then number columns", ()=> {
-            var sortedTree:Tree = SortFactory.sortTree(unsubtotaledTree, sortByGenderGiftAsc);
-            expect(sortedTree.getRoot().detailRows[0].data()['gender']).toBe("Female");
-            expect(sortedTree.getRoot().detailRows[0].data()['gift']).toEqual(2);
-
-            var sortedTree:Tree = SortFactory.sortTree(unsubtotaledTree, sortByGenderGiftDesc);
-            expect(sortedTree.getRoot().detailRows[0].data()['gender']).toBe("Male");
-            expect(sortedTree.getRoot().detailRows[0].data()['gift']).toEqual(9);
-        });
-
-        it("sort a number column", ()=> {
-            var sortedTree:Tree = SortFactory.sortTree(unsubtotaledTree, sortByGiftDesc);
-            expect(sortedTree.getRoot().detailRows[0].data()['gift']).toEqual(10);
-
-            var sortedTree:Tree = SortFactory.sortTree(unsubtotaledTree, sortByGiftAsc);
-            expect(sortedTree.getRoot().detailRows[0].data()['gift']).toEqual(2);
-        });
-
     });
 
-    describe("sort subtotaled tree", ()=> {
-
-        it("sort string then columns", ()=> {
-            var sortedTree = SortFactory.sortTree(subtotaledTree, sortByGenderGiftAsc);
-            expect(sortedTree.getRoot().getChildAtIndex(0).title).toBe("Female");
-
-            sortedTree = SortFactory.sortTree(subtotaledTree, sortByGenderGiftDesc);
-            expect(sortedTree.getRoot().getChildAtIndex(0).title).toBe("Male");
+    describe("Sorting a Unsubtotaled Tree", ()=> {
+        const tree:Tree = TreeBuilder.buildTree(UKBudget.data, []);
+        it("should sort on age and children in descending order", ()=> {
+            const sorted = SortFactory.sortTree(tree, byAgeThenChildrenDESC);
+            var detailRows = sorted.getRoot().detailRows;
+            expect(detailRows[0].getByColTag("Age")).toBe(60);
+            expect(detailRows[1].getByColTag("Age")).toBe(60);
+            expect(detailRows[detailRows.length - 1].getByColTag("Age")).toBe(19);
+            const firstAgeEqual60 = _.find(detailRows, (dr)=>dr.getByColTag("Age") == 59);
+            expect(firstAgeEqual60.getByColTag("Children")).toBe(2)
         });
-
-        it("sort a number column", ()=> {
-            var sortedTree:Tree = SortFactory.sortTree(subtotaledTree, sortByGiftAsc);
-            expect(sortedTree.getRoot().getChildAtIndex(0).title).toBe("Female");
-
-            sortedTree = SortFactory.sortTree(subtotaledTree, sortByGiftDesc);
-            expect(sortedTree.getRoot().getChildAtIndex(0).title).toBe("Male");
+        it("should sort on age and children in ascending order", ()=> {
+            const sorted = SortFactory.sortTree(tree, byAgeThenChildrenASC);
+            var detailRows = sorted.getRoot().detailRows;
+            expect(detailRows[0].getByColTag("Age")).toBe(19);
+            expect(detailRows[1].getByColTag("Age")).toBe(19);
+            expect(detailRows[detailRows.length - 1].getByColTag("Age")).toBe(60);
+            const firstAgeEqual60 = _.find(detailRows, (dr)=>dr.getByColTag("Age") == 59);
+            expect(firstAgeEqual60.getByColTag("Children")).toBe(1)
         });
-
     });
 
-    it("will not cause an error is sorting a blank array of SortBy", ()=> {
-        expect(SortFactory.sortTree(subtotaledTree, [])).not.toBeNull();
-        expect(SortFactory.sortTree(unsubtotaledTree, [])).not.toBeNull();
+    describe("Sorting a Subtotaled Tree", ()=> {
+        const tree:Tree = TreeBuilder.buildTree(UKBudget.data, UKBudget.initialSubtotalBys);
+        it("should sort on age and children in descending order", ()=> {
+            const sorted = SortFactory.sortTree(tree, byAgeThenChildrenDESC);
+            const lvl1Subtotals = sorted.getRoot().getChildren();
+            expect(lvl1Subtotals[0].title).toBe(60);
+            expect(lvl1Subtotals[lvl1Subtotals.length - 1].title).toBe(19);
+        });
+        it("should sort on age and children in ascending order", ()=> {
+            const sorted = SortFactory.sortTree(tree, byAgeThenChildrenASC);
+            const lvl1Subtotals = sorted.getRoot().getChildren();
+            expect(lvl1Subtotals[0].title).toBe(19);
+            expect(lvl1Subtotals[lvl1Subtotals.length - 1].title).toBe(60);
+        });
     });
-
 
 });

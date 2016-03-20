@@ -58,9 +58,8 @@ export class SortFactory {
     private static buildLexicalSortFn(sortBy:SortBy):(a:Row, b:Row)=>number {
 
         return function (a:Row, b:Row):number {
-
-            const valA = a.data()[sortBy.colTag];
-            const valB = b.data()[sortBy.colTag];
+            const valA = a.isDetail() ? a.get(sortBy) : a.title;
+            const valB = b.isDetail() ? b.get(sortBy) : b.title;
 
             var result = 0;
 
