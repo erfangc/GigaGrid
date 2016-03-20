@@ -1,51 +1,91 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {GigaGrid} from "../src/index";
-import {ColumnDef, SubtotalBy} from "../src/models/ColumnLike";
-import {ukBudget, ukBudgetColumnDefs, ukBudgetInitialSubtotalBys} from './data/UKBudget';
+import UKBudget from "./data/UKBudget";
+import {GigaProps} from "../src/components/GigaGrid";
+import {Tabs, Tab, Navbar} from "react-bootstrap";
+import * as $ from 'jquery';
 
 /**
  * Created by erfangc on 3/20/16.
  */
 
 interface ExamplesProps extends React.Props<Examples> {
-    ukBudget:any[]
-    ukBudgetColumnDefs:ColumnDef[]
-    ukBudgetInitialSubtotalBys: SubtotalBy[]
+    ukBudget:GigaProps
 }
 
-export class Examples extends React.Component<ExamplesProps,{}> {
+interface ExampleState {
+    activeTabKey: number
+}
+
+export class Examples extends React.Component<ExamplesProps, ExampleState> {
 
     constructor(props:ExamplesProps) {
         super(props);
+        this.state = {
+            activeTabKey: 0
+        }
     }
 
-    basicExample() {
-        return (
-            <div id="basic_example" className="card">
-                <div className="card-block">
-                    <h4 className="card-title">Basic Example</h4>
-                    <GigaGrid data={this.props.ukBudget} columnDefs={this.props.ukBudgetColumnDefs} initialSubtotalBys={this.props.ukBudgetInitialSubtotalBys}/>
-                </div>
-            </div>
-        )
+    private handleTabSelect(idx) {
+        // trigger resize on click so the table headers adjust
+        this.setState({
+            activeTabKey: idx
+        });
     }
 
     render() {
         return (
-            <div className="container">
-                {this.basicExample()}
+            <div>
+                {Examples.renderNavbar()}
+                <div className="container">
+                    <br/>
+                    <Tabs activeKey={this.state.activeTabKey} onSelect={idx=>this.handleTabSelect(idx)} animation={false}>
+                        <Tab eventKey={0} title="Basic Example">
+                            <br/>
+                            {this.renderBasicExample()}
+                        </Tab>
+                        <Tab eventKey={1} title="With Column Grouping">
+                            <br/>
+                            {this.renderExampleWithColumnGrouping()}
+                        </Tab>
+                    </Tabs>
+                </div>
             </div>
+        );
+    }
+
+    private renderBasicExample() {
+        return (<GigaGrid {...this.props.ukBudget}/>);
+    }
+
+    private renderExampleWithColumnGrouping() {
+        return (<GigaGrid
+            columnGroups={[
+                {title:"Info", columns:["Age","Children"]},
+                {title:"Spending Proportion", columns:["WFood","WFuel","WCloth","WAlc","WTrans","WOther"]},
+                {title:"Average Income vs. Expense", columns:["TotExp","Income"]}
+            ]}
+            {...this.props.ukBudget}/>);
+    }
+
+    private static renderNavbar() {
+        return (
+            <Navbar inverse>
+                <Navbar.Header>
+                    <Navbar.Brand>
+                        <a href="#">GigaGrid Examples</a>
+                    </Navbar.Brand>
+                    <Navbar.Toggle />
+                </Navbar.Header>
+            </Navbar>
         );
     }
 }
 
-function main(args:string[]) {
+function main() {
     // App Entry point
-    ReactDOM.render(<Examples ukBudgetColumnDefs={ukBudgetColumnDefs}
-                              ukBudget={ukBudget}
-                              ukBudgetInitialSubtotalBys={ukBudgetInitialSubtotalBys}
-    />, document.getElementById("app"));
+    ReactDOM.render(<Examples ukBudget={UKBudget}/>, document.getElementById("app"));
 }
 
-main([]);
+main();

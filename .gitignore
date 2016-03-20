@@ -1,8 +1,6 @@
-build
+examples/bundle.*
 src/**/*.js
 test/**/*.js
 **/*.js.map
 .idea
 node_modules
-bower_components
-jspm_packages

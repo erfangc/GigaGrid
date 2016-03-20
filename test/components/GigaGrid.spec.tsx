@@ -1,23 +1,18 @@
-import * as $ from 'jquery';
-import * as React from 'react';
-import * as ReactTestUtils from 'react-addons-test-utils';
+import * as React from "react";
+import * as ReactTestUtils from "react-addons-test-utils";
 import {ColumnDef} from "../../src/models/ColumnLike";
-import {GigaProps} from "../../src/components/GigaGrid";
 import {GigaGrid} from "../../src/components/GigaGrid";
-import {SubtotalBy} from "../../src/models/ColumnLike";
 import {TestUtils} from "../TestUtils";
 
-// TODO use ReactTestUtils
 describe('GigaGrid', ()=> {
 
     it("can render a basic HTML table", () => {
         const peopleData = TestUtils.newPeopleTestData();
         const data:any[] = peopleData.rawData();
         const columnDefs:ColumnDef[] = peopleData.columnDefs();
-        const component = ReactTestUtils.renderIntoDocument(<GigaGrid data={data} columnDefs={columnDefs}/>);
-        const trs = ReactTestUtils.scryRenderedDOMComponentsWithTag(component, "tr");
+        const component:Element = ReactTestUtils.renderIntoDocument(<GigaGrid data={data} columnDefs={columnDefs}/>);
+        const trs = ReactTestUtils.scryRenderedDOMComponentsWithTag(component as React.Component<{},{}>, "tr");
         expect(trs.length).toBe(11);
-        // first cell of first table
         expect((trs as HTMLTableRowElement[])[0].children[0].textContent.substr(0, 10)).toBe("First Name");
     });
 
@@ -26,10 +21,9 @@ describe('GigaGrid', ()=> {
         const data:any[] = peopleData.rawData();
         const columnDefs:ColumnDef[] = peopleData.columnDefs();
         const component = ReactTestUtils.renderIntoDocument(<GigaGrid data={data} columnDefs={columnDefs} initialSubtotalBys={[{colTag: "gender"}]}/>);
-        const trs = ReactTestUtils.scryRenderedDOMComponentsWithTag(component, "tr");
+        const trs = ReactTestUtils.scryRenderedDOMComponentsWithTag(component as React.Component<{},{}>, "tr");
         expect(trs.length).toBe(3); // collapsed by default
         // TODO add test for expanded columns
-
     });
 
 });

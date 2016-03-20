@@ -36,7 +36,7 @@
       "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
     },
     "react/react.d.ts": {
-      "commit": "a6ff9f6e195a334afd89e4b721d05e9520eee4c0"
+      "commit": "6766ed1d0faf02ede9e2edf2e66bbb2388c825ec"
     },
     "jasmine/jasmine.d.ts": {
       "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
@@ -52,6 +52,9 @@
     },
     "lodash/lodash.d.ts": {
       "commit": "ba257a9b91bc0de1bdd9091b6723194c905a902a"
+    },
+    "react-bootstrap/react-bootstrap.d.ts": {
+      "commit": "6766ed1d0faf02ede9e2edf2e66bbb2388c825ec"
     }
   }
 }
