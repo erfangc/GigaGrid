@@ -1,12 +1,9 @@
-import * as $ from 'jquery';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import {GigaRow} from "../../src/components/GigaRow";
-import {GigaRowProps} from "../../src/components/GigaRow";
-import {SubtotalRow} from "../../src/models/Row";
+import * as $ from "jquery";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import {GigaRow, GigaRowProps} from "../../src/components/GigaRow";
+import {SubtotalRow, Row} from "../../src/models/Row";
 import {TestUtils} from "../TestUtils";
-import {DetailRow} from "../../src/models/Row";
-import {Row} from "../../src/models/Row";
 
 describe("GigaRow Components", () => {
 

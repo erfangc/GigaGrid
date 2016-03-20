@@ -1,20 +1,25 @@
-import {GigaGrid, GigaProps} from "../src/components/GigaGrid";
+import {GigaGrid} from "../src/index";
+import {GigaProps} from "../src/components/GigaGrid";
 import {ColumnFormat, AggregationMethod} from "../src/models/ColumnLike";
 import * as $ from "jquery";
-import React = require('react');
-import ReactDOM = require('react-dom');
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
-$.ajax("./examples/data/Hotels.json").done(function (data:any[]) {
+export default function run() {
 
-    const element = React.createElement<GigaProps>(GigaGrid, {
-        bodyHeight: "500px",
-        data: data,
-        columnDefs: columnDefs
+    $.ajax("./examples/data/Hotels.json").done(function (data:any[]) {
+
+        const element = React.createElement<GigaProps>(GigaGrid, {
+            bodyHeight: "500px",
+            data: data,
+            columnDefs: columnDefs
+        });
+
+        ReactDOM.render(element, document.getElementById('larger_data_set'));
+
     });
 
-    ReactDOM.render(element, document.getElementById('larger_data_set'));
-
-});
+}
 
 const columnDefs = [
     {
@@ -64,5 +69,7 @@ const columnDefs = [
         formatInstruction: {
             roundTo: 2
         }
-    }
+    },
+    {colTag: "Contact", title: "Contact"},
+    {colTag: "Email", title: "Email"}
 ];

@@ -1,19 +1,21 @@
 // Karma configuration
 // Generated on Mon Dec 21 2015 16:09:58 GMT-0500 (Eastern Standard Time)
 
+var webpackConfig = require("./webpack.common.js");
+delete webpackConfig.entry; // no need for entry, test files are the entry points
+
 module.exports = function (config) {
     config.set({
+
+        frameworks: ['jasmine'],
 
         // base path that will be used to resolve all patterns (eg. files, exclude)
         basePath: '',
 
-        // frameworks to use
-        // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: ['jspm', 'jasmine'],
-
         // list of files / patterns to load in the browser
         files: [
-            'jspm_packages/npm/phantomjs-polyfill@0.0.1/bind-polyfill.js'
+            'test/**/*.spec.ts',
+            'test/**/*.spec.tsx'
         ],
 
         // list of files to exclude
@@ -27,8 +29,13 @@ module.exports = function (config) {
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-        preprocessors: {},
+        preprocessors: {
+            // add webpack as preprocessor
+            'test/**/*.spec.ts': ['webpack'],
+            'test/**/*.spec.tsx': ['webpack']
+        },
 
+        webpack: webpackConfig,
 
         // test results reporter to use
         // possible values: 'dots', 'progress'

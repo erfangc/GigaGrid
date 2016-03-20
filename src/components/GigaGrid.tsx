@@ -1,8 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import * as Flux from 'flux';
 import * as _ from "lodash";
-import * as FluxUtils from 'flux/utils';
 import $ = require('jquery');
 import ReactElement = __React.ReactElement;
 import {SubtotalBy} from "../models/ColumnLike";
@@ -11,14 +9,11 @@ import {Row} from "../models/Row";
 import {Column} from "../models/ColumnLike";
 import {Tree} from "../static/TreeBuilder";
 import {GigaStore} from "../store/GigaStore";
-import ReduceStore = FluxUtils.ReduceStore;
-import Dispatcher = Flux.Dispatcher;
+import {Dispatcher} from 'flux';
 import {GigaAction} from "../store/GigaStore";
 import {SortBy} from "../models/ColumnLike";
 import {FilterBy} from "../models/ColumnLike";
 import {GigaActionType} from "../store/GigaStore";
-import {WidthMeasures} from "../static/WidthMeasureCalculator";
-import {validateColumnWidthProperty} from "../static/WidthMeasureCalculator";
 import {TableBody} from "./TableBody";
 import {ColumnFactory} from "../models/ColumnLike";
 import {ColumnGroupDef} from "../models/ColumnLike";
@@ -122,7 +117,6 @@ export interface GigaState {
     columnDefMask?:ColumnDef[]
     lastAction?:GigaAction
 
-    widthMeasures:WidthMeasures
 }
 
 /**
@@ -153,7 +147,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         initialFilterBys: [],
         data: [],
         columnDefs: [],
-        bodyHeight: "100%",
+        bodyHeight: "500px",
         rowHeight: "25px"
     };
 
@@ -180,22 +174,21 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
         const bodyStyle = {
             // TODO we will need to give similar consideration to height as we did for width
-            height: this.props.bodyHeight || "100%",
-            width: this.state.widthMeasures.bodyWidth
+            height: this.props.bodyHeight,
         };
 
         return (
             <div className="giga-grid">
-                <div className="giga-grid-table-header-wrapper" style={{width: this.state.widthMeasures.bodyWidth}}>
-                    <table>
+                <div className="giga-grid-header-container">
+                    <table className="header-table">
                         <TableHeader dispatcher={this.dispatcher} columns={columns}/>
                     </table>
                 </div>
                 <div ref={c=>this.viewport=c}
-                     className="giga-grid-body-scroll-y"
                      onScroll={()=>this.handleScroll()}
+                     className="giga-grid-body-viewport"
                      style={bodyStyle}>
-                    <table ref={c=>this.canvas=c}>
+                    <table ref={c=>this.canvas=c} className="giga-grid-body-canvas">
                         <TableBody dispatcher={this.dispatcher}
                                    rows={this.state.rasterizedRows}
                                    columns={columns[columns.length-1]}
@@ -212,28 +205,36 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         this.dispatchDisplayBoundChange();
     }
 
-    private dispatchWidthChange() {
-        // if no bodyWidth was provided through props and there are no explicit width set for columns, we need to dynamically the table's bodyWidth
-        // after it has been mounted and the parent width is known
-        if (this.props.bodyWidth || validateColumnWidthProperty(this.props.columnDefs))
-            return;
-
-        const parentWidth = ReactDOM.findDOMNode(this).parentElement.offsetWidth + "px";
-        const action = {
-            type: GigaActionType.TABLE_WIDTH_CHANGE,
-            width: parentWidth
-        };
-        this.dispatcher.dispatch(action);
-    }
-
     /**
      * on component update, we use jquery to align table headers
      * this is the "give up" solution, implemented in 0.1.7
      */
     componentDidUpdate() {
-        if (this.state.lastAction && this.state.lastAction.type === GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS && this.state.displayStart != 0)
+        this.synchTableHeaderWidthToFirstRow();
+    }
+
+    /**
+     * yes this is still a thing!
+     */
+    synchTableHeaderWidthToFirstRow() {
+        if (this.state.lastAction && this.state.lastAction.type === GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS && this.state.displayStart != 0) {
             return;
+        }
         const node = ReactDOM.findDOMNode(this);
+        var $canvas = $(node).find("table.giga-grid-body-canvas");
+
+        // set header row width to table body width
+
+        const rootNodeWidth = $(node).innerWidth();
+        var canvasWidth = $canvas.innerWidth();
+        if (rootNodeWidth > canvasWidth) {
+            const newWCanvasWidth = rootNodeWidth - getScrollBarWidth();
+            $canvas.innerWidth(newWCanvasWidth);
+            canvasWidth = newWCanvasWidth;
+        }
+
+
+        $(node).find("table.header-table").innerWidth(canvasWidth);
         const $tableHeaders = $(node).find("th.table-header");
         const $firstRowInBody = $(node).find("tbody tr.placeholder-false:first td");
         _.chain($tableHeaders).zip($firstRowInBody).each((pair)=> {
@@ -244,18 +245,24 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
     }
 
     componentDidMount() {
-        this.dispatchWidthChange();
         /*
-         Trigger resize of table on window resize
-         https://github.com/erfangc/GigaGrid/issues/20
+         * subscribe to window.resize
          */
         if (typeof window !== "undefined")
-            window.addEventListener('resize', this.dispatchWidthChange.bind(this));
+            window.addEventListener('resize', this.synchTableHeaderWidthToFirstRow.bind(this));
 
         /*
          re-compute displayStart && displayEnd
          */
         this.dispatchDisplayBoundChange();
+    }
+
+    componentWillUnmount() {
+        /*
+         * unsubscribe to window.resize
+         */
+        if (typeof window !== "undefined")
+            window.removeEventListener('resize', this.synchTableHeaderWidthToFirstRow);
     }
 
     private dispatchDisplayBoundChange() {
@@ -270,12 +277,45 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         this.dispatcher.dispatch(action);
     }
 
-    componentWillUnmount() {
-        /*
-         * remove any lingering event listeners
-         */
-        if (typeof window !== "undefined")
-            window.removeEventListener('resize', this.dispatchWidthChange);
+}
+
+/**
+ * uber hax to get scrollbar width
+ * see stackoverflow reference: http://stackoverflow.com/questions/986937/how-can-i-get-the-browsers-scrollbar-sizes
+ * @returns {number}
+ */
+function getScrollBarWidth() {
+
+    var scrollBarWidth = null;
+
+    function computeScrollBarWidth() {
+        var inner = document.createElement('p');
+        inner.style.width = "100%";
+        inner.style.height = "200px";
+
+        var outer = document.createElement('div');
+        outer.style.position = "absolute";
+        outer.style.top = "0px";
+        outer.style.left = "0px";
+        outer.style.visibility = "hidden";
+        outer.style.width = "200px";
+        outer.style.height = "150px";
+        outer.style.overflow = "hidden";
+        outer.appendChild(inner);
+
+        document.body.appendChild(outer);
+        var w1 = inner.offsetWidth;
+        outer.style.overflow = 'scroll';
+        var w2 = inner.offsetWidth;
+        if (w1 == w2) w2 = outer.clientWidth;
+
+        document.body.removeChild(outer);
+        return (w1 - w2);
     }
+
+    if (scrollBarWidth === null)
+        scrollBarWidth = computeScrollBarWidth();
+
+    return scrollBarWidth;
 
 }
