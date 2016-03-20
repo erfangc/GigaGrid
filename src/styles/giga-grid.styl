@@ -11,16 +11,17 @@ div.giga-grid
   margin 0
   font-family Roboto, sans-serif
   color #333
+  overflow-x scroll
 
   table
+    table-layout fixed
     border-collapse collapse
     font-size 11px
 
   div.giga-grid-body-viewport
-    overflow-y auto
-
-  table.header-table
-    table-layout fixed
+    overflow-y scroll
+    overflow-x hidden
+    display inline-block // this allow the viewport to be as wide as the canva
 
   tr.selected
     background-color selected-color
@@ -35,7 +36,6 @@ div.giga-grid
 
   th:last-child, td:last-child
     padding-right 10px
-    border-left none
 
   th:first-child, td:first-child
     padding-left 10px

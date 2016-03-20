@@ -69,5 +69,7 @@ const columnDefs = [
         formatInstruction: {
             roundTo: 2
         }
-    }
+    },
+    {colTag: "Contact", title: "Contact"},
+    {colTag: "Email", title: "Email"}
 ];
