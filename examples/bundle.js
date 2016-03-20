@@ -19909,7 +19909,7 @@
 
 
 	// module
-	exports.push([module.id, "div.giga-grid .dropdown-menu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  left: 0;\n}\ndiv.giga-grid .dropdown-menu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  right: 0;\n}\ndiv.giga-grid .dropdown-submenu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  left: 100%;\n}\ndiv.giga-grid .dropdown-submenu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  right: 50%;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle {\n  position: absolute;\n  right: 0;\n  background-color: #4a5564;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle-hide {\n  opacity: 0;\n}\ndiv.giga-grid .dropdown-menu-item {\n  position: relative;\n  padding-bottom: 5px;\n  padding-left: 10px;\n  padding-top: 5px;\n  color: #666;\n  border-radius: 2px;\n}\ndiv.giga-grid .dropdown-menu-item.hoverable:hover {\n  cursor: pointer;\n  background-color: #eee;\n}\ndiv.giga-grid .dropdown-menu-item input {\n  border: none;\n  border-bottom: 2px solid #666;\n  margin-top: 10px;\n  margin-bottom: 10px;\n  padding-top: 5px;\n  padding-bottom: 5px;\n  font-size: 13px;\n}\ndiv.giga-grid {\n  margin: 0;\n  font-family: Roboto, sans-serif;\n  color: #333;\n}\ndiv.giga-grid table {\n  border-collapse: collapse;\n  font-size: 11px;\n}\ndiv.giga-grid div.giga-grid-body-viewport {\n  overflow-y: auto;\n}\ndiv.giga-grid table.header-table {\n  table-layout: fixed;\n}\ndiv.giga-grid tr.selected {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row.selected {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid tr td,\ndiv.giga-grid tr th {\n  box-sizing: border-box;\n  padding: 2px 5px;\n  min-width: 10em;\n}\ndiv.giga-grid th:last-child,\ndiv.giga-grid td:last-child {\n  padding-right: 10px;\n  border-left: none;\n}\ndiv.giga-grid th:first-child,\ndiv.giga-grid td:first-child {\n  padding-left: 10px;\n}\ndiv.giga-grid tr th {\n  font-weight: normal;\n  background-color: #4a5564;\n  color: #fff;\n  border-left: 1px solid #fff;\n}\ndiv.giga-grid tr th.column-group {\n  text-align: center;\n  border-right: 1px solid #f5f5f5;\n  border-bottom: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr td {\n  white-space: nowrap;\n  border: 1px solid #f5f5f5;\n  border-right: none;\n  border-left: none;\n}\ndiv.giga-grid tr.subtotal-row {\n  background-color: #fff;\n}\ndiv.giga-grid thead tr:hover,\ndiv.giga-grid tbody tr:hover {\n  cursor: pointer;\n}\ndiv.giga-grid tbody tr:hover {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row:hover {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid .numeric {\n  text-align: right;\n}\ndiv.giga-grid .non-numeric {\n  text-align: left;\n}\ndiv.giga-grid span.header-text {\n  padding-right: 15px;\n}\n", ""]);
+	exports.push([module.id, "div.giga-grid .dropdown-menu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  left: 0;\n}\ndiv.giga-grid .dropdown-menu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  right: 0;\n}\ndiv.giga-grid .dropdown-submenu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  left: 100%;\n}\ndiv.giga-grid .dropdown-submenu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  right: 50%;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle {\n  position: absolute;\n  right: 0;\n  background-color: #4a5564;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle-hide {\n  opacity: 0;\n}\ndiv.giga-grid .dropdown-menu-item {\n  position: relative;\n  padding-bottom: 5px;\n  padding-left: 10px;\n  padding-top: 5px;\n  color: #666;\n  border-radius: 2px;\n}\ndiv.giga-grid .dropdown-menu-item.hoverable:hover {\n  cursor: pointer;\n  background-color: #eee;\n}\ndiv.giga-grid .dropdown-menu-item input {\n  border: none;\n  border-bottom: 2px solid #666;\n  margin-top: 10px;\n  margin-bottom: 10px;\n  padding-top: 5px;\n  padding-bottom: 5px;\n  font-size: 13px;\n}\ndiv.giga-grid {\n  margin: 0;\n  font-family: Roboto, sans-serif;\n  color: #333;\n  overflow-x: scroll;\n}\ndiv.giga-grid table {\n  table-layout: fixed;\n  border-collapse: collapse;\n  font-size: 11px;\n}\ndiv.giga-grid div.giga-grid-body-viewport {\n  overflow-y: scroll;\n  overflow-x: hidden;\n  display: inline-block;\n}\ndiv.giga-grid tr.selected {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row.selected {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid tr td,\ndiv.giga-grid tr th {\n  box-sizing: border-box;\n  padding: 2px 5px;\n  min-width: 10em;\n}\ndiv.giga-grid th:last-child,\ndiv.giga-grid td:last-child {\n  padding-right: 10px;\n}\ndiv.giga-grid th:first-child,\ndiv.giga-grid td:first-child {\n  padding-left: 10px;\n}\ndiv.giga-grid tr th {\n  font-weight: normal;\n  background-color: #4a5564;\n  color: #fff;\n  border-left: 1px solid #fff;\n}\ndiv.giga-grid tr th.column-group {\n  text-align: center;\n  border-right: 1px solid #f5f5f5;\n  border-bottom: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr td {\n  white-space: nowrap;\n  border: 1px solid #f5f5f5;\n  border-right: none;\n  border-left: none;\n}\ndiv.giga-grid tr.subtotal-row {\n  background-color: #fff;\n}\ndiv.giga-grid thead tr:hover,\ndiv.giga-grid tbody tr:hover {\n  cursor: pointer;\n}\ndiv.giga-grid tbody tr:hover {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row:hover {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid .numeric {\n  text-align: right;\n}\ndiv.giga-grid .non-numeric {\n  text-align: left;\n}\ndiv.giga-grid span.header-text {\n  padding-right: 15px;\n}\n", ""]);
 
 	// exports
 
@@ -20282,9 +20282,9 @@
 	            columns = [ColumnLike_1.ColumnFactory.createColumnsFromDefinition(this.props.columnDefs, this.state)];
 	        var bodyStyle = {
 	            // TODO we will need to give similar consideration to height as we did for width
-	            height: this.props.bodyHeight || "100%",
+	            height: this.props.bodyHeight,
 	        };
-	        return (React.createElement("div", {className: "giga-grid"}, React.createElement("div", {className: "giga-grid-table-header-wrapper"}, React.createElement("table", {style: { width: "100%" }, className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, onScroll: function () { return _this.handleScroll(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }, style: { width: "100%" }}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: this.state.rasterizedRows, columns: columns[columns.length - 1], displayStart: this.state.displayStart, displayEnd: this.state.displayEnd, rowHeight: this.props.rowHeight})))));
+	        return (React.createElement("div", {className: "giga-grid"}, React.createElement("div", {className: "giga-grid-header-container"}, React.createElement("table", {className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, onScroll: function () { return _this.handleScroll(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: this.state.rasterizedRows, columns: columns[columns.length - 1], displayStart: this.state.displayStart, displayEnd: this.state.displayEnd, rowHeight: this.props.rowHeight})))));
 	    };
 	    GigaGrid.prototype.handleScroll = function () {
 	        this.dispatchDisplayBoundChange();
@@ -20300,9 +20300,20 @@
 	     * yes this is still a thing!
 	     */
 	    GigaGrid.prototype.synchTableHeaderWidthToFirstRow = function () {
-	        if (this.state.lastAction && this.state.lastAction.type === GigaStore_2.GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS && this.state.displayStart != 0)
+	        if (this.state.lastAction && this.state.lastAction.type === GigaStore_2.GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS && this.state.displayStart != 0) {
 	            return;
+	        }
 	        var node = ReactDOM.findDOMNode(this);
+	        var $canvas = $(node).find("table.giga-grid-body-canvas");
+	        // set header row width to table body width
+	        var rootNodeWidth = $(node).innerWidth();
+	        var canvasWidth = $canvas.innerWidth();
+	        if (rootNodeWidth > canvasWidth) {
+	            var newWCanvasWidth = rootNodeWidth - getScrollBarWidth();
+	            $canvas.innerWidth(newWCanvasWidth);
+	            canvasWidth = newWCanvasWidth;
+	        }
+	        $(node).find("table.header-table").innerWidth(canvasWidth);
 	        var $tableHeaders = $(node).find("th.table-header");
 	        var $firstRowInBody = $(node).find("tbody tr.placeholder-false:first td");
 	        _.chain($tableHeaders).zip($firstRowInBody).each(function (pair) {
@@ -20346,12 +20357,45 @@
 	        initialFilterBys: [],
 	        data: [],
 	        columnDefs: [],
-	        bodyHeight: "100%",
+	        bodyHeight: "500px",
 	        rowHeight: "25px"
 	    };
 	    return GigaGrid;
 	}(React.Component));
 	exports.GigaGrid = GigaGrid;
+	/**
+	 * uber hax to get scrollbar width
+	 * see stackoverflow reference: http://stackoverflow.com/questions/986937/how-can-i-get-the-browsers-scrollbar-sizes
+	 * @returns {number}
+	 */
+	function getScrollBarWidth() {
+	    var scrollBarWidth = null;
+	    function computeScrollBarWidth() {
+	        var inner = document.createElement('p');
+	        inner.style.width = "100%";
+	        inner.style.height = "200px";
+	        var outer = document.createElement('div');
+	        outer.style.position = "absolute";
+	        outer.style.top = "0px";
+	        outer.style.left = "0px";
+	        outer.style.visibility = "hidden";
+	        outer.style.width = "200px";
+	        outer.style.height = "150px";
+	        outer.style.overflow = "hidden";
+	        outer.appendChild(inner);
+	        document.body.appendChild(outer);
+	        var w1 = inner.offsetWidth;
+	        outer.style.overflow = 'scroll';
+	        var w2 = inner.offsetWidth;
+	        if (w1 == w2)
+	            w2 = outer.clientWidth;
+	        document.body.removeChild(outer);
+	        return (w1 - w2);
+	    }
+	    if (scrollBarWidth === null)
+	        scrollBarWidth = computeScrollBarWidth();
+	    return scrollBarWidth;
+	}
 
 
 /***/ },
@@ -50916,7 +50960,9 @@
 	        formatInstruction: {
 	            roundTo: 2
 	        }
-	    }
+	    },
+	    { colTag: "Contact", title: "Contact" },
+	    { colTag: "Email", title: "Email" }
 	];
 
 

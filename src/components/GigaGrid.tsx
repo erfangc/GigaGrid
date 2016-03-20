@@ -147,7 +147,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         initialFilterBys: [],
         data: [],
         columnDefs: [],
-        bodyHeight: "100%",
+        bodyHeight: "500px",
         rowHeight: "25px"
     };
 
@@ -174,13 +174,13 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
         const bodyStyle = {
             // TODO we will need to give similar consideration to height as we did for width
-            height: this.props.bodyHeight || "100%",
+            height: this.props.bodyHeight,
         };
 
         return (
             <div className="giga-grid">
-                <div className="giga-grid-table-header-wrapper">
-                    <table style={{width: "100%"}} className="header-table">
+                <div className="giga-grid-header-container">
+                    <table className="header-table">
                         <TableHeader dispatcher={this.dispatcher} columns={columns}/>
                     </table>
                 </div>
@@ -188,7 +188,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                      onScroll={()=>this.handleScroll()}
                      className="giga-grid-body-viewport"
                      style={bodyStyle}>
-                    <table ref={c=>this.canvas=c} style={{width: "100%"}}>
+                    <table ref={c=>this.canvas=c} className="giga-grid-body-canvas">
                         <TableBody dispatcher={this.dispatcher}
                                    rows={this.state.rasterizedRows}
                                    columns={columns[columns.length-1]}
@@ -217,9 +217,24 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
      * yes this is still a thing!
      */
     synchTableHeaderWidthToFirstRow() {
-        if (this.state.lastAction && this.state.lastAction.type === GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS && this.state.displayStart != 0)
+        if (this.state.lastAction && this.state.lastAction.type === GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS && this.state.displayStart != 0) {
             return;
+        }
         const node = ReactDOM.findDOMNode(this);
+        var $canvas = $(node).find("table.giga-grid-body-canvas");
+
+        // set header row width to table body width
+
+        const rootNodeWidth = $(node).innerWidth();
+        var canvasWidth = $canvas.innerWidth();
+        if (rootNodeWidth > canvasWidth) {
+            const newWCanvasWidth = rootNodeWidth - getScrollBarWidth();
+            $canvas.innerWidth(newWCanvasWidth);
+            canvasWidth = newWCanvasWidth;
+        }
+
+
+        $(node).find("table.header-table").innerWidth(canvasWidth);
         const $tableHeaders = $(node).find("th.table-header");
         const $firstRowInBody = $(node).find("tbody tr.placeholder-false:first td");
         _.chain($tableHeaders).zip($firstRowInBody).each((pair)=> {
@@ -261,5 +276,46 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         };
         this.dispatcher.dispatch(action);
     }
+
+}
+
+/**
+ * uber hax to get scrollbar width
+ * see stackoverflow reference: http://stackoverflow.com/questions/986937/how-can-i-get-the-browsers-scrollbar-sizes
+ * @returns {number}
+ */
+function getScrollBarWidth() {
+
+    var scrollBarWidth = null;
+
+    function computeScrollBarWidth() {
+        var inner = document.createElement('p');
+        inner.style.width = "100%";
+        inner.style.height = "200px";
+
+        var outer = document.createElement('div');
+        outer.style.position = "absolute";
+        outer.style.top = "0px";
+        outer.style.left = "0px";
+        outer.style.visibility = "hidden";
+        outer.style.width = "200px";
+        outer.style.height = "150px";
+        outer.style.overflow = "hidden";
+        outer.appendChild(inner);
+
+        document.body.appendChild(outer);
+        var w1 = inner.offsetWidth;
+        outer.style.overflow = 'scroll';
+        var w2 = inner.offsetWidth;
+        if (w1 == w2) w2 = outer.clientWidth;
+
+        document.body.removeChild(outer);
+        return (w1 - w2);
+    }
+
+    if (scrollBarWidth === null)
+        scrollBarWidth = computeScrollBarWidth();
+
+    return scrollBarWidth;
 
 }
