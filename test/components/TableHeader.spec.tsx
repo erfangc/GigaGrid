@@ -51,7 +51,7 @@ describe("TableHeader", ()=> {
 
         it("row 1 has colspan defined on its th", ()=> {
             const ths = (trs[0] as HTMLTableRowElement).children;
-            expect(ths.length).toBe(3); // +1 for placeholder
+            expect(ths.length).toBe(2); // +1 for placeholder
             expect((ths[0] as HTMLTableHeaderCellElement).colSpan).toBe(2);
             expect((ths[1] as HTMLTableHeaderCellElement).colSpan).toBe(3);
         });

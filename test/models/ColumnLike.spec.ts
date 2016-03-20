@@ -27,7 +27,6 @@ describe("ColumnCreator", ()=> {
             expect(column.colTag).toBe("colTag1");
             expect(column.aggregationMethod).toBe(AggregationMethod.SUM);
             expect(column.title).toBe("Column Tag 1");
-            expect(column.width).toBe("100px");
         });
 
         it("copies callback from definition correctly", ()=> {
