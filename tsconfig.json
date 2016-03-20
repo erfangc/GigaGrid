@@ -3,10 +3,7 @@
     "target": "es5",
     "module": "commonjs",
     "sourceMap": true,
-    "jsx": "react",
-    "outDir": "build",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "jsx": "react"
   },
   "exclude": [
     "node_modules",

@@ -1,15 +1,11 @@
-import * as React from 'react';
-import * as classNames from 'classnames';
-import {SubtotalRow} from "../models/Row";
-import {Column} from "../models/ColumnLike";
-import {ColumnFormat} from "../models/ColumnLike";
-import {DetailRow} from "../models/Row";
+import * as React from "react";
+import * as classNames from "classnames";
 import {Row} from "../models/Row";
+import {Column} from "../models/ColumnLike";
 import {GridSubcomponentProps} from "./TableHeaderCell";
-import {ToggleCollapseAction} from "../store/GigaStore";
 import {GigaActionType} from "../store/GigaStore";
-import SyntheticEvent = __React.SyntheticEvent;
 import {Cell} from "./Cell";
+import SyntheticEvent = __React.SyntheticEvent;
 
 export interface GigaRowProps extends GridSubcomponentProps<GigaRow> {
     row:Row;
