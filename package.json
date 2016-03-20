@@ -4,12 +4,8 @@
   "description": "Massively performant, multi-layered React.js table widget Written in TypeScript",
   "main": "dist/giga-grid.js",
   "scripts": {
-    "clean": "rm -rf ./build",
-    "styles": "mkdirp ./build/src/styles && stylus ./src/styles -o ./build/src/styles",
-    "compile": "npm run clean && tsc && npm run styles",
-    "build": "npm run compile && webpack",
-    "test": "npm run build && karma start karma2.conf.js --single-run",
-    "serve": "npm run build && live-server --open=examples"
+    "build": "webpack --config webpack.production.js",
+    "test": "karma start karma2.conf.js --single-run"
   },
   "repository": {
     "type": "git",

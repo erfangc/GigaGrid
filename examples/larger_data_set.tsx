@@ -1,5 +1,5 @@
 import {GigaGrid} from "../src/index";
-import {GigaProps} from "../src/store/GigaStore";
+import {GigaProps} from "../src/components/GigaGrid";
 import {ColumnFormat, AggregationMethod} from "../src/models/ColumnLike";
 import * as $ from "jquery";
 import * as React from 'react';

@@ -7,7 +7,7 @@
 		exports["GigaGrid"] = factory(require("react"), require("react-dom"));
 	else
 		root["GigaGrid"] = factory(root["React"], root["ReactDOM"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_14__, __WEBPACK_EXTERNAL_MODULE_15__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_7__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -56,16 +56,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 	__webpack_require__(1);
-	__webpack_require__(5);
-	var GigaGrid_1 = __webpack_require__(13);
-	var ColumnLike_1 = __webpack_require__(42);
-	var ColumnLike_2 = __webpack_require__(42);
-	var ColumnLike_3 = __webpack_require__(42);
+	var GigaGrid_1 = __webpack_require__(5);
+	var ColumnLike_1 = __webpack_require__(13);
+	var ColumnLike_2 = __webpack_require__(13);
+	var ColumnLike_3 = __webpack_require__(13);
 	exports.GigaGrid = GigaGrid_1.GigaGrid;
 	exports.ColumnFormat = ColumnLike_1.ColumnFormat;
 	exports.AggregationMethod = ColumnLike_2.AggregationMethod;
 	exports.SortDirection = ColumnLike_3.SortDirection;
-	//# sourceMappingURL=index.js.map
+
 
 /***/ },
 /* 1 */
@@ -83,8 +82,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./giga-grid.css", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./giga-grid.css");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./giga-grid.styl", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./giga-grid.styl");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -102,7 +101,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "div.giga-grid .dropdown-menu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  left: 0;\n}\ndiv.giga-grid .dropdown-menu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  right: 0;\n}\ndiv.giga-grid .dropdown-submenu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  left: 100%;\n}\ndiv.giga-grid .dropdown-submenu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  right: 50%;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle {\n  position: absolute;\n  right: 0;\n  background-color: #4a5564;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle-hide {\n  opacity: 0;\n}\ndiv.giga-grid .dropdown-menu-item {\n  position: relative;\n  padding-bottom: 5px;\n  padding-left: 10px;\n  padding-top: 5px;\n  color: #666;\n  border-radius: 2px;\n}\ndiv.giga-grid .dropdown-menu-item.hoverable:hover {\n  cursor: pointer;\n  background-color: #eee;\n}\ndiv.giga-grid .dropdown-menu-item input {\n  border: none;\n  border-bottom: 2px solid #666;\n  margin-top: 10px;\n  margin-bottom: 10px;\n  padding-top: 5px;\n  padding-bottom: 5px;\n  font-size: 13px;\n}\ndiv.giga-grid {\n  margin: 0;\n  font-family: Roboto, sans-serif;\n  color: #333;\n  overflow-x: auto;\n}\ndiv.giga-grid div.giga-grid-body-scroll-y {\n  overflow-y: auto;\n}\ndiv.giga-grid table {\n  border-collapse: collapse;\n  font-size: 11px;\n  table-layout: fixed;\n}\ndiv.giga-grid tr.selected {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row.selected {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid tr td,\ndiv.giga-grid tr th {\n  box-sizing: border-box;\n  padding: 2px 5px;\n}\ndiv.giga-grid th:last-child,\ndiv.giga-grid td:last-child {\n  padding-right: 10px;\n  border-left: none;\n}\ndiv.giga-grid th:first-child,\ndiv.giga-grid td:first-child {\n  padding-left: 10px;\n}\ndiv.giga-grid tr th {\n  font-weight: normal;\n  background-color: #4a5564;\n  color: #fff;\n  border-left: 1px solid #fff;\n}\ndiv.giga-grid tr th.column-group {\n  text-align: center;\n  border-right: 1px solid #f5f5f5;\n  border-bottom: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr td {\n  white-space: nowrap;\n  border: 1px solid #f5f5f5;\n  border-right: none;\n  border-left: none;\n}\ndiv.giga-grid tr.subtotal-row {\n  background-color: #fff;\n}\ndiv.giga-grid thead tr:hover,\ndiv.giga-grid tbody tr:hover {\n  cursor: pointer;\n}\ndiv.giga-grid tbody tr:hover {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row:hover {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid .numeric {\n  text-align: right;\n}\ndiv.giga-grid .non-numeric {\n  text-align: left;\n}\ndiv.giga-grid span.header-text {\n  padding-right: 15px;\n}\n", ""]);
+	exports.push([module.id, "div.giga-grid .dropdown-menu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  left: 0;\n}\ndiv.giga-grid .dropdown-menu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  right: 0;\n}\ndiv.giga-grid .dropdown-submenu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  left: 100%;\n}\ndiv.giga-grid .dropdown-submenu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  right: 50%;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle {\n  position: absolute;\n  right: 0;\n  background-color: #4a5564;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle-hide {\n  opacity: 0;\n}\ndiv.giga-grid .dropdown-menu-item {\n  position: relative;\n  padding-bottom: 5px;\n  padding-left: 10px;\n  padding-top: 5px;\n  color: #666;\n  border-radius: 2px;\n}\ndiv.giga-grid .dropdown-menu-item.hoverable:hover {\n  cursor: pointer;\n  background-color: #eee;\n}\ndiv.giga-grid .dropdown-menu-item input {\n  border: none;\n  border-bottom: 2px solid #666;\n  margin-top: 10px;\n  margin-bottom: 10px;\n  padding-top: 5px;\n  padding-bottom: 5px;\n  font-size: 13px;\n}\ndiv.giga-grid {\n  margin: 0;\n  font-family: Roboto, sans-serif;\n  color: #333;\n  overflow-x: scroll;\n}\ndiv.giga-grid table {\n  table-layout: fixed;\n  border-collapse: collapse;\n  font-size: 11px;\n}\ndiv.giga-grid div.giga-grid-body-viewport {\n  overflow-y: scroll;\n  overflow-x: hidden;\n  display: inline-block;\n}\ndiv.giga-grid tr.selected {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row.selected {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid tr td,\ndiv.giga-grid tr th {\n  box-sizing: border-box;\n  padding: 2px 5px;\n  min-width: 10em;\n}\ndiv.giga-grid th:last-child,\ndiv.giga-grid td:last-child {\n  padding-right: 10px;\n}\ndiv.giga-grid th:first-child,\ndiv.giga-grid td:first-child {\n  padding-left: 10px;\n}\ndiv.giga-grid tr th {\n  font-weight: normal;\n  background-color: #4a5564;\n  color: #fff;\n  border-left: 1px solid #fff;\n}\ndiv.giga-grid tr th.column-group {\n  text-align: center;\n  border-right: 1px solid #f5f5f5;\n  border-bottom: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr td {\n  white-space: nowrap;\n  border: 1px solid #f5f5f5;\n  border-right: none;\n  border-left: none;\n}\ndiv.giga-grid tr.subtotal-row {\n  background-color: #fff;\n}\ndiv.giga-grid thead tr:hover,\ndiv.giga-grid tbody tr:hover {\n  cursor: pointer;\n}\ndiv.giga-grid tbody tr:hover {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row:hover {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid .numeric {\n  text-align: right;\n}\ndiv.giga-grid .non-numeric {\n  text-align: left;\n}\ndiv.giga-grid span.header-text {\n  padding-right: 15px;\n}\n", ""]);
 
 	// exports
 
@@ -421,100 +420,22 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(6);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(4)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./font-awesome.css", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./font-awesome.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(3)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "/*!\n *  Font Awesome 4.5.0 by @davegandy - http://fontawesome.io - @fontawesome\n *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)\n */\n/* FONT PATH\n * -------------------------- */\n@font-face {\n  font-family: 'FontAwesome';\n  src: url(" + __webpack_require__(7) + ");\n  src: url(" + __webpack_require__(8) + "?#iefix&v=4.5.0) format('embedded-opentype'), url(" + __webpack_require__(9) + ") format('woff2'), url(" + __webpack_require__(10) + ") format('woff'), url(" + __webpack_require__(11) + ") format('truetype'), url(" + __webpack_require__(12) + "#fontawesomeregular) format('svg');\n  font-weight: normal;\n  font-style: normal;\n}\n.fa {\n  display: inline-block;\n  font: normal normal normal 14px/1 FontAwesome;\n  font-size: inherit;\n  text-rendering: auto;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n/* makes the font 33% larger relative to the icon container */\n.fa-lg {\n  font-size: 1.33333333em;\n  line-height: 0.75em;\n  vertical-align: -15%;\n}\n.fa-2x {\n  font-size: 2em;\n}\n.fa-3x {\n  font-size: 3em;\n}\n.fa-4x {\n  font-size: 4em;\n}\n.fa-5x {\n  font-size: 5em;\n}\n.fa-fw {\n  width: 1.28571429em;\n  text-align: center;\n}\n.fa-ul {\n  padding-left: 0;\n  margin-left: 2.14285714em;\n  list-style-type: none;\n}\n.fa-ul > li {\n  position: relative;\n}\n.fa-li {\n  position: absolute;\n  left: -2.14285714em;\n  width: 2.14285714em;\n  top: 0.14285714em;\n  text-align: center;\n}\n.fa-li.fa-lg {\n  left: -1.85714286em;\n}\n.fa-border {\n  padding: .2em .25em .15em;\n  border: solid 0.08em #eeeeee;\n  border-radius: .1em;\n}\n.fa-pull-left {\n  float: left;\n}\n.fa-pull-right {\n  float: right;\n}\n.fa.fa-pull-left {\n  margin-right: .3em;\n}\n.fa.fa-pull-right {\n  margin-left: .3em;\n}\n/* Deprecated as of 4.4.0 */\n.pull-right {\n  float: right;\n}\n.pull-left {\n  float: left;\n}\n.fa.pull-left {\n  margin-right: .3em;\n}\n.fa.pull-right {\n  margin-left: .3em;\n}\n.fa-spin {\n  -webkit-animation: fa-spin 2s infinite linear;\n  animation: fa-spin 2s infinite linear;\n}\n.fa-pulse {\n  -webkit-animation: fa-spin 1s infinite steps(8);\n  animation: fa-spin 1s infinite steps(8);\n}\n@-webkit-keyframes fa-spin {\n  0% {\n    -webkit-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(359deg);\n    transform: rotate(359deg);\n  }\n}\n@keyframes fa-spin {\n  0% {\n    -webkit-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(359deg);\n    transform: rotate(359deg);\n  }\n}\n.fa-rotate-90 {\n  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);\n  -webkit-transform: rotate(90deg);\n  -ms-transform: rotate(90deg);\n  transform: rotate(90deg);\n}\n.fa-rotate-180 {\n  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);\n  -webkit-transform: rotate(180deg);\n  -ms-transform: rotate(180deg);\n  transform: rotate(180deg);\n}\n.fa-rotate-270 {\n  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);\n  -webkit-transform: rotate(270deg);\n  -ms-transform: rotate(270deg);\n  transform: rotate(270deg);\n}\n.fa-flip-horizontal {\n  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1);\n  -webkit-transform: scale(-1, 1);\n  -ms-transform: scale(-1, 1);\n  transform: scale(-1, 1);\n}\n.fa-flip-vertical {\n  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1);\n  -webkit-transform: scale(1, -1);\n  -ms-transform: scale(1, -1);\n  transform: scale(1, -1);\n}\n:root .fa-rotate-90,\n:root .fa-rotate-180,\n:root .fa-rotate-270,\n:root .fa-flip-horizontal,\n:root .fa-flip-vertical {\n  filter: none;\n}\n.fa-stack {\n  position: relative;\n  display: inline-block;\n  width: 2em;\n  height: 2em;\n  line-height: 2em;\n  vertical-align: middle;\n}\n.fa-stack-1x,\n.fa-stack-2x {\n  position: absolute;\n  left: 0;\n  width: 100%;\n  text-align: center;\n}\n.fa-stack-1x {\n  line-height: inherit;\n}\n.fa-stack-2x {\n  font-size: 2em;\n}\n.fa-inverse {\n  color: #ffffff;\n}\n/* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen\n   readers do not read off random characters that represent icons */\n.fa-glass:before {\n  content: \"\\F000\";\n}\n.fa-music:before {\n  content: \"\\F001\";\n}\n.fa-search:before {\n  content: \"\\F002\";\n}\n.fa-envelope-o:before {\n  content: \"\\F003\";\n}\n.fa-heart:before {\n  content: \"\\F004\";\n}\n.fa-star:before {\n  content: \"\\F005\";\n}\n.fa-star-o:before {\n  content: \"\\F006\";\n}\n.fa-user:before {\n  content: \"\\F007\";\n}\n.fa-film:before {\n  content: \"\\F008\";\n}\n.fa-th-large:before {\n  content: \"\\F009\";\n}\n.fa-th:before {\n  content: \"\\F00A\";\n}\n.fa-th-list:before {\n  content: \"\\F00B\";\n}\n.fa-check:before {\n  content: \"\\F00C\";\n}\n.fa-remove:before,\n.fa-close:before,\n.fa-times:before {\n  content: \"\\F00D\";\n}\n.fa-search-plus:before {\n  content: \"\\F00E\";\n}\n.fa-search-minus:before {\n  content: \"\\F010\";\n}\n.fa-power-off:before {\n  content: \"\\F011\";\n}\n.fa-signal:before {\n  content: \"\\F012\";\n}\n.fa-gear:before,\n.fa-cog:before {\n  content: \"\\F013\";\n}\n.fa-trash-o:before {\n  content: \"\\F014\";\n}\n.fa-home:before {\n  content: \"\\F015\";\n}\n.fa-file-o:before {\n  content: \"\\F016\";\n}\n.fa-clock-o:before {\n  content: \"\\F017\";\n}\n.fa-road:before {\n  content: \"\\F018\";\n}\n.fa-download:before {\n  content: \"\\F019\";\n}\n.fa-arrow-circle-o-down:before {\n  content: \"\\F01A\";\n}\n.fa-arrow-circle-o-up:before {\n  content: \"\\F01B\";\n}\n.fa-inbox:before {\n  content: \"\\F01C\";\n}\n.fa-play-circle-o:before {\n  content: \"\\F01D\";\n}\n.fa-rotate-right:before,\n.fa-repeat:before {\n  content: \"\\F01E\";\n}\n.fa-refresh:before {\n  content: \"\\F021\";\n}\n.fa-list-alt:before {\n  content: \"\\F022\";\n}\n.fa-lock:before {\n  content: \"\\F023\";\n}\n.fa-flag:before {\n  content: \"\\F024\";\n}\n.fa-headphones:before {\n  content: \"\\F025\";\n}\n.fa-volume-off:before {\n  content: \"\\F026\";\n}\n.fa-volume-down:before {\n  content: \"\\F027\";\n}\n.fa-volume-up:before {\n  content: \"\\F028\";\n}\n.fa-qrcode:before {\n  content: \"\\F029\";\n}\n.fa-barcode:before {\n  content: \"\\F02A\";\n}\n.fa-tag:before {\n  content: \"\\F02B\";\n}\n.fa-tags:before {\n  content: \"\\F02C\";\n}\n.fa-book:before {\n  content: \"\\F02D\";\n}\n.fa-bookmark:before {\n  content: \"\\F02E\";\n}\n.fa-print:before {\n  content: \"\\F02F\";\n}\n.fa-camera:before {\n  content: \"\\F030\";\n}\n.fa-font:before {\n  content: \"\\F031\";\n}\n.fa-bold:before {\n  content: \"\\F032\";\n}\n.fa-italic:before {\n  content: \"\\F033\";\n}\n.fa-text-height:before {\n  content: \"\\F034\";\n}\n.fa-text-width:before {\n  content: \"\\F035\";\n}\n.fa-align-left:before {\n  content: \"\\F036\";\n}\n.fa-align-center:before {\n  content: \"\\F037\";\n}\n.fa-align-right:before {\n  content: \"\\F038\";\n}\n.fa-align-justify:before {\n  content: \"\\F039\";\n}\n.fa-list:before {\n  content: \"\\F03A\";\n}\n.fa-dedent:before,\n.fa-outdent:before {\n  content: \"\\F03B\";\n}\n.fa-indent:before {\n  content: \"\\F03C\";\n}\n.fa-video-camera:before {\n  content: \"\\F03D\";\n}\n.fa-photo:before,\n.fa-image:before,\n.fa-picture-o:before {\n  content: \"\\F03E\";\n}\n.fa-pencil:before {\n  content: \"\\F040\";\n}\n.fa-map-marker:before {\n  content: \"\\F041\";\n}\n.fa-adjust:before {\n  content: \"\\F042\";\n}\n.fa-tint:before {\n  content: \"\\F043\";\n}\n.fa-edit:before,\n.fa-pencil-square-o:before {\n  content: \"\\F044\";\n}\n.fa-share-square-o:before {\n  content: \"\\F045\";\n}\n.fa-check-square-o:before {\n  content: \"\\F046\";\n}\n.fa-arrows:before {\n  content: \"\\F047\";\n}\n.fa-step-backward:before {\n  content: \"\\F048\";\n}\n.fa-fast-backward:before {\n  content: \"\\F049\";\n}\n.fa-backward:before {\n  content: \"\\F04A\";\n}\n.fa-play:before {\n  content: \"\\F04B\";\n}\n.fa-pause:before {\n  content: \"\\F04C\";\n}\n.fa-stop:before {\n  content: \"\\F04D\";\n}\n.fa-forward:before {\n  content: \"\\F04E\";\n}\n.fa-fast-forward:before {\n  content: \"\\F050\";\n}\n.fa-step-forward:before {\n  content: \"\\F051\";\n}\n.fa-eject:before {\n  content: \"\\F052\";\n}\n.fa-chevron-left:before {\n  content: \"\\F053\";\n}\n.fa-chevron-right:before {\n  content: \"\\F054\";\n}\n.fa-plus-circle:before {\n  content: \"\\F055\";\n}\n.fa-minus-circle:before {\n  content: \"\\F056\";\n}\n.fa-times-circle:before {\n  content: \"\\F057\";\n}\n.fa-check-circle:before {\n  content: \"\\F058\";\n}\n.fa-question-circle:before {\n  content: \"\\F059\";\n}\n.fa-info-circle:before {\n  content: \"\\F05A\";\n}\n.fa-crosshairs:before {\n  content: \"\\F05B\";\n}\n.fa-times-circle-o:before {\n  content: \"\\F05C\";\n}\n.fa-check-circle-o:before {\n  content: \"\\F05D\";\n}\n.fa-ban:before {\n  content: \"\\F05E\";\n}\n.fa-arrow-left:before {\n  content: \"\\F060\";\n}\n.fa-arrow-right:before {\n  content: \"\\F061\";\n}\n.fa-arrow-up:before {\n  content: \"\\F062\";\n}\n.fa-arrow-down:before {\n  content: \"\\F063\";\n}\n.fa-mail-forward:before,\n.fa-share:before {\n  content: \"\\F064\";\n}\n.fa-expand:before {\n  content: \"\\F065\";\n}\n.fa-compress:before {\n  content: \"\\F066\";\n}\n.fa-plus:before {\n  content: \"\\F067\";\n}\n.fa-minus:before {\n  content: \"\\F068\";\n}\n.fa-asterisk:before {\n  content: \"\\F069\";\n}\n.fa-exclamation-circle:before {\n  content: \"\\F06A\";\n}\n.fa-gift:before {\n  content: \"\\F06B\";\n}\n.fa-leaf:before {\n  content: \"\\F06C\";\n}\n.fa-fire:before {\n  content: \"\\F06D\";\n}\n.fa-eye:before {\n  content: \"\\F06E\";\n}\n.fa-eye-slash:before {\n  content: \"\\F070\";\n}\n.fa-warning:before,\n.fa-exclamation-triangle:before {\n  content: \"\\F071\";\n}\n.fa-plane:before {\n  content: \"\\F072\";\n}\n.fa-calendar:before {\n  content: \"\\F073\";\n}\n.fa-random:before {\n  content: \"\\F074\";\n}\n.fa-comment:before {\n  content: \"\\F075\";\n}\n.fa-magnet:before {\n  content: \"\\F076\";\n}\n.fa-chevron-up:before {\n  content: \"\\F077\";\n}\n.fa-chevron-down:before {\n  content: \"\\F078\";\n}\n.fa-retweet:before {\n  content: \"\\F079\";\n}\n.fa-shopping-cart:before {\n  content: \"\\F07A\";\n}\n.fa-folder:before {\n  content: \"\\F07B\";\n}\n.fa-folder-open:before {\n  content: \"\\F07C\";\n}\n.fa-arrows-v:before {\n  content: \"\\F07D\";\n}\n.fa-arrows-h:before {\n  content: \"\\F07E\";\n}\n.fa-bar-chart-o:before,\n.fa-bar-chart:before {\n  content: \"\\F080\";\n}\n.fa-twitter-square:before {\n  content: \"\\F081\";\n}\n.fa-facebook-square:before {\n  content: \"\\F082\";\n}\n.fa-camera-retro:before {\n  content: \"\\F083\";\n}\n.fa-key:before {\n  content: \"\\F084\";\n}\n.fa-gears:before,\n.fa-cogs:before {\n  content: \"\\F085\";\n}\n.fa-comments:before {\n  content: \"\\F086\";\n}\n.fa-thumbs-o-up:before {\n  content: \"\\F087\";\n}\n.fa-thumbs-o-down:before {\n  content: \"\\F088\";\n}\n.fa-star-half:before {\n  content: \"\\F089\";\n}\n.fa-heart-o:before {\n  content: \"\\F08A\";\n}\n.fa-sign-out:before {\n  content: \"\\F08B\";\n}\n.fa-linkedin-square:before {\n  content: \"\\F08C\";\n}\n.fa-thumb-tack:before {\n  content: \"\\F08D\";\n}\n.fa-external-link:before {\n  content: \"\\F08E\";\n}\n.fa-sign-in:before {\n  content: \"\\F090\";\n}\n.fa-trophy:before {\n  content: \"\\F091\";\n}\n.fa-github-square:before {\n  content: \"\\F092\";\n}\n.fa-upload:before {\n  content: \"\\F093\";\n}\n.fa-lemon-o:before {\n  content: \"\\F094\";\n}\n.fa-phone:before {\n  content: \"\\F095\";\n}\n.fa-square-o:before {\n  content: \"\\F096\";\n}\n.fa-bookmark-o:before {\n  content: \"\\F097\";\n}\n.fa-phone-square:before {\n  content: \"\\F098\";\n}\n.fa-twitter:before {\n  content: \"\\F099\";\n}\n.fa-facebook-f:before,\n.fa-facebook:before {\n  content: \"\\F09A\";\n}\n.fa-github:before {\n  content: \"\\F09B\";\n}\n.fa-unlock:before {\n  content: \"\\F09C\";\n}\n.fa-credit-card:before {\n  content: \"\\F09D\";\n}\n.fa-feed:before,\n.fa-rss:before {\n  content: \"\\F09E\";\n}\n.fa-hdd-o:before {\n  content: \"\\F0A0\";\n}\n.fa-bullhorn:before {\n  content: \"\\F0A1\";\n}\n.fa-bell:before {\n  content: \"\\F0F3\";\n}\n.fa-certificate:before {\n  content: \"\\F0A3\";\n}\n.fa-hand-o-right:before {\n  content: \"\\F0A4\";\n}\n.fa-hand-o-left:before {\n  content: \"\\F0A5\";\n}\n.fa-hand-o-up:before {\n  content: \"\\F0A6\";\n}\n.fa-hand-o-down:before {\n  content: \"\\F0A7\";\n}\n.fa-arrow-circle-left:before {\n  content: \"\\F0A8\";\n}\n.fa-arrow-circle-right:before {\n  content: \"\\F0A9\";\n}\n.fa-arrow-circle-up:before {\n  content: \"\\F0AA\";\n}\n.fa-arrow-circle-down:before {\n  content: \"\\F0AB\";\n}\n.fa-globe:before {\n  content: \"\\F0AC\";\n}\n.fa-wrench:before {\n  content: \"\\F0AD\";\n}\n.fa-tasks:before {\n  content: \"\\F0AE\";\n}\n.fa-filter:before {\n  content: \"\\F0B0\";\n}\n.fa-briefcase:before {\n  content: \"\\F0B1\";\n}\n.fa-arrows-alt:before {\n  content: \"\\F0B2\";\n}\n.fa-group:before,\n.fa-users:before {\n  content: \"\\F0C0\";\n}\n.fa-chain:before,\n.fa-link:before {\n  content: \"\\F0C1\";\n}\n.fa-cloud:before {\n  content: \"\\F0C2\";\n}\n.fa-flask:before {\n  content: \"\\F0C3\";\n}\n.fa-cut:before,\n.fa-scissors:before {\n  content: \"\\F0C4\";\n}\n.fa-copy:before,\n.fa-files-o:before {\n  content: \"\\F0C5\";\n}\n.fa-paperclip:before {\n  content: \"\\F0C6\";\n}\n.fa-save:before,\n.fa-floppy-o:before {\n  content: \"\\F0C7\";\n}\n.fa-square:before {\n  content: \"\\F0C8\";\n}\n.fa-navicon:before,\n.fa-reorder:before,\n.fa-bars:before {\n  content: \"\\F0C9\";\n}\n.fa-list-ul:before {\n  content: \"\\F0CA\";\n}\n.fa-list-ol:before {\n  content: \"\\F0CB\";\n}\n.fa-strikethrough:before {\n  content: \"\\F0CC\";\n}\n.fa-underline:before {\n  content: \"\\F0CD\";\n}\n.fa-table:before {\n  content: \"\\F0CE\";\n}\n.fa-magic:before {\n  content: \"\\F0D0\";\n}\n.fa-truck:before {\n  content: \"\\F0D1\";\n}\n.fa-pinterest:before {\n  content: \"\\F0D2\";\n}\n.fa-pinterest-square:before {\n  content: \"\\F0D3\";\n}\n.fa-google-plus-square:before {\n  content: \"\\F0D4\";\n}\n.fa-google-plus:before {\n  content: \"\\F0D5\";\n}\n.fa-money:before {\n  content: \"\\F0D6\";\n}\n.fa-caret-down:before {\n  content: \"\\F0D7\";\n}\n.fa-caret-up:before {\n  content: \"\\F0D8\";\n}\n.fa-caret-left:before {\n  content: \"\\F0D9\";\n}\n.fa-caret-right:before {\n  content: \"\\F0DA\";\n}\n.fa-columns:before {\n  content: \"\\F0DB\";\n}\n.fa-unsorted:before,\n.fa-sort:before {\n  content: \"\\F0DC\";\n}\n.fa-sort-down:before,\n.fa-sort-desc:before {\n  content: \"\\F0DD\";\n}\n.fa-sort-up:before,\n.fa-sort-asc:before {\n  content: \"\\F0DE\";\n}\n.fa-envelope:before {\n  content: \"\\F0E0\";\n}\n.fa-linkedin:before {\n  content: \"\\F0E1\";\n}\n.fa-rotate-left:before,\n.fa-undo:before {\n  content: \"\\F0E2\";\n}\n.fa-legal:before,\n.fa-gavel:before {\n  content: \"\\F0E3\";\n}\n.fa-dashboard:before,\n.fa-tachometer:before {\n  content: \"\\F0E4\";\n}\n.fa-comment-o:before {\n  content: \"\\F0E5\";\n}\n.fa-comments-o:before {\n  content: \"\\F0E6\";\n}\n.fa-flash:before,\n.fa-bolt:before {\n  content: \"\\F0E7\";\n}\n.fa-sitemap:before {\n  content: \"\\F0E8\";\n}\n.fa-umbrella:before {\n  content: \"\\F0E9\";\n}\n.fa-paste:before,\n.fa-clipboard:before {\n  content: \"\\F0EA\";\n}\n.fa-lightbulb-o:before {\n  content: \"\\F0EB\";\n}\n.fa-exchange:before {\n  content: \"\\F0EC\";\n}\n.fa-cloud-download:before {\n  content: \"\\F0ED\";\n}\n.fa-cloud-upload:before {\n  content: \"\\F0EE\";\n}\n.fa-user-md:before {\n  content: \"\\F0F0\";\n}\n.fa-stethoscope:before {\n  content: \"\\F0F1\";\n}\n.fa-suitcase:before {\n  content: \"\\F0F2\";\n}\n.fa-bell-o:before {\n  content: \"\\F0A2\";\n}\n.fa-coffee:before {\n  content: \"\\F0F4\";\n}\n.fa-cutlery:before {\n  content: \"\\F0F5\";\n}\n.fa-file-text-o:before {\n  content: \"\\F0F6\";\n}\n.fa-building-o:before {\n  content: \"\\F0F7\";\n}\n.fa-hospital-o:before {\n  content: \"\\F0F8\";\n}\n.fa-ambulance:before {\n  content: \"\\F0F9\";\n}\n.fa-medkit:before {\n  content: \"\\F0FA\";\n}\n.fa-fighter-jet:before {\n  content: \"\\F0FB\";\n}\n.fa-beer:before {\n  content: \"\\F0FC\";\n}\n.fa-h-square:before {\n  content: \"\\F0FD\";\n}\n.fa-plus-square:before {\n  content: \"\\F0FE\";\n}\n.fa-angle-double-left:before {\n  content: \"\\F100\";\n}\n.fa-angle-double-right:before {\n  content: \"\\F101\";\n}\n.fa-angle-double-up:before {\n  content: \"\\F102\";\n}\n.fa-angle-double-down:before {\n  content: \"\\F103\";\n}\n.fa-angle-left:before {\n  content: \"\\F104\";\n}\n.fa-angle-right:before {\n  content: \"\\F105\";\n}\n.fa-angle-up:before {\n  content: \"\\F106\";\n}\n.fa-angle-down:before {\n  content: \"\\F107\";\n}\n.fa-desktop:before {\n  content: \"\\F108\";\n}\n.fa-laptop:before {\n  content: \"\\F109\";\n}\n.fa-tablet:before {\n  content: \"\\F10A\";\n}\n.fa-mobile-phone:before,\n.fa-mobile:before {\n  content: \"\\F10B\";\n}\n.fa-circle-o:before {\n  content: \"\\F10C\";\n}\n.fa-quote-left:before {\n  content: \"\\F10D\";\n}\n.fa-quote-right:before {\n  content: \"\\F10E\";\n}\n.fa-spinner:before {\n  content: \"\\F110\";\n}\n.fa-circle:before {\n  content: \"\\F111\";\n}\n.fa-mail-reply:before,\n.fa-reply:before {\n  content: \"\\F112\";\n}\n.fa-github-alt:before {\n  content: \"\\F113\";\n}\n.fa-folder-o:before {\n  content: \"\\F114\";\n}\n.fa-folder-open-o:before {\n  content: \"\\F115\";\n}\n.fa-smile-o:before {\n  content: \"\\F118\";\n}\n.fa-frown-o:before {\n  content: \"\\F119\";\n}\n.fa-meh-o:before {\n  content: \"\\F11A\";\n}\n.fa-gamepad:before {\n  content: \"\\F11B\";\n}\n.fa-keyboard-o:before {\n  content: \"\\F11C\";\n}\n.fa-flag-o:before {\n  content: \"\\F11D\";\n}\n.fa-flag-checkered:before {\n  content: \"\\F11E\";\n}\n.fa-terminal:before {\n  content: \"\\F120\";\n}\n.fa-code:before {\n  content: \"\\F121\";\n}\n.fa-mail-reply-all:before,\n.fa-reply-all:before {\n  content: \"\\F122\";\n}\n.fa-star-half-empty:before,\n.fa-star-half-full:before,\n.fa-star-half-o:before {\n  content: \"\\F123\";\n}\n.fa-location-arrow:before {\n  content: \"\\F124\";\n}\n.fa-crop:before {\n  content: \"\\F125\";\n}\n.fa-code-fork:before {\n  content: \"\\F126\";\n}\n.fa-unlink:before,\n.fa-chain-broken:before {\n  content: \"\\F127\";\n}\n.fa-question:before {\n  content: \"\\F128\";\n}\n.fa-info:before {\n  content: \"\\F129\";\n}\n.fa-exclamation:before {\n  content: \"\\F12A\";\n}\n.fa-superscript:before {\n  content: \"\\F12B\";\n}\n.fa-subscript:before {\n  content: \"\\F12C\";\n}\n.fa-eraser:before {\n  content: \"\\F12D\";\n}\n.fa-puzzle-piece:before {\n  content: \"\\F12E\";\n}\n.fa-microphone:before {\n  content: \"\\F130\";\n}\n.fa-microphone-slash:before {\n  content: \"\\F131\";\n}\n.fa-shield:before {\n  content: \"\\F132\";\n}\n.fa-calendar-o:before {\n  content: \"\\F133\";\n}\n.fa-fire-extinguisher:before {\n  content: \"\\F134\";\n}\n.fa-rocket:before {\n  content: \"\\F135\";\n}\n.fa-maxcdn:before {\n  content: \"\\F136\";\n}\n.fa-chevron-circle-left:before {\n  content: \"\\F137\";\n}\n.fa-chevron-circle-right:before {\n  content: \"\\F138\";\n}\n.fa-chevron-circle-up:before {\n  content: \"\\F139\";\n}\n.fa-chevron-circle-down:before {\n  content: \"\\F13A\";\n}\n.fa-html5:before {\n  content: \"\\F13B\";\n}\n.fa-css3:before {\n  content: \"\\F13C\";\n}\n.fa-anchor:before {\n  content: \"\\F13D\";\n}\n.fa-unlock-alt:before {\n  content: \"\\F13E\";\n}\n.fa-bullseye:before {\n  content: \"\\F140\";\n}\n.fa-ellipsis-h:before {\n  content: \"\\F141\";\n}\n.fa-ellipsis-v:before {\n  content: \"\\F142\";\n}\n.fa-rss-square:before {\n  content: \"\\F143\";\n}\n.fa-play-circle:before {\n  content: \"\\F144\";\n}\n.fa-ticket:before {\n  content: \"\\F145\";\n}\n.fa-minus-square:before {\n  content: \"\\F146\";\n}\n.fa-minus-square-o:before {\n  content: \"\\F147\";\n}\n.fa-level-up:before {\n  content: \"\\F148\";\n}\n.fa-level-down:before {\n  content: \"\\F149\";\n}\n.fa-check-square:before {\n  content: \"\\F14A\";\n}\n.fa-pencil-square:before {\n  content: \"\\F14B\";\n}\n.fa-external-link-square:before {\n  content: \"\\F14C\";\n}\n.fa-share-square:before {\n  content: \"\\F14D\";\n}\n.fa-compass:before {\n  content: \"\\F14E\";\n}\n.fa-toggle-down:before,\n.fa-caret-square-o-down:before {\n  content: \"\\F150\";\n}\n.fa-toggle-up:before,\n.fa-caret-square-o-up:before {\n  content: \"\\F151\";\n}\n.fa-toggle-right:before,\n.fa-caret-square-o-right:before {\n  content: \"\\F152\";\n}\n.fa-euro:before,\n.fa-eur:before {\n  content: \"\\F153\";\n}\n.fa-gbp:before {\n  content: \"\\F154\";\n}\n.fa-dollar:before,\n.fa-usd:before {\n  content: \"\\F155\";\n}\n.fa-rupee:before,\n.fa-inr:before {\n  content: \"\\F156\";\n}\n.fa-cny:before,\n.fa-rmb:before,\n.fa-yen:before,\n.fa-jpy:before {\n  content: \"\\F157\";\n}\n.fa-ruble:before,\n.fa-rouble:before,\n.fa-rub:before {\n  content: \"\\F158\";\n}\n.fa-won:before,\n.fa-krw:before {\n  content: \"\\F159\";\n}\n.fa-bitcoin:before,\n.fa-btc:before {\n  content: \"\\F15A\";\n}\n.fa-file:before {\n  content: \"\\F15B\";\n}\n.fa-file-text:before {\n  content: \"\\F15C\";\n}\n.fa-sort-alpha-asc:before {\n  content: \"\\F15D\";\n}\n.fa-sort-alpha-desc:before {\n  content: \"\\F15E\";\n}\n.fa-sort-amount-asc:before {\n  content: \"\\F160\";\n}\n.fa-sort-amount-desc:before {\n  content: \"\\F161\";\n}\n.fa-sort-numeric-asc:before {\n  content: \"\\F162\";\n}\n.fa-sort-numeric-desc:before {\n  content: \"\\F163\";\n}\n.fa-thumbs-up:before {\n  content: \"\\F164\";\n}\n.fa-thumbs-down:before {\n  content: \"\\F165\";\n}\n.fa-youtube-square:before {\n  content: \"\\F166\";\n}\n.fa-youtube:before {\n  content: \"\\F167\";\n}\n.fa-xing:before {\n  content: \"\\F168\";\n}\n.fa-xing-square:before {\n  content: \"\\F169\";\n}\n.fa-youtube-play:before {\n  content: \"\\F16A\";\n}\n.fa-dropbox:before {\n  content: \"\\F16B\";\n}\n.fa-stack-overflow:before {\n  content: \"\\F16C\";\n}\n.fa-instagram:before {\n  content: \"\\F16D\";\n}\n.fa-flickr:before {\n  content: \"\\F16E\";\n}\n.fa-adn:before {\n  content: \"\\F170\";\n}\n.fa-bitbucket:before {\n  content: \"\\F171\";\n}\n.fa-bitbucket-square:before {\n  content: \"\\F172\";\n}\n.fa-tumblr:before {\n  content: \"\\F173\";\n}\n.fa-tumblr-square:before {\n  content: \"\\F174\";\n}\n.fa-long-arrow-down:before {\n  content: \"\\F175\";\n}\n.fa-long-arrow-up:before {\n  content: \"\\F176\";\n}\n.fa-long-arrow-left:before {\n  content: \"\\F177\";\n}\n.fa-long-arrow-right:before {\n  content: \"\\F178\";\n}\n.fa-apple:before {\n  content: \"\\F179\";\n}\n.fa-windows:before {\n  content: \"\\F17A\";\n}\n.fa-android:before {\n  content: \"\\F17B\";\n}\n.fa-linux:before {\n  content: \"\\F17C\";\n}\n.fa-dribbble:before {\n  content: \"\\F17D\";\n}\n.fa-skype:before {\n  content: \"\\F17E\";\n}\n.fa-foursquare:before {\n  content: \"\\F180\";\n}\n.fa-trello:before {\n  content: \"\\F181\";\n}\n.fa-female:before {\n  content: \"\\F182\";\n}\n.fa-male:before {\n  content: \"\\F183\";\n}\n.fa-gittip:before,\n.fa-gratipay:before {\n  content: \"\\F184\";\n}\n.fa-sun-o:before {\n  content: \"\\F185\";\n}\n.fa-moon-o:before {\n  content: \"\\F186\";\n}\n.fa-archive:before {\n  content: \"\\F187\";\n}\n.fa-bug:before {\n  content: \"\\F188\";\n}\n.fa-vk:before {\n  content: \"\\F189\";\n}\n.fa-weibo:before {\n  content: \"\\F18A\";\n}\n.fa-renren:before {\n  content: \"\\F18B\";\n}\n.fa-pagelines:before {\n  content: \"\\F18C\";\n}\n.fa-stack-exchange:before {\n  content: \"\\F18D\";\n}\n.fa-arrow-circle-o-right:before {\n  content: \"\\F18E\";\n}\n.fa-arrow-circle-o-left:before {\n  content: \"\\F190\";\n}\n.fa-toggle-left:before,\n.fa-caret-square-o-left:before {\n  content: \"\\F191\";\n}\n.fa-dot-circle-o:before {\n  content: \"\\F192\";\n}\n.fa-wheelchair:before {\n  content: \"\\F193\";\n}\n.fa-vimeo-square:before {\n  content: \"\\F194\";\n}\n.fa-turkish-lira:before,\n.fa-try:before {\n  content: \"\\F195\";\n}\n.fa-plus-square-o:before {\n  content: \"\\F196\";\n}\n.fa-space-shuttle:before {\n  content: \"\\F197\";\n}\n.fa-slack:before {\n  content: \"\\F198\";\n}\n.fa-envelope-square:before {\n  content: \"\\F199\";\n}\n.fa-wordpress:before {\n  content: \"\\F19A\";\n}\n.fa-openid:before {\n  content: \"\\F19B\";\n}\n.fa-institution:before,\n.fa-bank:before,\n.fa-university:before {\n  content: \"\\F19C\";\n}\n.fa-mortar-board:before,\n.fa-graduation-cap:before {\n  content: \"\\F19D\";\n}\n.fa-yahoo:before {\n  content: \"\\F19E\";\n}\n.fa-google:before {\n  content: \"\\F1A0\";\n}\n.fa-reddit:before {\n  content: \"\\F1A1\";\n}\n.fa-reddit-square:before {\n  content: \"\\F1A2\";\n}\n.fa-stumbleupon-circle:before {\n  content: \"\\F1A3\";\n}\n.fa-stumbleupon:before {\n  content: \"\\F1A4\";\n}\n.fa-delicious:before {\n  content: \"\\F1A5\";\n}\n.fa-digg:before {\n  content: \"\\F1A6\";\n}\n.fa-pied-piper:before {\n  content: \"\\F1A7\";\n}\n.fa-pied-piper-alt:before {\n  content: \"\\F1A8\";\n}\n.fa-drupal:before {\n  content: \"\\F1A9\";\n}\n.fa-joomla:before {\n  content: \"\\F1AA\";\n}\n.fa-language:before {\n  content: \"\\F1AB\";\n}\n.fa-fax:before {\n  content: \"\\F1AC\";\n}\n.fa-building:before {\n  content: \"\\F1AD\";\n}\n.fa-child:before {\n  content: \"\\F1AE\";\n}\n.fa-paw:before {\n  content: \"\\F1B0\";\n}\n.fa-spoon:before {\n  content: \"\\F1B1\";\n}\n.fa-cube:before {\n  content: \"\\F1B2\";\n}\n.fa-cubes:before {\n  content: \"\\F1B3\";\n}\n.fa-behance:before {\n  content: \"\\F1B4\";\n}\n.fa-behance-square:before {\n  content: \"\\F1B5\";\n}\n.fa-steam:before {\n  content: \"\\F1B6\";\n}\n.fa-steam-square:before {\n  content: \"\\F1B7\";\n}\n.fa-recycle:before {\n  content: \"\\F1B8\";\n}\n.fa-automobile:before,\n.fa-car:before {\n  content: \"\\F1B9\";\n}\n.fa-cab:before,\n.fa-taxi:before {\n  content: \"\\F1BA\";\n}\n.fa-tree:before {\n  content: \"\\F1BB\";\n}\n.fa-spotify:before {\n  content: \"\\F1BC\";\n}\n.fa-deviantart:before {\n  content: \"\\F1BD\";\n}\n.fa-soundcloud:before {\n  content: \"\\F1BE\";\n}\n.fa-database:before {\n  content: \"\\F1C0\";\n}\n.fa-file-pdf-o:before {\n  content: \"\\F1C1\";\n}\n.fa-file-word-o:before {\n  content: \"\\F1C2\";\n}\n.fa-file-excel-o:before {\n  content: \"\\F1C3\";\n}\n.fa-file-powerpoint-o:before {\n  content: \"\\F1C4\";\n}\n.fa-file-photo-o:before,\n.fa-file-picture-o:before,\n.fa-file-image-o:before {\n  content: \"\\F1C5\";\n}\n.fa-file-zip-o:before,\n.fa-file-archive-o:before {\n  content: \"\\F1C6\";\n}\n.fa-file-sound-o:before,\n.fa-file-audio-o:before {\n  content: \"\\F1C7\";\n}\n.fa-file-movie-o:before,\n.fa-file-video-o:before {\n  content: \"\\F1C8\";\n}\n.fa-file-code-o:before {\n  content: \"\\F1C9\";\n}\n.fa-vine:before {\n  content: \"\\F1CA\";\n}\n.fa-codepen:before {\n  content: \"\\F1CB\";\n}\n.fa-jsfiddle:before {\n  content: \"\\F1CC\";\n}\n.fa-life-bouy:before,\n.fa-life-buoy:before,\n.fa-life-saver:before,\n.fa-support:before,\n.fa-life-ring:before {\n  content: \"\\F1CD\";\n}\n.fa-circle-o-notch:before {\n  content: \"\\F1CE\";\n}\n.fa-ra:before,\n.fa-rebel:before {\n  content: \"\\F1D0\";\n}\n.fa-ge:before,\n.fa-empire:before {\n  content: \"\\F1D1\";\n}\n.fa-git-square:before {\n  content: \"\\F1D2\";\n}\n.fa-git:before {\n  content: \"\\F1D3\";\n}\n.fa-y-combinator-square:before,\n.fa-yc-square:before,\n.fa-hacker-news:before {\n  content: \"\\F1D4\";\n}\n.fa-tencent-weibo:before {\n  content: \"\\F1D5\";\n}\n.fa-qq:before {\n  content: \"\\F1D6\";\n}\n.fa-wechat:before,\n.fa-weixin:before {\n  content: \"\\F1D7\";\n}\n.fa-send:before,\n.fa-paper-plane:before {\n  content: \"\\F1D8\";\n}\n.fa-send-o:before,\n.fa-paper-plane-o:before {\n  content: \"\\F1D9\";\n}\n.fa-history:before {\n  content: \"\\F1DA\";\n}\n.fa-circle-thin:before {\n  content: \"\\F1DB\";\n}\n.fa-header:before {\n  content: \"\\F1DC\";\n}\n.fa-paragraph:before {\n  content: \"\\F1DD\";\n}\n.fa-sliders:before {\n  content: \"\\F1DE\";\n}\n.fa-share-alt:before {\n  content: \"\\F1E0\";\n}\n.fa-share-alt-square:before {\n  content: \"\\F1E1\";\n}\n.fa-bomb:before {\n  content: \"\\F1E2\";\n}\n.fa-soccer-ball-o:before,\n.fa-futbol-o:before {\n  content: \"\\F1E3\";\n}\n.fa-tty:before {\n  content: \"\\F1E4\";\n}\n.fa-binoculars:before {\n  content: \"\\F1E5\";\n}\n.fa-plug:before {\n  content: \"\\F1E6\";\n}\n.fa-slideshare:before {\n  content: \"\\F1E7\";\n}\n.fa-twitch:before {\n  content: \"\\F1E8\";\n}\n.fa-yelp:before {\n  content: \"\\F1E9\";\n}\n.fa-newspaper-o:before {\n  content: \"\\F1EA\";\n}\n.fa-wifi:before {\n  content: \"\\F1EB\";\n}\n.fa-calculator:before {\n  content: \"\\F1EC\";\n}\n.fa-paypal:before {\n  content: \"\\F1ED\";\n}\n.fa-google-wallet:before {\n  content: \"\\F1EE\";\n}\n.fa-cc-visa:before {\n  content: \"\\F1F0\";\n}\n.fa-cc-mastercard:before {\n  content: \"\\F1F1\";\n}\n.fa-cc-discover:before {\n  content: \"\\F1F2\";\n}\n.fa-cc-amex:before {\n  content: \"\\F1F3\";\n}\n.fa-cc-paypal:before {\n  content: \"\\F1F4\";\n}\n.fa-cc-stripe:before {\n  content: \"\\F1F5\";\n}\n.fa-bell-slash:before {\n  content: \"\\F1F6\";\n}\n.fa-bell-slash-o:before {\n  content: \"\\F1F7\";\n}\n.fa-trash:before {\n  content: \"\\F1F8\";\n}\n.fa-copyright:before {\n  content: \"\\F1F9\";\n}\n.fa-at:before {\n  content: \"\\F1FA\";\n}\n.fa-eyedropper:before {\n  content: \"\\F1FB\";\n}\n.fa-paint-brush:before {\n  content: \"\\F1FC\";\n}\n.fa-birthday-cake:before {\n  content: \"\\F1FD\";\n}\n.fa-area-chart:before {\n  content: \"\\F1FE\";\n}\n.fa-pie-chart:before {\n  content: \"\\F200\";\n}\n.fa-line-chart:before {\n  content: \"\\F201\";\n}\n.fa-lastfm:before {\n  content: \"\\F202\";\n}\n.fa-lastfm-square:before {\n  content: \"\\F203\";\n}\n.fa-toggle-off:before {\n  content: \"\\F204\";\n}\n.fa-toggle-on:before {\n  content: \"\\F205\";\n}\n.fa-bicycle:before {\n  content: \"\\F206\";\n}\n.fa-bus:before {\n  content: \"\\F207\";\n}\n.fa-ioxhost:before {\n  content: \"\\F208\";\n}\n.fa-angellist:before {\n  content: \"\\F209\";\n}\n.fa-cc:before {\n  content: \"\\F20A\";\n}\n.fa-shekel:before,\n.fa-sheqel:before,\n.fa-ils:before {\n  content: \"\\F20B\";\n}\n.fa-meanpath:before {\n  content: \"\\F20C\";\n}\n.fa-buysellads:before {\n  content: \"\\F20D\";\n}\n.fa-connectdevelop:before {\n  content: \"\\F20E\";\n}\n.fa-dashcube:before {\n  content: \"\\F210\";\n}\n.fa-forumbee:before {\n  content: \"\\F211\";\n}\n.fa-leanpub:before {\n  content: \"\\F212\";\n}\n.fa-sellsy:before {\n  content: \"\\F213\";\n}\n.fa-shirtsinbulk:before {\n  content: \"\\F214\";\n}\n.fa-simplybuilt:before {\n  content: \"\\F215\";\n}\n.fa-skyatlas:before {\n  content: \"\\F216\";\n}\n.fa-cart-plus:before {\n  content: \"\\F217\";\n}\n.fa-cart-arrow-down:before {\n  content: \"\\F218\";\n}\n.fa-diamond:before {\n  content: \"\\F219\";\n}\n.fa-ship:before {\n  content: \"\\F21A\";\n}\n.fa-user-secret:before {\n  content: \"\\F21B\";\n}\n.fa-motorcycle:before {\n  content: \"\\F21C\";\n}\n.fa-street-view:before {\n  content: \"\\F21D\";\n}\n.fa-heartbeat:before {\n  content: \"\\F21E\";\n}\n.fa-venus:before {\n  content: \"\\F221\";\n}\n.fa-mars:before {\n  content: \"\\F222\";\n}\n.fa-mercury:before {\n  content: \"\\F223\";\n}\n.fa-intersex:before,\n.fa-transgender:before {\n  content: \"\\F224\";\n}\n.fa-transgender-alt:before {\n  content: \"\\F225\";\n}\n.fa-venus-double:before {\n  content: \"\\F226\";\n}\n.fa-mars-double:before {\n  content: \"\\F227\";\n}\n.fa-venus-mars:before {\n  content: \"\\F228\";\n}\n.fa-mars-stroke:before {\n  content: \"\\F229\";\n}\n.fa-mars-stroke-v:before {\n  content: \"\\F22A\";\n}\n.fa-mars-stroke-h:before {\n  content: \"\\F22B\";\n}\n.fa-neuter:before {\n  content: \"\\F22C\";\n}\n.fa-genderless:before {\n  content: \"\\F22D\";\n}\n.fa-facebook-official:before {\n  content: \"\\F230\";\n}\n.fa-pinterest-p:before {\n  content: \"\\F231\";\n}\n.fa-whatsapp:before {\n  content: \"\\F232\";\n}\n.fa-server:before {\n  content: \"\\F233\";\n}\n.fa-user-plus:before {\n  content: \"\\F234\";\n}\n.fa-user-times:before {\n  content: \"\\F235\";\n}\n.fa-hotel:before,\n.fa-bed:before {\n  content: \"\\F236\";\n}\n.fa-viacoin:before {\n  content: \"\\F237\";\n}\n.fa-train:before {\n  content: \"\\F238\";\n}\n.fa-subway:before {\n  content: \"\\F239\";\n}\n.fa-medium:before {\n  content: \"\\F23A\";\n}\n.fa-yc:before,\n.fa-y-combinator:before {\n  content: \"\\F23B\";\n}\n.fa-optin-monster:before {\n  content: \"\\F23C\";\n}\n.fa-opencart:before {\n  content: \"\\F23D\";\n}\n.fa-expeditedssl:before {\n  content: \"\\F23E\";\n}\n.fa-battery-4:before,\n.fa-battery-full:before {\n  content: \"\\F240\";\n}\n.fa-battery-3:before,\n.fa-battery-three-quarters:before {\n  content: \"\\F241\";\n}\n.fa-battery-2:before,\n.fa-battery-half:before {\n  content: \"\\F242\";\n}\n.fa-battery-1:before,\n.fa-battery-quarter:before {\n  content: \"\\F243\";\n}\n.fa-battery-0:before,\n.fa-battery-empty:before {\n  content: \"\\F244\";\n}\n.fa-mouse-pointer:before {\n  content: \"\\F245\";\n}\n.fa-i-cursor:before {\n  content: \"\\F246\";\n}\n.fa-object-group:before {\n  content: \"\\F247\";\n}\n.fa-object-ungroup:before {\n  content: \"\\F248\";\n}\n.fa-sticky-note:before {\n  content: \"\\F249\";\n}\n.fa-sticky-note-o:before {\n  content: \"\\F24A\";\n}\n.fa-cc-jcb:before {\n  content: \"\\F24B\";\n}\n.fa-cc-diners-club:before {\n  content: \"\\F24C\";\n}\n.fa-clone:before {\n  content: \"\\F24D\";\n}\n.fa-balance-scale:before {\n  content: \"\\F24E\";\n}\n.fa-hourglass-o:before {\n  content: \"\\F250\";\n}\n.fa-hourglass-1:before,\n.fa-hourglass-start:before {\n  content: \"\\F251\";\n}\n.fa-hourglass-2:before,\n.fa-hourglass-half:before {\n  content: \"\\F252\";\n}\n.fa-hourglass-3:before,\n.fa-hourglass-end:before {\n  content: \"\\F253\";\n}\n.fa-hourglass:before {\n  content: \"\\F254\";\n}\n.fa-hand-grab-o:before,\n.fa-hand-rock-o:before {\n  content: \"\\F255\";\n}\n.fa-hand-stop-o:before,\n.fa-hand-paper-o:before {\n  content: \"\\F256\";\n}\n.fa-hand-scissors-o:before {\n  content: \"\\F257\";\n}\n.fa-hand-lizard-o:before {\n  content: \"\\F258\";\n}\n.fa-hand-spock-o:before {\n  content: \"\\F259\";\n}\n.fa-hand-pointer-o:before {\n  content: \"\\F25A\";\n}\n.fa-hand-peace-o:before {\n  content: \"\\F25B\";\n}\n.fa-trademark:before {\n  content: \"\\F25C\";\n}\n.fa-registered:before {\n  content: \"\\F25D\";\n}\n.fa-creative-commons:before {\n  content: \"\\F25E\";\n}\n.fa-gg:before {\n  content: \"\\F260\";\n}\n.fa-gg-circle:before {\n  content: \"\\F261\";\n}\n.fa-tripadvisor:before {\n  content: \"\\F262\";\n}\n.fa-odnoklassniki:before {\n  content: \"\\F263\";\n}\n.fa-odnoklassniki-square:before {\n  content: \"\\F264\";\n}\n.fa-get-pocket:before {\n  content: \"\\F265\";\n}\n.fa-wikipedia-w:before {\n  content: \"\\F266\";\n}\n.fa-safari:before {\n  content: \"\\F267\";\n}\n.fa-chrome:before {\n  content: \"\\F268\";\n}\n.fa-firefox:before {\n  content: \"\\F269\";\n}\n.fa-opera:before {\n  content: \"\\F26A\";\n}\n.fa-internet-explorer:before {\n  content: \"\\F26B\";\n}\n.fa-tv:before,\n.fa-television:before {\n  content: \"\\F26C\";\n}\n.fa-contao:before {\n  content: \"\\F26D\";\n}\n.fa-500px:before {\n  content: \"\\F26E\";\n}\n.fa-amazon:before {\n  content: \"\\F270\";\n}\n.fa-calendar-plus-o:before {\n  content: \"\\F271\";\n}\n.fa-calendar-minus-o:before {\n  content: \"\\F272\";\n}\n.fa-calendar-times-o:before {\n  content: \"\\F273\";\n}\n.fa-calendar-check-o:before {\n  content: \"\\F274\";\n}\n.fa-industry:before {\n  content: \"\\F275\";\n}\n.fa-map-pin:before {\n  content: \"\\F276\";\n}\n.fa-map-signs:before {\n  content: \"\\F277\";\n}\n.fa-map-o:before {\n  content: \"\\F278\";\n}\n.fa-map:before {\n  content: \"\\F279\";\n}\n.fa-commenting:before {\n  content: \"\\F27A\";\n}\n.fa-commenting-o:before {\n  content: \"\\F27B\";\n}\n.fa-houzz:before {\n  content: \"\\F27C\";\n}\n.fa-vimeo:before {\n  content: \"\\F27D\";\n}\n.fa-black-tie:before {\n  content: \"\\F27E\";\n}\n.fa-fonticons:before {\n  content: \"\\F280\";\n}\n.fa-reddit-alien:before {\n  content: \"\\F281\";\n}\n.fa-edge:before {\n  content: \"\\F282\";\n}\n.fa-credit-card-alt:before {\n  content: \"\\F283\";\n}\n.fa-codiepie:before {\n  content: \"\\F284\";\n}\n.fa-modx:before {\n  content: \"\\F285\";\n}\n.fa-fort-awesome:before {\n  content: \"\\F286\";\n}\n.fa-usb:before {\n  content: \"\\F287\";\n}\n.fa-product-hunt:before {\n  content: \"\\F288\";\n}\n.fa-mixcloud:before {\n  content: \"\\F289\";\n}\n.fa-scribd:before {\n  content: \"\\F28A\";\n}\n.fa-pause-circle:before {\n  content: \"\\F28B\";\n}\n.fa-pause-circle-o:before {\n  content: \"\\F28C\";\n}\n.fa-stop-circle:before {\n  content: \"\\F28D\";\n}\n.fa-stop-circle-o:before {\n  content: \"\\F28E\";\n}\n.fa-shopping-bag:before {\n  content: \"\\F290\";\n}\n.fa-shopping-basket:before {\n  content: \"\\F291\";\n}\n.fa-hashtag:before {\n  content: \"\\F292\";\n}\n.fa-bluetooth:before {\n  content: \"\\F293\";\n}\n.fa-bluetooth-b:before {\n  content: \"\\F294\";\n}\n.fa-percent:before {\n  content: \"\\F295\";\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "32400f4e08932a94d8bfd2422702c446.eot";
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "32400f4e08932a94d8bfd2422702c446.eot";
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "db812d8a70a4e88e888744c1c9a27e89.woff2";
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "a35720c2fed2c7f043bc7e4ffb45e073.woff";
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "a3de2170e4e9df77161ea5d3f31b2668.ttf";
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "f775f9cca88e21d45bebe185b27c0e5b.svg";
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
 	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(14);
-	var ReactDOM = __webpack_require__(15);
-	var Flux = __webpack_require__(16);
-	var _ = __webpack_require__(20);
-	var $ = __webpack_require__(22);
-	var GigaStore_1 = __webpack_require__(23);
-	var Dispatcher = Flux.Dispatcher;
-	var GigaStore_2 = __webpack_require__(23);
-	var WidthMeasureCalculator_1 = __webpack_require__(46);
-	var TableBody_1 = __webpack_require__(49);
-	var ColumnLike_1 = __webpack_require__(42);
-	var TableHeader_1 = __webpack_require__(53);
+	var React = __webpack_require__(6);
+	var ReactDOM = __webpack_require__(7);
+	var _ = __webpack_require__(8);
+	var $ = __webpack_require__(10);
+	var GigaStore_1 = __webpack_require__(11);
+	var flux_1 = __webpack_require__(38);
+	var GigaStore_2 = __webpack_require__(11);
+	var TableBody_1 = __webpack_require__(40);
+	var ColumnLike_1 = __webpack_require__(13);
+	var TableHeader_1 = __webpack_require__(44);
 	/**
 	 * The root component of this React library. assembles raw data into `Row` objects which are then translated into their
 	 * virtual DOM representation
@@ -534,7 +455,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function GigaGrid(props) {
 	        var _this = this;
 	        _super.call(this, props);
-	        this.dispatcher = new Dispatcher();
+	        this.dispatcher = new flux_1.Dispatcher();
 	        this.store = new GigaStore_1.GigaStore(this.dispatcher, props);
 	        this.state = this.store.getState();
 	        // do not call setState again, this is the only place! otherwise you are violating the principles of Flux
@@ -553,34 +474,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	            columns = [ColumnLike_1.ColumnFactory.createColumnsFromDefinition(this.props.columnDefs, this.state)];
 	        var bodyStyle = {
 	            // TODO we will need to give similar consideration to height as we did for width
-	            height: this.props.bodyHeight || "100%",
-	            width: this.state.widthMeasures.bodyWidth
+	            height: this.props.bodyHeight,
 	        };
-	        return (React.createElement("div", {className: "giga-grid"}, React.createElement("div", {className: "giga-grid-table-header-wrapper", style: { width: this.state.widthMeasures.bodyWidth }}, React.createElement("table", null, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, className: "giga-grid-body-scroll-y", onScroll: function () { return _this.handleScroll(); }, style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: this.state.rasterizedRows, columns: columns[columns.length - 1], displayStart: this.state.displayStart, displayEnd: this.state.displayEnd, rowHeight: this.props.rowHeight})))));
+	        return (React.createElement("div", {className: "giga-grid"}, React.createElement("div", {className: "giga-grid-header-container"}, React.createElement("table", {className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, onScroll: function () { return _this.handleScroll(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: this.state.rasterizedRows, columns: columns[columns.length - 1], displayStart: this.state.displayStart, displayEnd: this.state.displayEnd, rowHeight: this.props.rowHeight})))));
 	    };
 	    GigaGrid.prototype.handleScroll = function () {
 	        this.dispatchDisplayBoundChange();
-	    };
-	    GigaGrid.prototype.dispatchWidthChange = function () {
-	        // if no bodyWidth was provided through props and there are no explicit width set for columns, we need to dynamically the table's bodyWidth
-	        // after it has been mounted and the parent width is known
-	        if (this.props.bodyWidth || WidthMeasureCalculator_1.validateColumnWidthProperty(this.props.columnDefs))
-	            return;
-	        var parentWidth = ReactDOM.findDOMNode(this).parentElement.offsetWidth + "px";
-	        var action = {
-	            type: GigaStore_2.GigaActionType.TABLE_WIDTH_CHANGE,
-	            width: parentWidth
-	        };
-	        this.dispatcher.dispatch(action);
 	    };
 	    /**
 	     * on component update, we use jquery to align table headers
 	     * this is the "give up" solution, implemented in 0.1.7
 	     */
 	    GigaGrid.prototype.componentDidUpdate = function () {
-	        if (this.state.lastAction && this.state.lastAction.type === GigaStore_2.GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS && this.state.displayStart != 0)
+	        this.synchTableHeaderWidthToFirstRow();
+	    };
+	    /**
+	     * yes this is still a thing!
+	     */
+	    GigaGrid.prototype.synchTableHeaderWidthToFirstRow = function () {
+	        if (this.state.lastAction && this.state.lastAction.type === GigaStore_2.GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS && this.state.displayStart != 0) {
 	            return;
+	        }
 	        var node = ReactDOM.findDOMNode(this);
+	        var $canvas = $(node).find("table.giga-grid-body-canvas");
+	        // set header row width to table body width
+	        var rootNodeWidth = $(node).innerWidth();
+	        var canvasWidth = $canvas.innerWidth();
+	        if (rootNodeWidth > canvasWidth) {
+	            var newWCanvasWidth = rootNodeWidth - getScrollBarWidth();
+	            $canvas.innerWidth(newWCanvasWidth);
+	            canvasWidth = newWCanvasWidth;
+	        }
+	        $(node).find("table.header-table").innerWidth(canvasWidth);
 	        var $tableHeaders = $(node).find("th.table-header");
 	        var $firstRowInBody = $(node).find("tbody tr.placeholder-false:first td");
 	        _.chain($tableHeaders).zip($firstRowInBody).each(function (pair) {
@@ -590,17 +515,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }).value();
 	    };
 	    GigaGrid.prototype.componentDidMount = function () {
-	        this.dispatchWidthChange();
 	        /*
-	         Trigger resize of table on window resize
-	         https://github.com/erfangc/GigaGrid/issues/20
+	         * subscribe to window.resize
 	         */
 	        if (typeof window !== "undefined")
-	            window.addEventListener('resize', this.dispatchWidthChange.bind(this));
+	            window.addEventListener('resize', this.synchTableHeaderWidthToFirstRow.bind(this));
 	        /*
 	         re-compute displayStart && displayEnd
 	         */
 	        this.dispatchDisplayBoundChange();
+	    };
+	    GigaGrid.prototype.componentWillUnmount = function () {
+	        /*
+	         * unsubscribe to window.resize
+	         */
+	        if (typeof window !== "undefined")
+	            window.removeEventListener('resize', this.synchTableHeaderWidthToFirstRow);
 	    };
 	    GigaGrid.prototype.dispatchDisplayBoundChange = function () {
 	        var $viewport = $(this.viewport);
@@ -613,446 +543,67 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        this.dispatcher.dispatch(action);
 	    };
-	    GigaGrid.prototype.componentWillUnmount = function () {
-	        /*
-	         * remove any lingering event listeners
-	         */
-	        if (typeof window !== "undefined")
-	            window.removeEventListener('resize', this.dispatchWidthChange);
-	    };
 	    GigaGrid.defaultProps = {
 	        initialSubtotalBys: [],
 	        initialSortBys: [],
 	        initialFilterBys: [],
 	        data: [],
 	        columnDefs: [],
-	        bodyHeight: "100%",
+	        bodyHeight: "500px",
 	        rowHeight: "25px"
 	    };
 	    return GigaGrid;
 	}(React.Component));
 	exports.GigaGrid = GigaGrid;
-	//# sourceMappingURL=GigaGrid.js.map
-
-/***/ },
-/* 14 */
-/***/ function(module, exports) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_14__;
-
-/***/ },
-/* 15 */
-/***/ function(module, exports) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_15__;
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/**
-	 * Copyright (c) 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
+	 * uber hax to get scrollbar width
+	 * see stackoverflow reference: http://stackoverflow.com/questions/986937/how-can-i-get-the-browsers-scrollbar-sizes
+	 * @returns {number}
 	 */
-
-	module.exports.Dispatcher = __webpack_require__(17);
-
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright (c) 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule Dispatcher
-	 * 
-	 * @preventMunge
-	 */
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	var invariant = __webpack_require__(19);
-
-	var _prefix = 'ID_';
-
-	/**
-	 * Dispatcher is used to broadcast payloads to registered callbacks. This is
-	 * different from generic pub-sub systems in two ways:
-	 *
-	 *   1) Callbacks are not subscribed to particular events. Every payload is
-	 *      dispatched to every registered callback.
-	 *   2) Callbacks can be deferred in whole or part until other callbacks have
-	 *      been executed.
-	 *
-	 * For example, consider this hypothetical flight destination form, which
-	 * selects a default city when a country is selected:
-	 *
-	 *   var flightDispatcher = new Dispatcher();
-	 *
-	 *   // Keeps track of which country is selected
-	 *   var CountryStore = {country: null};
-	 *
-	 *   // Keeps track of which city is selected
-	 *   var CityStore = {city: null};
-	 *
-	 *   // Keeps track of the base flight price of the selected city
-	 *   var FlightPriceStore = {price: null}
-	 *
-	 * When a user changes the selected city, we dispatch the payload:
-	 *
-	 *   flightDispatcher.dispatch({
-	 *     actionType: 'city-update',
-	 *     selectedCity: 'paris'
-	 *   });
-	 *
-	 * This payload is digested by `CityStore`:
-	 *
-	 *   flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'city-update') {
-	 *       CityStore.city = payload.selectedCity;
-	 *     }
-	 *   });
-	 *
-	 * When the user selects a country, we dispatch the payload:
-	 *
-	 *   flightDispatcher.dispatch({
-	 *     actionType: 'country-update',
-	 *     selectedCountry: 'australia'
-	 *   });
-	 *
-	 * This payload is digested by both stores:
-	 *
-	 *   CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'country-update') {
-	 *       CountryStore.country = payload.selectedCountry;
-	 *     }
-	 *   });
-	 *
-	 * When the callback to update `CountryStore` is registered, we save a reference
-	 * to the returned token. Using this token with `waitFor()`, we can guarantee
-	 * that `CountryStore` is updated before the callback that updates `CityStore`
-	 * needs to query its data.
-	 *
-	 *   CityStore.dispatchToken = flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'country-update') {
-	 *       // `CountryStore.country` may not be updated.
-	 *       flightDispatcher.waitFor([CountryStore.dispatchToken]);
-	 *       // `CountryStore.country` is now guaranteed to be updated.
-	 *
-	 *       // Select the default city for the new country
-	 *       CityStore.city = getDefaultCityForCountry(CountryStore.country);
-	 *     }
-	 *   });
-	 *
-	 * The usage of `waitFor()` can be chained, for example:
-	 *
-	 *   FlightPriceStore.dispatchToken =
-	 *     flightDispatcher.register(function(payload) {
-	 *       switch (payload.actionType) {
-	 *         case 'country-update':
-	 *         case 'city-update':
-	 *           flightDispatcher.waitFor([CityStore.dispatchToken]);
-	 *           FlightPriceStore.price =
-	 *             getFlightPriceStore(CountryStore.country, CityStore.city);
-	 *           break;
-	 *     }
-	 *   });
-	 *
-	 * The `country-update` payload will be guaranteed to invoke the stores'
-	 * registered callbacks in order: `CountryStore`, `CityStore`, then
-	 * `FlightPriceStore`.
-	 */
-
-	var Dispatcher = (function () {
-	  function Dispatcher() {
-	    _classCallCheck(this, Dispatcher);
-
-	    this._callbacks = {};
-	    this._isDispatching = false;
-	    this._isHandled = {};
-	    this._isPending = {};
-	    this._lastID = 1;
-	  }
-
-	  /**
-	   * Registers a callback to be invoked with every dispatched payload. Returns
-	   * a token that can be used with `waitFor()`.
-	   */
-
-	  Dispatcher.prototype.register = function register(callback) {
-	    var id = _prefix + this._lastID++;
-	    this._callbacks[id] = callback;
-	    return id;
-	  };
-
-	  /**
-	   * Removes a callback based on its token.
-	   */
-
-	  Dispatcher.prototype.unregister = function unregister(id) {
-	    !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.unregister(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
-	    delete this._callbacks[id];
-	  };
-
-	  /**
-	   * Waits for the callbacks specified to be invoked before continuing execution
-	   * of the current callback. This method should only be used by a callback in
-	   * response to a dispatched payload.
-	   */
-
-	  Dispatcher.prototype.waitFor = function waitFor(ids) {
-	    !this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Must be invoked while dispatching.') : invariant(false) : undefined;
-	    for (var ii = 0; ii < ids.length; ii++) {
-	      var id = ids[ii];
-	      if (this._isPending[id]) {
-	        !this._isHandled[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Circular dependency detected while ' + 'waiting for `%s`.', id) : invariant(false) : undefined;
-	        continue;
-	      }
-	      !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
-	      this._invokeCallback(id);
+	function getScrollBarWidth() {
+	    var scrollBarWidth = null;
+	    function computeScrollBarWidth() {
+	        var inner = document.createElement('p');
+	        inner.style.width = "100%";
+	        inner.style.height = "200px";
+	        var outer = document.createElement('div');
+	        outer.style.position = "absolute";
+	        outer.style.top = "0px";
+	        outer.style.left = "0px";
+	        outer.style.visibility = "hidden";
+	        outer.style.width = "200px";
+	        outer.style.height = "150px";
+	        outer.style.overflow = "hidden";
+	        outer.appendChild(inner);
+	        document.body.appendChild(outer);
+	        var w1 = inner.offsetWidth;
+	        outer.style.overflow = 'scroll';
+	        var w2 = inner.offsetWidth;
+	        if (w1 == w2)
+	            w2 = outer.clientWidth;
+	        document.body.removeChild(outer);
+	        return (w1 - w2);
 	    }
-	  };
-
-	  /**
-	   * Dispatches a payload to all registered callbacks.
-	   */
-
-	  Dispatcher.prototype.dispatch = function dispatch(payload) {
-	    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.') : invariant(false) : undefined;
-	    this._startDispatching(payload);
-	    try {
-	      for (var id in this._callbacks) {
-	        if (this._isPending[id]) {
-	          continue;
-	        }
-	        this._invokeCallback(id);
-	      }
-	    } finally {
-	      this._stopDispatching();
-	    }
-	  };
-
-	  /**
-	   * Is this Dispatcher currently dispatching.
-	   */
-
-	  Dispatcher.prototype.isDispatching = function isDispatching() {
-	    return this._isDispatching;
-	  };
-
-	  /**
-	   * Call the callback stored with the given id. Also do some internal
-	   * bookkeeping.
-	   *
-	   * @internal
-	   */
-
-	  Dispatcher.prototype._invokeCallback = function _invokeCallback(id) {
-	    this._isPending[id] = true;
-	    this._callbacks[id](this._pendingPayload);
-	    this._isHandled[id] = true;
-	  };
-
-	  /**
-	   * Set up bookkeeping needed when dispatching.
-	   *
-	   * @internal
-	   */
-
-	  Dispatcher.prototype._startDispatching = function _startDispatching(payload) {
-	    for (var id in this._callbacks) {
-	      this._isPending[id] = false;
-	      this._isHandled[id] = false;
-	    }
-	    this._pendingPayload = payload;
-	    this._isDispatching = true;
-	  };
-
-	  /**
-	   * Clear bookkeeping used for dispatching.
-	   *
-	   * @internal
-	   */
-
-	  Dispatcher.prototype._stopDispatching = function _stopDispatching() {
-	    delete this._pendingPayload;
-	    this._isDispatching = false;
-	  };
-
-	  return Dispatcher;
-	})();
-
-	module.exports = Dispatcher;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
-
-/***/ },
-/* 18 */
-/***/ function(module, exports) {
-
-	// shim for using process in browser
-
-	var process = module.exports = {};
-	var queue = [];
-	var draining = false;
-	var currentQueue;
-	var queueIndex = -1;
-
-	function cleanUpNextTick() {
-	    draining = false;
-	    if (currentQueue.length) {
-	        queue = currentQueue.concat(queue);
-	    } else {
-	        queueIndex = -1;
-	    }
-	    if (queue.length) {
-	        drainQueue();
-	    }
+	    if (scrollBarWidth === null)
+	        scrollBarWidth = computeScrollBarWidth();
+	    return scrollBarWidth;
 	}
 
-	function drainQueue() {
-	    if (draining) {
-	        return;
-	    }
-	    var timeout = setTimeout(cleanUpNextTick);
-	    draining = true;
-
-	    var len = queue.length;
-	    while(len) {
-	        currentQueue = queue;
-	        queue = [];
-	        while (++queueIndex < len) {
-	            if (currentQueue) {
-	                currentQueue[queueIndex].run();
-	            }
-	        }
-	        queueIndex = -1;
-	        len = queue.length;
-	    }
-	    currentQueue = null;
-	    draining = false;
-	    clearTimeout(timeout);
-	}
-
-	process.nextTick = function (fun) {
-	    var args = new Array(arguments.length - 1);
-	    if (arguments.length > 1) {
-	        for (var i = 1; i < arguments.length; i++) {
-	            args[i - 1] = arguments[i];
-	        }
-	    }
-	    queue.push(new Item(fun, args));
-	    if (queue.length === 1 && !draining) {
-	        setTimeout(drainQueue, 0);
-	    }
-	};
-
-	// v8 likes predictible objects
-	function Item(fun, array) {
-	    this.fun = fun;
-	    this.array = array;
-	}
-	Item.prototype.run = function () {
-	    this.fun.apply(null, this.array);
-	};
-	process.title = 'browser';
-	process.browser = true;
-	process.env = {};
-	process.argv = [];
-	process.version = ''; // empty string to avoid regexp issues
-	process.versions = {};
-
-	function noop() {}
-
-	process.on = noop;
-	process.addListener = noop;
-	process.once = noop;
-	process.off = noop;
-	process.removeListener = noop;
-	process.removeAllListeners = noop;
-	process.emit = noop;
-
-	process.binding = function (name) {
-	    throw new Error('process.binding is not supported');
-	};
-
-	process.cwd = function () { return '/' };
-	process.chdir = function (dir) {
-	    throw new Error('process.chdir is not supported');
-	};
-	process.umask = function() { return 0; };
-
 
 /***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
+/* 6 */
+/***/ function(module, exports) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule invariant
-	 */
-
-	"use strict";
-
-	/**
-	 * Use invariant() to assert state which your program assumes to be true.
-	 *
-	 * Provide sprintf-style format (only %s is supported) and arguments
-	 * to provide information about what broke and what you were
-	 * expecting.
-	 *
-	 * The invariant message will be stripped in production, but the invariant
-	 * will remain to ensure logic does not differ in production.
-	 */
-
-	var invariant = function (condition, format, a, b, c, d, e, f) {
-	  if (process.env.NODE_ENV !== 'production') {
-	    if (format === undefined) {
-	      throw new Error('invariant requires an error message argument');
-	    }
-	  }
-
-	  if (!condition) {
-	    var error;
-	    if (format === undefined) {
-	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
-	    } else {
-	      var args = [a, b, c, d, e, f];
-	      var argIndex = 0;
-	      error = new Error('Invariant Violation: ' + format.replace(/%s/g, function () {
-	        return args[argIndex++];
-	      }));
-	    }
-
-	    error.framesToPop = 1; // we don't care about invariant's own frame
-	    throw error;
-	  }
-	};
-
-	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
+	module.exports = __WEBPACK_EXTERNAL_MODULE_6__;
 
 /***/ },
-/* 20 */
+/* 7 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
+
+/***/ },
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -13407,10 +12958,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)(module), (function() { return this; }())))
 
 /***/ },
-/* 21 */
+/* 9 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -13426,7 +12977,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 22 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -23274,7 +22825,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 23 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	///<reference path="../../typings/tsd.d.ts"/>
@@ -23284,15 +22835,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var FluxUtils = __webpack_require__(24);
-	var _ = __webpack_require__(20);
-	var SubtotalAggregator_1 = __webpack_require__(41);
-	var TreeBuilder_1 = __webpack_require__(43);
-	var ReduceStore = FluxUtils.ReduceStore;
-	var SortFactory_1 = __webpack_require__(45);
-	var WidthMeasureCalculator_1 = __webpack_require__(46);
-	var TreeRasterizer_1 = __webpack_require__(47);
-	var ScrollCalculator_1 = __webpack_require__(48);
+	var _ = __webpack_require__(8);
+	var SubtotalAggregator_1 = __webpack_require__(12);
+	var TreeBuilder_1 = __webpack_require__(14);
+	var utils_1 = __webpack_require__(16);
+	var SortFactory_1 = __webpack_require__(35);
+	var TreeRasterizer_1 = __webpack_require__(36);
+	var ScrollCalculator_1 = __webpack_require__(37);
 	/*
 	 define the # of rows necessary to trigger progressive rendering
 	 below which all row display bound change events are ignored
@@ -23330,7 +22879,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            rasterizedRows: rasterizedRows,
 	            displayStart: 0,
 	            displayEnd: Math.min(rasterizedRows.length - 1, exports.PROGRESSIVE_RENDERING_THRESHOLD),
-	            widthMeasures: WidthMeasureCalculator_1.WidthMeasureCalculator.computeWidthMeasures(this.props.bodyWidth, this.props.columnDefs),
 	            subtotalBys: _.cloneDeep(this.props.initialSubtotalBys) || [],
 	            sortBys: _.cloneDeep(this.props.initialSortBys) || [],
 	            filterBys: _.cloneDeep(this.props.initialFilterBys) || [],
@@ -23348,31 +22896,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    };
 	    ;
-	    GigaStore.prototype.columnMaskSubReducer = function (state, subtotalBy) {
-	        // TODO in the future, if we decide to maintain this library, we should think about how this should work in the presence of column grouping
-	        // we now mask the column and recompute column size
-	        var columnDefMask = subtotalBy ? (state.columnDefMask || []) : [];
-	        columnDefMask.push(subtotalBy);
-	        var maskedColumnDefs = this.props.columnDefs.filter(function (cd) { return columnDefMask.map(function (m) { return m.colTag; }).indexOf(cd.colTag) === -1; });
-	        // re-compute proportion, this might not work for all width configurations
-	        var widthMeasures = WidthMeasureCalculator_1.WidthMeasureCalculator.computeWidthMeasures(state.widthMeasures.bodyWidth, maskedColumnDefs);
-	        return {
-	            widthMeasures: widthMeasures,
-	            columnDefMask: columnDefMask
-	        };
-	    };
-	    // TODO we should have a way to handle componentWillReceiveProps
 	    GigaStore.prototype.reduce = function (state, action) {
 	        var newState;
 	        switch (action.type) {
 	            case GigaActionType.INITIALIZE:
 	                newState = this.initialize();
-	                break;
-	            /*
-	             * Width Change Action
-	             */
-	            case GigaActionType.TABLE_WIDTH_CHANGE:
-	                newState = this.handleWidthChange(state, action);
 	                break;
 	            case GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS:
 	                newState = GigaStore.handleChangeRowDisplayBounds(state, action);
@@ -23474,12 +23002,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        else
 	            return state;
 	    };
-	    GigaStore.prototype.handleWidthChange = function (state, action) {
-	        var widthMeasures = WidthMeasureCalculator_1.WidthMeasureCalculator.computeWidthMeasures(action.width, this.props.columnDefs);
-	        var newState = _.clone(state);
-	        newState.widthMeasures = widthMeasures;
-	        return newState;
-	    };
 	    GigaStore.handleChangeRowDisplayBounds = function (state, action) {
 	        var _a = ScrollCalculator_1.ScrollCalculator.computeDisplayBoundaries(action.rowHeight, action.viewport, action.canvas), displayStart = _a.displayStart, displayEnd = _a.displayEnd;
 	        var newState = _.clone(state);
@@ -23504,12 +23026,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _.clone(state);
 	    };
 	    GigaStore.prototype.handleSubtotal = function (state, action) {
-	        // TODO this handler is very please fix, it not only randomly mutate state but introduce a dependency on a new state columnDefMask
-	        if (!this.props.columnGroups && this.props.hideColumnOnSubtotal) {
-	            var _a = this.columnMaskSubReducer(state, action.subtotalBy), widthMeasures = _a.widthMeasures, columnDefMask = _a.columnDefMask;
-	            state.widthMeasures = widthMeasures;
-	            state.columnDefMask = columnDefMask;
-	        }
 	        state.subtotalBys.push(action.subtotalBy);
 	        var newTree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, state.subtotalBys);
 	        TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(newTree.getRoot(), false);
@@ -23519,12 +23035,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return newState;
 	    };
 	    GigaStore.prototype.handleClearSubtotal = function (state) {
-	        if (!this.props.columnGroups && this.props.hideColumnOnSubtotal) {
-	            // TODO in the future, if we decide to maintain this library, we should think about how this should work in the presence of column grouping
-	            var _a = this.columnMaskSubReducer(state, null), widthMeasures = _a.widthMeasures, columnDefMask = _a.columnDefMask;
-	            state.widthMeasures = widthMeasures;
-	            state.columnDefMask = columnDefMask;
-	        }
 	        var newTree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, []);
 	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
 	        var newState = _.clone(state);
@@ -23559,7 +23069,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return newState;
 	    };
 	    return GigaStore;
-	}(ReduceStore));
+	}(utils_1.ReduceStore));
 	exports.GigaStore = GigaStore;
 	/*
 	 Public Actions API
@@ -23584,10 +23094,477 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GigaActionType[GigaActionType["CHANGE_ROW_DISPLAY_BOUNDS"] = 16] = "CHANGE_ROW_DISPLAY_BOUNDS";
 	})(exports.GigaActionType || (exports.GigaActionType = {}));
 	var GigaActionType = exports.GigaActionType;
-	//# sourceMappingURL=GigaStore.js.map
+
 
 /***/ },
-/* 24 */
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var ColumnLike_1 = __webpack_require__(13);
+	var _ = __webpack_require__(8);
+	function straightSum(detailRows, columnDef) {
+	    return _.sum(detailRows.map(function (r) { return r.getByColTag(columnDef.colTag); }));
+	}
+	function weightedAverage(detailRows, columnDef) {
+	    var denom = 0.0;
+	    var sumproduct = 0.0;
+	    for (var i = 0; i < detailRows.length; i++) {
+	        denom = denom + detailRows[i].getByColTag(columnDef.colTag);
+	        sumproduct = sumproduct + detailRows[i].getByColTag(columnDef.colTag) * detailRows[i].getByColTag(columnDef.weightBy);
+	    }
+	    if (denom !== 0.0)
+	        return sumproduct / denom;
+	}
+	function average(detailRows, columnDef) {
+	    if (detailRows.length === 0)
+	        return 0;
+	    return straightSum(detailRows, columnDef) / detailRows.length;
+	}
+	function count(detailRows, columnDefs) {
+	    return detailRows.length;
+	}
+	function countOrDistinct(detailRows, columnDef) {
+	    var distinctCount = countDistinct(detailRows, columnDef);
+	    var c = count(detailRows, columnDef);
+	    if (distinctCount !== 1)
+	        return distinctCount + "/" + c;
+	    else
+	        return detailRows[0].getByColTag(columnDef.colTag);
+	}
+	function countDistinct(detailRows, columnDef) {
+	    return _.chain(detailRows).map(function (r) { return r.getByColTag(columnDef.colTag); }).sortBy().uniq(true).value().length;
+	}
+	function range(detailRows, columnDef) {
+	    var val = detailRows.map(function (r) { return r.getByColTag(columnDef.colTag); });
+	    return _.min(val) + " - " + _.max(val);
+	}
+	function format(value, fmtInstruction) {
+	    if (!fmtInstruction)
+	        return value;
+	    function addCommas(nStr) {
+	        nStr += '';
+	        var x = nStr.split('.');
+	        var x1 = x[0];
+	        var x2 = x.length > 1 ? '.' + x[1] : '';
+	        var rgx = /(\d+)(\d{3})/;
+	        while (rgx.test(x1)) {
+	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	        }
+	        return x1 + x2;
+	    }
+	    var result = value;
+	    if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result))
+	        result *= value;
+	    if (typeof fmtInstruction.roundTo !== "undefined" && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
+	        result = parseFloat(result.toFixed(fmtInstruction.roundTo));
+	    if (fmtInstruction.separator && !isNaN(result))
+	        result = addCommas(result);
+	    return result;
+	}
+	/**
+	 * these should return Tree(s) as oppose to being void ... I want to use Immutable.js to simplify things where possible
+	 */
+	var SubtotalAggregator = (function () {
+	    function SubtotalAggregator() {
+	    }
+	    SubtotalAggregator.aggregateTree = function (tree, columnDefs) {
+	        SubtotalAggregator.aggregateSubtotalRow(tree.getRoot(), columnDefs);
+	        SubtotalAggregator.aggregateChildren(tree.getRoot(), columnDefs);
+	    };
+	    /**
+	     * depth first recursive implementation of the tree traversal
+	     * @param subtotalRow
+	     * @param columnDefs
+	     */
+	    SubtotalAggregator.aggregateChildren = function (subtotalRow, columnDefs) {
+	        subtotalRow.getChildren().forEach(function (childRow) {
+	            SubtotalAggregator.aggregateSubtotalRow(childRow, columnDefs);
+	            if (childRow.getChildren().length > 0)
+	                SubtotalAggregator.aggregateChildren(childRow, columnDefs);
+	        });
+	    };
+	    SubtotalAggregator.aggregate = function (detailRows, columnDefs) {
+	        var aggregated = {};
+	        columnDefs.forEach(function (columnDef) {
+	            var value;
+	            switch (columnDef.aggregationMethod) {
+	                case ColumnLike_1.AggregationMethod.AVERAGE:
+	                    value = average(detailRows, columnDef);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.COUNT:
+	                    value = count(detailRows, columnDef);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.COUNT_DISTINCT:
+	                    value = countDistinct(detailRows, columnDef);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.COUNT_OR_DISTINCT:
+	                    value = countOrDistinct(detailRows, columnDef);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.RANGE:
+	                    value = range(detailRows, columnDef);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.SUM:
+	                    value = straightSum(detailRows, columnDef);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE:
+	                    value = weightedAverage(detailRows, columnDef);
+	                    break;
+	                default:
+	                    value = "";
+	                    break;
+	            }
+	            aggregated[columnDef.colTag] = format(value, columnDef.formatInstruction);
+	        });
+	        return aggregated;
+	    };
+	    SubtotalAggregator.aggregateSubtotalRow = function (subtotalRow, columnDefs) {
+	        subtotalRow.setData(SubtotalAggregator.aggregate(subtotalRow.detailRows, columnDefs));
+	    };
+	    return SubtotalAggregator;
+	}());
+	exports.SubtotalAggregator = SubtotalAggregator;
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var _ = __webpack_require__(8);
+	(function (AggregationMethod) {
+	    AggregationMethod[AggregationMethod["SUM"] = 0] = "SUM";
+	    AggregationMethod[AggregationMethod["WEIGHTED_AVERAGE"] = 1] = "WEIGHTED_AVERAGE";
+	    AggregationMethod[AggregationMethod["AVERAGE"] = 2] = "AVERAGE";
+	    AggregationMethod[AggregationMethod["RANGE"] = 3] = "RANGE";
+	    AggregationMethod[AggregationMethod["COUNT"] = 4] = "COUNT";
+	    AggregationMethod[AggregationMethod["COUNT_DISTINCT"] = 5] = "COUNT_DISTINCT";
+	    AggregationMethod[AggregationMethod["COUNT_OR_DISTINCT"] = 6] = "COUNT_OR_DISTINCT";
+	    AggregationMethod[AggregationMethod["NONE"] = 7] = "NONE";
+	})(exports.AggregationMethod || (exports.AggregationMethod = {}));
+	var AggregationMethod = exports.AggregationMethod;
+	(function (ColumnFormat) {
+	    ColumnFormat[ColumnFormat["NUMBER"] = 0] = "NUMBER";
+	    ColumnFormat[ColumnFormat["STRING"] = 1] = "STRING";
+	    ColumnFormat[ColumnFormat["CURRENCY"] = 2] = "CURRENCY";
+	    ColumnFormat[ColumnFormat["DATE"] = 3] = "DATE";
+	})(exports.ColumnFormat || (exports.ColumnFormat = {}));
+	var ColumnFormat = exports.ColumnFormat;
+	(function (SortDirection) {
+	    SortDirection[SortDirection["ASC"] = 0] = "ASC";
+	    SortDirection[SortDirection["DESC"] = 1] = "DESC";
+	})(exports.SortDirection || (exports.SortDirection = {}));
+	var SortDirection = exports.SortDirection;
+	var ColumnFactory = (function () {
+	    function ColumnFactory() {
+	    }
+	    /**
+	     * create an array of Column from definitions
+	     * @param columnDefs
+	     * @param state
+	     * @returns {Column[]}
+	     */
+	    ColumnFactory.createColumnsFromDefinition = function (columnDefs, state) {
+	        var maskedTags = (state.columnDefMask || []).map(function (m) { return m.colTag; });
+	        return columnDefs.filter(function (cd) { return maskedTags.indexOf(cd.colTag) === -1; }).map(function (cd) { return ColumnFactory.createColumnFromDefinition(cd, state); });
+	    };
+	    /**
+	     * creates a single Column object from a ColumnDef (definition)
+	     * Column objects contain more rendering hints than ColumnDef objects which are passed in by the user
+	     * @param cd
+	     * @param state
+	     * @returns {Column}
+	     */
+	    ColumnFactory.createColumnFromDefinition = function (cd, state) {
+	        var column = {
+	            colTag: cd.colTag,
+	            title: cd.title,
+	            aggregationMethod: cd.aggregationMethod,
+	            format: cd.format,
+	            cellTemplateCreator: cd.cellTemplateCreator
+	        };
+	        // determine if there is an existing SortBy for this column
+	        var sortBy = _.find(state.sortBys, function (s) { return s.colTag === cd.colTag; });
+	        if (sortBy) {
+	            column.sortDirection = sortBy.direction;
+	            column.customSortFn = sortBy.customSortFn;
+	        }
+	        return column;
+	    };
+	    /**
+	     * Create a 2-dimensional structure of Column(s), this allow us to group column headers
+	     * @param columnGroupDefs
+	     * @param columnDefs
+	     * @param state
+	     * @returns {Column[][]}
+	     */
+	    ColumnFactory.createColumnsFromGroupDefinition = function (columnGroupDefs, columnDefs, state) {
+	        var columns = ColumnFactory.createColumnsFromDefinition(columnDefs, state);
+	        var columnMap = _.chain(columns).map(function (column) { return column.colTag; }).object(columns).value();
+	        var nestedColumns = [[], []];
+	        _.forEach(columnGroupDefs, function (groupDef, i) {
+	            nestedColumns[0].push({
+	                colTag: "column_group_" + (i + 1),
+	                title: groupDef.title,
+	                colSpan: groupDef.columns.length
+	            });
+	            _.forEach(groupDef.columns, function (colTag) { return nestedColumns[1].push(columnMap[colTag]); });
+	        });
+	        return nestedColumns;
+	    };
+	    return ColumnFactory;
+	}());
+	exports.ColumnFactory = ColumnFactory;
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var Row_1 = __webpack_require__(15);
+	var Row_2 = __webpack_require__(15);
+	var TreeBuilder = (function () {
+	    function TreeBuilder() {
+	    }
+	    TreeBuilder.buildTree = function (data, subtotalBys, grandTotal) {
+	        var _this = this;
+	        if (subtotalBys === void 0) { subtotalBys = []; }
+	        /*
+	         * the way we create a Tree is as follows
+	         * since each detailRow in data can only belong to ONE SubtotalRow and each SubtotalRow can have only 1 parent
+	         * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
+	         * parent SubtotalRow (in other words, find the detailRow's "bucket") and append said detailRow to the parent
+	         */
+	        grandTotal = grandTotal || new Row_1.SubtotalRow("Grand Total");
+	        grandTotal.setSectorPath([]);
+	        data.forEach(function (datum) { return _this.bucketDetailRow(subtotalBys, new Row_2.DetailRow(datum), grandTotal); });
+	        return new Tree(grandTotal);
+	    };
+	    TreeBuilder.bucketDetailRow = function (subtotalBys, detailedRow, grandTotal) {
+	        /*
+	         * to traverse the grandTotal and find the detailRow's immediate parent SubtotalRow
+	         * we store the detailRow's sector names in an ordered array
+	         */
+	        var subtotalTitles = []; // temporary array of strings to keep track subtotal titles names in sequence
+	        grandTotal.detailRows.push(detailedRow);
+	        subtotalBys.forEach(function (subtotalBy) {
+	            // the subtotal title
+	            var bucketTitle = TreeBuilder.resolveSubtotalTitle(subtotalBy, detailedRow);
+	            if (bucketTitle !== undefined) {
+	                subtotalTitles.push(bucketTitle);
+	                var subtotalRow = TreeBuilder.traverseOrCreate(grandTotal, subtotalTitles);
+	                subtotalRow.detailRows.push(detailedRow);
+	            }
+	        });
+	        detailedRow.setSectorPath(subtotalTitles);
+	    };
+	    ;
+	    // TODO add tests
+	    /**
+	     * recurisvely collapse the given node
+	     * @param node
+	     * @param shouldCollapse
+	     */
+	    TreeBuilder.recursivelyToggleChildrenCollapse = function (node, shouldCollapse) {
+	        if (shouldCollapse === void 0) { shouldCollapse = true; }
+	        /**
+	         *
+	         * @param node
+	         * @param shouldCollapse
+	         * @private
+	         */
+	        function _toggleCollapse(node, shouldCollapse) {
+	            node.toggleCollapse(shouldCollapse);
+	            TreeBuilder.recursivelyToggleChildrenCollapse(node, shouldCollapse);
+	        }
+	        node.getChildren().forEach(function (child) {
+	            if (shouldCollapse) {
+	                _toggleCollapse(child, shouldCollapse);
+	            }
+	            else {
+	                if (child.getChildren().length || child.sectorPath().length === 1) {
+	                    _toggleCollapse(child, shouldCollapse);
+	                }
+	            }
+	        });
+	    };
+	    /**
+	     *
+	     * @param grandTotal
+	     * @param subtotalTitles
+	     * @returns {SubtotalRow}
+	     */
+	    TreeBuilder.traverseOrCreate = function (grandTotal, subtotalTitles) {
+	        // traverse to the correct SubtotalRow
+	        var currentRow = grandTotal;
+	        for (var k = 0; k < subtotalTitles.length; k++) {
+	            // update the current subtotal row
+	            if (currentRow.hasChildWithTitle(subtotalTitles[k]))
+	                currentRow = currentRow.getChildByTitle(subtotalTitles[k]);
+	            else {
+	                // create a new sector if it is not already available
+	                var newRow = new Row_1.SubtotalRow(subtotalTitles[k]);
+	                newRow.toggleCollapse(true);
+	                // set the sector path for the new SubtotalRow we just created the length of which determines its depth
+	                newRow.setSectorPath(subtotalTitles.slice(0, k + 1));
+	                currentRow.addChild(newRow);
+	                currentRow = newRow;
+	            }
+	        }
+	        return currentRow;
+	    };
+	    ;
+	    TreeBuilder.resolveSubtotalTitle = function (subtotalBy, detailedRow) {
+	        if (subtotalBy.groupBy)
+	            return subtotalBy.groupBy(detailedRow);
+	        else
+	            return subtotalBy.title ? subtotalBy.title + ": " + detailedRow.getByColTag(subtotalBy.colTag) : detailedRow.getByColTag(subtotalBy.colTag);
+	    };
+	    return TreeBuilder;
+	}());
+	exports.TreeBuilder = TreeBuilder;
+	var Tree = (function () {
+	    function Tree(root) {
+	        this.root = root;
+	    }
+	    Tree.prototype.getRoot = function () {
+	        return this.root;
+	    };
+	    return Tree;
+	}());
+	exports.Tree = Tree;
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var GenericRow = (function () {
+	    function GenericRow(data) {
+	        this._isSelected = false;
+	        this._isHidden = false;
+	        this.title = null;
+	        this._data = data;
+	    }
+	    GenericRow.prototype.get = function (columnDef) {
+	        return this._data[columnDef.colTag];
+	    };
+	    GenericRow.prototype.getByColTag = function (colTag) {
+	        return this._data[colTag];
+	    };
+	    GenericRow.prototype.toggleSelect = function (select) {
+	        if (typeof select !== "undefined")
+	            this._isSelected = select;
+	        else
+	            this._isSelected = !this._isSelected;
+	    };
+	    GenericRow.prototype.isSelected = function () {
+	        return this._isSelected;
+	    };
+	    GenericRow.prototype.isHidden = function () {
+	        return this._isHidden;
+	    };
+	    GenericRow.prototype.toggleHide = function (hide) {
+	        if (typeof hide !== "undefined")
+	            this._isHidden = hide;
+	        else
+	            this._isHidden = !this._isHidden;
+	    };
+	    GenericRow.prototype.sectorPath = function () {
+	        return this._sectorPath;
+	    };
+	    GenericRow.prototype.setSectorPath = function (sectorPath) {
+	        this._sectorPath = sectorPath;
+	    };
+	    GenericRow.prototype.data = function () {
+	        return this._data;
+	    };
+	    GenericRow.prototype.setData = function (data) {
+	        this._data = data;
+	    };
+	    return GenericRow;
+	}());
+	var DetailRow = (function (_super) {
+	    __extends(DetailRow, _super);
+	    function DetailRow(data) {
+	        _super.call(this, data);
+	    }
+	    DetailRow.prototype.isDetail = function () {
+	        return true;
+	    };
+	    return DetailRow;
+	}(GenericRow));
+	exports.DetailRow = DetailRow;
+	var SubtotalRow = (function (_super) {
+	    __extends(SubtotalRow, _super);
+	    function SubtotalRow(title) {
+	        _super.call(this, {});
+	        this.children = [];
+	        this.childrenByTitle = {};
+	        this._isCollapsed = false;
+	        this.detailRows = [];
+	        this.title = title;
+	    }
+	    SubtotalRow.prototype.toggleCollapse = function (state) {
+	        if (state != undefined)
+	            this._isCollapsed = state;
+	        else
+	            this._isCollapsed = !this._isCollapsed;
+	    };
+	    SubtotalRow.prototype.isCollapsed = function () {
+	        return this._isCollapsed;
+	    };
+	    SubtotalRow.prototype.isDetail = function () {
+	        return false;
+	    };
+	    SubtotalRow.prototype.findIndex = function (child) {
+	        for (var i = 0; i < this.children.length; i++)
+	            if (this.children[i].title === child.title)
+	                return i;
+	        return -1;
+	    };
+	    SubtotalRow.prototype.addChild = function (child) {
+	        // if already exist, pop it from the children array
+	        this.removeChild(child);
+	        this.children.push(child);
+	        this.childrenByTitle[child.title] = child;
+	    };
+	    SubtotalRow.prototype.removeChild = function (child) {
+	        if (this.childrenByTitle[child.title] != undefined) {
+	            var idx = this.findIndex(child);
+	            this.children.splice(idx, 1);
+	            this.childrenByTitle[child.title] = undefined;
+	        }
+	    };
+	    SubtotalRow.prototype.getChildByTitle = function (title) {
+	        return this.childrenByTitle[title];
+	    };
+	    SubtotalRow.prototype.getNumChildren = function () {
+	        return this.children.length;
+	    };
+	    SubtotalRow.prototype.getChildren = function () {
+	        return this.children;
+	    };
+	    SubtotalRow.prototype.getChildAtIndex = function (idx) {
+	        return this.children[idx];
+	    };
+	    SubtotalRow.prototype.hasChildWithTitle = function (title) {
+	        return this.getChildByTitle(title) != undefined;
+	    };
+	    return SubtotalRow;
+	}(GenericRow));
+	exports.SubtotalRow = SubtotalRow;
+
+
+/***/ },
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -23599,15 +23576,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 
-	module.exports.Container = __webpack_require__(25);
-	module.exports.MapStore = __webpack_require__(28);
-	module.exports.Mixin = __webpack_require__(40);
-	module.exports.ReduceStore = __webpack_require__(29);
-	module.exports.Store = __webpack_require__(30);
+	module.exports.Container = __webpack_require__(17);
+	module.exports.MapStore = __webpack_require__(22);
+	module.exports.Mixin = __webpack_require__(34);
+	module.exports.ReduceStore = __webpack_require__(23);
+	module.exports.Store = __webpack_require__(24);
 
 
 /***/ },
-/* 25 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -23629,10 +23606,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var FluxStoreGroup = __webpack_require__(26);
+	var FluxStoreGroup = __webpack_require__(19);
 
-	var invariant = __webpack_require__(19);
-	var shallowEqual = __webpack_require__(27);
+	var invariant = __webpack_require__(20);
+	var shallowEqual = __webpack_require__(21);
 
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -23790,7 +23767,104 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 26 */
+/* 18 */
+/***/ function(module, exports) {
+
+	// shim for using process in browser
+
+	var process = module.exports = {};
+	var queue = [];
+	var draining = false;
+	var currentQueue;
+	var queueIndex = -1;
+
+	function cleanUpNextTick() {
+	    draining = false;
+	    if (currentQueue.length) {
+	        queue = currentQueue.concat(queue);
+	    } else {
+	        queueIndex = -1;
+	    }
+	    if (queue.length) {
+	        drainQueue();
+	    }
+	}
+
+	function drainQueue() {
+	    if (draining) {
+	        return;
+	    }
+	    var timeout = setTimeout(cleanUpNextTick);
+	    draining = true;
+
+	    var len = queue.length;
+	    while(len) {
+	        currentQueue = queue;
+	        queue = [];
+	        while (++queueIndex < len) {
+	            if (currentQueue) {
+	                currentQueue[queueIndex].run();
+	            }
+	        }
+	        queueIndex = -1;
+	        len = queue.length;
+	    }
+	    currentQueue = null;
+	    draining = false;
+	    clearTimeout(timeout);
+	}
+
+	process.nextTick = function (fun) {
+	    var args = new Array(arguments.length - 1);
+	    if (arguments.length > 1) {
+	        for (var i = 1; i < arguments.length; i++) {
+	            args[i - 1] = arguments[i];
+	        }
+	    }
+	    queue.push(new Item(fun, args));
+	    if (queue.length === 1 && !draining) {
+	        setTimeout(drainQueue, 0);
+	    }
+	};
+
+	// v8 likes predictible objects
+	function Item(fun, array) {
+	    this.fun = fun;
+	    this.array = array;
+	}
+	Item.prototype.run = function () {
+	    this.fun.apply(null, this.array);
+	};
+	process.title = 'browser';
+	process.browser = true;
+	process.env = {};
+	process.argv = [];
+	process.version = ''; // empty string to avoid regexp issues
+	process.versions = {};
+
+	function noop() {}
+
+	process.on = noop;
+	process.addListener = noop;
+	process.once = noop;
+	process.off = noop;
+	process.removeListener = noop;
+	process.removeAllListeners = noop;
+	process.emit = noop;
+
+	process.binding = function (name) {
+	    throw new Error('process.binding is not supported');
+	};
+
+	process.cwd = function () { return '/' };
+	process.chdir = function (dir) {
+	    throw new Error('process.chdir is not supported');
+	};
+	process.umask = function() { return 0; };
+
+
+/***/ },
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -23809,7 +23883,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var invariant = __webpack_require__(19);
+	var invariant = __webpack_require__(20);
 
 	/**
 	 * FluxStoreGroup allows you to execute a callback on every dispatch after
@@ -23871,7 +23945,62 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 27 */
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule invariant
+	 */
+
+	"use strict";
+
+	/**
+	 * Use invariant() to assert state which your program assumes to be true.
+	 *
+	 * Provide sprintf-style format (only %s is supported) and arguments
+	 * to provide information about what broke and what you were
+	 * expecting.
+	 *
+	 * The invariant message will be stripped in production, but the invariant
+	 * will remain to ensure logic does not differ in production.
+	 */
+
+	var invariant = function (condition, format, a, b, c, d, e, f) {
+	  if (process.env.NODE_ENV !== 'production') {
+	    if (format === undefined) {
+	      throw new Error('invariant requires an error message argument');
+	    }
+	  }
+
+	  if (!condition) {
+	    var error;
+	    if (format === undefined) {
+	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+	    } else {
+	      var args = [a, b, c, d, e, f];
+	      var argIndex = 0;
+	      error = new Error('Invariant Violation: ' + format.replace(/%s/g, function () {
+	        return args[argIndex++];
+	      }));
+	    }
+
+	    error.framesToPop = 1; // we don't care about invariant's own frame
+	    throw error;
+	  }
+	};
+
+	module.exports = invariant;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
+
+/***/ },
+/* 21 */
 /***/ function(module, exports) {
 
 	/**
@@ -23926,7 +24055,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = shallowEqual;
 
 /***/ },
-/* 28 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -23947,10 +24076,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var FluxReduceStore = __webpack_require__(29);
-	var Immutable = __webpack_require__(39);
+	var FluxReduceStore = __webpack_require__(23);
+	var Immutable = __webpack_require__(33);
 
-	var invariant = __webpack_require__(19);
+	var invariant = __webpack_require__(20);
 
 	/**
 	 * This is a simple store. It allows caching key value pairs. An implementation
@@ -24076,7 +24205,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 29 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24097,10 +24226,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var FluxStore = __webpack_require__(30);
+	var FluxStore = __webpack_require__(24);
 
-	var abstractMethod = __webpack_require__(38);
-	var invariant = __webpack_require__(19);
+	var abstractMethod = __webpack_require__(32);
+	var invariant = __webpack_require__(20);
 
 	var FluxReduceStore = (function (_FluxStore) {
 	  _inherits(FluxReduceStore, _FluxStore);
@@ -24183,7 +24312,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 30 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24202,11 +24331,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _require = __webpack_require__(31);
+	var _require = __webpack_require__(25);
 
 	var EventEmitter = _require.EventEmitter;
 
-	var invariant = __webpack_require__(19);
+	var invariant = __webpack_require__(20);
 
 	/**
 	 * This class should be extended by the stores in your application, like so:
@@ -24366,7 +24495,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 31 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24379,14 +24508,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(32)
+	  EventEmitter: __webpack_require__(26)
 	};
 
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 32 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24405,11 +24534,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var EmitterSubscription = __webpack_require__(33);
-	var EventSubscriptionVendor = __webpack_require__(35);
+	var EmitterSubscription = __webpack_require__(27);
+	var EventSubscriptionVendor = __webpack_require__(29);
 
-	var emptyFunction = __webpack_require__(37);
-	var invariant = __webpack_require__(36);
+	var emptyFunction = __webpack_require__(31);
+	var invariant = __webpack_require__(30);
 
 	/**
 	 * @class BaseEventEmitter
@@ -24583,7 +24712,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 33 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24604,7 +24733,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var EventSubscription = __webpack_require__(34);
+	var EventSubscription = __webpack_require__(28);
 
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -24636,7 +24765,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 34 */
+/* 28 */
 /***/ function(module, exports) {
 
 	/**
@@ -24690,7 +24819,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EventSubscription;
 
 /***/ },
-/* 35 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24709,7 +24838,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var invariant = __webpack_require__(36);
+	var invariant = __webpack_require__(30);
 
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -24799,7 +24928,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 36 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24855,7 +24984,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 37 */
+/* 31 */
 /***/ function(module, exports) {
 
 	/**
@@ -24898,7 +25027,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = emptyFunction;
 
 /***/ },
-/* 38 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24915,7 +25044,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var invariant = __webpack_require__(19);
+	var invariant = __webpack_require__(20);
 
 	function abstractMethod(className, methodName) {
 	   true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Subclasses of %s must override %s() with their own implementation.', className, methodName) : invariant(false) : undefined;
@@ -24925,7 +25054,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 39 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -29912,7 +30041,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}));
 
 /***/ },
-/* 40 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -29929,9 +30058,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var FluxStoreGroup = __webpack_require__(26);
+	var FluxStoreGroup = __webpack_require__(19);
 
-	var invariant = __webpack_require__(19);
+	var invariant = __webpack_require__(20);
 
 	/**
 	 * `FluxContainer` should be preferred over this mixin, but it requires using
@@ -30035,479 +30164,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ },
-/* 41 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var ColumnLike_1 = __webpack_require__(42);
-	var _ = __webpack_require__(20);
-	function straightSum(detailRows, columnDef) {
-	    return _.sum(detailRows.map(function (r) { return r.getByColTag(columnDef.colTag); }));
-	}
-	function weightedAverage(detailRows, columnDef) {
-	    var denom = 0.0;
-	    var sumproduct = 0.0;
-	    for (var i = 0; i < detailRows.length; i++) {
-	        denom = denom + detailRows[i].getByColTag(columnDef.colTag);
-	        sumproduct = sumproduct + detailRows[i].getByColTag(columnDef.colTag) * detailRows[i].getByColTag(columnDef.weightBy);
-	    }
-	    if (denom !== 0.0)
-	        return sumproduct / denom;
-	}
-	function average(detailRows, columnDef) {
-	    if (detailRows.length === 0)
-	        return 0;
-	    return straightSum(detailRows, columnDef) / detailRows.length;
-	}
-	function count(detailRows, columnDefs) {
-	    return detailRows.length;
-	}
-	function countOrDistinct(detailRows, columnDef) {
-	    var distinctCount = countDistinct(detailRows, columnDef);
-	    var c = count(detailRows, columnDef);
-	    if (distinctCount !== 1)
-	        return distinctCount + "/" + c;
-	    else
-	        return detailRows[0].getByColTag(columnDef.colTag);
-	}
-	function countDistinct(detailRows, columnDef) {
-	    return _.chain(detailRows).map(function (r) { return r.getByColTag(columnDef.colTag); }).sortBy().uniq(true).value().length;
-	}
-	function range(detailRows, columnDef) {
-	    var val = detailRows.map(function (r) { return r.getByColTag(columnDef.colTag); });
-	    return _.min(val) + " - " + _.max(val);
-	}
-	function format(value, fmtInstruction) {
-	    if (!fmtInstruction)
-	        return value;
-	    function addCommas(nStr) {
-	        nStr += '';
-	        var x = nStr.split('.');
-	        var x1 = x[0];
-	        var x2 = x.length > 1 ? '.' + x[1] : '';
-	        var rgx = /(\d+)(\d{3})/;
-	        while (rgx.test(x1)) {
-	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
-	        }
-	        return x1 + x2;
-	    }
-	    var result = value;
-	    if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result))
-	        result *= value;
-	    if (typeof fmtInstruction.roundTo !== "undefined" && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
-	        result = parseFloat(result.toFixed(fmtInstruction.roundTo));
-	    if (fmtInstruction.separator && !isNaN(result))
-	        result = addCommas(result);
-	    return result;
-	}
-	/**
-	 * these should return Tree(s) as oppose to being void ... I want to use Immutable.js to simplify things where possible
-	 */
-	var SubtotalAggregator = (function () {
-	    function SubtotalAggregator() {
-	    }
-	    SubtotalAggregator.aggregateTree = function (tree, columnDefs) {
-	        SubtotalAggregator.aggregateSubtotalRow(tree.getRoot(), columnDefs);
-	        SubtotalAggregator.aggregateChildren(tree.getRoot(), columnDefs);
-	    };
-	    /**
-	     * depth first recursive implementation of the tree traversal
-	     * @param subtotalRow
-	     * @param columnDefs
-	     */
-	    SubtotalAggregator.aggregateChildren = function (subtotalRow, columnDefs) {
-	        subtotalRow.getChildren().forEach(function (childRow) {
-	            SubtotalAggregator.aggregateSubtotalRow(childRow, columnDefs);
-	            if (childRow.getChildren().length > 0)
-	                SubtotalAggregator.aggregateChildren(childRow, columnDefs);
-	        });
-	    };
-	    SubtotalAggregator.aggregate = function (detailRows, columnDefs) {
-	        var aggregated = {};
-	        columnDefs.forEach(function (columnDef) {
-	            var value;
-	            switch (columnDef.aggregationMethod) {
-	                case ColumnLike_1.AggregationMethod.AVERAGE:
-	                    value = average(detailRows, columnDef);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.COUNT:
-	                    value = count(detailRows, columnDef);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.COUNT_DISTINCT:
-	                    value = countDistinct(detailRows, columnDef);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.COUNT_OR_DISTINCT:
-	                    value = countOrDistinct(detailRows, columnDef);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.RANGE:
-	                    value = range(detailRows, columnDef);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.SUM:
-	                    value = straightSum(detailRows, columnDef);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE:
-	                    value = weightedAverage(detailRows, columnDef);
-	                    break;
-	                default:
-	                    value = "";
-	                    break;
-	            }
-	            aggregated[columnDef.colTag] = format(value, columnDef.formatInstruction);
-	        });
-	        return aggregated;
-	    };
-	    SubtotalAggregator.aggregateSubtotalRow = function (subtotalRow, columnDefs) {
-	        subtotalRow.setData(SubtotalAggregator.aggregate(subtotalRow.detailRows, columnDefs));
-	    };
-	    return SubtotalAggregator;
-	}());
-	exports.SubtotalAggregator = SubtotalAggregator;
-	//# sourceMappingURL=SubtotalAggregator.js.map
-
-/***/ },
-/* 42 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var _ = __webpack_require__(20);
-	(function (AggregationMethod) {
-	    AggregationMethod[AggregationMethod["SUM"] = 0] = "SUM";
-	    AggregationMethod[AggregationMethod["WEIGHTED_AVERAGE"] = 1] = "WEIGHTED_AVERAGE";
-	    AggregationMethod[AggregationMethod["AVERAGE"] = 2] = "AVERAGE";
-	    AggregationMethod[AggregationMethod["RANGE"] = 3] = "RANGE";
-	    AggregationMethod[AggregationMethod["COUNT"] = 4] = "COUNT";
-	    AggregationMethod[AggregationMethod["COUNT_DISTINCT"] = 5] = "COUNT_DISTINCT";
-	    AggregationMethod[AggregationMethod["COUNT_OR_DISTINCT"] = 6] = "COUNT_OR_DISTINCT";
-	    AggregationMethod[AggregationMethod["NONE"] = 7] = "NONE";
-	})(exports.AggregationMethod || (exports.AggregationMethod = {}));
-	var AggregationMethod = exports.AggregationMethod;
-	(function (ColumnFormat) {
-	    ColumnFormat[ColumnFormat["NUMBER"] = 0] = "NUMBER";
-	    ColumnFormat[ColumnFormat["STRING"] = 1] = "STRING";
-	    ColumnFormat[ColumnFormat["CURRENCY"] = 2] = "CURRENCY";
-	    ColumnFormat[ColumnFormat["DATE"] = 3] = "DATE";
-	})(exports.ColumnFormat || (exports.ColumnFormat = {}));
-	var ColumnFormat = exports.ColumnFormat;
-	(function (SortDirection) {
-	    SortDirection[SortDirection["ASC"] = 0] = "ASC";
-	    SortDirection[SortDirection["DESC"] = 1] = "DESC";
-	})(exports.SortDirection || (exports.SortDirection = {}));
-	var SortDirection = exports.SortDirection;
-	var ColumnFactory = (function () {
-	    function ColumnFactory() {
-	    }
-	    /**
-	     * create an array of Column from definitions
-	     * @param columnDefs
-	     * @param state
-	     * @returns {Column[]}
-	     */
-	    ColumnFactory.createColumnsFromDefinition = function (columnDefs, state) {
-	        var maskedTags = (state.columnDefMask || []).map(function (m) { return m.colTag; });
-	        return columnDefs.filter(function (cd) { return maskedTags.indexOf(cd.colTag) === -1; }).map(function (cd) { return ColumnFactory.createColumnFromDefinition(cd, state); });
-	    };
-	    /**
-	     * creates a single Column object from a ColumnDef (definition)
-	     * Column objects contain more rendering hints than ColumnDef objects which are passed in by the user
-	     * @param cd
-	     * @param state
-	     * @returns {Column}
-	     */
-	    ColumnFactory.createColumnFromDefinition = function (cd, state) {
-	        var column = {
-	            colTag: cd.colTag,
-	            title: cd.title,
-	            aggregationMethod: cd.aggregationMethod,
-	            format: cd.format,
-	            width: state.widthMeasures.columnWidths[cd.colTag],
-	            cellTemplateCreator: cd.cellTemplateCreator
-	        };
-	        // determine if there is an existing SortBy for this column
-	        var sortBy = _.find(state.sortBys, function (s) { return s.colTag === cd.colTag; });
-	        if (sortBy) {
-	            column.sortDirection = sortBy.direction;
-	            column.customSortFn = sortBy.customSortFn;
-	        }
-	        return column;
-	    };
-	    /**
-	     * Create a 2-dimensional structure of Column(s), this allow us to group column headers
-	     * @param columnGroupDefs
-	     * @param columnDefs
-	     * @param state
-	     * @returns {Column[][]}
-	     */
-	    ColumnFactory.createColumnsFromGroupDefinition = function (columnGroupDefs, columnDefs, state) {
-	        var columns = ColumnFactory.createColumnsFromDefinition(columnDefs, state);
-	        var columnMap = _.chain(columns).map(function (column) { return column.colTag; }).object(columns).value();
-	        var nestedColumns = [[], []];
-	        _.forEach(columnGroupDefs, function (groupDef, i) {
-	            nestedColumns[0].push({
-	                colTag: "column_group_" + (i + 1),
-	                title: groupDef.title,
-	                colSpan: groupDef.columns.length
-	            });
-	            _.forEach(groupDef.columns, function (colTag) { return nestedColumns[1].push(columnMap[colTag]); });
-	        });
-	        return nestedColumns;
-	    };
-	    return ColumnFactory;
-	}());
-	exports.ColumnFactory = ColumnFactory;
-	//# sourceMappingURL=ColumnLike.js.map
-
-/***/ },
-/* 43 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var Row_1 = __webpack_require__(44);
-	var Row_2 = __webpack_require__(44);
-	var TreeBuilder = (function () {
-	    function TreeBuilder() {
-	    }
-	    TreeBuilder.buildTree = function (data, subtotalBys, grandTotal) {
-	        var _this = this;
-	        if (subtotalBys === void 0) { subtotalBys = []; }
-	        /*
-	         * the way we create a Tree is as follows
-	         * since each detailRow in data can only belong to ONE SubtotalRow and each SubtotalRow can have only 1 parent
-	         * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
-	         * parent SubtotalRow (in other words, find the detailRow's "bucket") and append said detailRow to the parent
-	         */
-	        grandTotal = grandTotal || new Row_1.SubtotalRow("Grand Total");
-	        grandTotal.setSectorPath([]);
-	        data.forEach(function (datum) { return _this.bucketDetailRow(subtotalBys, new Row_2.DetailRow(datum), grandTotal); });
-	        return new Tree(grandTotal);
-	    };
-	    TreeBuilder.bucketDetailRow = function (subtotalBys, detailedRow, grandTotal) {
-	        /*
-	         * to traverse the grandTotal and find the detailRow's immediate parent SubtotalRow
-	         * we store the detailRow's sector names in an ordered array
-	         */
-	        var subtotalTitles = []; // temporary array of strings to keep track subtotal titles names in sequence
-	        grandTotal.detailRows.push(detailedRow);
-	        subtotalBys.forEach(function (subtotalBy) {
-	            // the subtotal title
-	            var bucketTitle = TreeBuilder.resolveSubtotalTitle(subtotalBy, detailedRow);
-	            if (bucketTitle !== undefined) {
-	                subtotalTitles.push(bucketTitle);
-	                var subtotalRow = TreeBuilder.traverseOrCreate(grandTotal, subtotalTitles);
-	                subtotalRow.detailRows.push(detailedRow);
-	            }
-	        });
-	        detailedRow.setSectorPath(subtotalTitles);
-	    };
-	    ;
-	    // TODO add tests
-	    /**
-	     * recurisvely collapse the given node
-	     * @param node
-	     * @param shouldCollapse
-	     */
-	    TreeBuilder.recursivelyToggleChildrenCollapse = function (node, shouldCollapse) {
-	        if (shouldCollapse === void 0) { shouldCollapse = true; }
-	        /**
-	         *
-	         * @param node
-	         * @param shouldCollapse
-	         * @private
-	         */
-	        function _toggleCollapse(node, shouldCollapse) {
-	            node.toggleCollapse(shouldCollapse);
-	            TreeBuilder.recursivelyToggleChildrenCollapse(node, shouldCollapse);
-	        }
-	        node.getChildren().forEach(function (child) {
-	            if (shouldCollapse) {
-	                _toggleCollapse(child, shouldCollapse);
-	            }
-	            else {
-	                if (child.getChildren().length || child.sectorPath().length === 1) {
-	                    _toggleCollapse(child, shouldCollapse);
-	                }
-	            }
-	        });
-	    };
-	    /**
-	     *
-	     * @param grandTotal
-	     * @param subtotalTitles
-	     * @returns {SubtotalRow}
-	     */
-	    TreeBuilder.traverseOrCreate = function (grandTotal, subtotalTitles) {
-	        // traverse to the correct SubtotalRow
-	        var currentRow = grandTotal;
-	        for (var k = 0; k < subtotalTitles.length; k++) {
-	            // update the current subtotal row
-	            if (currentRow.hasChildWithTitle(subtotalTitles[k]))
-	                currentRow = currentRow.getChildByTitle(subtotalTitles[k]);
-	            else {
-	                // create a new sector if it is not already available
-	                var newRow = new Row_1.SubtotalRow(subtotalTitles[k]);
-	                newRow.toggleCollapse(true);
-	                // set the sector path for the new SubtotalRow we just created the length of which determines its depth
-	                newRow.setSectorPath(subtotalTitles.slice(0, k + 1));
-	                currentRow.addChild(newRow);
-	                currentRow = newRow;
-	            }
-	        }
-	        return currentRow;
-	    };
-	    ;
-	    TreeBuilder.resolveSubtotalTitle = function (subtotalBy, detailedRow) {
-	        if (subtotalBy.groupBy)
-	            return subtotalBy.groupBy(detailedRow);
-	        else
-	            return subtotalBy.title ? subtotalBy.title + ": " + detailedRow.getByColTag(subtotalBy.colTag) : detailedRow.getByColTag(subtotalBy.colTag);
-	    };
-	    return TreeBuilder;
-	}());
-	exports.TreeBuilder = TreeBuilder;
-	var Tree = (function () {
-	    function Tree(root) {
-	        this.root = root;
-	    }
-	    Tree.prototype.getRoot = function () {
-	        return this.root;
-	    };
-	    return Tree;
-	}());
-	exports.Tree = Tree;
-	//# sourceMappingURL=TreeBuilder.js.map
-
-/***/ },
-/* 44 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var GenericRow = (function () {
-	    function GenericRow(data) {
-	        this._isSelected = false;
-	        this._isHidden = false;
-	        this.title = null;
-	        this._data = data;
-	    }
-	    GenericRow.prototype.get = function (columnDef) {
-	        return this._data[columnDef.colTag];
-	    };
-	    GenericRow.prototype.getByColTag = function (colTag) {
-	        return this._data[colTag];
-	    };
-	    GenericRow.prototype.toggleSelect = function (select) {
-	        if (typeof select !== "undefined")
-	            this._isSelected = select;
-	        else
-	            this._isSelected = !this._isSelected;
-	    };
-	    GenericRow.prototype.isSelected = function () {
-	        return this._isSelected;
-	    };
-	    GenericRow.prototype.isHidden = function () {
-	        return this._isHidden;
-	    };
-	    GenericRow.prototype.toggleHide = function (hide) {
-	        if (typeof hide !== "undefined")
-	            this._isHidden = hide;
-	        else
-	            this._isHidden = !this._isHidden;
-	    };
-	    GenericRow.prototype.sectorPath = function () {
-	        return this._sectorPath;
-	    };
-	    GenericRow.prototype.setSectorPath = function (sectorPath) {
-	        this._sectorPath = sectorPath;
-	    };
-	    GenericRow.prototype.data = function () {
-	        return this._data;
-	    };
-	    GenericRow.prototype.setData = function (data) {
-	        this._data = data;
-	    };
-	    return GenericRow;
-	}());
-	var DetailRow = (function (_super) {
-	    __extends(DetailRow, _super);
-	    function DetailRow(data) {
-	        _super.call(this, data);
-	    }
-	    DetailRow.prototype.isDetail = function () {
-	        return true;
-	    };
-	    return DetailRow;
-	}(GenericRow));
-	exports.DetailRow = DetailRow;
-	var SubtotalRow = (function (_super) {
-	    __extends(SubtotalRow, _super);
-	    function SubtotalRow(title) {
-	        _super.call(this, {});
-	        this.children = [];
-	        this.childrenByTitle = {};
-	        this._isCollapsed = false;
-	        this.detailRows = [];
-	        this.title = title;
-	    }
-	    SubtotalRow.prototype.toggleCollapse = function (state) {
-	        if (state != undefined)
-	            this._isCollapsed = state;
-	        else
-	            this._isCollapsed = !this._isCollapsed;
-	    };
-	    SubtotalRow.prototype.isCollapsed = function () {
-	        return this._isCollapsed;
-	    };
-	    SubtotalRow.prototype.isDetail = function () {
-	        return false;
-	    };
-	    SubtotalRow.prototype.findIndex = function (child) {
-	        for (var i = 0; i < this.children.length; i++)
-	            if (this.children[i].title === child.title)
-	                return i;
-	        return -1;
-	    };
-	    SubtotalRow.prototype.addChild = function (child) {
-	        // if already exist, pop it from the children array
-	        this.removeChild(child);
-	        this.children.push(child);
-	        this.childrenByTitle[child.title] = child;
-	    };
-	    SubtotalRow.prototype.removeChild = function (child) {
-	        if (this.childrenByTitle[child.title] != undefined) {
-	            var idx = this.findIndex(child);
-	            this.children.splice(idx, 1);
-	            this.childrenByTitle[child.title] = undefined;
-	        }
-	    };
-	    SubtotalRow.prototype.getChildByTitle = function (title) {
-	        return this.childrenByTitle[title];
-	    };
-	    SubtotalRow.prototype.getNumChildren = function () {
-	        return this.children.length;
-	    };
-	    SubtotalRow.prototype.getChildren = function () {
-	        return this.children;
-	    };
-	    SubtotalRow.prototype.getChildAtIndex = function (idx) {
-	        return this.children[idx];
-	    };
-	    SubtotalRow.prototype.hasChildWithTitle = function (title) {
-	        return this.getChildByTitle(title) != undefined;
-	    };
-	    return SubtotalRow;
-	}(GenericRow));
-	exports.SubtotalRow = SubtotalRow;
-	//# sourceMappingURL=Row.js.map
-
-/***/ },
-/* 45 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var ColumnLike_1 = __webpack_require__(42);
+	var ColumnLike_1 = __webpack_require__(13);
 	var SortFactory = (function () {
 	    function SortFactory() {
 	    }
@@ -30578,134 +30239,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return SortFactory;
 	}());
 	exports.SortFactory = SortFactory;
-	//# sourceMappingURL=SortFactory.js.map
+
 
 /***/ },
-/* 46 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var _ = __webpack_require__(20);
-	var round = Math.round;
-	function parsePixelValue(pxMeasure) {
-	    return parseInt(pxMeasure.substr(0, pxMeasure.length - 2));
-	}
-	exports.parsePixelValue = parsePixelValue;
-	/**
-	 * returns true if every column in columnDefs defines a width property in pixels
-	 * @param columnDefs
-	 * @returns {boolean}
-	 */
-	function validateColumnWidthProperty(columnDefs) {
-	    for (var i = 0; i < columnDefs.length; i++) {
-	        if (!(columnDefs[i].width && _.endsWith(columnDefs[i].width, "px")))
-	            return false;
-	    }
-	    return true;
-	}
-	exports.validateColumnWidthProperty = validateColumnWidthProperty;
-	var scrollBarWidth = null;
-	/**
-	 * uber hax to get scrollbar width
-	 * see stackoverflow reference: http://stackoverflow.com/questions/986937/how-can-i-get-the-browsers-scrollbar-sizes
-	 * @returns {number}
-	 */
-	function getScrollBarWidth() {
-	    function computeScrollBarWidth() {
-	        var inner = document.createElement('p');
-	        inner.style.width = "100%";
-	        inner.style.height = "200px";
-	        var outer = document.createElement('div');
-	        outer.style.position = "absolute";
-	        outer.style.top = "0px";
-	        outer.style.left = "0px";
-	        outer.style.visibility = "hidden";
-	        outer.style.width = "200px";
-	        outer.style.height = "150px";
-	        outer.style.overflow = "hidden";
-	        outer.appendChild(inner);
-	        document.body.appendChild(outer);
-	        var w1 = inner.offsetWidth;
-	        outer.style.overflow = 'scroll';
-	        var w2 = inner.offsetWidth;
-	        if (w1 == w2)
-	            w2 = outer.clientWidth;
-	        document.body.removeChild(outer);
-	        return (w1 - w2);
-	    }
-	    if (scrollBarWidth === null)
-	        scrollBarWidth = computeScrollBarWidth();
-	    return scrollBarWidth;
-	}
-	exports.getScrollBarWidth = getScrollBarWidth;
-	// #7 Determine column width automatically if not passed in by the user https://github.com/erfangc/GigaGrid/issues/7
-	var WidthMeasureCalculator = (function () {
-	    function WidthMeasureCalculator() {
-	    }
-	    /**
-	     * takes a bodyWidth (which could be empty or null) and a set of column definitions
-	     * determines how to ration bodyWidth amongst the columns. Columns could specify preferred width through the `width` property
-	     * this only tries to affect the cell width not the header width ... header width as of v0.1.7 is sync-ed to cell width via a callback on componentDidUpdate
-	     * @param bodyWidth
-	     * @param columnDefs
-	     * @returns {WidthMeasures}
-	     */
-	    WidthMeasureCalculator.computeWidthMeasures = function (bodyWidth, columnDefs) {
-	        var columnWidthProvided = validateColumnWidthProperty(columnDefs);
-	        var measures;
-	        if (columnWidthProvided)
-	            measures = getMeasureAsSumOfColumnWidth(columnDefs);
-	        else
-	            measures = getDefaultWidthMeasure(columnDefs);
-	        return measures;
-	    };
-	    return WidthMeasureCalculator;
-	}());
-	exports.WidthMeasureCalculator = WidthMeasureCalculator;
-	function getMeasureWithEqualWidthColumn(bodyWidth, columnDefs) {
-	    var measures = {
-	        bodyWidth: null,
-	        columnWidths: {}
-	    };
-	    measures.bodyWidth = bodyWidth;
-	    var bodyWidthPx = parsePixelValue(bodyWidth);
-	    var cellWidth = round(bodyWidthPx / columnDefs.length);
-	    var totalCellWidth = 0;
-	    for (var i = 0; i < columnDefs.length - 1; i++) {
-	        measures.columnWidths[columnDefs[i].colTag] = cellWidth + "px";
-	        totalCellWidth += cellWidth;
-	    }
-	    var lastColTag = columnDefs[columnDefs.length - 1].colTag;
-	    measures.columnWidths[lastColTag] = (bodyWidthPx - totalCellWidth) + "px";
-	    return measures;
-	}
-	function getDefaultWidthMeasure(columnDefs) {
-	    var measures = {
-	        bodyWidth: null,
-	        columnWidths: {}
-	    };
-	    measures.bodyWidth = "100%";
-	    _.forEach(columnDefs, function (cd) {
-	        measures.columnWidths[cd.colTag] = "auto";
-	    });
-	    return measures;
-	}
-	function getMeasureAsSumOfColumnWidth(columnDefs) {
-	    var bodyWidth = _.chain(columnDefs).map(function (cd) { return parsePixelValue(cd.width); }).sum();
-	    var measures = {
-	        bodyWidth: null,
-	        columnWidths: {}
-	    };
-	    measures.bodyWidth = bodyWidth + "px";
-	    _.forEach(columnDefs, function (cd) {
-	        measures.columnWidths[cd.colTag] = cd.width;
-	    });
-	    return measures;
-	}
-	//# sourceMappingURL=WidthMeasureCalculator.js.map
-
-/***/ },
-/* 47 */
+/* 36 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -30736,10 +30273,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return TreeRasterizer;
 	}());
 	exports.TreeRasterizer = TreeRasterizer;
-	//# sourceMappingURL=TreeRasterizer.js.map
+
 
 /***/ },
-/* 48 */
+/* 37 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -30760,10 +30297,263 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return ScrollCalculator;
 	}());
 	exports.ScrollCalculator = ScrollCalculator;
-	//# sourceMappingURL=ScrollCalculator.js.map
+
 
 /***/ },
-/* 49 */
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	module.exports.Dispatcher = __webpack_require__(39);
+
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule Dispatcher
+	 * 
+	 * @preventMunge
+	 */
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var invariant = __webpack_require__(20);
+
+	var _prefix = 'ID_';
+
+	/**
+	 * Dispatcher is used to broadcast payloads to registered callbacks. This is
+	 * different from generic pub-sub systems in two ways:
+	 *
+	 *   1) Callbacks are not subscribed to particular events. Every payload is
+	 *      dispatched to every registered callback.
+	 *   2) Callbacks can be deferred in whole or part until other callbacks have
+	 *      been executed.
+	 *
+	 * For example, consider this hypothetical flight destination form, which
+	 * selects a default city when a country is selected:
+	 *
+	 *   var flightDispatcher = new Dispatcher();
+	 *
+	 *   // Keeps track of which country is selected
+	 *   var CountryStore = {country: null};
+	 *
+	 *   // Keeps track of which city is selected
+	 *   var CityStore = {city: null};
+	 *
+	 *   // Keeps track of the base flight price of the selected city
+	 *   var FlightPriceStore = {price: null}
+	 *
+	 * When a user changes the selected city, we dispatch the payload:
+	 *
+	 *   flightDispatcher.dispatch({
+	 *     actionType: 'city-update',
+	 *     selectedCity: 'paris'
+	 *   });
+	 *
+	 * This payload is digested by `CityStore`:
+	 *
+	 *   flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'city-update') {
+	 *       CityStore.city = payload.selectedCity;
+	 *     }
+	 *   });
+	 *
+	 * When the user selects a country, we dispatch the payload:
+	 *
+	 *   flightDispatcher.dispatch({
+	 *     actionType: 'country-update',
+	 *     selectedCountry: 'australia'
+	 *   });
+	 *
+	 * This payload is digested by both stores:
+	 *
+	 *   CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'country-update') {
+	 *       CountryStore.country = payload.selectedCountry;
+	 *     }
+	 *   });
+	 *
+	 * When the callback to update `CountryStore` is registered, we save a reference
+	 * to the returned token. Using this token with `waitFor()`, we can guarantee
+	 * that `CountryStore` is updated before the callback that updates `CityStore`
+	 * needs to query its data.
+	 *
+	 *   CityStore.dispatchToken = flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'country-update') {
+	 *       // `CountryStore.country` may not be updated.
+	 *       flightDispatcher.waitFor([CountryStore.dispatchToken]);
+	 *       // `CountryStore.country` is now guaranteed to be updated.
+	 *
+	 *       // Select the default city for the new country
+	 *       CityStore.city = getDefaultCityForCountry(CountryStore.country);
+	 *     }
+	 *   });
+	 *
+	 * The usage of `waitFor()` can be chained, for example:
+	 *
+	 *   FlightPriceStore.dispatchToken =
+	 *     flightDispatcher.register(function(payload) {
+	 *       switch (payload.actionType) {
+	 *         case 'country-update':
+	 *         case 'city-update':
+	 *           flightDispatcher.waitFor([CityStore.dispatchToken]);
+	 *           FlightPriceStore.price =
+	 *             getFlightPriceStore(CountryStore.country, CityStore.city);
+	 *           break;
+	 *     }
+	 *   });
+	 *
+	 * The `country-update` payload will be guaranteed to invoke the stores'
+	 * registered callbacks in order: `CountryStore`, `CityStore`, then
+	 * `FlightPriceStore`.
+	 */
+
+	var Dispatcher = (function () {
+	  function Dispatcher() {
+	    _classCallCheck(this, Dispatcher);
+
+	    this._callbacks = {};
+	    this._isDispatching = false;
+	    this._isHandled = {};
+	    this._isPending = {};
+	    this._lastID = 1;
+	  }
+
+	  /**
+	   * Registers a callback to be invoked with every dispatched payload. Returns
+	   * a token that can be used with `waitFor()`.
+	   */
+
+	  Dispatcher.prototype.register = function register(callback) {
+	    var id = _prefix + this._lastID++;
+	    this._callbacks[id] = callback;
+	    return id;
+	  };
+
+	  /**
+	   * Removes a callback based on its token.
+	   */
+
+	  Dispatcher.prototype.unregister = function unregister(id) {
+	    !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.unregister(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
+	    delete this._callbacks[id];
+	  };
+
+	  /**
+	   * Waits for the callbacks specified to be invoked before continuing execution
+	   * of the current callback. This method should only be used by a callback in
+	   * response to a dispatched payload.
+	   */
+
+	  Dispatcher.prototype.waitFor = function waitFor(ids) {
+	    !this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Must be invoked while dispatching.') : invariant(false) : undefined;
+	    for (var ii = 0; ii < ids.length; ii++) {
+	      var id = ids[ii];
+	      if (this._isPending[id]) {
+	        !this._isHandled[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Circular dependency detected while ' + 'waiting for `%s`.', id) : invariant(false) : undefined;
+	        continue;
+	      }
+	      !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
+	      this._invokeCallback(id);
+	    }
+	  };
+
+	  /**
+	   * Dispatches a payload to all registered callbacks.
+	   */
+
+	  Dispatcher.prototype.dispatch = function dispatch(payload) {
+	    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.') : invariant(false) : undefined;
+	    this._startDispatching(payload);
+	    try {
+	      for (var id in this._callbacks) {
+	        if (this._isPending[id]) {
+	          continue;
+	        }
+	        this._invokeCallback(id);
+	      }
+	    } finally {
+	      this._stopDispatching();
+	    }
+	  };
+
+	  /**
+	   * Is this Dispatcher currently dispatching.
+	   */
+
+	  Dispatcher.prototype.isDispatching = function isDispatching() {
+	    return this._isDispatching;
+	  };
+
+	  /**
+	   * Call the callback stored with the given id. Also do some internal
+	   * bookkeeping.
+	   *
+	   * @internal
+	   */
+
+	  Dispatcher.prototype._invokeCallback = function _invokeCallback(id) {
+	    this._isPending[id] = true;
+	    this._callbacks[id](this._pendingPayload);
+	    this._isHandled[id] = true;
+	  };
+
+	  /**
+	   * Set up bookkeeping needed when dispatching.
+	   *
+	   * @internal
+	   */
+
+	  Dispatcher.prototype._startDispatching = function _startDispatching(payload) {
+	    for (var id in this._callbacks) {
+	      this._isPending[id] = false;
+	      this._isHandled[id] = false;
+	    }
+	    this._pendingPayload = payload;
+	    this._isDispatching = true;
+	  };
+
+	  /**
+	   * Clear bookkeeping used for dispatching.
+	   *
+	   * @internal
+	   */
+
+	  Dispatcher.prototype._stopDispatching = function _stopDispatching() {
+	    delete this._pendingPayload;
+	    this._isDispatching = false;
+	  };
+
+	  return Dispatcher;
+	})();
+
+	module.exports = Dispatcher;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
+
+/***/ },
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -30772,9 +30562,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(14);
-	var GigaRow_1 = __webpack_require__(50);
-	var GigaStore_1 = __webpack_require__(23);
+	var React = __webpack_require__(6);
+	var GigaRow_1 = __webpack_require__(41);
+	var GigaStore_1 = __webpack_require__(11);
 	var TableBody = (function (_super) {
 	    __extends(TableBody, _super);
 	    function TableBody(props) {
@@ -30825,10 +30615,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return TableBody;
 	}(React.Component));
 	exports.TableBody = TableBody;
-	//# sourceMappingURL=TableBody.js.map
+
 
 /***/ },
-/* 50 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -30837,10 +30627,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(14);
-	var classNames = __webpack_require__(51);
-	var GigaStore_1 = __webpack_require__(23);
-	var Cell_1 = __webpack_require__(52);
+	var React = __webpack_require__(6);
+	var classNames = __webpack_require__(42);
+	var GigaStore_1 = __webpack_require__(11);
+	var Cell_1 = __webpack_require__(43);
 	var GigaRow = (function (_super) {
 	    __extends(GigaRow, _super);
 	    function GigaRow(props) {
@@ -30870,10 +30660,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return GigaRow;
 	}(React.Component));
 	exports.GigaRow = GigaRow;
-	//# sourceMappingURL=GigaRow.js.map
+
 
 /***/ },
-/* 51 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -30927,7 +30717,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 52 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -30936,10 +30726,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(14);
-	var classNames = __webpack_require__(51);
-	var ColumnLike_1 = __webpack_require__(42);
-	var GigaStore_1 = __webpack_require__(23);
+	var React = __webpack_require__(6);
+	var classNames = __webpack_require__(42);
+	var ColumnLike_1 = __webpack_require__(13);
+	var GigaStore_1 = __webpack_require__(11);
 	var Cell = (function (_super) {
 	    __extends(Cell, _super);
 	    function Cell(props) {
@@ -30974,7 +30764,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return {
 	            width: this.props.column.width,
 	            height: this.props.rowHeight,
-	            overflow: "hidden",
 	            paddingLeft: this.props.isFirstColumn ? TableRowUtils.calculateFirstColumnIdentation(this.props.row) : undefined
 	        };
 	    };
@@ -30995,7 +30784,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            result = (React.createElement("td", {className: cx, onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, Cell.renderContent(row, cd)));
 	        return result;
 	    };
-	    Cell.prototype.renderContent = function (row, cd) {
+	    Cell.renderContent = function (row, cd) {
 	        if (cd.cellTemplateCreator)
 	            return cd.cellTemplateCreator(row.data()[cd.colTag], cd);
 	        else
@@ -31020,10 +30809,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    return TableRowUtils;
 	}());
-	//# sourceMappingURL=Cell.js.map
+
 
 /***/ },
-/* 53 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31032,9 +30821,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(14);
-	var TableHeaderCell_1 = __webpack_require__(54);
-	var WidthMeasureCalculator_1 = __webpack_require__(46);
+	var React = __webpack_require__(6);
+	var TableHeaderCell_1 = __webpack_require__(45);
 	/**
 	 * terminology: column groups are columns that can span multiple `leaf` columns and physically reside
 	 * on top of `leaf` columns
@@ -31062,7 +30850,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var ths = columns.map(function (column, i) {
 	            return (React.createElement("th", {className: "column-group", key: i, colSpan: column.colSpan}, column.title));
 	        });
-	        ths.push(TableHeader.renderPlaceholder("column-group"));
 	        return (React.createElement("tr", {className: "column-group-row", key: key}, ths));
 	    };
 	    TableHeader.prototype.renderLeafColumns = function (columns, key) {
@@ -31070,24 +30857,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var ths = columns.map(function (colDef, i) {
 	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {tableColumnDef: colDef, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, dispatcher: _this.props.dispatcher});
 	        });
-	        ths.push(TableHeader.renderPlaceholder());
 	        return (React.createElement("tr", {key: key}, ths));
-	    };
-	    TableHeader.renderPlaceholder = function (className) {
-	        var scrollBarWidth = WidthMeasureCalculator_1.getScrollBarWidth();
-	        /*
-	         add an placeholder to align the header with cells
-	         https://github.com/erfangc/GigaGrid/issues/7
-	         */
-	        return (React.createElement("th", {key: "placeholder", className: className, style: { width: scrollBarWidth + "px" }}));
 	    };
 	    return TableHeader;
 	}(React.Component));
 	exports.TableHeader = TableHeader;
-	//# sourceMappingURL=TableHeader.js.map
+
 
 /***/ },
-/* 54 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31096,14 +30874,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(14);
-	var classNames = __webpack_require__(51);
-	var ColumnLike_1 = __webpack_require__(42);
-	var DropdownMenu_1 = __webpack_require__(55);
-	var SortMenuItem_1 = __webpack_require__(56);
-	var GigaStore_1 = __webpack_require__(23);
-	var SubtotalByMenuItem_1 = __webpack_require__(57);
-	var FilterMenuItem_1 = __webpack_require__(58);
+	var React = __webpack_require__(6);
+	var classNames = __webpack_require__(42);
+	var ColumnLike_1 = __webpack_require__(13);
+	var DropdownMenu_1 = __webpack_require__(46);
+	var SortMenuItem_1 = __webpack_require__(47);
+	var GigaStore_1 = __webpack_require__(11);
+	var SubtotalByMenuItem_1 = __webpack_require__(48);
+	var FilterMenuItem_1 = __webpack_require__(49);
 	// Comment
 	var TableHeaderState = (function () {
 	    function TableHeaderState() {
@@ -31161,10 +30939,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return TableHeaderCell;
 	}(React.Component));
 	exports.TableHeaderCell = TableHeaderCell;
-	//# sourceMappingURL=TableHeaderCell.js.map
+
 
 /***/ },
-/* 55 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31173,10 +30951,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(14);
-	var ReactDOM = __webpack_require__(15);
-	var $ = __webpack_require__(22);
-	var className = __webpack_require__(51);
+	var React = __webpack_require__(6);
+	var ReactDOM = __webpack_require__(7);
+	var $ = __webpack_require__(10);
+	var className = __webpack_require__(42);
 	/**
 	 * a generic dropdown menu component that can be reused in any context
 	 */
@@ -31276,10 +31054,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return SimpleDropdownMenuItem;
 	}(React.Component));
 	exports.SimpleDropdownMenuItem = SimpleDropdownMenuItem;
-	//# sourceMappingURL=DropdownMenu.js.map
+
 
 /***/ },
-/* 56 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31288,10 +31066,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(14);
-	var DropdownMenu_1 = __webpack_require__(55);
-	var GigaStore_1 = __webpack_require__(23);
-	var ColumnLike_1 = __webpack_require__(42);
+	var React = __webpack_require__(6);
+	var DropdownMenu_1 = __webpack_require__(46);
+	var GigaStore_1 = __webpack_require__(11);
+	var ColumnLike_1 = __webpack_require__(13);
 	var SortMenuItem = (function (_super) {
 	    __extends(SortMenuItem, _super);
 	    function SortMenuItem(props) {
@@ -31372,10 +31150,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return SortMenuItem;
 	}(React.Component));
 	exports.SortMenuItem = SortMenuItem;
-	//# sourceMappingURL=SortMenuItem.js.map
+
 
 /***/ },
-/* 57 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31384,12 +31162,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(14);
-	var classNames = __webpack_require__(51);
-	var _ = __webpack_require__(20);
-	var ColumnLike_1 = __webpack_require__(42);
-	var GigaStore_1 = __webpack_require__(23);
-	var DropdownMenu_1 = __webpack_require__(55);
+	var React = __webpack_require__(6);
+	var classNames = __webpack_require__(42);
+	var _ = __webpack_require__(8);
+	var ColumnLike_1 = __webpack_require__(13);
+	var GigaStore_1 = __webpack_require__(11);
+	var DropdownMenu_1 = __webpack_require__(46);
 	var SubtotalByMenuItem = (function (_super) {
 	    __extends(SubtotalByMenuItem, _super);
 	    function SubtotalByMenuItem(props) {
@@ -31484,10 +31262,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return SubtotalByMenuItem;
 	}(React.Component));
 	exports.SubtotalByMenuItem = SubtotalByMenuItem;
-	//# sourceMappingURL=SubtotalByMenuItem.js.map
+
 
 /***/ },
-/* 58 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31496,8 +31274,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(14);
-	var DropdownMenu_1 = __webpack_require__(55);
+	var React = __webpack_require__(6);
+	var DropdownMenu_1 = __webpack_require__(46);
 	var FilterMenuItem = (function (_super) {
 	    __extends(FilterMenuItem, _super);
 	    function FilterMenuItem(props) {
@@ -31510,7 +31288,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return FilterMenuItem;
 	}(React.Component));
 	exports.FilterMenuItem = FilterMenuItem;
-	//# sourceMappingURL=FilterMenuItem.js.map
+
 
 /***/ }
 /******/ ])
