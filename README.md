@@ -4,17 +4,14 @@ See the Grid in Action [Here](http://erfangc.github.io/GigaGrid/)
 
 ![GigaGrd](https://raw.githubusercontent.com/erfangc/GigaGrid/master/giga-grid.png)
 
-# GigaGrid (Under Development) [![Build Status](https://travis-ci.org/erfangc/GigaGrid.svg?branch=master)](https://travis-ci.org/erfangc/GigaGrid)
+# GigaGrid [![Build Status](https://travis-ci.org/erfangc/GigaGrid.svg?branch=master)](https://travis-ci.org/erfangc/GigaGrid)
 
 High performance, React.js table widget with Subtotals (Written in TypeScript)
 
-# Running the Examples
+# Running
 
 ```bash
-npm install && jspm install
-
-# this should compile build and call webpack to bundle the project 
-npm run serve
+npm install giga-grid
 ```
 
 # Developing
@@ -26,23 +23,10 @@ git clone https://github.com/erfangc/GigaGrid.git
 
 cd GigaGrid
 
-npm install && jspm install
-```
+npm install
 
-If you are using an IDE that does not come with TypeScript bundled, install TypeScript globally
+npm start
 
-```bash
-npm install typescript -g
-```
-
-To compile, simply run `tsc` (TypeScript compiler)
-
-```bash
-# this will automatically read configuration from tsconfig.json
-tsc
-
-# or watch for file changes with -w
-tsc -w
 ```
 
 If you are importing a `CommonJS` library, make sure you understand the difference between ES6 and `cjs` module specs
@@ -58,15 +42,8 @@ See:
 Make sure you install `karma` any plugins and `phantomjs` globally [More Info](http://phantomjs.org/)
 
 ```bash
-npm install phantomjs karma-phantomjs-launcher karma karma-jasmine karma-jspm -g
+npm install phantomjs karma -g
 
 # then at the project root run
 karma start karma2.conf.js
-```
-
-Alternatively, you can run
-
-```bash
-# this will clean the build directory and re-compile all the source files
-npm run test
 ```

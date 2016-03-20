@@ -70,8 +70,7 @@ export class ColumnFactory {
      * @returns {Column[]}
      */
     static createColumnsFromDefinition(columnDefs:ColumnDef[], state:GigaState):Column[] {
-        const maskedTags = (state.columnDefMask || []).map(m=>m.colTag);
-        return columnDefs.filter(cd=>maskedTags.indexOf(cd.colTag) === -1).map(cd => ColumnFactory.createColumnFromDefinition(cd, state));
+        return columnDefs.map(cd => ColumnFactory.createColumnFromDefinition(cd, state));
     }
 
     /**

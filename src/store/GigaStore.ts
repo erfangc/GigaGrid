@@ -136,10 +136,6 @@ export class GigaStore extends ReduceStore<GigaState> {
                 newState = state;
         }
 
-        // record the action
-        if (newState !== state)
-            newState.lastAction = action;
-
         /*
          determine if an action should trigger rasterization
          todo I wonder if we need to re-compute display bounds after rasterization if so, viewport and canvas must become states so we can access them here

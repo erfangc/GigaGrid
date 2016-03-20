@@ -41,11 +41,6 @@ export interface GigaProps extends React.Props<GigaGrid> {
     initialFilterBys?:FilterBy[]
 
     /**
-     * if set to true, we will not render the column that is used in subtotals
-     */
-    hideColumnOnSubtotal?:boolean
-
-    /**
      * Callback that fires when a row is clicked, return `false` in the passed callback function to suppress
      * default behavior (highlights the row)
      * @param row the `Row` object associated with the row the user clicked on
@@ -114,9 +109,6 @@ export interface GigaState {
     displayStart:number
     displayEnd:number
 
-    columnDefMask?:ColumnDef[]
-    lastAction?:GigaAction
-
 }
 
 /**
@@ -167,13 +159,11 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
         var columns:Column[][];
         if (this.props.columnGroups)
-        // TODO we need column groups to be aware of masks as well ... I think ...
             columns = ColumnFactory.createColumnsFromGroupDefinition(this.props.columnGroups, this.props.columnDefs, this.state);
         else
             columns = [ColumnFactory.createColumnsFromDefinition(this.props.columnDefs, this.state)];
 
         const bodyStyle = {
-            // TODO we will need to give similar consideration to height as we did for width
             height: this.props.bodyHeight,
         };
 
@@ -217,14 +207,10 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
      * yes this is still a thing!
      */
     synchTableHeaderWidthToFirstRow() {
-        if (this.state.lastAction && this.state.lastAction.type === GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS && this.state.displayStart != 0) {
-            return;
-        }
         const node = ReactDOM.findDOMNode(this);
         var $canvas = $(node).find("table.giga-grid-body-canvas");
 
         // set header row width to table body width
-
         const rootNodeWidth = $(node).innerWidth();
         var canvasWidth = $canvas.innerWidth();
         if (rootNodeWidth > canvasWidth) {
@@ -232,7 +218,6 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             $canvas.innerWidth(newWCanvasWidth);
             canvasWidth = newWCanvasWidth;
         }
-
 
         $(node).find("table.header-table").innerWidth(canvasWidth);
         const $tableHeaders = $(node).find("th.table-header");
@@ -242,6 +227,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             const $td = $(pair[1]);
             $th.innerWidth($td.innerWidth());
         }).value();
+
     }
 
     componentDidMount() {

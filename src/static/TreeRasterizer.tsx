@@ -20,7 +20,6 @@ export class TreeRasterizer {
         // push self
         rasterizedRows.push(subtotalRow);
         // push children (at which point recurse)
-        // TODO consider when a row is masked by a filter
         if (!subtotalRow.isCollapsed())
             if (subtotalRow.getChildren().length === 0)
                 subtotalRow.detailRows.forEach(detailRow=>rasterizedRows.push(detailRow));

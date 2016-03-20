@@ -1,10 +1,10 @@
 language: node_js
 node_js:
-- '4.1'
-- '4.0'
+- '5'
+- '4'
 
 install:
-- npm instal jspm phantomjs karma-phantomjs-launcher karma karma-jasmine -g
+- npm instal phantomjs karma-phantomjs-launcher karma -g
 - npm install
 
 script:
