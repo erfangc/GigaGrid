@@ -22997,7 +22997,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    GigaStore.prototype.handleRowSelect = function (state, action) {
 	        if (typeof this.props.onRowClick === "function") {
-	            if (!this.props.onRowClick(action.row))
+	            if (!this.props.onRowClick(action.row, state))
 	                return state;
 	            else {
 	                action.row.toggleSelect();
