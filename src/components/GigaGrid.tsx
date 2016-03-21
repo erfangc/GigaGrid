@@ -190,6 +190,12 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             </div>);
     }
 
+    componentWillReceiveProps(nextProps: GigaProps) {
+        this.dispatcher.dispatch({
+            type: GigaActionType.INITIALIZE
+        });
+    }
+
     /**
      * on component update, we use jquery to align table headers
      * this is the "give up" solution, implemented in 0.1.7
