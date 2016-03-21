@@ -1,5 +1,7 @@
 # Demo
 
+(This Project is Currently Development - Some Features are Not Working and I am Currently Accepting All Help!)
+
 See the Grid in Action [Here](http://erfangc.github.io/GigaGrid/)
 
 ![GigaGrd](https://raw.githubusercontent.com/erfangc/GigaGrid/master/giga-grid.png)
