@@ -45,7 +45,7 @@ export interface GigaProps extends React.Props<GigaGrid> {
      * default behavior (highlights the row)
      * @param row the `Row` object associated with the row the user clicked on
      */
-    onRowClick?:(row:Row)=>boolean
+    onRowClick?:(row:Row, state: GigaState)=>boolean
 
     /**
      * Callback that fires when a cell is clicked, return `false` in the passed callback function to suppress

@@ -169,7 +169,7 @@ export class GigaStore extends ReduceStore<GigaState> {
     private handleRowSelect(state:GigaState, action:ToggleRowSelectAction):GigaState {
 
         if (typeof this.props.onRowClick === "function") {
-            if (!this.props.onRowClick(action.row))
+            if (!this.props.onRowClick(action.row, state))
                 return state;
             else {
                 action.row.toggleSelect();
