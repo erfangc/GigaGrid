@@ -1,6 +1,5 @@
 examples/bundle.*
 src/**/*.js
 test/**/*.js
-**/*.js.map
 .idea
 node_modules
