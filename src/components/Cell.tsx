@@ -38,7 +38,7 @@ export class Cell extends React.Component<CellProps,any> {
         var action = {
             type: GigaActionType.TOGGLE_CELL_SELECT,
             row: this.props.row,
-            tableColumnDef: this.props.column
+            column: this.props.column
         };
         this.props.dispatcher.dispatch(action);
     }

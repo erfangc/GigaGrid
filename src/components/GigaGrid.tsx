@@ -8,7 +8,7 @@ import {ColumnDef} from "../models/ColumnLike";
 import {Row} from "../models/Row";
 import {Column} from "../models/ColumnLike";
 import {Tree} from "../static/TreeBuilder";
-import {GigaStore} from "../store/GigaStore";
+import {GigaStore, InitializeAction} from "../store/GigaStore";
 import {Dispatcher} from 'flux';
 import {GigaAction} from "../store/GigaStore";
 import {SortBy} from "../models/ColumnLike";
@@ -191,10 +191,11 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
     }
 
     componentWillReceiveProps(nextProps: GigaProps) {
-        this.dispatcher.dispatch({
+        var payload: InitializeAction = {
             type: GigaActionType.INITIALIZE,
             props: nextProps
-        });
+        };
+        this.dispatcher.dispatch(payload);
     }
 
     /**

@@ -14,10 +14,11 @@ export interface GridSubcomponentProps<T> extends React.Props<T> {
 }
 
 export interface TableHeaderProps extends GridSubcomponentProps<TableHeaderCell> {
-    tableColumnDef: Column
+    column: Column
     isFirstColumn?: boolean
     isLastColumn?: boolean
 }
+
 // Comment
 class TableHeaderState {
     handleVisible:boolean;
@@ -48,14 +49,14 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
                    onClick={()=>this.dropdownMenuRef.toggleDisplay()}/>
                 <DropdownMenu ref={(c:DropdownMenu)=>this.dropdownMenuRef=c} alignLeft={this.props.isLastColumn}
                               toggleHandle={()=>this.dropdownToggleHandleRef}>
-                    <SortMenuItem tableRowColumnDef={this.props.tableColumnDef} isLastColumn={this.props.isLastColumn}
+                    <SortMenuItem tableRowColumnDef={this.props.column} isLastColumn={this.props.isLastColumn}
                                   dispatcher={this.props.dispatcher}/>
-                    <SubtotalByMenuItem column={this.props.tableColumnDef}
+                    <SubtotalByMenuItem column={this.props.column}
                                         isLastColumn={this.props.isLastColumn}
                                         dispatcher={this.props.dispatcher}/>
                     <FilterMenuItem dispatcher={this.props.dispatcher}
                                     isLastColumn={this.props.isLastColumn}
-                                    tableRowColumnDef={this.props.tableColumnDef}/>
+                                    tableRowColumnDef={this.props.column}/>
                     <SimpleDropdownMenuItem onClick={()=>{
                                 this.props.dispatcher.dispatch({
                                 type: GigaActionType.COLLAPSE_ALL
@@ -73,11 +74,11 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
     }
 
     renderSortIcon() {
-        if (this.props.tableColumnDef.sortDirection != undefined) {
+        if (this.props.column.sortDirection != undefined) {
             const cx = classNames({
                 "fa": true,
-                "fa-sort-asc": this.props.tableColumnDef.sortDirection === SortDirection.ASC,
-                "fa-sort-desc": this.props.tableColumnDef.sortDirection === SortDirection.DESC
+                "fa-sort-asc": this.props.column.sortDirection === SortDirection.ASC,
+                "fa-sort-desc": this.props.column.sortDirection === SortDirection.DESC
             });
             return (
                 <span>
@@ -88,7 +89,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
     }
 
     render() {
-        const columnDef = this.props.tableColumnDef;
+        const columnDef = this.props.column;
 
         const style = {
             overflow: "visible",
