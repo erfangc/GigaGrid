@@ -22894,7 +22894,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    GigaStore.prototype.initialize = function (action) {
 	        var props = action.props || this.props;
-	        var tree = TreeBuilder_1.TreeBuilder.buildTree(props.data, this.appendSubtotalBysWithTitle(props.initialSubtotalBys));
+	        var tree = TreeBuilder_1.TreeBuilder.buildTree(props.data, this.appendSubtotalBysWithTitle(props.initialSubtotalBys), this.props.initiallyExpandedSubtotalRows, this.props.initiallySelectedSubtotalRows);
 	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, props.columnDefs);
 	        if (props.initialSortBys)
 	            tree = SortFactory_1.SortFactory.sortTree(tree, props.initialSortBys);
@@ -23368,10 +23368,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 	var Row_1 = __webpack_require__(15);
 	var Row_2 = __webpack_require__(15);
+	var _ = __webpack_require__(8);
 	var TreeBuilder = (function () {
 	    function TreeBuilder() {
 	    }
-	    TreeBuilder.buildTree = function (data, subtotalBys, grandTotal) {
+	    /**
+	     * traverse the tree and find nodes that has identical sector path, set toggleCollapse to false
+	     * TODO add tests to ensure it does not break
+	     * @param node
+	     * @param initiallyExpandedSubtotalRows
+	     */
+	    TreeBuilder.selectivelyExpand = function (node, initiallyExpandedSubtotalRows) {
+	        initiallyExpandedSubtotalRows.forEach(function (sp) {
+	            for (var i = 1; i <= sp.length; i++)
+	                if (_.isEqual(node.sectorPath(), sp.slice(0, i)))
+	                    node.toggleCollapse(false);
+	        });
+	        if (node.getNumChildren() != 0)
+	            node.getChildren().forEach(function (child) { return TreeBuilder.selectivelyExpand(child, initiallyExpandedSubtotalRows); });
+	    };
+	    /**
+	     * traverse the tree and find nodes that has identical sector path, set isSelected to true
+	     * TODO add tests to ensure it does not break
+	     * @param node
+	     * @param initiallySelectedSubtotalRows
+	     */
+	    TreeBuilder.selectivelySelect = function (node, initiallySelectedSubtotalRows) {
+	        initiallySelectedSubtotalRows.forEach(function (sp) {
+	            if (_.isEqual(node.sectorPath(), sp))
+	                node.toggleSelect(true);
+	        });
+	        if (node.getNumChildren() != 0)
+	            node.getChildren().forEach(function (child) { return TreeBuilder.selectivelySelect(child, initiallySelectedSubtotalRows); });
+	    };
+	    TreeBuilder.buildTree = function (data, subtotalBys, initiallyExpandedSubtotalRows, initiallySelectedSubtotalRows) {
 	        var _this = this;
 	        if (subtotalBys === void 0) { subtotalBys = []; }
 	        /*
@@ -23380,10 +23410,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
 	         * parent SubtotalRow (in other words, find the detailRow's "bucket") and append said detailRow to the parent
 	         */
-	        grandTotal = grandTotal || new Row_1.SubtotalRow("Grand Total");
+	        var grandTotal = new Row_1.SubtotalRow("Grand Total");
 	        grandTotal.setSectorPath([]);
 	        data.forEach(function (datum) { return _this.bucketDetailRow(subtotalBys, new Row_2.DetailRow(datum), grandTotal); });
 	        TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, false);
+	        /**
+	         * EXPERIMENTAL - these props allow us to expand / select SubtotalRow on construction of the grid component
+	         */
+	        if (initiallyExpandedSubtotalRows)
+	            TreeBuilder.selectivelyExpand(grandTotal, initiallyExpandedSubtotalRows);
+	        if (initiallySelectedSubtotalRows)
+	            TreeBuilder.selectivelySelect(grandTotal, initiallySelectedSubtotalRows);
 	        return new Tree(grandTotal);
 	    };
 	    TreeBuilder.bucketDetailRow = function (subtotalBys, detailedRow, grandTotal) {
