@@ -23200,7 +23200,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result))
 	        result *= value;
 	    if (typeof fmtInstruction.roundTo !== "undefined" && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
-	        result = parseFloat(result.toFixed(fmtInstruction.roundTo));
+	        result = parseFloat(result).toFixed(fmtInstruction.roundTo);
 	    if (fmtInstruction.separator && !isNaN(result))
 	        result = addCommas(result);
 	    return result;

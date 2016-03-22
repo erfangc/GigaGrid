@@ -1,9 +1,6 @@
 import {Tree} from "./TreeBuilder";
-import {Row} from "../models/Row";
-import {ColumnFormat} from "../models/ColumnLike";
-import {SubtotalRow} from "../models/Row";
-import {SortBy} from "../models/ColumnLike";
-import {SortDirection} from "../models/ColumnLike";
+import {Row, SubtotalRow} from "../models/Row";
+import {SortBy, SortDirection} from "../models/ColumnLike";
 
 export class SortFactory {
 

@@ -73,12 +73,11 @@ export function format(value:any, fmtInstruction:FormatInstruction):any {
         return x1 + x2;
     }
 
-
     var result = value;
     if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result))
         result *= value;
     if (typeof fmtInstruction.roundTo !== "undefined" && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
-        result = parseFloat(result.toFixed(fmtInstruction.roundTo));
+        result = parseFloat(result).toFixed(fmtInstruction.roundTo);
     if (fmtInstruction.separator && !isNaN(result))
         result = addCommas(result);
 
