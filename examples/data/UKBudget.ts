@@ -12,7 +12,7 @@ const columnDefs:ColumnDef[] = [
         title: "Food",
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
-        formatInstruction: {roundTo: 4}
+        formatInstruction: {roundTo: 1}
     },
     {
         colTag: "WFuel",

@@ -86,6 +86,7 @@ export class ColumnFactory {
             title: cd.title,
             aggregationMethod: cd.aggregationMethod,
             format: cd.format,
+            formatInstruction: cd.formatInstruction,
             cellTemplateCreator: cd.cellTemplateCreator
         };
 
