@@ -184,7 +184,7 @@ export class GigaStore extends ReduceStore<GigaState> {
     private handleCellSelect(state:GigaState, action:ToggleCellSelectAction):GigaState {
 
         if (typeof this.props.onCellClick === "function") {
-            if (!this.props.onCellClick(action.row, action.tableColumnDef))
+            if (!this.props.onCellClick(action.row, action.column))
                 return state; // will not emit state mutation event
             else
                 return _.clone(state); // will emit state mutation event
@@ -299,7 +299,7 @@ export interface GigaAction {
     type:GigaActionType
 }
 
-export interface InitializeAction {
+export interface InitializeAction extends GigaAction {
     props?: GigaProps
 }
 
@@ -343,5 +343,5 @@ export interface ToggleRowSelectAction extends GigaAction {
 
 export interface ToggleCellSelectAction extends GigaAction {
     row:Row
-    tableColumnDef: Column
+    column: Column
 }

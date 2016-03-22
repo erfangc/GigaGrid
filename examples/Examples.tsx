@@ -4,7 +4,6 @@ import {GigaGrid} from "../src/index";
 import UKBudget from "./data/UKBudget";
 import {GigaProps} from "../src/components/GigaGrid";
 import {Tabs, Tab, Navbar} from "react-bootstrap";
-import * as $ from 'jquery';
 
 /**
  * Created by erfangc on 3/20/16.

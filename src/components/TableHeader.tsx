@@ -50,7 +50,7 @@ export class TableHeader extends React.Component<TableHeaderProps,any> {
 
     private renderLeafColumns(columns:Column[], key:number):Element {
         const ths = columns.map((colDef:Column, i:number)=> {
-            return <TableHeaderCell tableColumnDef={colDef} key={i} isFirstColumn={i===0}
+            return <TableHeaderCell column={colDef} key={i} isFirstColumn={i===0}
                                     isLastColumn={i===columns.length-1} dispatcher={this.props.dispatcher}/>
         });
         return (<tr key={key}>{ths}</tr>);

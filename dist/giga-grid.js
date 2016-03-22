@@ -58,6 +58,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	__webpack_require__(1);
 	var GigaGrid_1 = __webpack_require__(5);
 	exports.GigaGrid = GigaGrid_1.GigaGrid;
+	var ColumnLike_1 = __webpack_require__(13);
+	exports.AggregationMethod = ColumnLike_1.AggregationMethod;
+	exports.ColumnFormat = ColumnLike_1.ColumnFormat;
+	exports.SortDirection = ColumnLike_1.SortDirection;
 
 
 /***/ },
@@ -471,10 +475,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return (React.createElement("div", {className: "giga-grid"}, React.createElement("div", {className: "giga-grid-header-container"}, React.createElement("table", {className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, onScroll: function () { return _this.dispatchDisplayBoundChange(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: this.state.rasterizedRows, columns: columns[columns.length - 1], displayStart: this.state.displayStart, displayEnd: this.state.displayEnd, rowHeight: this.props.rowHeight})))));
 	    };
 	    GigaGrid.prototype.componentWillReceiveProps = function (nextProps) {
-	        this.dispatcher.dispatch({
+	        var payload = {
 	            type: GigaStore_2.GigaActionType.INITIALIZE,
 	            props: nextProps
-	        });
+	        };
+	        this.dispatcher.dispatch(payload);
 	    };
 	    /**
 	     * on component update, we use jquery to align table headers
@@ -23010,7 +23015,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    GigaStore.prototype.handleCellSelect = function (state, action) {
 	        if (typeof this.props.onCellClick === "function") {
-	            if (!this.props.onCellClick(action.row, action.tableColumnDef))
+	            if (!this.props.onCellClick(action.row, action.column))
 	                return state; // will not emit state mutation event
 	            else
 	                return _.clone(state); // will emit state mutation event
@@ -30763,7 +30768,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var action = {
 	            type: GigaStore_1.GigaActionType.TOGGLE_CELL_SELECT,
 	            row: this.props.row,
-	            tableColumnDef: this.props.column
+	            column: this.props.column
 	        };
 	        this.props.dispatcher.dispatch(action);
 	    };
@@ -30871,7 +30876,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    TableHeader.prototype.renderLeafColumns = function (columns, key) {
 	        var _this = this;
 	        var ths = columns.map(function (colDef, i) {
-	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {tableColumnDef: colDef, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, dispatcher: _this.props.dispatcher});
+	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {column: colDef, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, dispatcher: _this.props.dispatcher});
 	        });
 	        return (React.createElement("tr", {key: key}, ths));
 	    };
@@ -30918,7 +30923,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "fa-bars": true,
 	            "dropdown-menu-toggle-handle-hide": !this.state.handleVisible
 	        });
-	        return (React.createElement("span", {style: { position: "absolute", right: "5px" }}, React.createElement("i", {key: 1, className: cx, ref: function (c) { return _this.dropdownToggleHandleRef = c; }, onClick: function () { return _this.dropdownMenuRef.toggleDisplay(); }}), React.createElement(DropdownMenu_1.DropdownMenu, {ref: function (c) { return _this.dropdownMenuRef = c; }, alignLeft: this.props.isLastColumn, toggleHandle: function () { return _this.dropdownToggleHandleRef; }}, React.createElement(SortMenuItem_1.SortMenuItem, {tableRowColumnDef: this.props.tableColumnDef, isLastColumn: this.props.isLastColumn, dispatcher: this.props.dispatcher}), React.createElement(SubtotalByMenuItem_1.SubtotalByMenuItem, {column: this.props.tableColumnDef, isLastColumn: this.props.isLastColumn, dispatcher: this.props.dispatcher}), React.createElement(FilterMenuItem_1.FilterMenuItem, {dispatcher: this.props.dispatcher, isLastColumn: this.props.isLastColumn, tableRowColumnDef: this.props.tableColumnDef}), React.createElement(DropdownMenu_1.SimpleDropdownMenuItem, {onClick: function () {
+	        return (React.createElement("span", {style: { position: "absolute", right: "5px" }}, React.createElement("i", {key: 1, className: cx, ref: function (c) { return _this.dropdownToggleHandleRef = c; }, onClick: function () { return _this.dropdownMenuRef.toggleDisplay(); }}), React.createElement(DropdownMenu_1.DropdownMenu, {ref: function (c) { return _this.dropdownMenuRef = c; }, alignLeft: this.props.isLastColumn, toggleHandle: function () { return _this.dropdownToggleHandleRef; }}, React.createElement(SortMenuItem_1.SortMenuItem, {tableRowColumnDef: this.props.column, isLastColumn: this.props.isLastColumn, dispatcher: this.props.dispatcher}), React.createElement(SubtotalByMenuItem_1.SubtotalByMenuItem, {column: this.props.column, isLastColumn: this.props.isLastColumn, dispatcher: this.props.dispatcher}), React.createElement(FilterMenuItem_1.FilterMenuItem, {dispatcher: this.props.dispatcher, isLastColumn: this.props.isLastColumn, tableRowColumnDef: this.props.column}), React.createElement(DropdownMenu_1.SimpleDropdownMenuItem, {onClick: function () {
 	            _this.props.dispatcher.dispatch({
 	                type: GigaStore_1.GigaActionType.COLLAPSE_ALL
 	            });
@@ -30929,18 +30934,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }, text: "Expand All", isLastColumn: this.props.isLastColumn}))));
 	    };
 	    TableHeaderCell.prototype.renderSortIcon = function () {
-	        if (this.props.tableColumnDef.sortDirection != undefined) {
+	        if (this.props.column.sortDirection != undefined) {
 	            var cx = classNames({
 	                "fa": true,
-	                "fa-sort-asc": this.props.tableColumnDef.sortDirection === ColumnLike_1.SortDirection.ASC,
-	                "fa-sort-desc": this.props.tableColumnDef.sortDirection === ColumnLike_1.SortDirection.DESC
+	                "fa-sort-asc": this.props.column.sortDirection === ColumnLike_1.SortDirection.ASC,
+	                "fa-sort-desc": this.props.column.sortDirection === ColumnLike_1.SortDirection.DESC
 	            });
 	            return (React.createElement("span", null, React.createElement("i", {className: cx})));
 	        }
 	    };
 	    TableHeaderCell.prototype.render = function () {
 	        var _this = this;
-	        var columnDef = this.props.tableColumnDef;
+	        var columnDef = this.props.column;
 	        var style = {
 	            overflow: "visible",
 	            position: "relative"

@@ -6,7 +6,6 @@ import {GigaProps} from "../../src/components/GigaGrid";
 import {TestUtils} from "../TestUtils";
 import {NewSubtotalAction} from "../../src/store/GigaStore";
 import {GigaActionType} from "../../src/store/GigaStore";
-import {ClearSubtotalAction} from "../../src/store/GigaStore";
 import {ToggleCollapseAction} from "../../src/store/GigaStore";
 import {NewSortAction} from "../../src/store/GigaStore";
 import {ColumnFormat} from "../../src/models/ColumnLike";
@@ -31,7 +30,7 @@ describe("GigaStore", ()=> {
     });
 
     it("can deduce the correct initial state", ()=> {
-        const initialState = store.initialize({}); // not getInitialState()
+        const initialState = store.initialize({type: GigaActionType.INITIALIZE}); // not getInitialState()
         expect(initialState.subtotalBys).toEqual([]);
         const state = store.getState();
         // expect(state).toEqual(initialState); // TODO this is failing due to deep comparison I believe
