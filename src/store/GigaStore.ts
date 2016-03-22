@@ -51,7 +51,12 @@ export class GigaStore extends ReduceStore<GigaState> {
     initialize(action: InitializeAction):GigaState {
 
         const props = action.props ||  this.props;
-        var tree = TreeBuilder.buildTree(props.data, this.appendSubtotalBysWithTitle(props.initialSubtotalBys));
+        var tree = TreeBuilder.buildTree(
+                            props.data,
+                            this.appendSubtotalBysWithTitle(props.initialSubtotalBys),
+                            this.props.initiallyExpandedSubtotalRows,
+                            this.props.initiallySelectedSubtotalRows
+        );
         SubtotalAggregator.aggregateTree(tree, props.columnDefs);
 
         if (props.initialSortBys)

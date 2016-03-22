@@ -1,19 +1,65 @@
 import {SubtotalBy} from "../models/ColumnLike";
 import {SubtotalRow} from "../models/Row";
 import {DetailRow} from "../models/Row";
+import * as _ from 'lodash';
 export class TreeBuilder {
 
-    static buildTree(data:any[], subtotalBys:SubtotalBy[] = [], grandTotal?:SubtotalRow):Tree {
+    /**
+     * traverse the tree and find nodes that has identical sector path, set toggleCollapse to false
+     * TODO add tests to ensure it does not break
+     * @param node
+     * @param initiallyExpandedSubtotalRows
+     */
+    private static selectivelyExpand(node:SubtotalRow, initiallyExpandedSubtotalRows:string[][]) {
+
+        initiallyExpandedSubtotalRows.forEach((sp)=>{
+            for (let i = 1; i <= sp.length; i++)
+                if (_.isEqual(node.sectorPath(), sp.slice(0,i)))
+                    node.toggleCollapse(false);
+        });
+
+        if (node.getNumChildren()!=0)
+            node.getChildren().forEach((child)=>TreeBuilder.selectivelyExpand(child, initiallyExpandedSubtotalRows))
+    }
+
+    /**
+     * traverse the tree and find nodes that has identical sector path, set isSelected to true
+     * TODO add tests to ensure it does not break
+     * @param node
+     * @param initiallySelectedSubtotalRows
+     */
+    private static selectivelySelect(node:SubtotalRow, initiallySelectedSubtotalRows:string[][]) {
+        initiallySelectedSubtotalRows.forEach((sp)=>{
+                if (_.isEqual(node.sectorPath(), sp))
+                    node.toggleSelect(true);
+        });
+        if (node.getNumChildren()!=0)
+            node.getChildren().forEach((child)=>TreeBuilder.selectivelySelect(child, initiallySelectedSubtotalRows))
+    }
+
+    static buildTree(data:any[],
+                     subtotalBys:SubtotalBy[] = [],
+                     initiallyExpandedSubtotalRows?:string[][],
+                     initiallySelectedSubtotalRows?:string[][]):Tree {
         /*
          * the way we create a Tree is as follows
          * since each detailRow in data can only belong to ONE SubtotalRow and each SubtotalRow can have only 1 parent
          * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
          * parent SubtotalRow (in other words, find the detailRow's "bucket") and append said detailRow to the parent
          */
-        grandTotal = grandTotal || new SubtotalRow("Grand Total");
+        const grandTotal = new SubtotalRow("Grand Total");
         grandTotal.setSectorPath([]);
         data.forEach(datum => this.bucketDetailRow(subtotalBys, new DetailRow(datum), grandTotal));
         TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, false);
+
+        /**
+         * EXPERIMENTAL - these props allow us to expand / select SubtotalRow on construction of the grid component
+         */
+        if (initiallyExpandedSubtotalRows)
+            TreeBuilder.selectivelyExpand(grandTotal, initiallyExpandedSubtotalRows);
+        if (initiallySelectedSubtotalRows)
+            TreeBuilder.selectivelySelect(grandTotal, initiallySelectedSubtotalRows);
+
         return new Tree(grandTotal);
     }
 
