@@ -56,7 +56,7 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
     }
 
     private renderBasicExample() {
-        return (<GigaGrid {...this.props.ukBudget}/>);
+        return (<GigaGrid onRowClick={()=>alert("Clicked")} {...this.props.ukBudget}/>);
     }
 
     private renderExampleWithColumnGrouping() {

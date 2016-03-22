@@ -25,6 +25,8 @@ export class Cell extends React.Component<CellProps,any> {
 
     private onCollapseToggle(e:SyntheticEvent) {
         e.preventDefault();
+        e.stopPropagation(); // we don't want toggle collapse to also trigger a row / cell clicked event
+
         const action:ToggleCollapseAction = {
             type: GigaActionType.TOGGLE_ROW_COLLAPSE,
             subtotalRow: this.props.row as SubtotalRow
