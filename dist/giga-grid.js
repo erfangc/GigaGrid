@@ -23006,6 +23006,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (!this.props.onRowClick(action.row, state))
 	                return state;
 	            else {
+	                // de-select every other row unless enableMultiRowSelect is turned on
+	                if (!this.props.enableMultiRowSelect) {
+	                    // call said function
+	                    recursivelyDeselect(state.tree.getRoot());
+	                }
 	                action.row.toggleSelect();
 	                return _.clone(state);
 	            }
@@ -23115,6 +23120,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GigaActionType[GigaActionType["CHANGE_ROW_DISPLAY_BOUNDS"] = 16] = "CHANGE_ROW_DISPLAY_BOUNDS";
 	})(exports.GigaActionType || (exports.GigaActionType = {}));
 	var GigaActionType = exports.GigaActionType;
+	// define a function
+	function recursivelyDeselect(row) {
+	    row.toggleSelect(false);
+	    if (!row.isDetail()) {
+	        var subtotalRow = row;
+	        var children = subtotalRow.getChildren().length === 0 ? subtotalRow.detailRows : subtotalRow.getChildren();
+	        children.forEach(function (child) { return recursivelyDeselect(child); });
+	    }
+	}
 
 
 /***/ },
@@ -23160,6 +23174,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var val = detailRows.map(function (r) { return r.getByColTag(columnDef.colTag); });
 	    return _.min(val) + " - " + _.max(val);
 	}
+	/**
+	 * formats a given value per the format instruction
+	 * TODO add tests
+	 * TODO this does not belong to a file called SubtotalAggregator.ts
+	 * @param value
+	 * @param fmtInstruction
+	 * @returns {any}
+	 */
 	function format(value, fmtInstruction) {
 	    if (!fmtInstruction)
 	        return value;
@@ -23183,6 +23205,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        result = addCommas(result);
 	    return result;
 	}
+	exports.format = format;
 	/**
 	 * these should return Tree(s) as oppose to being void ... I want to use Immutable.js to simplify things where possible
 	 */
@@ -23301,6 +23324,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            title: cd.title,
 	            aggregationMethod: cd.aggregationMethod,
 	            format: cd.format,
+	            formatInstruction: cd.formatInstruction,
 	            cellTemplateCreator: cd.cellTemplateCreator
 	        };
 	        // determine if there is an existing SortBy for this column
@@ -23359,6 +23383,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        grandTotal = grandTotal || new Row_1.SubtotalRow("Grand Total");
 	        grandTotal.setSectorPath([]);
 	        data.forEach(function (datum) { return _this.bucketDetailRow(subtotalBys, new Row_2.DetailRow(datum), grandTotal); });
+	        TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, false);
 	        return new Tree(grandTotal);
 	    };
 	    TreeBuilder.bucketDetailRow = function (subtotalBys, detailedRow, grandTotal) {
@@ -30749,6 +30774,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(6);
 	var classNames = __webpack_require__(42);
 	var ColumnLike_1 = __webpack_require__(13);
+	var SubtotalAggregator_1 = __webpack_require__(12);
 	var GigaStore_1 = __webpack_require__(11);
 	var Cell = (function (_super) {
 	    __extends(Cell, _super);
@@ -30809,7 +30835,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (cd.cellTemplateCreator)
 	            return cd.cellTemplateCreator(row.data()[cd.colTag], cd);
 	        else
-	            return row.data()[cd.colTag] || "";
+	            return SubtotalAggregator_1.format(row.data()[cd.colTag], cd.formatInstruction) || "";
 	    };
 	    return Cell;
 	}(React.Component));
