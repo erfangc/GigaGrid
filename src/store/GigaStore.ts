@@ -48,13 +48,14 @@ export class GigaStore extends ReduceStore<GigaState> {
      * so we kind of hack around it ... the designers of the Flux paradigm never though I would use flux store to manage widget
      * state as oppose to application state?
      */
-    initialize():GigaState {
+    initialize(action: InitializeAction):GigaState {
 
-        var tree = TreeBuilder.buildTree(this.props.data, this.appendSubtotalBysWithTitle(this.props.initialSubtotalBys));
-        SubtotalAggregator.aggregateTree(tree, this.props.columnDefs);
+        const props = action.props ||  this.props;
+        var tree = TreeBuilder.buildTree(props.data, this.appendSubtotalBysWithTitle(props.initialSubtotalBys));
+        SubtotalAggregator.aggregateTree(tree, props.columnDefs);
 
-        if (this.props.initialSortBys)
-            tree = SortFactory.sortTree(tree, this.props.initialSortBys);
+        if (props.initialSortBys)
+            tree = SortFactory.sortTree(tree, props.initialSortBys);
 
         const rasterizedRows:Row[] = TreeRasterizer.rasterize(tree);
 
@@ -62,9 +63,9 @@ export class GigaStore extends ReduceStore<GigaState> {
             rasterizedRows: rasterizedRows,
             displayStart: 0,
             displayEnd: Math.min(rasterizedRows.length - 1, PROGRESSIVE_RENDERING_THRESHOLD),
-            subtotalBys: _.cloneDeep(this.props.initialSubtotalBys) || [],
-            sortBys: _.cloneDeep(this.props.initialSortBys) || [],
-            filterBys: _.cloneDeep(this.props.initialFilterBys) || [],
+            subtotalBys: _.cloneDeep(props.initialSubtotalBys) || [],
+            sortBys: _.cloneDeep(props.initialSortBys) || [],
+            filterBys: _.cloneDeep(props.initialFilterBys) || [],
             tree: tree
         }
     }
@@ -85,7 +86,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         var newState:GigaState;
         switch (action.type) {
             case GigaActionType.INITIALIZE:
-                newState = this.initialize();
+                newState = this.initialize(action as InitializeAction);
                 break;
             case GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS:
                 newState = GigaStore.handleChangeRowDisplayBounds(state, action as ChangeRowDisplayBoundsAction);
@@ -296,6 +297,10 @@ export enum GigaActionType {
 
 export interface GigaAction {
     type:GigaActionType
+}
+
+export interface InitializeAction {
+    props?: GigaProps
 }
 
 export interface ToggleCollapseAction extends GigaAction {

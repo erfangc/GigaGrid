@@ -36,7 +36,8 @@ export class GigaRow extends React.Component<GigaRowProps, any> {
                               dispatcher={this.props.dispatcher}
                               row={this.props.row}/>)
             });
-        return <tr className={cx} style={{height: this.props.rowHeight}} onClick={()=>{
+        return <tr className={cx} style={{height: this.props.rowHeight}} onClick={(e:SyntheticEvent)=>{
+            e.preventDefault();
             var action = {
                 type: GigaActionType.TOGGLE_ROW_SELECT,
                 row: this.props.row

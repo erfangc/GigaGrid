@@ -17,8 +17,8 @@ div.giga-grid
     border-collapse collapse
     font-size 11px
 
-  //table.header-table
-  //  table-layout fixed
+  table.header-table
+    table-layout fixed
 
   div.giga-grid-body-viewport
     overflow-y scroll
@@ -57,10 +57,13 @@ div.giga-grid
     white-space: nowrap
     border 1px solid cell-border-color
 
+  tr td i:hover
+    cursor pointer
+
   tr.subtotal-row
     background-color subtotal-color
 
-  thead tr:hover, tbody tr:hover
+  thead tr:hover
     cursor pointer
 
   tbody tr:hover

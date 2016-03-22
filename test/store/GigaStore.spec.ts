@@ -31,7 +31,7 @@ describe("GigaStore", ()=> {
     });
 
     it("can deduce the correct initial state", ()=> {
-        const initialState = store.initialize(); // not getInitialState()
+        const initialState = store.initialize({}); // not getInitialState()
         expect(initialState.subtotalBys).toEqual([]);
         const state = store.getState();
         // expect(state).toEqual(initialState); // TODO this is failing due to deep comparison I believe

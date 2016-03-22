@@ -58,12 +58,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	__webpack_require__(1);
 	var GigaGrid_1 = __webpack_require__(5);
 	exports.GigaGrid = GigaGrid_1.GigaGrid;
-	var ColumnLike_1 = __webpack_require__(13);
-	exports.CF = ColumnLike_1.ColumnFormat;
-	var ColumnLike_2 = __webpack_require__(13);
-	exports.AM = ColumnLike_2.AggregationMethod;
-	var ColumnLike_3 = __webpack_require__(13);
-	exports.SD = ColumnLike_3.SortDirection;
 
 
 /***/ },
@@ -101,7 +95,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	// module
-	exports.push([module.id, "div.giga-grid .dropdown-menu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  left: 0;\n}\ndiv.giga-grid .dropdown-menu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  right: 0;\n}\ndiv.giga-grid .dropdown-submenu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  left: 100%;\n}\ndiv.giga-grid .dropdown-submenu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  right: 50%;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle {\n  position: absolute;\n  right: 0;\n  background-color: #4a5564;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle-hide {\n  opacity: 0;\n}\ndiv.giga-grid .dropdown-menu-item {\n  position: relative;\n  padding-bottom: 5px;\n  padding-left: 10px;\n  padding-top: 5px;\n  color: #666;\n  border-radius: 2px;\n}\ndiv.giga-grid .dropdown-menu-item.hoverable:hover {\n  cursor: pointer;\n  background-color: #eee;\n}\ndiv.giga-grid .dropdown-menu-item input {\n  border: none;\n  border-bottom: 2px solid #666;\n  margin-top: 10px;\n  margin-bottom: 10px;\n  padding-top: 5px;\n  padding-bottom: 5px;\n  font-size: 13px;\n}\ndiv.giga-grid {\n  margin: 0;\n  font-family: Roboto, sans-serif;\n  color: #333;\n  overflow-x: scroll;\n}\ndiv.giga-grid table {\n  border-collapse: collapse;\n  font-size: 11px;\n}\ndiv.giga-grid table.header-table {\n  table-layout: fixed;\n}\ndiv.giga-grid div.giga-grid-body-viewport {\n  overflow-y: scroll;\n  overflow-x: hidden;\n  display: inline-block;\n}\ndiv.giga-grid tr.selected {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row.selected {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid tr td,\ndiv.giga-grid tr th {\n  box-sizing: border-box;\n  padding: 2px 5px;\n  min-width: 8em;\n}\ndiv.giga-grid th:last-child,\ndiv.giga-grid td:last-child {\n  padding-right: 10px;\n}\ndiv.giga-grid th:first-child,\ndiv.giga-grid td:first-child {\n  padding-left: 10px;\n}\ndiv.giga-grid tr th {\n  font-weight: normal;\n  background-color: #4a5564;\n  color: #fff;\n  border-left: 1px solid #fff;\n}\ndiv.giga-grid tr th.column-group {\n  text-align: center;\n  border-right: 1px solid #f5f5f5;\n  border-bottom: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr td {\n  white-space: nowrap;\n  border: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr.subtotal-row {\n  background-color: rgba(74,85,100,0.1);\n}\ndiv.giga-grid thead tr:hover,\ndiv.giga-grid tbody tr:hover {\n  cursor: pointer;\n}\ndiv.giga-grid tbody tr:hover {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row:hover {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid .numeric {\n  text-align: right;\n}\ndiv.giga-grid .non-numeric {\n  text-align: left;\n}\ndiv.giga-grid span.header-text {\n  padding-right: 15px;\n}\n", ""]);
+	exports.push([module.id, "div.giga-grid .dropdown-menu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  left: 0;\n}\ndiv.giga-grid .dropdown-menu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  right: 0;\n}\ndiv.giga-grid .dropdown-submenu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  left: 100%;\n}\ndiv.giga-grid .dropdown-submenu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  right: 50%;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle {\n  position: absolute;\n  right: 0;\n  background-color: #4a5564;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle-hide {\n  opacity: 0;\n}\ndiv.giga-grid .dropdown-menu-item {\n  position: relative;\n  padding-bottom: 5px;\n  padding-left: 10px;\n  padding-top: 5px;\n  color: #666;\n  border-radius: 2px;\n}\ndiv.giga-grid .dropdown-menu-item.hoverable:hover {\n  cursor: pointer;\n  background-color: #eee;\n}\ndiv.giga-grid .dropdown-menu-item input {\n  border: none;\n  border-bottom: 2px solid #666;\n  margin-top: 10px;\n  margin-bottom: 10px;\n  padding-top: 5px;\n  padding-bottom: 5px;\n  font-size: 13px;\n}\ndiv.giga-grid {\n  margin: 0;\n  font-family: Roboto, sans-serif;\n  color: #333;\n  overflow-x: scroll;\n}\ndiv.giga-grid table {\n  border-collapse: collapse;\n  font-size: 11px;\n}\ndiv.giga-grid table.header-table {\n  table-layout: fixed;\n}\ndiv.giga-grid div.giga-grid-body-viewport {\n  overflow-y: scroll;\n  overflow-x: hidden;\n  display: inline-block;\n}\ndiv.giga-grid tr.selected {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row.selected {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid tr td,\ndiv.giga-grid tr th {\n  box-sizing: border-box;\n  padding: 2px 5px;\n  min-width: 8em;\n}\ndiv.giga-grid th:last-child,\ndiv.giga-grid td:last-child {\n  padding-right: 10px;\n}\ndiv.giga-grid th:first-child,\ndiv.giga-grid td:first-child {\n  padding-left: 10px;\n}\ndiv.giga-grid tr th {\n  font-weight: normal;\n  background-color: #4a5564;\n  color: #fff;\n  border-left: 1px solid #fff;\n  border-right: 1px solid #fff;\n  border-bottom: 1px solid #fff;\n}\ndiv.giga-grid tr th.column-group {\n  text-align: center;\n}\ndiv.giga-grid tr td {\n  white-space: nowrap;\n  border: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr td i:hover {\n  cursor: pointer;\n}\ndiv.giga-grid tr.subtotal-row {\n  background-color: rgba(74,85,100,0.1);\n}\ndiv.giga-grid thead tr:hover {\n  cursor: pointer;\n}\ndiv.giga-grid tbody tr:hover {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row:hover {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid .numeric {\n  text-align: right;\n}\ndiv.giga-grid .non-numeric {\n  text-align: left;\n}\ndiv.giga-grid span.header-text {\n  padding-right: 15px;\n}\n", ""]);
 	
 	// exports
 
@@ -475,6 +469,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            height: this.props.bodyHeight,
 	        };
 	        return (React.createElement("div", {className: "giga-grid"}, React.createElement("div", {className: "giga-grid-header-container"}, React.createElement("table", {className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, onScroll: function () { return _this.dispatchDisplayBoundChange(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: this.state.rasterizedRows, columns: columns[columns.length - 1], displayStart: this.state.displayStart, displayEnd: this.state.displayEnd, rowHeight: this.props.rowHeight})))));
+	    };
+	    GigaGrid.prototype.componentWillReceiveProps = function (nextProps) {
+	        this.dispatcher.dispatch({
+	            type: GigaStore_2.GigaActionType.INITIALIZE,
+	            props: nextProps
+	        });
 	    };
 	    /**
 	     * on component update, we use jquery to align table headers
@@ -22887,19 +22887,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * so we kind of hack around it ... the designers of the Flux paradigm never though I would use flux store to manage widget
 	     * state as oppose to application state?
 	     */
-	    GigaStore.prototype.initialize = function () {
-	        var tree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, this.appendSubtotalBysWithTitle(this.props.initialSubtotalBys));
-	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, this.props.columnDefs);
-	        if (this.props.initialSortBys)
-	            tree = SortFactory_1.SortFactory.sortTree(tree, this.props.initialSortBys);
+	    GigaStore.prototype.initialize = function (action) {
+	        var props = action.props || this.props;
+	        var tree = TreeBuilder_1.TreeBuilder.buildTree(props.data, this.appendSubtotalBysWithTitle(props.initialSubtotalBys));
+	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, props.columnDefs);
+	        if (props.initialSortBys)
+	            tree = SortFactory_1.SortFactory.sortTree(tree, props.initialSortBys);
 	        var rasterizedRows = TreeRasterizer_1.TreeRasterizer.rasterize(tree);
 	        return {
 	            rasterizedRows: rasterizedRows,
 	            displayStart: 0,
 	            displayEnd: Math.min(rasterizedRows.length - 1, exports.PROGRESSIVE_RENDERING_THRESHOLD),
-	            subtotalBys: _.cloneDeep(this.props.initialSubtotalBys) || [],
-	            sortBys: _.cloneDeep(this.props.initialSortBys) || [],
-	            filterBys: _.cloneDeep(this.props.initialFilterBys) || [],
+	            subtotalBys: _.cloneDeep(props.initialSubtotalBys) || [],
+	            sortBys: _.cloneDeep(props.initialSortBys) || [],
+	            filterBys: _.cloneDeep(props.initialFilterBys) || [],
 	            tree: tree
 	        };
 	    };
@@ -22918,7 +22919,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var newState;
 	        switch (action.type) {
 	            case GigaActionType.INITIALIZE:
-	                newState = this.initialize();
+	                newState = this.initialize(action);
 	                break;
 	            case GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS:
 	                newState = GigaStore.handleChangeRowDisplayBounds(state, action);
@@ -30662,7 +30663,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            .map(function (column, i) {
 	            return (React.createElement(Cell_1.Cell, {key: i, isFirstColumn: i === 0, column: column, rowHeight: _this.props.rowHeight, dispatcher: _this.props.dispatcher, row: _this.props.row}));
 	        });
-	        return React.createElement("tr", {className: cx, style: { height: this.props.rowHeight }, onClick: function () {
+	        return React.createElement("tr", {className: cx, style: { height: this.props.rowHeight }, onClick: function (e) {
+	            e.preventDefault();
 	            var action = {
 	                type: GigaStore_1.GigaActionType.TOGGLE_ROW_SELECT,
 	                row: _this.props.row
@@ -30750,6 +30752,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    Cell.prototype.onCollapseToggle = function (e) {
 	        e.preventDefault();
+	        e.stopPropagation(); // we don't want toggle collapse to also trigger a row / cell clicked event
 	        var action = {
 	            type: GigaStore_1.GigaActionType.TOGGLE_ROW_COLLAPSE,
 	            subtotalRow: this.props.row
