@@ -46,6 +46,7 @@ export interface GigaProps extends React.Props<GigaGrid> {
      * @param row the `Row` object associated with the row the user clicked on
      */
     onRowClick?:(row:Row, state: GigaState)=>boolean
+    enableMultiRowSelect?: boolean
 
     /**
      * Callback that fires when a cell is clicked, return `false` in the passed callback function to suppress
