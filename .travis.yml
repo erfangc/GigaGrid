@@ -4,7 +4,7 @@ node_js:
 - '4'
 
 install:
-- npm install phantomjs karma-phantomjs-launcher karma -g
+- npm install phantomjs karma -g
 - npm install
 
 script:
