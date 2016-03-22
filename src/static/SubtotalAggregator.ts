@@ -49,7 +49,15 @@ function range(detailRows:DetailRow[], columnDef:ColumnDef):string {
     return `${_.min(val)} - ${_.max(val)}`;
 }
 
-function format(value:any, fmtInstruction:FormatInstruction):any {
+/**
+ * formats a given value per the format instruction
+ * TODO add tests
+ * TODO this does not belong to a file called SubtotalAggregator.ts
+ * @param value
+ * @param fmtInstruction
+ * @returns {any}
+ */
+export function format(value:any, fmtInstruction:FormatInstruction):any {
     if (!fmtInstruction)
         return value;
 

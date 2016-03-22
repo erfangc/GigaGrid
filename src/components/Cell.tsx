@@ -5,6 +5,7 @@ import {Column} from "../models/ColumnLike";
 import {Row} from "../models/Row";
 import {ColumnFormat} from "../models/ColumnLike";
 import {SubtotalRow} from "../models/Row";
+import {format} from '../static/SubtotalAggregator';
 import SyntheticEvent = __React.SyntheticEvent;
 import {ToggleCollapseAction} from "../store/GigaStore";
 import {GigaActionType} from "../store/GigaStore";
@@ -12,7 +13,7 @@ import {GigaActionType} from "../store/GigaStore";
 export interface CellProps extends GridSubcomponentProps<Cell> {
     row:Row
     column:Column
-    rowHeight: string
+    rowHeight:string
     isFirstColumn?:boolean
 }
 
@@ -56,7 +57,7 @@ export class Cell extends React.Component<CellProps,any> {
                 <strong>
                     <span>
                         <i className={cx} onClick={e=>this.onCollapseToggle(e)}/>&nbsp;
-                    {row.title || ""}
+                        {row.title || ""}
                     </span>
                 </strong>
             </td>
@@ -87,7 +88,7 @@ export class Cell extends React.Component<CellProps,any> {
             result = this.renderSubtotalCellWithCollapseBtn(row as SubtotalRow);
         else
             result = (<td className={cx} onClick={e=>this.onClick()}
-                          style={this.calculateStyle()}>{Cell.renderContent(row,cd)}</td>);
+                          style={this.calculateStyle()}>{Cell.renderContent(row, cd)}</td>);
 
         return result;
     }
@@ -96,7 +97,7 @@ export class Cell extends React.Component<CellProps,any> {
         if (cd.cellTemplateCreator)
             return cd.cellTemplateCreator(row.data()[cd.colTag], cd);
         else
-            return row.data()[cd.colTag] || "";
+            return format(row.data()[cd.colTag], cd.formatInstruction) || "";
     }
 }
 
