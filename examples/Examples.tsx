@@ -52,7 +52,12 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
     }
 
     private renderBasicExample() {
-        return (<GigaGrid onRowClick={(row:Row, state:GigaState)=>true} {...this.props.ukBudget}/>);
+        return (<GigaGrid
+                    onRowClick={(row:Row, state:GigaState)=>!row.isSelected()}
+                    initiallyExpandedSubtotalRows={[["Age: 50","# of Children: 1"]]}
+                    initiallySelectedSubtotalRows={[["Age: 50","# of Children: 1"]]}
+                    {...this.props.ukBudget}
+                />);
     }
 
     private renderExampleWithColumnGrouping() {

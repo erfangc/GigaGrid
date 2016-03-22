@@ -80,6 +80,18 @@ export interface GigaProps extends React.Props<GigaGrid> {
     columnGroups?:ColumnGroupDef[]
     bodyHeight?:string
     rowHeight?:string
+
+    /**
+     * EXPERIMENTAL - these props allow us to expand / select SubtotalRow on construction of the grid component
+     */
+    /**
+     * sector paths to expand by default
+     */
+    initiallyExpandedSubtotalRows?: string[][]
+    /**
+     * sector paths to mark as "selected"
+     */
+    initiallySelectedSubtotalRows?:  string[][]
 }
 
 /**
