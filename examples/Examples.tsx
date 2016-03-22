@@ -2,12 +2,9 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {GigaGrid} from "../src/index";
 import UKBudget from "./data/UKBudget";
-import {GigaProps} from "../src/components/GigaGrid";
+import {GigaProps, GigaState} from "../src/components/GigaGrid";
 import {Tabs, Tab, Navbar} from "react-bootstrap";
-
-/**
- * Created by erfangc on 3/20/16.
- */
+import {Row} from "../src/models/Row";
 
 interface ExamplesProps extends React.Props<Examples> {
     ukBudget:GigaProps
@@ -55,7 +52,7 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
     }
 
     private renderBasicExample() {
-        return (<GigaGrid onRowClick={()=>alert("Clicked")} {...this.props.ukBudget}/>);
+        return (<GigaGrid onRowClick={(row:Row, state:GigaState)=>true} {...this.props.ukBudget}/>);
     }
 
     private renderExampleWithColumnGrouping() {

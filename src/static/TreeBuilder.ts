@@ -13,6 +13,7 @@ export class TreeBuilder {
         grandTotal = grandTotal || new SubtotalRow("Grand Total");
         grandTotal.setSectorPath([]);
         data.forEach(datum => this.bucketDetailRow(subtotalBys, new DetailRow(datum), grandTotal));
+        TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, false);
         return new Tree(grandTotal);
     }
 

@@ -31,7 +31,7 @@ describe("TableBody", ()=> {
             </table>
         );
         const trs = ReactTestUtils.scryRenderedDOMComponentsWithTag(component, "tr");
-        expect(trs.length).toBe(2); // collapsed by default
+        expect(trs.length).toBe(12); // collapsed by default
         // TODO add test case for expanding
     });
 

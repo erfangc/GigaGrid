@@ -173,6 +173,11 @@ export class GigaStore extends ReduceStore<GigaState> {
             if (!this.props.onRowClick(action.row, state))
                 return state;
             else {
+                // de-select every other row unless enableMultiRowSelect is turned on
+                if (!this.props.enableMultiRowSelect) {
+                    // call said function
+                    recursivelyDeselect(state.tree.getRoot());
+                }
                 action.row.toggleSelect();
                 return _.clone(state);
             }
@@ -344,4 +349,14 @@ export interface ToggleRowSelectAction extends GigaAction {
 export interface ToggleCellSelectAction extends GigaAction {
     row:Row
     column: Column
+}
+
+// define a function
+function recursivelyDeselect(row: Row) {
+    row.toggleSelect(false);
+    if (!row.isDetail()) {
+        const subtotalRow = (row as SubtotalRow);
+        const children :Row[] = subtotalRow.getChildren().length === 0 ? subtotalRow.detailRows: subtotalRow.getChildren();
+        children.forEach(child=>recursivelyDeselect(child));
+    }
 }
