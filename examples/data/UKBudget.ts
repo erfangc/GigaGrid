@@ -6,7 +6,13 @@ var json = require("./UKBudget.json");
 
 const columnDefs:ColumnDef[] = [
     {colTag: "Age", title: "Age"},
-    {colTag: "Children", title: "# of Children"},
+    {
+        colTag: "Children",
+        title: "# of Children",
+        format: ColumnFormat.NUMBER,
+        aggregationMethod: AggregationMethod.WEIGHTED_AVERAGE,
+        weightBy: "Income"
+    },
     {
         colTag: "WFood",
         title: "Food",

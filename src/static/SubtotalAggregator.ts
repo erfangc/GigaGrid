@@ -14,7 +14,7 @@ function weightedAverage(detailRows:DetailRow[], columnDef:ColumnDef):number {
     var denom = 0.0;
     var sumproduct = 0.0;
     for (let i = 0; i < detailRows.length; i++) {
-        denom = denom + detailRows[i].getByColTag(columnDef.colTag);
+        denom = denom + detailRows[i].getByColTag(columnDef.weightBy);
         sumproduct = sumproduct + detailRows[i].getByColTag(columnDef.colTag) * detailRows[i].getByColTag(columnDef.weightBy)
     }
     if (denom !== 0.0)
@@ -27,13 +27,13 @@ function average(detailRows:DetailRow[], columnDef:ColumnDef):number {
     return straightSum(detailRows, columnDef) / detailRows.length;
 }
 
-function count(detailRows:DetailRow[], columnDefs:ColumnDef):number {
+function count(detailRows:DetailRow[]):number {
     return detailRows.length;
 }
 
 function countOrDistinct(detailRows:DetailRow[], columnDef:ColumnDef):any {
     const distinctCount = countDistinct(detailRows, columnDef);
-    const c = count(detailRows, columnDef);
+    const c = count(detailRows);
     if (distinctCount !== 1)
         return `${distinctCount}/${c}`;
     else
@@ -117,7 +117,7 @@ export class SubtotalAggregator {
                     value = average(detailRows, columnDef);
                     break;
                 case AggregationMethod.COUNT:
-                    value = count(detailRows, columnDef);
+                    value = count(detailRows);
                     break;
                 case AggregationMethod.COUNT_DISTINCT:
                     value = countDistinct(detailRows, columnDef);

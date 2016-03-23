@@ -23145,7 +23145,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var denom = 0.0;
 	    var sumproduct = 0.0;
 	    for (var i = 0; i < detailRows.length; i++) {
-	        denom = denom + detailRows[i].getByColTag(columnDef.colTag);
+	        denom = denom + detailRows[i].getByColTag(columnDef.weightBy);
 	        sumproduct = sumproduct + detailRows[i].getByColTag(columnDef.colTag) * detailRows[i].getByColTag(columnDef.weightBy);
 	    }
 	    if (denom !== 0.0)
@@ -23156,12 +23156,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return 0;
 	    return straightSum(detailRows, columnDef) / detailRows.length;
 	}
-	function count(detailRows, columnDefs) {
+	function count(detailRows) {
 	    return detailRows.length;
 	}
 	function countOrDistinct(detailRows, columnDef) {
 	    var distinctCount = countDistinct(detailRows, columnDef);
-	    var c = count(detailRows, columnDef);
+	    var c = count(detailRows);
 	    if (distinctCount !== 1)
 	        return distinctCount + "/" + c;
 	    else
@@ -23237,7 +23237,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    value = average(detailRows, columnDef);
 	                    break;
 	                case ColumnLike_1.AggregationMethod.COUNT:
-	                    value = count(detailRows, columnDef);
+	                    value = count(detailRows);
 	                    break;
 	                case ColumnLike_1.AggregationMethod.COUNT_DISTINCT:
 	                    value = countDistinct(detailRows, columnDef);

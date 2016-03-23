@@ -1,12 +1,7 @@
-import {DetailRow} from "../../src/models/Row";
-import {SubtotalRow} from "../../src/models/Row";
-import {ColumnDef} from "../../src/models/ColumnLike";
-import {ColumnFormat} from "../../src/models/ColumnLike";
-import {AggregationMethod} from "../../src/models/ColumnLike";
+import {DetailRow, SubtotalRow} from "../../src/models/Row";
+import {ColumnDef, ColumnFormat, AggregationMethod} from "../../src/models/ColumnLike";
 import {SubtotalAggregator} from "../../src/static/SubtotalAggregator";
-import {Tree} from "../../src/static/TreeBuilder";
-import {TreeBuilder} from "../../src/static/TreeBuilder";
-import {SubtotalBy} from "../../src/models/ColumnLike";
+import {Tree, TreeBuilder} from "../../src/static/TreeBuilder";
 import {TestUtils} from "../TestUtils";
 
 describe("SubtotalAggregator", () => {
@@ -125,6 +120,15 @@ describe("SubtotalAggregator", () => {
 
         it("RANGE subtotal", () => {
             expect(aggregatedRow["range_field"]).toBe("1 - 10");
+        });
+
+        it("Weighted Average of average_field by weight_factor", ()=> {
+            const aggregatedRow = SubtotalAggregator.aggregate(detailRows, [{
+                colTag: "average_field",
+                aggregationMethod: AggregationMethod.WEIGHTED_AVERAGE,
+                weightBy: "weight_factor"
+            }]);
+            expect(aggregatedRow['average_field']).toBeCloseTo(5.615560, 0.0001);
         });
 
     });
