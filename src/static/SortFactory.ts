@@ -52,11 +52,22 @@ export class SortFactory {
             return SortFactory.buildLexicalSortFn(sortBy);
     }
 
+    private static getColumnValueForRow(row: Row, sortBy: SortBy) {
+        if (row.isDetail())
+            return row.get(sortBy);
+        else
+            if (row.get(sortBy) !== null && row.get(sortBy) !== undefined && row.get(sortBy) !== "")
+                return row.get(sortBy);
+            else
+                return row.title;
+    }
+
     private static buildLexicalSortFn(sortBy:SortBy):(a:Row, b:Row)=>number {
 
         return function (a:Row, b:Row):number {
-            const valA = a.isDetail() ? a.get(sortBy) : a.title;
-            const valB = b.isDetail() ? b.get(sortBy) : b.title;
+
+            const valA = SortFactory.getColumnValueForRow(a, sortBy);
+            const valB = SortFactory.getColumnValueForRow(b, sortBy);
 
             var result = 0;
 
