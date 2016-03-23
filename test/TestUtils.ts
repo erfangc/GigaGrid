@@ -1,14 +1,6 @@
-import {DetailRow} from "../src/models/Row";
-import {ColumnDef} from "../src/models/ColumnLike";
-import {ColumnFormat} from "../src/models/ColumnLike";
-import {AggregationMethod} from "../src/models/ColumnLike";
-import {SubtotalRow} from "../src/models/Row";
-import {Column} from "../src/models/ColumnLike";
-import {TreeBuilder} from "../src/static/TreeBuilder";
-import {SubtotalAggregator} from "../src/static/SubtotalAggregator";
-import {Tree} from "../src/static/TreeBuilder";
-import {Row} from "../src/models/Row";
-import {ColumnGroupDef} from "../src/models/ColumnLike";
+import {DetailRow, SubtotalRow, Row} from "../src/models/Row";
+import {ColumnDef, ColumnFormat, AggregationMethod, Column, ColumnGroupDef} from "../src/models/ColumnLike";
+import {TreeBuilder, Tree} from "../src/static/TreeBuilder";
 import {GigaState} from "../src/components/GigaGrid";
 
 interface TestDataFactory {
@@ -26,17 +18,18 @@ class ComprehensiveTypeData implements TestDataFactory {
     }
 
     rawData():any[]{
-        return [{
-            "id": 1,
-            "last_name": "George",
-            "gender": "Female",
-            "invariant": "Invariant",
-            "sum_field": 10,
-            "average_field": 10,
-            "count_or_distinct_field": "F",
-            "range_field": 2,
-            "weight_factor": "0.66"
-        },
+        return [
+            {
+                "id": 1,
+                "last_name": "George",
+                "gender": "Female",
+                "invariant": "Invariant",
+                "sum_field": 10,
+                "average_field": 10,
+                "count_or_distinct_field": "F",
+                "range_field": 2,
+                "weight_factor": 0.66
+            },
             {
                 "id": 2,
                 "last_name": "Wood",
@@ -46,7 +39,7 @@ class ComprehensiveTypeData implements TestDataFactory {
                 "average_field": 7,
                 "count_or_distinct_field": "F",
                 "range_field": 8,
-                "weight_factor": "0.68"
+                "weight_factor": 0.68
             },
             {
                 "id": 3,
@@ -57,7 +50,7 @@ class ComprehensiveTypeData implements TestDataFactory {
                 "average_field": 4,
                 "count_or_distinct_field": "M",
                 "range_field": 4,
-                "weight_factor": "0.41"
+                "weight_factor": 0.41
             },
             {
                 "id": 4,
@@ -68,7 +61,7 @@ class ComprehensiveTypeData implements TestDataFactory {
                 "average_field": 7,
                 "count_or_distinct_field": "M",
                 "range_field": 6,
-                "weight_factor": "0.29"
+                "weight_factor": 0.29
             },
             {
                 "id": 5,
@@ -79,7 +72,7 @@ class ComprehensiveTypeData implements TestDataFactory {
                 "average_field": 5,
                 "count_or_distinct_field": "M",
                 "range_field": 1,
-                "weight_factor": "0.75"
+                "weight_factor": 0.75
             },
             {
                 "id": 6,
@@ -90,7 +83,7 @@ class ComprehensiveTypeData implements TestDataFactory {
                 "average_field": 6,
                 "count_or_distinct_field": "F",
                 "range_field": 10,
-                "weight_factor": "0.65"
+                "weight_factor": 0.65
             },
             {
                 "id": 7,
@@ -101,7 +94,7 @@ class ComprehensiveTypeData implements TestDataFactory {
                 "average_field": 2,
                 "count_or_distinct_field": "F",
                 "range_field": 2,
-                "weight_factor": "0.93"
+                "weight_factor": 0.93
             },
             {
                 "id": 8,
@@ -112,7 +105,7 @@ class ComprehensiveTypeData implements TestDataFactory {
                 "average_field": 2,
                 "count_or_distinct_field": "M",
                 "range_field": 1,
-                "weight_factor": "0.77"
+                "weight_factor": 0.77
             },
             {
                 "id": 9,
@@ -123,7 +116,7 @@ class ComprehensiveTypeData implements TestDataFactory {
                 "average_field": 9,
                 "count_or_distinct_field": "F",
                 "range_field": 6,
-                "weight_factor": "0.71"
+                "weight_factor": 0.71
             },
             {
                 "id": 10,
@@ -134,7 +127,7 @@ class ComprehensiveTypeData implements TestDataFactory {
                 "average_field": 5,
                 "count_or_distinct_field": "M",
                 "range_field": 6,
-                "weight_factor": "0.22"
+                "weight_factor": 0.22
             },
             {
                 "id": 11,
@@ -145,7 +138,7 @@ class ComprehensiveTypeData implements TestDataFactory {
                 "average_field": 8,
                 "count_or_distinct_field": "F",
                 "range_field": 5,
-                "weight_factor": "0.69"
+                "weight_factor": 0.69
             },
             {
                 "id": 12,
@@ -156,7 +149,7 @@ class ComprehensiveTypeData implements TestDataFactory {
                 "average_field": 2,
                 "count_or_distinct_field": "M",
                 "range_field": 1,
-                "weight_factor": "0.08"
+                "weight_factor": 0.08
             },
             {
                 "id": 13,
@@ -167,7 +160,7 @@ class ComprehensiveTypeData implements TestDataFactory {
                 "average_field": 3,
                 "count_or_distinct_field": "F",
                 "range_field": 4,
-                "weight_factor": "0.28"
+                "weight_factor": 0.28
             },
             {
                 "id": 14,
@@ -178,7 +171,7 @@ class ComprehensiveTypeData implements TestDataFactory {
                 "average_field": 7,
                 "count_or_distinct_field": "F",
                 "range_field": 7,
-                "weight_factor": "0.87"
+                "weight_factor": 0.87
             },
             {
                 "id": 15,
@@ -189,7 +182,7 @@ class ComprehensiveTypeData implements TestDataFactory {
                 "average_field": 4,
                 "count_or_distinct_field": "F",
                 "range_field": 3,
-                "weight_factor": "0.42"
+                "weight_factor": 0.42
             }];
     }
 
