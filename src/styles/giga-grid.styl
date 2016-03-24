@@ -11,7 +11,6 @@ div.giga-grid
   margin 0
   font-family Roboto, sans-serif
   color #333
-  overflow-x scroll
 
   table
     border-collapse collapse
@@ -21,10 +20,13 @@ div.giga-grid
     table-layout fixed
 
   div.giga-grid-body-viewport
-    overflow-y scroll
-    overflow-x hidden
+    overflow scroll
     display inline-block // this allow the viewport to be as wide as the canva
+    max-width 100%
 
+  div.giga-grid-header-container
+    max-width 100%
+    overflow hidden
   tr.selected
     background-color selected-color
 
