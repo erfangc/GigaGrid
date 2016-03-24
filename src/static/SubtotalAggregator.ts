@@ -117,7 +117,7 @@ export class SubtotalAggregator {
                     value = average(detailRows, columnDef);
                     break;
                 case AggregationMethod.COUNT:
-                    value = count(detailRows);
+                    value = `[${count(detailRows)}]`;
                     break;
                 case AggregationMethod.COUNT_DISTINCT:
                     value = countDistinct(detailRows, columnDef);
