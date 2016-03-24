@@ -10,8 +10,8 @@ const columnDefs:ColumnDef[] = [
         colTag: "Children",
         title: "# of Children",
         format: ColumnFormat.NUMBER,
-        aggregationMethod: AggregationMethod.WEIGHTED_AVERAGE,
-        weightBy: "Income"
+        aggregationMethod: AggregationMethod.COUNT
+        // weightBy: "Income"
     },
     {
         colTag: "WFood",

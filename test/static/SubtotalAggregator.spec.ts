@@ -95,7 +95,7 @@ describe("SubtotalAggregator", () => {
         const aggregatedRow = SubtotalAggregator.aggregate(detailRows, columnDefs);
 
         it("COUNT subtotal", () => {
-            expect(aggregatedRow["id"]).toBe(15);
+            expect(aggregatedRow["id"]).toBe("[15]");
         });
 
         it("COUNT_DISTINCT subtotal", () => {
