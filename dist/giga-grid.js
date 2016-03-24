@@ -23237,7 +23237,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    value = average(detailRows, columnDef);
 	                    break;
 	                case ColumnLike_1.AggregationMethod.COUNT:
-	                    value = count(detailRows);
+	                    value = "[" + count(detailRows) + "]";
 	                    break;
 	                case ColumnLike_1.AggregationMethod.COUNT_DISTINCT:
 	                    value = countDistinct(detailRows, columnDef);
