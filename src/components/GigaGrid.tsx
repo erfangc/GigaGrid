@@ -243,6 +243,11 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         }).value();
     }
 
+    horizontalScrollHandler() {
+        const scrollLeftAmount: number = $('.giga-grid-body-viewport').scrollLeft();
+        $('.giga-grid-header-container').scrollLeft(scrollLeftAmount);
+    }
+
     componentDidMount() {
         /*
          * subscribe to window.resize
@@ -255,9 +260,14 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
          */
         this.dispatchDisplayBoundChange();
         this.synchTableHeaderWidthToFirstRow();
+
+        // Bind scroll listener to move headers when data container is srcolled
+        $('.giga-grid-body-viewport').scroll(this.horizontalScrollHandler)
     }
 
     componentWillUnmount() {
+        // Unbind the scroll listener
+        $('.giga-grid-body-viewport').unbind('scroll', this.horizontalScrollHandler);
         /*
          * unsubscribe to window.resize
          */
