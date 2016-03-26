@@ -1,18 +1,14 @@
 ///<reference path="../../typings/tsd.d.ts"/>
 
-import * as _ from 'lodash';
-import {GigaState,GigaProps} from "../components/GigaGrid";
+import * as _ from "lodash";
+import {GigaState, GigaProps} from "../components/GigaGrid";
 import {SubtotalAggregator} from "../static/SubtotalAggregator";
-import {Tree} from "../static/TreeBuilder";
-import {TreeBuilder} from "../static/TreeBuilder";
-import {SubtotalBy} from "../models/ColumnLike";
-import {ReduceStore} from 'flux/utils';
-import {Dispatcher} from 'flux';
-import {SubtotalRow} from "../models/Row";
+import {Tree, TreeBuilder} from "../static/TreeBuilder";
+import {ReduceStore} from "flux/utils";
+import {Dispatcher} from "flux";
+import {SubtotalRow, Row} from "../models/Row";
 import {SortFactory} from "../static/SortFactory";
-import {SortBy} from "../models/ColumnLike";
-import {Row} from "../models/Row";
-import {Column} from "../models/ColumnLike";
+import {SortBy, Column} from "../models/ColumnLike";
 import {TreeRasterizer} from "../static/TreeRasterizer";
 import {ScrollCalculator} from "../static/ScrollCalculator";
 
@@ -48,42 +44,47 @@ export class GigaStore extends ReduceStore<GigaState> {
      * so we kind of hack around it ... the designers of the Flux paradigm never though I would use flux store to manage widget
      * state as oppose to application state?
      */
-    initialize(action: InitializeAction):GigaState {
+    initialize(action:InitializeAction):GigaState {
 
-        const props = action.props ||  this.props;
+        const {data, columnDefs, columnGroups, initialSubtotalBys, initialSortBys, initialFilterBys} = (action.props || this.props);
+
+        /**
+         * turn ColumnDefs into "Columns" which are decorated with behaviors
+         */
+        const columns = columnDefs.map(columnDef=> {
+            return _.assign<{},Column>({}, columnDef, {});
+        });
+        const subtotalBys:Column[] = (initialSubtotalBys || []).map(subtotalBy => {
+            const column:Column = _.find(columns, column => column.colTag === subtotalBy.colTag);
+            return _.assign<{}, Column>({}, column, subtotalBy);
+        });
+        const filteredColumns = _.filter(columns, column => subtotalBys.map(subtotalBy => subtotalBy.colTag).indexOf(column.colTag) === -1);
+
         var tree = TreeBuilder.buildTree(
-                            props.data,
-                            this.appendSubtotalBysWithTitle(props.initialSubtotalBys),
-                            this.props.initiallyExpandedSubtotalRows,
-                            this.props.initiallySelectedSubtotalRows
+            data,
+            subtotalBys,
+            this.props.initiallyExpandedSubtotalRows,
+            this.props.initiallySelectedSubtotalRows
         );
-        SubtotalAggregator.aggregateTree(tree, props.columnDefs);
+        SubtotalAggregator.aggregateTree(tree, columns);
 
-        if (props.initialSortBys)
-            tree = SortFactory.sortTree(tree, props.initialSortBys);
+        if (initialSortBys)
+            tree = SortFactory.sortTree(tree, initialSortBys);
 
         const rasterizedRows:Row[] = TreeRasterizer.rasterize(tree);
 
         return {
             rasterizedRows: rasterizedRows,
             displayStart: 0,
+            columns: columnGroups ? columns : filteredColumns,
             displayEnd: Math.min(rasterizedRows.length - 1, PROGRESSIVE_RENDERING_THRESHOLD),
-            subtotalBys: _.cloneDeep(props.initialSubtotalBys) || [],
-            sortBys: _.cloneDeep(props.initialSortBys) || [],
-            filterBys: _.cloneDeep(props.initialFilterBys) || [],
+            subtotalBys: subtotalBys,
+            sortBys: _.cloneDeep(initialSortBys) || [],
+            filterBys: _.cloneDeep(initialFilterBys) || [],
             tree: tree
         }
-    }
 
-    private appendSubtotalBysWithTitle(subtotalBys:SubtotalBy[]) {
-        return (subtotalBys || []).map(sb => {
-            const col = _.find(this.props.columnDefs, cd=>cd.colTag === sb.colTag);
-            return {
-                colTag: sb.colTag,
-                title: col.title
-            }
-        });
-    };
+    }
 
     reduce(state:GigaState,
            action:GigaAction):GigaState {
@@ -99,11 +100,9 @@ export class GigaStore extends ReduceStore<GigaState> {
             /*
              Subtotal Actions
              */
-            case GigaActionType.NEW_SUBTOTAL:
-                newState = this.handleSubtotal(state, action as NewSubtotalAction);
-                break;
-            case GigaActionType.CLEAR_SUBTOTAL:
-                newState = this.handleClearSubtotal(state);
+            // TODO implement handling the new subtotal actions
+            case GigaActionType.COLUMNS_UPDATE:
+                newState = this.handleColumnUpdate(state, action as ColumnUpdateAction);
                 break;
             /*
              Row Level Actions
@@ -156,16 +155,14 @@ export class GigaStore extends ReduceStore<GigaState> {
         return [
                 GigaActionType.ADD_FILTER,
                 GigaActionType.ADD_SORT,
-                GigaActionType.ADD_SUBTOTAL,
                 GigaActionType.CLEAR_FILTER,
                 GigaActionType.CLEAR_SORT,
-                GigaActionType.CLEAR_SUBTOTAL,
                 GigaActionType.NEW_FILTER,
                 GigaActionType.NEW_SORT,
-                GigaActionType.NEW_SUBTOTAL,
                 GigaActionType.TOGGLE_ROW_COLLAPSE,
                 GigaActionType.COLLAPSE_ALL,
-                GigaActionType.EXPAND_ALL
+                GigaActionType.EXPAND_ALL,
+                GigaActionType.COLUMNS_UPDATE
             ].indexOf(action.type) !== -1;
     }
 
@@ -179,10 +176,9 @@ export class GigaStore extends ReduceStore<GigaState> {
                 return state;
             else {
                 // de-select every other row unless enableMultiRowSelect is turned on
-                if (!this.props.enableMultiRowSelect) {
+                if (!this.props.enableMultiRowSelect)
                     // call said function
                     recursivelyDeselect(state.tree.getRoot());
-                }
                 action.row.toggleSelect();
                 return _.clone(state);
             }
@@ -230,26 +226,6 @@ export class GigaStore extends ReduceStore<GigaState> {
         return _.clone(state);
     }
 
-    private handleSubtotal(state:GigaState,
-                           action:NewSubtotalAction):GigaState {
-        state.subtotalBys.push(action.subtotalBy);
-        const newTree = TreeBuilder.buildTree(this.props.data, state.subtotalBys);
-        TreeBuilder.recursivelyToggleChildrenCollapse(newTree.getRoot(), false);
-        SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
-        const newState = _.clone(state);
-        newState.tree = newTree;
-        return newState;
-    }
-
-    private handleClearSubtotal(state:GigaState):GigaState {
-        const newTree = TreeBuilder.buildTree(this.props.data, []);
-        SubtotalAggregator.aggregateTree(newTree, this.props.columnDefs);
-        const newState = _.clone(state);
-        newState.tree = newTree;
-        newState.subtotalBys = [];
-        return newState;
-    }
-
     /*
      TODO test these sort handlers
      Sort Action Handlers
@@ -279,6 +255,20 @@ export class GigaStore extends ReduceStore<GigaState> {
         return newState;
     }
 
+    private handleColumnUpdate(state: GigaState, action: ColumnUpdateAction) {
+        const newColumnStates = {
+            columns: action.columns || state.columns,
+            subtotalBys: action.subtotalBys || state.subtotalBys
+        };
+        if (!_.isEqual(state.subtotalBys, newColumnStates.subtotalBys)) {
+            const tree: Tree = TreeBuilder.buildTree(this.props.data, newColumnStates.subtotalBys);
+            TreeBuilder.recursivelyToggleChildrenCollapse(tree.getRoot(), false);
+            SubtotalAggregator.aggregateTree(tree, newColumnStates.columns);
+            newColumnStates["tree"] = tree;
+        }
+        return _.assign<{}, GigaState>({}, state, newColumnStates);
+    }
+
 }
 
 /*
@@ -287,9 +277,6 @@ export class GigaStore extends ReduceStore<GigaState> {
 
 export enum GigaActionType {
     INITIALIZE,
-    NEW_SUBTOTAL,
-    ADD_SUBTOTAL,
-    CLEAR_SUBTOTAL,
     NEW_SORT,
     ADD_SORT,
     CLEAR_SORT,
@@ -301,34 +288,31 @@ export enum GigaActionType {
     EXPAND_ALL,
     TOGGLE_ROW_SELECT,
     TOGGLE_CELL_SELECT,
-    TABLE_WIDTH_CHANGE,
-    CHANGE_ROW_DISPLAY_BOUNDS
+    CHANGE_ROW_DISPLAY_BOUNDS,
+    COLUMNS_UPDATE
 }
 
 export interface GigaAction {
     type:GigaActionType
 }
 
+export interface ColumnUpdateAction extends GigaAction {
+    columns: Column[]
+    subtotalBys: Column[]
+}
+
 export interface InitializeAction extends GigaAction {
-    props?: GigaProps
+    props?:GigaProps
 }
 
 export interface ToggleCollapseAction extends GigaAction {
-    subtotalRow: SubtotalRow
-}
-
-export interface NewSubtotalAction extends GigaAction {
-    subtotalBy:SubtotalBy
-}
-
-export interface ClearSubtotalAction extends GigaAction {
-
+    subtotalRow:SubtotalRow
 }
 
 export interface ChangeRowDisplayBoundsAction extends GigaAction {
-    viewport: JQuery
-    canvas: JQuery
-    rowHeight: string
+    viewport:JQuery
+    canvas:JQuery
+    rowHeight:string
 }
 
 export interface ClearSortAction extends GigaAction {
@@ -336,7 +320,7 @@ export interface ClearSortAction extends GigaAction {
 }
 
 export interface AddSortAction extends GigaAction {
-    sortBy: SortBy
+    sortBy:SortBy
 }
 
 export interface NewSortAction extends GigaAction {
@@ -353,15 +337,15 @@ export interface ToggleRowSelectAction extends GigaAction {
 
 export interface ToggleCellSelectAction extends GigaAction {
     row:Row
-    column: Column
+    column:Column
 }
 
 // define a function
-function recursivelyDeselect(row: Row) {
+function recursivelyDeselect(row:Row) {
     row.toggleSelect(false);
     if (!row.isDetail()) {
         const subtotalRow = (row as SubtotalRow);
-        const children :Row[] = subtotalRow.getChildren().length === 0 ? subtotalRow.detailRows: subtotalRow.getChildren();
+        const children:Row[] = subtotalRow.getChildren().length === 0 ? subtotalRow.detailRows : subtotalRow.getChildren();
         children.forEach(child=>recursivelyDeselect(child));
     }
 }

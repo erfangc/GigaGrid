@@ -1,6 +1,6 @@
-declare var require: any;
+declare var require:any;
 
-import {ColumnFormat, AggregationMethod, ColumnDef, SubtotalBy} from "../../src/models/ColumnLike";
+import {ColumnFormat, AggregationMethod, ColumnDef, Column} from "../../src/models/ColumnLike";
 import {GigaProps} from "../../src/components/GigaGrid";
 var json = require("./UKBudget.json");
 
@@ -71,7 +71,7 @@ const columnDefs:ColumnDef[] = [
     }
 ];
 
-const initialSubtotalBys:SubtotalBy[] = [{colTag:"Age"}, {colTag:"Children"}];
+const initialSubtotalBys:Column[] = [{colTag: "Age"}, {colTag: "Children"}];
 
 // const initialSortBy:SortBy[] = [{colTag: "Age", sortDirection: SortDirection.DESC}];
 

@@ -1,9 +1,8 @@
-import * as React from 'react';
-import * as _ from "lodash";
+import * as React from "react";
 import {GridSubcomponentProps} from "../../src/components/TableHeaderCell";
 import {Column} from "../../src/models/ColumnLike";
-import Element = JSX.Element;
 import {TableHeaderCell} from "./TableHeaderCell";
+import Element = JSX.Element;
 
 export interface TableHeaderProps extends GridSubcomponentProps<TableHeader> {
     columns: Column[][]
@@ -32,9 +31,8 @@ export class TableHeader extends React.Component<TableHeaderProps,any> {
     private renderHeaderRows():Element[] {
         const trs:Element[] = [];
         var i:number;
-        for (i = 0; i < this.props.columns.length - 1; i++) {
+        for (i = 0; i < this.props.columns.length - 1; i++)
             trs.push(TableHeader.renderColumnGroups(this.props.columns[i], i));
-        }
         trs.push(this.renderLeafColumns(this.props.columns[i], i));
         return trs;
     }

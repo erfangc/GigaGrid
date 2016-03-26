@@ -7,33 +7,13 @@ import {ColumnFactory} from "../../src/models/ColumnLike";
 describe("TableHeader", ()=> {
 
     var component;
-    it("renders flat columns properly, i.e. no column grouping", ()=> {
-
-        const columns = ColumnFactory
-            .createColumnsFromDefinition(
-                TestUtils.getMockColumnDefs(),
-                TestUtils.getMockState());
-
-        ReactTestUtils.renderIntoDocument(
-            <table>
-                <TableHeader ref={c=>component=c}
-                             columns={[columns]}
-                             dispatcher={null}/>
-            </table>
-        );
-
-        const trs = ReactTestUtils.scryRenderedDOMComponentsWithTag(component, "tr");
-
-        expect(trs.length).toBe(1);
-
-    });
 
     describe("renders column groups properly", ()=> {
-        const columns = ColumnFactory
-            .createColumnsFromGroupDefinition(
+        const mockState = TestUtils.getMockState();
+        mockState.columns = TestUtils.getMockColumnDefs();
+        const columns = ColumnFactory.createColumnsFromGroupDefinition(
                 TestUtils.getMockColumnGroupDefs(),
-                TestUtils.getMockColumnDefs(),
-                TestUtils.getMockState());
+                mockState);
 
         ReactTestUtils.renderIntoDocument(
             <table>
