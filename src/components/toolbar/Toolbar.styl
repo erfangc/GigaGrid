@@ -1,0 +1,40 @@
+paper-box-shadow()
+  box-shadow 0 1px 1px rgba(0,0,0,0.23), 0 1px 1px rgba(0,0,0,0.23)
+
+.giga-grid .giga-grid-toolbar span.toolbar-item
+  position relative
+
+.giga-grid-toolbar span.toolbar-item-toggle:hover
+  cursor pointer
+  color #2F6FAD
+
+.giga-grid-sortable
+  border 1px solid #ddd
+  padding 1em
+
+.giga-grid .giga-grid-settings-pop-over
+  border 1px solid #ebebeb
+  padding 1em
+  paper-box-shadow()
+  position absolute
+  left -100%
+  top 100%
+  z-index 1
+  background-color #fff
+  min-width 350px
+  min-height 350px
+  & ul
+    list-style circle
+    & li
+      display inline-block
+      paper-box-shadow()
+      padding 5px
+      margin-right 3px
+      margin-bottom 5px
+      &:hover
+        cursor: pointer
+        background-color #ebebeb
+      &.dragging
+        border-right 2px solid orangered
+  .dismiss,.submit
+    cursor pointer
