@@ -1,12 +1,10 @@
-import * as React from 'react';
-import * as _ from "lodash";
-import {GridSubcomponentProps} from "../../src/components/TableHeaderCell";
+import * as React from "react";
 import {Column} from "../../src/models/ColumnLike";
-import Element = JSX.Element;
 import {TableHeaderCell} from "./TableHeaderCell";
+import {GridSubcomponentProps, getScrollBarWidth} from "./GigaGrid";
 
 export interface TableHeaderProps extends GridSubcomponentProps<TableHeader> {
-    columns: Column[][]
+    columns:Column[][]
 }
 
 /**
@@ -24,22 +22,24 @@ export class TableHeader extends React.Component<TableHeaderProps,any> {
     render() {
         return (
             <thead>
-                {this.renderHeaderRows()}
+            {this.renderHeaderRows()}
             </thead>
         )
     }
 
-    private renderHeaderRows():Element[] {
-        const trs:Element[] = [];
+    private renderHeaderRows():JSX.Element[] {
+        const trs:JSX.Element[] = [];
         var i:number;
-        for (i = 0; i < this.props.columns.length - 1; i++) {
+        for (i = 0; i < this.props.columns.length - 1; i++)
             trs.push(TableHeader.renderColumnGroups(this.props.columns[i], i));
-        }
         trs.push(this.renderLeafColumns(this.props.columns[i], i));
         return trs;
     }
 
-    private static renderColumnGroups(columns:Column[], key:number):Element {
+    /**
+     * TODO th with colSpan really screw up our ability to set width on columns
+     */
+    private static renderColumnGroups(columns:Column[], key:number):JSX.Element {
         const ths = columns.map((column:Column, i:number)=> {
             return (
                 <th className="column-group" key={i} colSpan={column.colSpan}>{column.title}</th>
@@ -48,11 +48,15 @@ export class TableHeader extends React.Component<TableHeaderProps,any> {
         return (<tr className="column-group-row" key={key}>{ths}</tr>);
     }
 
-    private renderLeafColumns(columns:Column[], key:number):Element {
-        const ths = columns.map((colDef:Column, i:number)=> {
-            return <TableHeaderCell column={colDef} key={i} isFirstColumn={i===0}
-                                    isLastColumn={i===columns.length-1} dispatcher={this.props.dispatcher}/>
+    private renderLeafColumns(columns:Column[], key:number):JSX.Element {
+        const ths = columns.map((column:Column, i:number)=> {
+            return <TableHeaderCell column={column} key={i}
+                                    isFirstColumn={i===0}
+                                    isLastColumn={i===columns.length-1}
+                                    dispatcher={this.props.dispatcher}/>
         });
+        // add a placeholder to offset the scrollbar
+        ths.push(<th key={ths.length} style={{width:`${getScrollBarWidth()}px`}}/>);
         return (<tr key={key}>{ths}</tr>);
     }
 

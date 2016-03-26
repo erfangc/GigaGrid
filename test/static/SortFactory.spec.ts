@@ -1,6 +1,6 @@
 import {Tree, TreeBuilder} from "../../src/static/TreeBuilder";
 import {SortFactory} from "../../src/static/SortFactory";
-import {ColumnFormat, SortBy, SortDirection} from "../../src/models/ColumnLike";
+import {ColumnFormat, Column, SortDirection} from "../../src/models/ColumnLike";
 import UKBudget from "../../examples/data/UKBudget";
 
 describe("SortFactory", ()=> {
@@ -17,7 +17,7 @@ describe("SortFactory", ()=> {
             direction: SortDirection.DESC
         }];
 
-    const byAgeThenChildrenASC = byAgeThenChildrenDESC.map((sortBy: SortBy)=> {
+    const byAgeThenChildrenASC = byAgeThenChildrenDESC.map((sortBy: Column)=> {
         return {
             colTag: sortBy.colTag,
             format: sortBy.format,

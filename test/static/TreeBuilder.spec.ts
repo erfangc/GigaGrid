@@ -1,4 +1,3 @@
-import {SubtotalBy} from "../../src/models/ColumnLike";
 import {Tree} from "../../src/static/TreeBuilder";
 import {TreeBuilder} from "../../src/static/TreeBuilder";
 import {TestUtils} from "../TestUtils";
