@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as _ from "lodash";
-import {ColumnDef, Column, SortBy, FilterBy, ColumnFactory, ColumnGroupDef} from "../models/ColumnLike";
+import {ColumnDef, Column, FilterBy, ColumnFactory, ColumnGroupDef} from "../models/ColumnLike";
 import {Row} from "../models/Row";
 import {Tree} from "../static/TreeBuilder";
 import {Toolbar} from "./toolbar/Toolbar";
@@ -34,7 +34,7 @@ export interface GigaProps extends React.Props<GigaGrid> {
      * Initial set of SortBy declarations, default to `[]`. If set, the grid will initialize
      * with the specified sorting order
      */
-    initialSortBys?:SortBy[]
+    initialSortBys?:Column[]
 
     initialFilterBys?:FilterBy[]
 
@@ -92,6 +92,10 @@ export interface GigaProps extends React.Props<GigaGrid> {
     initiallySelectedSubtotalRows?:string[][]
 }
 
+export interface GridSubcomponentProps<T> extends React.Props<T> {
+    dispatcher: Dispatcher<GigaAction>;
+}
+
 /**
  * Interface that Declares the Valid State of GigaGrid
  * The grid's state consists of an `Tree` object that model the rows in a hierarchical structure (representing subtotals)
@@ -109,7 +113,7 @@ export interface GigaState {
     tree:Tree
     columns:Column[]
     subtotalBys:Column[]
-    sortBys:SortBy[]
+    sortBys:Column[]
     filterBys:FilterBy[]
 
     /*
@@ -293,7 +297,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
  * see stackoverflow reference: http://stackoverflow.com/questions/986937/how-can-i-get-the-browsers-scrollbar-sizes
  * @returns {number}
  */
-function getScrollBarWidth() {
+export function getScrollBarWidth() {
 
     var scrollBarWidth = null;
 

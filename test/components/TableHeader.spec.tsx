@@ -36,4 +36,6 @@ describe("TableHeader", ()=> {
             expect((ths[1] as HTMLTableHeaderCellElement).colSpan).toBe(3);
         });
     });
+
+
 });

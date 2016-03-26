@@ -1,11 +1,11 @@
 import {Tree} from "./TreeBuilder";
 import {Row, SubtotalRow} from "../models/Row";
-import {SortBy, SortDirection} from "../models/ColumnLike";
+import {Column, SortDirection} from "../models/ColumnLike";
 
 export class SortFactory {
 
 
-    public static sortTree(tree:Tree, sortBys:SortBy[]):Tree {
+    public static sortTree(tree:Tree, sortBys:Column[]):Tree {
         // FIXME the damn tree is so mutable ... but I can't think of a good way to manipulate trees that are immutable
         var sortFn = SortFactory.createCompositeSortFn(sortBys);
         SortFactory.recursivelyExecuteSort(tree.getRoot(), sortFn);
@@ -22,7 +22,7 @@ export class SortFactory {
             rootRow.detailRows.sort(fn);
     }
 
-    private static createCompositeSortFn(sortBys:SortBy[]):(a:Row, b:Row)=>number {
+    private static createCompositeSortFn(sortBys:Column[]):(a:Row, b:Row)=>number {
 
         if (!sortBys || sortBys.length === 0)
             return function (a:Row, b:Row):number {
@@ -44,7 +44,7 @@ export class SortFactory {
         };
     }
 
-    private static resolveSortFn(sortBy:SortBy):(a:Row, b:Row)=>number {
+    private static resolveSortFn(sortBy:Column):(a:Row, b:Row)=>number {
         // todo implement and resolve other sort fn
         if (sortBy.customSortFn)
             return sortBy.customSortFn;
@@ -52,7 +52,7 @@ export class SortFactory {
             return SortFactory.buildLexicalSortFn(sortBy);
     }
 
-    private static getColumnValueForRow(row: Row, sortBy: SortBy) {
+    private static getColumnValueForRow(row: Row, sortBy: Column) {
         if (row.isDetail())
             return row.get(sortBy);
         else
@@ -62,7 +62,7 @@ export class SortFactory {
                 return row.title;
     }
 
-    private static buildLexicalSortFn(sortBy:SortBy):(a:Row, b:Row)=>number {
+    private static buildLexicalSortFn(sortBy:Column):(a:Row, b:Row)=>number {
 
         return function (a:Row, b:Row):number {
 

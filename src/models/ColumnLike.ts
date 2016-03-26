@@ -35,20 +35,13 @@ export interface ColumnDef extends ColumnLike {
 }
 
 export interface Column extends ColumnDef {
-    sortDirection?: SortDirection
+    direction?: SortDirection
     customSortFn?:(a:Row, b:Row)=>number
     colSpan?: number
 }
 
 export interface FilterBy extends ColumnLike {
     predicate: (a:any)=>boolean
-}
-
-export interface SortBy {
-    colTag:string;
-    format: ColumnFormat;
-    customSortFn?:(a:Row, b:Row)=>number; // UDF for sorting
-    direction: SortDirection
 }
 
 export interface ColumnGroupDef {

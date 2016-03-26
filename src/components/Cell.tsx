@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import {GridSubcomponentProps} from "./TableHeaderCell";
 import {Column} from "../models/ColumnLike";
 import {Row} from "../models/Row";
 import {ColumnFormat} from "../models/ColumnLike";
@@ -9,6 +8,7 @@ import {format} from '../static/SubtotalAggregator';
 import SyntheticEvent = __React.SyntheticEvent;
 import {ToggleCollapseAction} from "../store/GigaStore";
 import {GigaActionType} from "../store/GigaStore";
+import {GridSubcomponentProps} from "./GigaGrid";
 
 export interface CellProps extends GridSubcomponentProps<Cell> {
     row:Row
