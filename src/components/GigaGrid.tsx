@@ -1,24 +1,22 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import * as React from "react";
+import * as ReactDOM from "react-dom";
 import * as _ from "lodash";
+import {ColumnDef, Column, SortBy, FilterBy, ColumnFactory, ColumnGroupDef} from "../models/ColumnLike";
+import {Row} from "../models/Row";
+import {Tree} from "../static/TreeBuilder";
+import {Toolbar} from "./toolbar/Toolbar";
+import {
+    GigaStore,
+    InitializeAction,
+    GigaAction,
+    GigaActionType,
+    ChangeRowDisplayBoundsAction
+} from "../store/GigaStore";
+import {Dispatcher} from "flux";
+import {TableBody} from "./TableBody";
+import {TableHeader} from "./TableHeader";
 import $ = require('jquery');
 import ReactElement = __React.ReactElement;
-import {SubtotalBy} from "../models/ColumnLike";
-import {ColumnDef} from "../models/ColumnLike";
-import {Row} from "../models/Row";
-import {Column} from "../models/ColumnLike";
-import {Tree} from "../static/TreeBuilder";
-import {GigaStore, InitializeAction} from "../store/GigaStore";
-import {Dispatcher} from 'flux';
-import {GigaAction} from "../store/GigaStore";
-import {SortBy} from "../models/ColumnLike";
-import {FilterBy} from "../models/ColumnLike";
-import {GigaActionType} from "../store/GigaStore";
-import {TableBody} from "./TableBody";
-import {ColumnFactory} from "../models/ColumnLike";
-import {ColumnGroupDef} from "../models/ColumnLike";
-import {TableHeader} from "./TableHeader";
-import {ChangeRowDisplayBoundsAction} from "../store/GigaStore";
 
 /**
  * Interface that describe the shape of the `Props` that `GigaGrid` accepts from the user
@@ -30,7 +28,7 @@ export interface GigaProps extends React.Props<GigaGrid> {
      * Initial set of SubtotalBy declarations, default to `[]`. If set, the grid will initialize
      * with the specified subtotals
      */
-    initialSubtotalBys?:SubtotalBy[]
+    initialSubtotalBys?:ColumnDef[]
 
     /**
      * Initial set of SortBy declarations, default to `[]`. If set, the grid will initialize
@@ -45,8 +43,8 @@ export interface GigaProps extends React.Props<GigaGrid> {
      * default behavior (highlights the row)
      * @param row the `Row` object associated with the row the user clicked on
      */
-    onRowClick?:(row:Row, state: GigaState)=>boolean
-    enableMultiRowSelect?: boolean
+    onRowClick?:(row:Row, state:GigaState)=>boolean
+    enableMultiRowSelect?:boolean
 
     /**
      * Callback that fires when a cell is clicked, return `false` in the passed callback function to suppress
@@ -87,11 +85,11 @@ export interface GigaProps extends React.Props<GigaGrid> {
     /**
      * sector paths to expand by default
      */
-    initiallyExpandedSubtotalRows?: string[][]
+    initiallyExpandedSubtotalRows?:string[][]
     /**
      * sector paths to mark as "selected"
      */
-    initiallySelectedSubtotalRows?:  string[][]
+    initiallySelectedSubtotalRows?:string[][]
 }
 
 /**
@@ -109,8 +107,8 @@ export interface GigaProps extends React.Props<GigaGrid> {
 export interface GigaState {
 
     tree:Tree
-
-    subtotalBys:SubtotalBy[]
+    columns:Column[]
+    subtotalBys:Column[]
     sortBys:SortBy[]
     filterBys:FilterBy[]
 
@@ -171,9 +169,9 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
         var columns:Column[][];
         if (this.props.columnGroups)
-            columns = ColumnFactory.createColumnsFromGroupDefinition(this.props.columnGroups, this.props.columnDefs, this.state);
+            columns = ColumnFactory.createColumnsFromGroupDefinition(this.props.columnGroups, this.state);
         else
-            columns = [ColumnFactory.createColumnsFromDefinition(this.props.columnDefs, this.state)];
+            columns = [this.state.columns];
 
         const bodyStyle = {
             height: this.props.bodyHeight,
@@ -181,6 +179,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
         return (
             <div className="giga-grid">
+                <Toolbar gridProps={this.props} gridStore={this.store} dispatcher={this.dispatcher}/>
                 <div className="giga-grid-header-container">
                     <table className="header-table">
                         <TableHeader dispatcher={this.dispatcher} columns={columns}/>
@@ -203,8 +202,8 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             </div>);
     }
 
-    componentWillReceiveProps(nextProps: GigaProps) {
-        var payload: InitializeAction = {
+    componentWillReceiveProps(nextProps:GigaProps) {
+        var payload:InitializeAction = {
             type: GigaActionType.INITIALIZE,
             props: nextProps
         };
@@ -244,7 +243,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
     }
 
     horizontalScrollHandler() {
-        const scrollLeftAmount: number = $('.giga-grid-body-viewport').scrollLeft();
+        const scrollLeftAmount:number = $('.giga-grid-body-viewport').scrollLeft();
         $('.giga-grid-header-container').scrollLeft(scrollLeftAmount);
     }
 
@@ -336,7 +335,7 @@ function getScrollBarWidth() {
  * @param node
  * @returns {number}
  */
-function findParentWidth(node: Element) {
+function findParentWidth(node:Element) {
     var rootNodeWidth = $(node).innerWidth();
     var $parent = $(node).parent();
     while ($parent && rootNodeWidth === 0) {

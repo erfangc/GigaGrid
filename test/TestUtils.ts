@@ -17,7 +17,7 @@ class ComprehensiveTypeData implements TestDataFactory {
 
     }
 
-    rawData():any[]{
+    rawData():any[] {
         return [
             {
                 "id": 1,
@@ -421,14 +421,11 @@ export class TestUtils {
             }
         ],
         state: {
+            tree: null,
+            columns: [],
             sortBys: [],
             subtotalBys: [],
             filterBys: [],
-            tree: null,
-            widthMeasures: {
-                bodyWidth: "",
-                columnWidths: {"colTag1": "100px"}
-            },
             rasterizedRows: [],
             displayStart: 0,
             displayEnd: 1

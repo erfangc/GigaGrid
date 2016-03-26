@@ -1,17 +1,15 @@
-import * as Flux from 'flux';
-import Dispatcher = Flux.Dispatcher;
-import {GigaAction} from "../../src/store/GigaStore";
-import {GigaStore} from "../../src/store/GigaStore";
+import {
+    GigaAction,
+    GigaStore,
+    GigaActionType,
+    NewSortAction,
+    AddSortAction,
+    ClearSortAction
+} from "../../src/store/GigaStore";
 import {GigaProps} from "../../src/components/GigaGrid";
 import {TestUtils} from "../TestUtils";
-import {NewSubtotalAction} from "../../src/store/GigaStore";
-import {GigaActionType} from "../../src/store/GigaStore";
-import {ToggleCollapseAction} from "../../src/store/GigaStore";
-import {NewSortAction} from "../../src/store/GigaStore";
-import {ColumnFormat} from "../../src/models/ColumnLike";
-import {AddSortAction} from "../../src/store/GigaStore";
-import {ClearSortAction} from "../../src/store/GigaStore";
-import {SortDirection} from "../../src/models/ColumnLike";
+import {ColumnFormat, SortDirection} from "../../src/models/ColumnLike";
+import {Dispatcher} from "flux";
 
 describe("GigaStore", ()=> {
 
@@ -38,67 +36,7 @@ describe("GigaStore", ()=> {
         expect(state.tree.getRoot().detailRows.length).toBe(10);
     });
 
-    describe("can handle Subtotal Actions", ()=> {
-
-        var newSubtotalAction:NewSubtotalAction = {
-            type: GigaActionType.NEW_SUBTOTAL,
-            subtotalBy: {colTag: "gender"}
-        };
-
-        it("can handle NEW_SUBTOTAL action", ()=> {
-            var state = store.getState();
-            expect(state.rasterizedRows.length).toBe(10);
-
-            dispatcher.dispatch(newSubtotalAction);
-            state = store.getState();
-            expect(state.subtotalBys.length).toBe(1);
-            expect(state.subtotalBys[0]).toBe(newSubtotalAction.subtotalBy);
-            const children = state.tree.getRoot().getChildren();
-            expect(children.length).toBe(2);
-            expect(state.tree.getRoot().getChildByTitle("Male")).toBeDefined();
-            expect(state.tree.getRoot().getChildByTitle("Male")).not.toBeNull();
-            expect(state.rasterizedRows.length).toBe(12);
-        });
-
-        it("can handle CLEAR_SUBTOTAL action", ()=> {
-            dispatcher.dispatch(newSubtotalAction);
-            var state = store.getState();
-            expect(state.subtotalBys[0]).toBe(newSubtotalAction.subtotalBy);
-            expect(state.rasterizedRows.length).toBe(12);
-
-            // clear subtotal
-            dispatcher.dispatch({type: GigaActionType.CLEAR_SUBTOTAL});
-            state = store.getState();
-            expect(state.subtotalBys).toEqual([]);
-            expect(state.rasterizedRows.length).toBe(10);
-            expect(state.tree.getRoot().getChildren.length).toBe(0);
-        });
-
-        it("can handle TOGGLE_ROW_COLLAPSE action", ()=> {
-
-
-            dispatcher.dispatch(newSubtotalAction);
-            expect(store.getState().rasterizedRows.length).toBe(12);
-
-            const row = store.getState().tree.getRoot().getChildByTitle("Male");
-            const toggleRowCollapse:ToggleCollapseAction = {
-                type: GigaActionType.TOGGLE_ROW_COLLAPSE,
-                subtotalRow: row
-            };
-
-            expect(row.isCollapsed()).toBeFalsy();
-
-            dispatcher.dispatch(toggleRowCollapse);
-            expect(store.getState().rasterizedRows.length).toBe(7);
-            expect(row.isCollapsed()).toBeTruthy();
-
-            dispatcher.dispatch(toggleRowCollapse);
-            expect(store.getState().rasterizedRows.length).toBe(12);
-            expect(row.isCollapsed()).toBeFalsy();
-
-        });
-
-    });
+    // TODO test COLUMN_UPDATE action
 
     describe("can handle Sort Actions", ()=> {
 

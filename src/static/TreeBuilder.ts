@@ -1,7 +1,7 @@
-import {SubtotalBy} from "../models/ColumnLike";
 import {SubtotalRow} from "../models/Row";
 import {DetailRow} from "../models/Row";
 import * as _ from 'lodash';
+import {Column} from "../models/ColumnLike";
 export class TreeBuilder {
 
     /**
@@ -12,13 +12,13 @@ export class TreeBuilder {
      */
     private static selectivelyExpand(node:SubtotalRow, initiallyExpandedSubtotalRows:string[][]) {
 
-        initiallyExpandedSubtotalRows.forEach((sp)=>{
+        initiallyExpandedSubtotalRows.forEach((sp)=> {
             for (let i = 1; i <= sp.length; i++)
-                if (_.isEqual(node.sectorPath(), sp.slice(0,i)))
+                if (_.isEqual(node.sectorPath(), sp.slice(0, i)))
                     node.toggleCollapse(false);
         });
 
-        if (node.getNumChildren()!=0)
+        if (node.getNumChildren() != 0)
             node.getChildren().forEach((child)=>TreeBuilder.selectivelyExpand(child, initiallyExpandedSubtotalRows))
     }
 
@@ -29,16 +29,16 @@ export class TreeBuilder {
      * @param initiallySelectedSubtotalRows
      */
     private static selectivelySelect(node:SubtotalRow, initiallySelectedSubtotalRows:string[][]) {
-        initiallySelectedSubtotalRows.forEach((sp)=>{
-                if (_.isEqual(node.sectorPath(), sp))
-                    node.toggleSelect(true);
+        initiallySelectedSubtotalRows.forEach((sp)=> {
+            if (_.isEqual(node.sectorPath(), sp))
+                node.toggleSelect(true);
         });
-        if (node.getNumChildren()!=0)
+        if (node.getNumChildren() != 0)
             node.getChildren().forEach((child)=>TreeBuilder.selectivelySelect(child, initiallySelectedSubtotalRows))
     }
 
     static buildTree(data:any[],
-                     subtotalBys:SubtotalBy[] = [],
+                     subtotalBys:Column[] = [],
                      initiallyExpandedSubtotalRows?:string[][],
                      initiallySelectedSubtotalRows?:string[][]):Tree {
         /*
@@ -63,7 +63,7 @@ export class TreeBuilder {
         return new Tree(grandTotal);
     }
 
-    private static bucketDetailRow(subtotalBys:SubtotalBy[], detailedRow:DetailRow, grandTotal:SubtotalRow):void {
+    private static bucketDetailRow(subtotalBys:Column[], detailedRow:DetailRow, grandTotal:SubtotalRow):void {
         /*
          * to traverse the grandTotal and find the detailRow's immediate parent SubtotalRow
          * we store the detailRow's sector names in an ordered array
@@ -137,11 +137,8 @@ export class TreeBuilder {
         return currentRow;
     };
 
-    private static resolveSubtotalTitle(subtotalBy:SubtotalBy, detailedRow:DetailRow) {
-        if (subtotalBy.groupBy)
-            return subtotalBy.groupBy(detailedRow);
-        else
-            return subtotalBy.title ? `${subtotalBy.title}: ${detailedRow.getByColTag(subtotalBy.colTag)}` : detailedRow.getByColTag(subtotalBy.colTag);
+    private static resolveSubtotalTitle(subtotalBy:Column, detailedRow:DetailRow) {
+        return subtotalBy.title ? `${subtotalBy.title}: ${detailedRow.getByColTag(subtotalBy.colTag)}` : detailedRow.getByColTag(subtotalBy.colTag);
     }
 
 }

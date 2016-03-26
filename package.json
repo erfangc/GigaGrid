@@ -1,10 +1,6 @@
 {
   "name": "giga-grid",
-<<<<<<< HEAD
-  "version": "0.2.4-2",
-=======
   "version": "0.2.4-4",
->>>>>>> origin/master
   "description": "Massively performant, multi-layered React.js table widget Written in TypeScript",
   "main": "dist/giga-grid.js",
   "scripts": {
