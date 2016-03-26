@@ -2,7 +2,7 @@ import {
     GigaAction,
     GigaStore,
     GigaActionType,
-    NewSortAction,
+    SortUpdateAction,
     AddSortAction,
     ClearSortAction
 } from "../../src/store/GigaStore";
@@ -54,7 +54,7 @@ describe("GigaStore", ()=> {
 
         it("can handle NEW_SORT action", ()=> {
 
-            const action:NewSortAction = {
+            const action:SortUpdateAction = {
                 type: GigaActionType.NEW_SORT,
                 sortBys: [sortByGift]
             };
@@ -70,7 +70,7 @@ describe("GigaStore", ()=> {
 
         it("can handle CLEAR_SORT action", ()=> {
             // start with a gender sort
-            const firstSort:NewSortAction = {
+            const firstSort:SortUpdateAction = {
                 type: GigaActionType.NEW_SORT,
                 sortBys: [sortByGender]
             };

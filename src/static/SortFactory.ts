@@ -1,6 +1,6 @@
 import {Tree} from "./TreeBuilder";
 import {Row, SubtotalRow} from "../models/Row";
-import {Column, SortDirection} from "../models/ColumnLike";
+import {Column, SortDirection, ColumnFormat, AggregationMethod} from "../models/ColumnLike";
 
 export class SortFactory {
 
@@ -54,10 +54,17 @@ export class SortFactory {
 
     private static getColumnValueForRow(row: Row, sortBy: Column) {
         if (row.isDetail())
-            return row.get(sortBy);
-        else
-            if (row.get(sortBy) !== null && row.get(sortBy) !== undefined && row.get(sortBy) !== "")
+            if (sortBy.format === ColumnFormat.NUMBER)
+                return parseFloat(row.get(sortBy));
+            else
                 return row.get(sortBy);
+        else // deal with SubtotalRow
+            if (row.get(sortBy) !== null && row.get(sortBy) !== undefined && row.get(sortBy) !== "")
+                // if the column aggregation method produces a number, we want to treat it like a number
+                if ([AggregationMethod.WEIGHTED_AVERAGE, AggregationMethod.AVERAGE, AggregationMethod.SUM].indexOf(sortBy.aggregationMethod) !== -1)
+                    return parseFloat(row.get(sortBy));
+                else
+                    return row.get(sortBy);
             else
                 return row.title;
     }
