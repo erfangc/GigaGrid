@@ -139,10 +139,10 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
                     <h5>Subtotal By</h5>
                     {this.renderSortable("subtotalBys", this.state.subtotalBys)}
                 </div>
-                <span style={{color:"green"}} onClick={(e)=>this.submitStateChanges()}><i
+                <span className="submit" style={{color:"green"}} onClick={(e)=>this.submitStateChanges()}><i
                     className="fa fa-2x fa-check-square"/></span>
                 {" "}
-                <span style={{color:"red"}} onClick={(e)=>this.props.onDismiss()}><i
+                <span style={{color:"red"}} className="dismiss" onClick={(e)=>this.props.onDismiss()}><i
                     className="fa fa-2x fa-close"/></span>
             </div>
         );

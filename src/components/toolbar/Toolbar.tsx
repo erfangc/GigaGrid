@@ -3,7 +3,7 @@ import * as React from "react";
 import {GridSubcomponentProps} from "../TableHeaderCell";
 import {GigaStore} from "../../store/GigaStore";
 import {SettingsPopover} from "./SettingsPopover";
-import "./Toobar.styl";
+import "./Toolbar.styl";
 
 export interface ToolbarProps extends GridSubcomponentProps<Toolbar> {
     gridProps:GigaProps
@@ -39,7 +39,8 @@ export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
         const {columns, subtotalBys} = state;
         return (
             <div className="giga-grid-toolbar">
-                <span className="toolbar-item" onClick={()=>this.setState({showSettingsPopover: !this.state.showSettingsPopover})}><i className="fa fa-cogs"/> Settings
+                <span className="toolbar-item" onClick={()=>this.setState({showSettingsPopover: !this.state.showSettingsPopover})}>
+                    <span className="toolbar-item-toggle"><i className="fa fa-cogs"/> Settings</span>
                     {
                         this.state.showSettingsPopover ?
                         <SettingsPopover onDismiss={()=>this.dismissSettingsPopover()}

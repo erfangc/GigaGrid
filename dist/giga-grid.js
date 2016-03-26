@@ -13097,7 +13097,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var dispatcher = this.props.dispatcher;
 	        var state = this.props.gridStore.getState();
 	        var columns = state.columns, subtotalBys = state.subtotalBys;
-	        return (React.createElement("div", {className: "giga-grid-toolbar"}, React.createElement("span", {className: "toolbar-item", onClick: function () { return _this.setState({ showSettingsPopover: !_this.state.showSettingsPopover }); }}, React.createElement("i", {className: "fa fa-cogs"}), " Settings", this.state.showSettingsPopover ?
+	        return (React.createElement("div", {className: "giga-grid-toolbar"}, React.createElement("span", {className: "toolbar-item", onClick: function () { return _this.setState({ showSettingsPopover: !_this.state.showSettingsPopover }); }}, React.createElement("span", {className: "toolbar-item-toggle"}, React.createElement("i", {className: "fa fa-cogs"}), " Settings"), this.state.showSettingsPopover ?
 	            React.createElement(SettingsPopover_1.SettingsPopover, {onDismiss: function () { return _this.dismissSettingsPopover(); }, dispatcher: dispatcher, subtotalBys: subtotalBys, columns: columns})
 	            :
 	                "")));
@@ -13205,7 +13205,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    SettingsPopover.prototype.render = function () {
 	        var _this = this;
-	        return (React.createElement("div", {className: "giga-grid-settings-pop-over"}, React.createElement("div", null, React.createElement("h5", null, "Columns"), this.renderSortable("columns", this.state.columns)), React.createElement("div", null, React.createElement("h5", null, "Subtotal By"), this.renderSortable("subtotalBys", this.state.subtotalBys)), React.createElement("span", {style: { color: "green" }, onClick: function (e) { return _this.submitStateChanges(); }}, React.createElement("i", {className: "fa fa-2x fa-check-square"})), " ", React.createElement("span", {style: { color: "red" }, onClick: function (e) { return _this.props.onDismiss(); }}, React.createElement("i", {className: "fa fa-2x fa-close"}))));
+	        return (React.createElement("div", {className: "giga-grid-settings-pop-over"}, React.createElement("div", null, React.createElement("h5", null, "Columns"), this.renderSortable("columns", this.state.columns)), React.createElement("div", null, React.createElement("h5", null, "Subtotal By"), this.renderSortable("subtotalBys", this.state.subtotalBys)), React.createElement("span", {className: "submit", style: { color: "green" }, onClick: function (e) { return _this.submitStateChanges(); }}, React.createElement("i", {className: "fa fa-2x fa-check-square"})), " ", React.createElement("span", {style: { color: "red" }, className: "dismiss", onClick: function (e) { return _this.props.onDismiss(); }}, React.createElement("i", {className: "fa fa-2x fa-close"}))));
 	    };
 	    return SettingsPopover;
 	}(React.Component));
@@ -20785,8 +20785,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Toobar.styl", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Toobar.styl");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Toolbar.styl", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Toolbar.styl");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -20804,7 +20804,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	// module
-	exports.push([module.id, ".giga-grid .giga-grid-toolbar span.toolbar-item {\n  position: relative;\n}\n.giga-grid-sortable {\n  border: 1px solid #ddd;\n  padding: 1em;\n}\n.giga-grid .giga-grid-settings-pop-over {\n  border: 1px solid #ebebeb;\n  padding: 1em;\n  box-shadow: 0 1px 1px rgba(0,0,0,0.23), 0 1px 1px rgba(0,0,0,0.23);\n  position: absolute;\n  left: -100%;\n  top: 100%;\n  z-index: 1;\n  background-color: #fff;\n  min-width: 350px;\n  min-height: 350px;\n}\n.giga-grid .giga-grid-settings-pop-over ul {\n  list-style: circle;\n}\n.giga-grid .giga-grid-settings-pop-over ul li {\n  display: inline-block;\n  box-shadow: 0 1px 1px rgba(0,0,0,0.23), 0 1px 1px rgba(0,0,0,0.23);\n  padding: 5px;\n  margin-right: 3px;\n  margin-bottom: 5px;\n}\n.giga-grid .giga-grid-settings-pop-over ul li:hover {\n  cursor: pointer;\n  background-color: #ebebeb;\n}\n.giga-grid .giga-grid-settings-pop-over ul li.dragging {\n  border-right: 2px solid #ff4500;\n}\n", ""]);
+	exports.push([module.id, ".giga-grid .giga-grid-toolbar span.toolbar-item {\n  position: relative;\n}\n.giga-grid-toolbar span.toolbar-item-toggle:hover {\n  cursor: pointer;\n  color: #2f6fad;\n}\n.giga-grid-sortable {\n  border: 1px solid #ddd;\n  padding: 1em;\n}\n.giga-grid .giga-grid-settings-pop-over {\n  border: 1px solid #ebebeb;\n  padding: 1em;\n  box-shadow: 0 1px 1px rgba(0,0,0,0.23), 0 1px 1px rgba(0,0,0,0.23);\n  position: absolute;\n  left: -100%;\n  top: 100%;\n  z-index: 1;\n  background-color: #fff;\n  min-width: 350px;\n  min-height: 350px;\n}\n.giga-grid .giga-grid-settings-pop-over ul {\n  list-style: circle;\n}\n.giga-grid .giga-grid-settings-pop-over ul li {\n  display: inline-block;\n  box-shadow: 0 1px 1px rgba(0,0,0,0.23), 0 1px 1px rgba(0,0,0,0.23);\n  padding: 5px;\n  margin-right: 3px;\n  margin-bottom: 5px;\n}\n.giga-grid .giga-grid-settings-pop-over ul li:hover {\n  cursor: pointer;\n  background-color: #ebebeb;\n}\n.giga-grid .giga-grid-settings-pop-over ul li.dragging {\n  border-right: 2px solid #ff4500;\n}\n.giga-grid .giga-grid-settings-pop-over .dismiss,\n.giga-grid .giga-grid-settings-pop-over .submit {\n  cursor: pointer;\n}\n", ""]);
 	
 	// exports
 
