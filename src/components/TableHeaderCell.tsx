@@ -2,36 +2,32 @@ import * as React from "react";
 import * as classNames from "classnames";
 import {Column, ColumnFormat, SortDirection} from "../models/ColumnLike";
 import {GridSubcomponentProps} from "./GigaGrid";
-import {NewSortAction, GigaActionType} from "../store/GigaStore";
+import {SortUpdateAction, GigaActionType} from "../store/GigaStore";
+import * as _ from "lodash";
 
 export interface TableHeaderProps extends GridSubcomponentProps<TableHeaderCell> {
-    column: Column
-    isFirstColumn?: boolean
-    isLastColumn?: boolean
+    column:Column
+    isFirstColumn?:boolean
+    isLastColumn?:boolean
 }
 
-// Comment
-class TableHeaderState {
-    handleVisible:boolean;
-}
-
-export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeaderState> {
+export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
 
     constructor(props:TableHeaderProps) {
         super(props);
-        this.state = {handleVisible: false};
     }
 
     renderSortIcon() {
-        if (this.props.column.direction != undefined) {
+        const {direction} = this.props.column;
+        if (direction != undefined) {
             const cx = classNames({
                 "fa": true,
-                "fa-sort-asc": this.props.column.direction === SortDirection.ASC,
-                "fa-sort-desc": this.props.column.direction === SortDirection.DESC
+                "fa-sort-asc": direction === SortDirection.ASC,
+                "fa-sort-desc": direction === SortDirection.DESC
             });
             return (
                 <span>
-                    <i className={cx}/>
+                    {' '}<i className={cx}/>
                 </span>
             );
         }
@@ -54,13 +50,11 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
         return (
             <th style={style}
                 onClick={()=>{
-                    const {colTag, format, direction} = this.props.column;
-                    const sortBy: Column = {
-                        colTag: colTag,
-                        format: format,
+                    const {direction} = this.props.column;
+                    const sortBy: Column = _.assign<{},Column>({},this.props.column, {
                         direction: direction === SortDirection.DESC ? SortDirection.ASC : SortDirection.DESC
-                    };
-                    const payload: NewSortAction = {
+                    });
+                    const payload: SortUpdateAction = {
                         type: GigaActionType.NEW_SORT,
                         sortBys: [sortBy]
                     };

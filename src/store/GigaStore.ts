@@ -64,6 +64,14 @@ export class GigaStore extends ReduceStore<GigaState> {
         });
         const filteredColumns = _.filter(columns, column => subtotalBys.map(subtotalBy => subtotalBy.colTag).indexOf(column.colTag) === -1);
 
+        /**
+         * create sortBys from columns (any properties passed via initialSortBys will override the same property in the corresponding Column object
+         */
+        const sortBys = (initialSortBys || []).map(sortBy=> {
+            const column = _.find(columns, column => column.colTag === sortBy.colTag);
+            return _.assign<{},Column>({}, column, sortBy);
+        });
+
         var tree = TreeBuilder.buildTree(
             data,
             subtotalBys,
@@ -72,8 +80,8 @@ export class GigaStore extends ReduceStore<GigaState> {
         );
         SubtotalAggregator.aggregateTree(tree, columns);
 
-        if (initialSortBys)
-            tree = SortFactory.sortTree(tree, initialSortBys);
+        if (sortBys)
+            tree = SortFactory.sortTree(tree, sortBys);
 
         const rasterizedRows:Row[] = TreeRasterizer.rasterize(tree);
 
@@ -83,7 +91,7 @@ export class GigaStore extends ReduceStore<GigaState> {
             columns: columnGroups ? columns : filteredColumns,
             displayEnd: Math.min(rasterizedRows.length - 1, PROGRESSIVE_RENDERING_THRESHOLD),
             subtotalBys: subtotalBys,
-            sortBys: _.cloneDeep(initialSortBys) || [],
+            sortBys: sortBys,
             filterBys: _.cloneDeep(initialFilterBys) || [],
             tree: tree
         }
@@ -123,7 +131,7 @@ export class GigaStore extends ReduceStore<GigaState> {
              Sort Actions
              */
             case GigaActionType.NEW_SORT:
-                newState = GigaStore.handleNewSort(state, action as NewSortAction);
+                newState = GigaStore.handleSortUpdate(state, action as SortUpdateAction);
                 break;
             case GigaActionType.CLEAR_SORT:
                 newState = GigaStore.handleClearSort(state);
@@ -169,16 +177,19 @@ export class GigaStore extends ReduceStore<GigaState> {
      Selection Action Handlers
      */
     private handleRowSelect(state:GigaState, action:ToggleRowSelectAction):GigaState {
-
-        if (typeof this.props.onRowClick === "function") {
-            if (this.props.onRowClick(action.row, state) === false)
+        if (_.isFunction(this.props.onRowClick)) {
+            const udfResult = this.props.onRowClick(action.row, state);
+            if (udfResult !== undefined &&
+                udfResult === false)
                 return state;
             else {
                 // de-select every other row unless enableMultiRowSelect is turned on
-                if (!this.props.enableMultiRowSelect)
-                // call said function
+                if (!this.props.enableMultiRowSelect) {
+                    const toggleTo = !action.row.isSelected();
                     recursivelyDeselect(state.tree.getRoot());
-                action.row.toggleSelect();
+                    action.row.toggleSelect(toggleTo);
+                } else
+                    action.row.toggleSelect();
                 return _.clone(state);
             }
         } else
@@ -188,7 +199,7 @@ export class GigaStore extends ReduceStore<GigaState> {
 
     private handleCellSelect(state:GigaState, action:ToggleCellSelectAction):GigaState {
 
-        if (typeof this.props.onCellClick === "function") {
+        if (_.isFunction(this.props.onCellClick)) {
             if (!this.props.onCellClick(action.row, action.column))
                 return state; // will not emit state mutation event
             else
@@ -230,15 +241,26 @@ export class GigaStore extends ReduceStore<GigaState> {
      Sort Action Handlers
      */
 
-    private static handleNewSort(state:GigaState, action:NewSortAction):GigaState {
-        const newTree:Tree = SortFactory.sortTree(state.tree, action.sortBys);
-        const newState = _.clone(state);
-        newState.tree = newTree;
-        newState.sortBys = action.sortBys;
-        return newState;
+    private static handleSortUpdate(state:GigaState, action:SortUpdateAction):GigaState {
+        /**
+         * go through all the columns in state, flip on/off sort flags as necessary
+         */
+        var newPartialState = {};
+        state.columns.forEach(column=> {
+            var sb = _.find(action.sortBys, s=>s.colTag === column.colTag);
+            if (sb)
+                column.direction = sb.direction;
+            else
+                column.direction = undefined;
+        });
+        newPartialState['columns'] = state.columns;
+        newPartialState['tree'] = SortFactory.sortTree(state.tree, action.sortBys);
+        newPartialState['sortBys'] = action.sortBys;
+        return _.assign<{}, GigaState>({}, state, newPartialState);
     }
 
     private static handleClearSort(state:GigaState):GigaState {
+        state.columns.forEach(column => column.direction = undefined);
         const newTree:Tree = SortFactory.sortTree(state.tree, []);
         const newState = _.clone(state);
         newState.tree = newTree;
@@ -316,7 +338,7 @@ export interface AddSortAction extends GigaAction {
     sortBy:Column
 }
 
-export interface NewSortAction extends GigaAction {
+export interface SortUpdateAction extends GigaAction {
     sortBys:Column[]
 }
 

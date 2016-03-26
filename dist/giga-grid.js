@@ -80,8 +80,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./giga-grid.styl", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./giga-grid.styl");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./GigaGrid.styl", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./GigaGrid.styl");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -99,7 +99,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	// module
-	exports.push([module.id, "div.giga-grid .dropdown-menu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  left: 0;\n}\ndiv.giga-grid .dropdown-menu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  right: 0;\n}\ndiv.giga-grid .dropdown-submenu-align-right {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  left: 100%;\n}\ndiv.giga-grid .dropdown-submenu-align-left {\n  position: absolute;\n  background-color: #fff;\n  top: 100%;\n  border: 1px solid #eee;\n  border-radius: 2px;\n  white-space: nowrap;\n  padding: 10px;\n  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\n  list-style: none;\n  top: 0;\n  right: 50%;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle {\n  position: absolute;\n  right: 0;\n  background-color: #4a5564;\n}\ndiv.giga-grid .dropdown-menu-toggle-handle-hide {\n  opacity: 0;\n}\ndiv.giga-grid .dropdown-menu-item {\n  position: relative;\n  padding-bottom: 5px;\n  padding-left: 10px;\n  padding-top: 5px;\n  color: #666;\n  border-radius: 2px;\n}\ndiv.giga-grid .dropdown-menu-item.hoverable:hover {\n  cursor: pointer;\n  background-color: #eee;\n}\ndiv.giga-grid .dropdown-menu-item input {\n  border: none;\n  border-bottom: 2px solid #666;\n  margin-top: 10px;\n  margin-bottom: 10px;\n  padding-top: 5px;\n  padding-bottom: 5px;\n  font-size: 13px;\n}\ndiv.giga-grid {\n  margin: 0;\n  font-family: Roboto, sans-serif;\n  color: #333;\n}\ndiv.giga-grid table {\n  border-collapse: collapse;\n  font-size: 11px;\n}\ndiv.giga-grid table.header-table {\n  table-layout: fixed;\n}\ndiv.giga-grid div.giga-grid-body-viewport {\n  overflow: scroll;\n  display: inline-block;\n  max-width: 100%;\n}\ndiv.giga-grid div.giga-grid-header-container {\n  max-width: 100%;\n  overflow: hidden;\n}\ndiv.giga-grid tr.selected {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row.selected {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid tr td,\ndiv.giga-grid tr th {\n  box-sizing: border-box;\n  padding: 2px 5px;\n  min-width: 8em;\n}\ndiv.giga-grid th:last-child,\ndiv.giga-grid td:last-child {\n  padding-right: 10px;\n}\ndiv.giga-grid th:first-child,\ndiv.giga-grid td:first-child {\n  padding-left: 10px;\n}\ndiv.giga-grid tr th {\n  font-weight: normal;\n  background-color: #4a5564;\n  color: #fff;\n  border-left: 1px solid #fff;\n  border-right: 1px solid #fff;\n  border-bottom: 1px solid #fff;\n}\ndiv.giga-grid tr th.column-group {\n  text-align: center;\n}\ndiv.giga-grid tr td {\n  white-space: nowrap;\n  border: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr td i:hover {\n  cursor: pointer;\n  color: #fff;\n}\ndiv.giga-grid tr.subtotal-row {\n  background-color: rgba(74,85,100,0.1);\n}\ndiv.giga-grid thead tr:hover {\n  cursor: pointer;\n}\ndiv.giga-grid tbody tr:hover {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row:hover {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid .numeric {\n  text-align: right;\n}\ndiv.giga-grid .non-numeric {\n  text-align: left;\n}\ndiv.giga-grid span.header-text {\n  padding-right: 15px;\n}\n", ""]);
+	exports.push([module.id, "div.giga-grid {\n  margin: 0;\n  font-family: Roboto, sans-serif;\n  color: #333;\n}\ndiv.giga-grid span.giga-grid-button {\n  background-color: #fff;\n  border: 1px solid rgba(0,0,0,0.078);\n  padding: 5px;\n  cursor: pointer;\n  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;\n}\ndiv.giga-grid span.giga-grid-button:hover {\n  background-color: rgba(0,0,0,0.078);\n}\ndiv.giga-grid table {\n  border-collapse: collapse;\n  font-size: 11px;\n}\ndiv.giga-grid table.header-table {\n  table-layout: fixed;\n}\ndiv.giga-grid div.giga-grid-body-viewport {\n  overflow: scroll;\n  display: inline-block;\n  max-width: 100%;\n}\ndiv.giga-grid div.giga-grid-header-container {\n  max-width: 100%;\n  overflow: hidden;\n}\ndiv.giga-grid tr.selected {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row.selected {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid tr td,\ndiv.giga-grid tr th {\n  box-sizing: border-box;\n  padding: 2px 5px;\n  min-width: 8em;\n}\ndiv.giga-grid th:last-child,\ndiv.giga-grid td:last-child {\n  padding-right: 10px;\n}\ndiv.giga-grid th:first-child,\ndiv.giga-grid td:first-child {\n  padding-left: 10px;\n}\ndiv.giga-grid tr th {\n  font-weight: normal;\n  background-color: #4a5564;\n  color: #fff;\n  border-left: 1px solid #f5f5f5;\n  border-right: 1px solid #f5f5f5;\n  border-bottom: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr th.column-group {\n  text-align: center;\n}\ndiv.giga-grid tr td {\n  white-space: nowrap;\n  border: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr td i:hover {\n  cursor: pointer;\n  color: #f5f5f5;\n}\ndiv.giga-grid tr.subtotal-row {\n  background-color: rgba(74,85,100,0.1);\n}\ndiv.giga-grid thead tr:hover {\n  cursor: pointer;\n}\ndiv.giga-grid tbody tr:hover {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row:hover {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid .numeric {\n  text-align: right;\n}\ndiv.giga-grid .non-numeric {\n  text-align: left;\n}\n", ""]);
 	
 	// exports
 
@@ -590,6 +590,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        scrollBarWidth = computeScrollBarWidth();
 	    return scrollBarWidth;
 	}
+	exports.getScrollBarWidth = getScrollBarWidth;
 	/**
 	 * traverse the node until a viable parent with a non-zero width is found
 	 * stops until the node run out of parent (i.e. reaches the <html/> element
@@ -13092,15 +13093,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            showSettingsPopover: false
 	        });
 	    };
+	    Toolbar.prototype.dispatchAction = function (action) {
+	        this.props.dispatcher.dispatch(action);
+	        this.dismissSettingsPopover();
+	    };
 	    Toolbar.prototype.render = function () {
 	        var _this = this;
-	        var dispatcher = this.props.dispatcher;
 	        var state = this.props.gridStore.getState();
 	        var columns = state.columns, subtotalBys = state.subtotalBys;
 	        return (React.createElement("div", {className: "giga-grid-toolbar"}, React.createElement("span", {className: "toolbar-item", onClick: function () { return _this.setState({ showSettingsPopover: !_this.state.showSettingsPopover }); }}, React.createElement("span", {className: "toolbar-item-toggle"}, React.createElement("i", {className: "fa fa-cogs"}), " Settings"), this.state.showSettingsPopover ?
-	            React.createElement(SettingsPopover_1.SettingsPopover, {onDismiss: function () { return _this.dismissSettingsPopover(); }, dispatcher: dispatcher, subtotalBys: subtotalBys, columns: columns})
-	            :
-	                "")));
+	            React.createElement(SettingsPopover_1.SettingsPopover, {onDismiss: function () { return _this.dismissSettingsPopover(); }, onSubmit: function (action) { return _this.dispatchAction(action); }, subtotalBys: subtotalBys, columns: columns}) : "")));
 	    };
 	    return Toolbar;
 	}(React.Component));
@@ -13129,10 +13131,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var subtotalBys = _.clone(props.subtotalBys);
 	        this.state = { columns: columns, subtotalBys: subtotalBys };
 	    }
-	    SettingsPopover.swapToAnotherListOfColumns = function (from, to, src, dest) {
+	    /**
+	     * move the src from the `from` list to after the dest column in the `to` list
+	     * @param from
+	     * @param to
+	     * @param src
+	     * @param dest
+	     */
+	    SettingsPopover.prototype.swapToAnotherListOfColumns = function (from, to, src, dest) {
 	        var item = from.splice(src.idx, 1)[0];
 	        to.splice(dest.idx + 1, 0, item);
 	    };
+	    /**
+	     * moves the src column to after the dest column within the same list
+	     * @param columns
+	     * @param src
+	     * @param dest
+	     */
 	    SettingsPopover.prototype.moveColumn = function (columns, src, dest) {
 	        var item = columns.splice(src.idx, 1)[0];
 	        // the previous step mutates the columns, dest.idx is no longer reliable, we must find it again ...
@@ -13155,7 +13170,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            /**
 	             * src is in a different list of column than dest, we need to transfer them
 	             */
-	            SettingsPopover.swapToAnotherListOfColumns(this.state[src.type], this.state[dest.type], src, dest);
+	            this.swapToAnotherListOfColumns(this.state[src.type], this.state[dest.type], src, dest);
 	        this.setState({
 	            columns: this.state.columns,
 	            subtotalBys: this.state.subtotalBys
@@ -13167,7 +13182,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            columns: this.state.columns,
 	            subtotalBys: this.state.subtotalBys
 	        };
-	        this.props.dispatcher.dispatch(payload);
+	        this.props.onSubmit.call(undefined, payload);
 	    };
 	    SettingsPopover.prototype.renderSortable = function (type, columns) {
 	        var _this = this;
@@ -13193,7 +13208,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    colTag: null,
 	                    idx: 0
 	                };
-	                SettingsPopover.swapToAnotherListOfColumns(fromList, toList, src, dest);
+	                _this.swapToAnotherListOfColumns(fromList, toList, src, dest);
 	                _this.setState({
 	                    columns: _this.state.columns,
 	                    subtotalBys: _this.state.subtotalBys
@@ -13205,7 +13220,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    SettingsPopover.prototype.render = function () {
 	        var _this = this;
-	        return (React.createElement("div", {className: "giga-grid-settings-pop-over"}, React.createElement("div", null, React.createElement("h5", null, "Columns"), this.renderSortable("columns", this.state.columns)), React.createElement("div", null, React.createElement("h5", null, "Subtotal By"), this.renderSortable("subtotalBys", this.state.subtotalBys)), React.createElement("span", {className: "submit", style: { color: "green" }, onClick: function (e) { return _this.commitColumnUpdates(); }}, React.createElement("i", {className: "fa fa-2x fa-check-square"})), " ", React.createElement("span", {style: { color: "red" }, className: "dismiss", onClick: function (e) { return _this.props.onDismiss(); }}, React.createElement("i", {className: "fa fa-2x fa-close"}))));
+	        return (React.createElement("div", {className: "giga-grid-settings-pop-over", onClick: function (e) { return e.stopPropagation(); }}, React.createElement("div", null, React.createElement("h5", null, "Columns"), this.renderSortable("columns", this.state.columns)), React.createElement("div", null, React.createElement("h5", null, "Subtotal By"), this.renderSortable("subtotalBys", this.state.subtotalBys)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.EXPAND_ALL }); }}, "Expand All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.COLLAPSE_ALL }); }}, "Collapse All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.CLEAR_SORT }); }}, "Clear Sort")), React.createElement("br", null), React.createElement("div", null, React.createElement("span", {className: "submit", style: { color: "green" }, onClick: function (e) { return _this.commitColumnUpdates(); }}, React.createElement("i", {className: "fa fa-2x fa-check-square"})), " ", React.createElement("span", {style: { color: "red" }, className: "dismiss", onClick: function (e) { return _this.props.onDismiss(); }}, React.createElement("i", {className: "fa fa-2x fa-close"})))));
 	    };
 	    return SettingsPopover;
 	}(React.Component));
@@ -13386,15 +13401,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var columns = columnDefs.map(function (columnDef) {
 	            return _.assign({}, columnDef, {});
 	        });
+	        /**
+	         * create subtotalBys from columns (any properties passed in via initialSubtotalBys will override the same property on the corresponding Column object
+	         */
 	        var subtotalBys = (initialSubtotalBys || []).map(function (subtotalBy) {
 	            var column = _.find(columns, function (column) { return column.colTag === subtotalBy.colTag; });
 	            return _.assign({}, column, subtotalBy);
 	        });
 	        var filteredColumns = _.filter(columns, function (column) { return subtotalBys.map(function (subtotalBy) { return subtotalBy.colTag; }).indexOf(column.colTag) === -1; });
+	        /**
+	         * create sortBys from columns (any properties passed via initialSortBys will override the same property in the corresponding Column object
+	         */
+	        var sortBys = (initialSortBys || []).map(function (sortBy) {
+	            var column = _.find(columns, function (column) { return column.colTag === sortBy.colTag; });
+	            return _.assign({}, column, sortBy);
+	        });
 	        var tree = TreeBuilder_1.TreeBuilder.buildTree(data, subtotalBys, this.props.initiallyExpandedSubtotalRows, this.props.initiallySelectedSubtotalRows);
 	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, columns);
-	        if (initialSortBys)
-	            tree = SortFactory_1.SortFactory.sortTree(tree, initialSortBys);
+	        if (sortBys)
+	            tree = SortFactory_1.SortFactory.sortTree(tree, sortBys);
 	        var rasterizedRows = TreeRasterizer_1.TreeRasterizer.rasterize(tree);
 	        return {
 	            rasterizedRows: rasterizedRows,
@@ -13402,7 +13427,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            columns: columnGroups ? columns : filteredColumns,
 	            displayEnd: Math.min(rasterizedRows.length - 1, exports.PROGRESSIVE_RENDERING_THRESHOLD),
 	            subtotalBys: subtotalBys,
-	            sortBys: _.cloneDeep(initialSortBys) || [],
+	            sortBys: sortBys,
 	            filterBys: _.cloneDeep(initialFilterBys) || [],
 	            tree: tree
 	        };
@@ -13419,7 +13444,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            /*
 	             Subtotal Actions
 	             */
-	            // TODO implement handling the new subtotal actions
 	            case GigaActionType.COLUMNS_UPDATE:
 	                newState = this.handleColumnUpdate(state, action);
 	                break;
@@ -13438,14 +13462,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            /*
 	             Sort Actions
 	             */
-	            case GigaActionType.ADD_SORT:
-	                newState = GigaStore.handleAddSort(state, action);
-	                break;
 	            case GigaActionType.NEW_SORT:
-	                newState = GigaStore.handleNewSort(state, action);
+	                newState = GigaStore.handleSortUpdate(state, action);
 	                break;
 	            case GigaActionType.CLEAR_SORT:
-	                newState = GigaStore.handleClearSort(state, action);
+	                newState = GigaStore.handleClearSort(state);
 	                break;
 	            /*
 	             Selection Actions
@@ -13470,7 +13491,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GigaStore.shouldTriggerRasterization = function (action) {
 	        return [
 	            GigaActionType.ADD_FILTER,
-	            GigaActionType.ADD_SORT,
 	            GigaActionType.CLEAR_FILTER,
 	            GigaActionType.CLEAR_SORT,
 	            GigaActionType.NEW_FILTER,
@@ -13485,15 +13505,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	     Selection Action Handlers
 	     */
 	    GigaStore.prototype.handleRowSelect = function (state, action) {
-	        if (typeof this.props.onRowClick === "function") {
-	            if (this.props.onRowClick(action.row, state) === false)
+	        if (_.isFunction(this.props.onRowClick)) {
+	            var udfResult = this.props.onRowClick(action.row, state);
+	            if (udfResult !== undefined &&
+	                udfResult === false)
 	                return state;
 	            else {
 	                // de-select every other row unless enableMultiRowSelect is turned on
-	                if (!this.props.enableMultiRowSelect)
-	                    // call said function
+	                if (!this.props.enableMultiRowSelect) {
+	                    var toggleTo = !action.row.isSelected();
 	                    recursivelyDeselect(state.tree.getRoot());
-	                action.row.toggleSelect();
+	                    action.row.toggleSelect(toggleTo);
+	                }
+	                else
+	                    action.row.toggleSelect();
 	                return _.clone(state);
 	            }
 	        }
@@ -13501,7 +13526,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return state;
 	    };
 	    GigaStore.prototype.handleCellSelect = function (state, action) {
-	        if (typeof this.props.onCellClick === "function") {
+	        if (_.isFunction(this.props.onCellClick)) {
 	            if (!this.props.onCellClick(action.row, action.column))
 	                return state; // will not emit state mutation event
 	            else
@@ -13537,22 +13562,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	     TODO test these sort handlers
 	     Sort Action Handlers
 	     */
-	    GigaStore.handleAddSort = function (state, action) {
-	        var sortBy = action.sortBy;
-	        state.sortBys.push(sortBy);
-	        var newTree = SortFactory_1.SortFactory.sortTree(state.tree, state.sortBys);
-	        var newState = _.clone(state);
-	        newState.tree = newTree;
-	        return newState;
+	    GigaStore.handleSortUpdate = function (state, action) {
+	        /**
+	         * go through all the columns in state, flip on/off sort flags as necessary
+	         */
+	        var newPartialState = {};
+	        state.columns.forEach(function (column) {
+	            var sb = _.find(action.sortBys, function (s) { return s.colTag === column.colTag; });
+	            if (sb)
+	                column.direction = sb.direction;
+	            else
+	                column.direction = undefined;
+	        });
+	        newPartialState['columns'] = state.columns;
+	        newPartialState['tree'] = SortFactory_1.SortFactory.sortTree(state.tree, action.sortBys);
+	        newPartialState['sortBys'] = action.sortBys;
+	        return _.assign({}, state, newPartialState);
 	    };
-	    GigaStore.handleNewSort = function (state, action) {
-	        var newTree = SortFactory_1.SortFactory.sortTree(state.tree, action.sortBys);
-	        var newState = _.clone(state);
-	        newState.tree = newTree;
-	        newState.sortBys = action.sortBys;
-	        return newState;
-	    };
-	    GigaStore.handleClearSort = function (state, action) {
+	    GigaStore.handleClearSort = function (state) {
+	        state.columns.forEach(function (column) { return column.direction = undefined; });
 	        var newTree = SortFactory_1.SortFactory.sortTree(state.tree, []);
 	        var newState = _.clone(state);
 	        newState.tree = newTree;
@@ -13564,6 +13592,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            columns: action.columns || state.columns,
 	            subtotalBys: action.subtotalBys || state.subtotalBys
 	        };
+	        /**
+	         * if subtotalBys has been updated, we must re-create the tree and rerun aggregation
+	         */
 	        if (!_.isEqual(state.subtotalBys, newColumnStates.subtotalBys)) {
 	            var tree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, newColumnStates.subtotalBys);
 	            TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(tree.getRoot(), false);
@@ -13581,18 +13612,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	(function (GigaActionType) {
 	    GigaActionType[GigaActionType["INITIALIZE"] = 0] = "INITIALIZE";
 	    GigaActionType[GigaActionType["NEW_SORT"] = 1] = "NEW_SORT";
-	    GigaActionType[GigaActionType["ADD_SORT"] = 2] = "ADD_SORT";
-	    GigaActionType[GigaActionType["CLEAR_SORT"] = 3] = "CLEAR_SORT";
-	    GigaActionType[GigaActionType["NEW_FILTER"] = 4] = "NEW_FILTER";
-	    GigaActionType[GigaActionType["ADD_FILTER"] = 5] = "ADD_FILTER";
-	    GigaActionType[GigaActionType["CLEAR_FILTER"] = 6] = "CLEAR_FILTER";
-	    GigaActionType[GigaActionType["TOGGLE_ROW_COLLAPSE"] = 7] = "TOGGLE_ROW_COLLAPSE";
-	    GigaActionType[GigaActionType["COLLAPSE_ALL"] = 8] = "COLLAPSE_ALL";
-	    GigaActionType[GigaActionType["EXPAND_ALL"] = 9] = "EXPAND_ALL";
-	    GigaActionType[GigaActionType["TOGGLE_ROW_SELECT"] = 10] = "TOGGLE_ROW_SELECT";
-	    GigaActionType[GigaActionType["TOGGLE_CELL_SELECT"] = 11] = "TOGGLE_CELL_SELECT";
-	    GigaActionType[GigaActionType["CHANGE_ROW_DISPLAY_BOUNDS"] = 12] = "CHANGE_ROW_DISPLAY_BOUNDS";
-	    GigaActionType[GigaActionType["COLUMNS_UPDATE"] = 13] = "COLUMNS_UPDATE";
+	    GigaActionType[GigaActionType["CLEAR_SORT"] = 2] = "CLEAR_SORT";
+	    GigaActionType[GigaActionType["NEW_FILTER"] = 3] = "NEW_FILTER";
+	    GigaActionType[GigaActionType["ADD_FILTER"] = 4] = "ADD_FILTER";
+	    GigaActionType[GigaActionType["CLEAR_FILTER"] = 5] = "CLEAR_FILTER";
+	    GigaActionType[GigaActionType["TOGGLE_ROW_COLLAPSE"] = 6] = "TOGGLE_ROW_COLLAPSE";
+	    GigaActionType[GigaActionType["COLLAPSE_ALL"] = 7] = "COLLAPSE_ALL";
+	    GigaActionType[GigaActionType["EXPAND_ALL"] = 8] = "EXPAND_ALL";
+	    GigaActionType[GigaActionType["TOGGLE_ROW_SELECT"] = 9] = "TOGGLE_ROW_SELECT";
+	    GigaActionType[GigaActionType["TOGGLE_CELL_SELECT"] = 10] = "TOGGLE_CELL_SELECT";
+	    GigaActionType[GigaActionType["CHANGE_ROW_DISPLAY_BOUNDS"] = 11] = "CHANGE_ROW_DISPLAY_BOUNDS";
+	    GigaActionType[GigaActionType["COLUMNS_UPDATE"] = 12] = "COLUMNS_UPDATE";
 	})(exports.GigaActionType || (exports.GigaActionType = {}));
 	var GigaActionType = exports.GigaActionType;
 	// define a function
@@ -20679,9 +20709,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    SortFactory.getColumnValueForRow = function (row, sortBy) {
 	        if (row.isDetail())
-	            return row.get(sortBy);
+	            if (sortBy.format === ColumnLike_1.ColumnFormat.NUMBER)
+	                return parseFloat(row.get(sortBy));
+	            else
+	                return row.get(sortBy);
 	        else if (row.get(sortBy) !== null && row.get(sortBy) !== undefined && row.get(sortBy) !== "")
-	            return row.get(sortBy);
+	            // if the column aggregation method produces a number, we want to treat it like a number
+	            if ([ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE, ColumnLike_1.AggregationMethod.AVERAGE, ColumnLike_1.AggregationMethod.SUM].indexOf(sortBy.aggregationMethod) !== -1)
+	                return parseFloat(row.get(sortBy));
+	            else
+	                return row.get(sortBy);
 	        else
 	            return row.title;
 	    };
@@ -20804,7 +20841,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	// module
-	exports.push([module.id, ".giga-grid .giga-grid-toolbar span.toolbar-item {\n  position: relative;\n}\n.giga-grid-toolbar span.toolbar-item-toggle:hover {\n  cursor: pointer;\n  color: #2f6fad;\n}\n.giga-grid-sortable {\n  border: 1px solid #ddd;\n  padding: 1em;\n}\n.giga-grid .giga-grid-settings-pop-over {\n  border: 1px solid #ebebeb;\n  padding: 1em;\n  box-shadow: 0 1px 1px rgba(0,0,0,0.23), 0 1px 1px rgba(0,0,0,0.23);\n  position: absolute;\n  left: -100%;\n  top: 100%;\n  z-index: 1;\n  background-color: #fff;\n  min-width: 350px;\n  min-height: 350px;\n}\n.giga-grid .giga-grid-settings-pop-over ul {\n  list-style: circle;\n}\n.giga-grid .giga-grid-settings-pop-over ul li {\n  display: inline-block;\n  box-shadow: 0 1px 1px rgba(0,0,0,0.23), 0 1px 1px rgba(0,0,0,0.23);\n  padding: 5px;\n  margin-right: 3px;\n  margin-bottom: 5px;\n}\n.giga-grid .giga-grid-settings-pop-over ul li:hover {\n  cursor: pointer;\n  background-color: #ebebeb;\n}\n.giga-grid .giga-grid-settings-pop-over ul li.dragging {\n  border-right: 2px solid #ff4500;\n}\n.giga-grid .giga-grid-settings-pop-over .dismiss,\n.giga-grid .giga-grid-settings-pop-over .submit {\n  cursor: pointer;\n}\n", ""]);
+	exports.push([module.id, ".giga-grid .giga-grid-toolbar span.toolbar-item {\n  position: relative;\n}\n.giga-grid-toolbar span.toolbar-item-toggle:hover {\n  cursor: pointer;\n  color: #2f6fad;\n}\n.giga-grid-sortable {\n  border: 1px solid rgba(0,0,0,0.078);\n  padding: 1em;\n}\n.giga-grid .giga-grid-settings-pop-over {\n  border: 1px solid rgba(0,0,0,0.078);\n  padding: 1em;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  position: absolute;\n  left: -100%;\n  top: 100%;\n  z-index: 1;\n  background-color: #fff;\n  min-width: 350px;\n  min-height: 350px;\n}\n.giga-grid .giga-grid-settings-pop-over ul {\n  list-style: circle;\n}\n.giga-grid .giga-grid-settings-pop-over ul li {\n  display: inline-block;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  padding: 5px;\n  margin-right: 3px;\n  margin-bottom: 5px;\n}\n.giga-grid .giga-grid-settings-pop-over ul li:hover {\n  cursor: pointer;\n  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;\n  background-color: rgba(0,0,0,0.078);\n}\n.giga-grid .giga-grid-settings-pop-over ul li.dragging {\n  border-right: 2px solid #ff4500;\n}\n.giga-grid .giga-grid-settings-pop-over .dismiss,\n.giga-grid .giga-grid-settings-pop-over .submit {\n  cursor: pointer;\n}\n", ""]);
 	
 	// exports
 
@@ -21282,6 +21319,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(6);
 	var TableHeaderCell_1 = __webpack_require__(49);
+	var GigaGrid_1 = __webpack_require__(5);
 	/**
 	 * terminology: column groups are columns that can span multiple `leaf` columns and physically reside
 	 * on top of `leaf` columns
@@ -21304,6 +21342,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        trs.push(this.renderLeafColumns(this.props.columns[i], i));
 	        return trs;
 	    };
+	    /**
+	     * TODO th with colSpan really screw up our ability to set width on columns
+	     */
 	    TableHeader.renderColumnGroups = function (columns, key) {
 	        var ths = columns.map(function (column, i) {
 	            return (React.createElement("th", {className: "column-group", key: i, colSpan: column.colSpan}, column.title));
@@ -21312,9 +21353,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    TableHeader.prototype.renderLeafColumns = function (columns, key) {
 	        var _this = this;
-	        var ths = columns.map(function (colDef, i) {
-	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {column: colDef, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, dispatcher: _this.props.dispatcher});
+	        var ths = columns.map(function (column, i) {
+	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {column: column, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, dispatcher: _this.props.dispatcher});
 	        });
+	        // add a placeholder to offset the scrollbar
+	        ths.push(React.createElement("th", {key: ths.length, style: { width: GigaGrid_1.getScrollBarWidth() + "px" }}));
 	        return (React.createElement("tr", {key: key}, ths));
 	    };
 	    return TableHeader;
@@ -21335,26 +21378,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(6);
 	var classNames = __webpack_require__(14);
 	var ColumnLike_1 = __webpack_require__(10);
-	// Comment
-	var TableHeaderState = (function () {
-	    function TableHeaderState() {
-	    }
-	    return TableHeaderState;
-	}());
+	var GigaStore_1 = __webpack_require__(15);
+	var _ = __webpack_require__(8);
 	var TableHeaderCell = (function (_super) {
 	    __extends(TableHeaderCell, _super);
 	    function TableHeaderCell(props) {
 	        _super.call(this, props);
-	        this.state = { handleVisible: false };
 	    }
 	    TableHeaderCell.prototype.renderSortIcon = function () {
-	        if (this.props.column.sortDirection != undefined) {
+	        var direction = this.props.column.direction;
+	        if (direction != undefined) {
 	            var cx = classNames({
 	                "fa": true,
-	                "fa-sort-asc": this.props.column.sortDirection === ColumnLike_1.SortDirection.ASC,
-	                "fa-sort-desc": this.props.column.sortDirection === ColumnLike_1.SortDirection.DESC
+	                "fa-sort-asc": direction === ColumnLike_1.SortDirection.ASC,
+	                "fa-sort-desc": direction === ColumnLike_1.SortDirection.DESC
 	            });
-	            return (React.createElement("span", null, React.createElement("i", {className: cx})));
+	            return (React.createElement("span", null, ' ', React.createElement("i", {className: cx})));
 	        }
 	    };
 	    TableHeaderCell.prototype.render = function () {
@@ -21369,7 +21408,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "numeric": column.format === ColumnLike_1.ColumnFormat.NUMBER,
 	            "non-numeric": column.format !== ColumnLike_1.ColumnFormat.NUMBER
 	        });
-	        return (React.createElement("th", {style: style, onMouseEnter: function () { return _this.setState({ handleVisible: true }); }, onMouseLeave: function () { return _this.setState({ handleVisible: false }); }, className: cx}, React.createElement("span", {className: "header-text"}, column.title || column.colTag), this.renderSortIcon()));
+	        return (React.createElement("th", {style: style, onClick: function () {
+	            var direction = _this.props.column.direction;
+	            var sortBy = _.assign({}, _this.props.column, {
+	                direction: direction === ColumnLike_1.SortDirection.DESC ? ColumnLike_1.SortDirection.ASC : ColumnLike_1.SortDirection.DESC
+	            });
+	            var payload = {
+	                type: GigaStore_1.GigaActionType.NEW_SORT,
+	                sortBys: [sortBy]
+	            };
+	            _this.props.dispatcher.dispatch(payload);
+	        }, className: cx}, React.createElement("span", {className: "header-text"}, column.title || column.colTag), this.renderSortIcon()));
 	    };
 	    return TableHeaderCell;
 	}(React.Component));

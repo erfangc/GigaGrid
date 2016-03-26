@@ -111,9 +111,10 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
                  * in the event the column is empty, we still want to handle drop events
                  */
                 <ul className="giga-grid-sortable"
-                    onDragOver={(e)=>e.preventDefault()}
+                    onDragOver={e => e.preventDefault()}
                     onDrop={(e:DragEvent)=>{
-                        const srcType = e.dataTransfer.getData('type');const src = {
+                        const srcType = e.dataTransfer.getData('type');
+                        const src = {
                             type: srcType,
                             colTag: e.dataTransfer.getData('colTag'),
                             idx:  parseInt(e.dataTransfer.getData('idx'))
@@ -156,6 +157,8 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
                     <span className="giga-grid-button" onClick={()=>this.props.onSubmit.call(undefined,{type:GigaActionType.EXPAND_ALL})}>Expand All</span>
                     {" "}
                     <span className="giga-grid-button" onClick={()=>this.props.onSubmit.call(undefined,{type:GigaActionType.COLLAPSE_ALL})}>Collapse All</span>
+                    {" "}
+                    <span className="giga-grid-button" onClick={()=>this.props.onSubmit.call(undefined,{type:GigaActionType.CLEAR_SORT})}>Clear Sort</span>
                 </div>
                 <br/>
                 <div>
