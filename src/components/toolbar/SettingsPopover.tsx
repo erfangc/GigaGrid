@@ -1,15 +1,15 @@
 import * as React from "react";
-import {GridSubcomponentProps} from "../TableHeaderCell";
 import {Column} from "../../models/ColumnLike";
 import {SortableItem} from "./SortableItem";
 import * as _ from "lodash";
+import {GigaActionType, ColumnUpdateAction, GigaAction} from "../../store/GigaStore";
 import DragEvent = __React.DragEvent;
 import Props = __React.Props;
-import {GigaActionType, ColumnUpdateAction} from "../../store/GigaStore";
 
-export interface SettingsPopoverProps extends GridSubcomponentProps<SettingsPopover> {
+export interface SettingsPopoverProps {
     subtotalBys:Column[]
     columns:Column[]
+    onSubmit:(action:GigaAction)=>any
     onDismiss:()=>any
 }
 
@@ -33,15 +33,28 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
         this.state = {columns, subtotalBys};
     }
 
-    static swapToAnotherListOfColumns(from:Column[],
-                                      to:Column[],
-                                      src:SortableDataTransfer,
-                                      dest:SortableDataTransfer) {
+    /**
+     * move the src from the `from` list to after the dest column in the `to` list
+     * @param from
+     * @param to
+     * @param src
+     * @param dest
+     */
+    private swapToAnotherListOfColumns(from:Column[],
+                                       to:Column[],
+                                       src:SortableDataTransfer,
+                                       dest:SortableDataTransfer) {
         const item = from.splice(src.idx, 1)[0];
         to.splice(dest.idx + 1, 0, item);
     }
 
-    moveColumn(columns:Column[], src:SortableDataTransfer, dest:SortableDataTransfer) {
+    /**
+     * moves the src column to after the dest column within the same list
+     * @param columns
+     * @param src
+     * @param dest
+     */
+    private moveColumn(columns:Column[], src:SortableDataTransfer, dest:SortableDataTransfer) {
         const item = columns.splice(src.idx, 1)[0];
         // the previous step mutates the columns, dest.idx is no longer reliable, we must find it again ...
         const destIdx = _.findIndex(columns, c=>c.colTag === dest.colTag);
@@ -54,8 +67,8 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
      * @param src
      * @param dest
      */
-    updateColumnPosition(src:SortableDataTransfer,
-                         dest:SortableDataTransfer) {
+    private updateColumnPosition(src:SortableDataTransfer,
+                                 dest:SortableDataTransfer) {
 
         if (src.type === dest.type)
             /**
@@ -66,7 +79,7 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
             /**
              * src is in a different list of column than dest, we need to transfer them
              */
-            SettingsPopover.swapToAnotherListOfColumns(this.state[src.type], this.state[dest.type], src, dest);
+            this.swapToAnotherListOfColumns(this.state[src.type], this.state[dest.type], src, dest);
 
         this.setState({
             columns: this.state.columns,
@@ -74,13 +87,13 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
         });
     }
 
-    submitStateChanges() {
+    commitColumnUpdates() {
         const payload:ColumnUpdateAction = {
             type: GigaActionType.COLUMNS_UPDATE,
             columns: this.state.columns,
             subtotalBys: this.state.subtotalBys
         };
-        this.props.dispatcher.dispatch(payload);
+        this.props.onSubmit.call(undefined, payload);
     }
 
     renderSortable(type:string, columns:Column[]) {
@@ -105,14 +118,14 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
                             colTag: e.dataTransfer.getData('colTag'),
                             idx:  parseInt(e.dataTransfer.getData('idx'))
                         };
-                        var fromList = this.state[srcType];
-                        var toList = this.state[type];
-                        var dest: SortableDataTransfer = {
+                        const fromList = this.state[srcType];
+                        const toList = this.state[type];
+                        const dest: SortableDataTransfer = {
                             type: type,
                             colTag: null,
                             idx: 0
                         };
-                        SettingsPopover.swapToAnotherListOfColumns(fromList, toList, src, dest);
+                        this.swapToAnotherListOfColumns(fromList, toList, src, dest);
                         this.setState({
                             columns: this.state.columns,
                             subtotalBys: this.state.subtotalBys
@@ -130,7 +143,7 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
 
     render() {
         return (
-            <div className="giga-grid-settings-pop-over">
+            <div className="giga-grid-settings-pop-over" onClick={e=>e.stopPropagation()}>
                 <div>
                     <h5>Columns</h5>
                     {this.renderSortable("columns", this.state.columns)}
@@ -139,11 +152,21 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
                     <h5>Subtotal By</h5>
                     {this.renderSortable("subtotalBys", this.state.subtotalBys)}
                 </div>
-                <span className="submit" style={{color:"green"}} onClick={(e)=>this.submitStateChanges()}><i
-                    className="fa fa-2x fa-check-square"/></span>
-                {" "}
-                <span style={{color:"red"}} className="dismiss" onClick={(e)=>this.props.onDismiss()}><i
-                    className="fa fa-2x fa-close"/></span>
+                <div>
+                    <span className="giga-grid-button" onClick={()=>this.props.onSubmit.call(undefined,{type:GigaActionType.EXPAND_ALL})}>Expand All</span>
+                    {" "}
+                    <span className="giga-grid-button" onClick={()=>this.props.onSubmit.call(undefined,{type:GigaActionType.COLLAPSE_ALL})}>Collapse All</span>
+                </div>
+                <br/>
+                <div>
+                    <span className="submit" style={{color:"green"}} onClick={(e)=>this.commitColumnUpdates()}>
+                        <i className="fa fa-2x fa-check-square"/>
+                    </span>
+                        {" "}
+                    <span style={{color:"red"}} className="dismiss" onClick={(e)=>this.props.onDismiss()}>
+                        <i className="fa fa-2x fa-close"/>
+                    </span>
+                </div>
             </div>
         );
     }

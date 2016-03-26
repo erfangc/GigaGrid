@@ -73,7 +73,7 @@ const columnDefs:ColumnDef[] = [
 
 const initialSubtotalBys:Column[] = [{colTag: "Age"}, {colTag: "Children"}];
 
-// const initialSortBy:SortBy[] = [{colTag: "Age", sortDirection: SortDirection.DESC}];
+// const initialSortBy:SortBy[] = [{colTag: "Age", direction: SortDirection.DESC}];
 
 const props:GigaProps = {
     columnDefs: columnDefs,

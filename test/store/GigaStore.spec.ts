@@ -68,32 +68,6 @@ describe("GigaStore", ()=> {
 
         });
 
-        it("can handle ADD_SORT action", ()=> {
-            // start with a gender sort
-            const firstSort:NewSortAction = {
-                type: GigaActionType.NEW_SORT,
-                sortBys: [sortByGender]
-            };
-
-            dispatcher.dispatch(firstSort);
-            var root = store.getState().tree.getRoot();
-            expect(root.detailRows[0].getByColTag('gender')).toBe("Female");
-            expect(store.getState().rasterizedRows[0].getByColTag('gender')).toBe("Female");
-
-            // add a sort
-            const action:AddSortAction = {
-                type: GigaActionType.ADD_SORT,
-                sortBy: sortByGift
-            };
-
-            dispatcher.dispatch(action);
-
-            expect(root.detailRows[0].getByColTag('gender')).toBe("Female");
-            expect(root.detailRows[0].getByColTag('gift')).toBe(10);
-
-            expect(store.getState().sortBys.length).toBe(2);
-        });
-
         it("can handle CLEAR_SORT action", ()=> {
             // start with a gender sort
             const firstSort:NewSortAction = {

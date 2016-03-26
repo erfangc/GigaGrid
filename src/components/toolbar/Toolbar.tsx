@@ -1,7 +1,6 @@
-import {GigaProps} from "./../GigaGrid";
+import {GigaProps, GridSubcomponentProps} from "./../GigaGrid";
 import * as React from "react";
-import {GridSubcomponentProps} from "../TableHeaderCell";
-import {GigaStore} from "../../store/GigaStore";
+import {GigaStore, GigaAction} from "../../store/GigaStore";
 import {SettingsPopover} from "./SettingsPopover";
 import "./Toolbar.styl";
 
@@ -32,9 +31,13 @@ export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
             showSettingsPopover: false
         });
     }
+    
+    dispatchAction(action: GigaAction) {
+        this.props.dispatcher.dispatch(action);
+        this.dismissSettingsPopover();
+    }
 
     render() {
-        const {dispatcher} = this.props;
         const state = this.props.gridStore.getState();
         const {columns, subtotalBys} = state;
         return (
@@ -44,9 +47,8 @@ export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
                     {
                         this.state.showSettingsPopover ?
                         <SettingsPopover onDismiss={()=>this.dismissSettingsPopover()}
-                                         dispatcher={dispatcher} subtotalBys={subtotalBys} columns={columns}/>
-                            :
-                            ""
+                                         onSubmit={(action)=>this.dispatchAction(action)}
+                                         subtotalBys={subtotalBys} columns={columns}/> : ""
                     }
                 </span>
             </div>

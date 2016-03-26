@@ -13161,7 +13161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            subtotalBys: this.state.subtotalBys
 	        });
 	    };
-	    SettingsPopover.prototype.submitStateChanges = function () {
+	    SettingsPopover.prototype.commitColumnUpdates = function () {
 	        var payload = {
 	            type: GigaStore_1.GigaActionType.COLUMNS_UPDATE,
 	            columns: this.state.columns,
@@ -13205,7 +13205,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    SettingsPopover.prototype.render = function () {
 	        var _this = this;
-	        return (React.createElement("div", {className: "giga-grid-settings-pop-over"}, React.createElement("div", null, React.createElement("h5", null, "Columns"), this.renderSortable("columns", this.state.columns)), React.createElement("div", null, React.createElement("h5", null, "Subtotal By"), this.renderSortable("subtotalBys", this.state.subtotalBys)), React.createElement("span", {className: "submit", style: { color: "green" }, onClick: function (e) { return _this.submitStateChanges(); }}, React.createElement("i", {className: "fa fa-2x fa-check-square"})), " ", React.createElement("span", {style: { color: "red" }, className: "dismiss", onClick: function (e) { return _this.props.onDismiss(); }}, React.createElement("i", {className: "fa fa-2x fa-close"}))));
+	        return (React.createElement("div", {className: "giga-grid-settings-pop-over"}, React.createElement("div", null, React.createElement("h5", null, "Columns"), this.renderSortable("columns", this.state.columns)), React.createElement("div", null, React.createElement("h5", null, "Subtotal By"), this.renderSortable("subtotalBys", this.state.subtotalBys)), React.createElement("span", {className: "submit", style: { color: "green" }, onClick: function (e) { return _this.commitColumnUpdates(); }}, React.createElement("i", {className: "fa fa-2x fa-check-square"})), " ", React.createElement("span", {style: { color: "red" }, className: "dismiss", onClick: function (e) { return _this.props.onDismiss(); }}, React.createElement("i", {className: "fa fa-2x fa-close"}))));
 	    };
 	    return SettingsPopover;
 	}(React.Component));

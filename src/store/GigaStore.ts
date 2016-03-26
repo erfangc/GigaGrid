@@ -8,7 +8,7 @@ import {ReduceStore} from "flux/utils";
 import {Dispatcher} from "flux";
 import {SubtotalRow, Row} from "../models/Row";
 import {SortFactory} from "../static/SortFactory";
-import {SortBy, Column} from "../models/ColumnLike";
+import {Column} from "../models/ColumnLike";
 import {TreeRasterizer} from "../static/TreeRasterizer";
 import {ScrollCalculator} from "../static/ScrollCalculator";
 
@@ -54,6 +54,10 @@ export class GigaStore extends ReduceStore<GigaState> {
         const columns = columnDefs.map(columnDef=> {
             return _.assign<{},Column>({}, columnDef, {});
         });
+
+        /**
+         * create subtotalBys from columns (any properties passed in via initialSubtotalBys will override the same property on the corresponding Column object
+         */
         const subtotalBys:Column[] = (initialSubtotalBys || []).map(subtotalBy => {
             const column:Column = _.find(columns, column => column.colTag === subtotalBy.colTag);
             return _.assign<{}, Column>({}, column, subtotalBy);
@@ -100,7 +104,6 @@ export class GigaStore extends ReduceStore<GigaState> {
             /*
              Subtotal Actions
              */
-            // TODO implement handling the new subtotal actions
             case GigaActionType.COLUMNS_UPDATE:
                 newState = this.handleColumnUpdate(state, action as ColumnUpdateAction);
                 break;
@@ -119,14 +122,11 @@ export class GigaStore extends ReduceStore<GigaState> {
             /*
              Sort Actions
              */
-            case GigaActionType.ADD_SORT:
-                newState = GigaStore.handleAddSort(state, action as AddSortAction);
-                break;
             case GigaActionType.NEW_SORT:
                 newState = GigaStore.handleNewSort(state, action as NewSortAction);
                 break;
             case GigaActionType.CLEAR_SORT:
-                newState = GigaStore.handleClearSort(state, action as ClearSortAction);
+                newState = GigaStore.handleClearSort(state);
                 break;
             /*
              Selection Actions
@@ -154,7 +154,6 @@ export class GigaStore extends ReduceStore<GigaState> {
     private static shouldTriggerRasterization(action:GigaAction) {
         return [
                 GigaActionType.ADD_FILTER,
-                GigaActionType.ADD_SORT,
                 GigaActionType.CLEAR_FILTER,
                 GigaActionType.CLEAR_SORT,
                 GigaActionType.NEW_FILTER,
@@ -177,7 +176,7 @@ export class GigaStore extends ReduceStore<GigaState> {
             else {
                 // de-select every other row unless enableMultiRowSelect is turned on
                 if (!this.props.enableMultiRowSelect)
-                    // call said function
+                // call said function
                     recursivelyDeselect(state.tree.getRoot());
                 action.row.toggleSelect();
                 return _.clone(state);
@@ -230,14 +229,6 @@ export class GigaStore extends ReduceStore<GigaState> {
      TODO test these sort handlers
      Sort Action Handlers
      */
-    private static handleAddSort(state:GigaState, action:AddSortAction):GigaState {
-        const sortBy = action.sortBy;
-        state.sortBys.push(sortBy);
-        const newTree:Tree = SortFactory.sortTree(state.tree, state.sortBys);
-        const newState = _.clone(state);
-        newState.tree = newTree;
-        return newState;
-    }
 
     private static handleNewSort(state:GigaState, action:NewSortAction):GigaState {
         const newTree:Tree = SortFactory.sortTree(state.tree, action.sortBys);
@@ -247,7 +238,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return newState;
     }
 
-    private static handleClearSort(state:GigaState, action:ClearSortAction):GigaState {
+    private static handleClearSort(state:GigaState):GigaState {
         const newTree:Tree = SortFactory.sortTree(state.tree, []);
         const newState = _.clone(state);
         newState.tree = newTree;
@@ -255,13 +246,16 @@ export class GigaStore extends ReduceStore<GigaState> {
         return newState;
     }
 
-    private handleColumnUpdate(state: GigaState, action: ColumnUpdateAction) {
+    private handleColumnUpdate(state:GigaState, action:ColumnUpdateAction) {
         const newColumnStates = {
             columns: action.columns || state.columns,
             subtotalBys: action.subtotalBys || state.subtotalBys
         };
+        /**
+         * if subtotalBys has been updated, we must re-create the tree and rerun aggregation
+         */
         if (!_.isEqual(state.subtotalBys, newColumnStates.subtotalBys)) {
-            const tree: Tree = TreeBuilder.buildTree(this.props.data, newColumnStates.subtotalBys);
+            const tree:Tree = TreeBuilder.buildTree(this.props.data, newColumnStates.subtotalBys);
             TreeBuilder.recursivelyToggleChildrenCollapse(tree.getRoot(), false);
             SubtotalAggregator.aggregateTree(tree, newColumnStates.columns);
             newColumnStates["tree"] = tree;
@@ -278,7 +272,6 @@ export class GigaStore extends ReduceStore<GigaState> {
 export enum GigaActionType {
     INITIALIZE,
     NEW_SORT,
-    ADD_SORT,
     CLEAR_SORT,
     NEW_FILTER,
     ADD_FILTER,
@@ -297,8 +290,8 @@ export interface GigaAction {
 }
 
 export interface ColumnUpdateAction extends GigaAction {
-    columns: Column[]
-    subtotalBys: Column[]
+    columns:Column[]
+    subtotalBys:Column[]
 }
 
 export interface InitializeAction extends GigaAction {
@@ -320,11 +313,11 @@ export interface ClearSortAction extends GigaAction {
 }
 
 export interface AddSortAction extends GigaAction {
-    sortBy:SortBy
+    sortBy:Column
 }
 
 export interface NewSortAction extends GigaAction {
-    sortBys:SortBy[]
+    sortBys:Column[]
 }
 
 export interface TableWidthChangeAction extends GigaAction {
