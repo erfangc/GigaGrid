@@ -10,8 +10,9 @@ describe('GigaGrid', ()=> {
         const peopleData = TestUtils.newPeopleTestData();
         const data:any[] = peopleData.rawData();
         const columnDefs:ColumnDef[] = peopleData.columnDefs();
-        const component:Element = ReactTestUtils.renderIntoDocument(<GigaGrid data={data} columnDefs={columnDefs}/>);
-        const trs = ReactTestUtils.scryRenderedDOMComponentsWithTag(component as React.Component<{},{}>, "tr");
+        var component: React.Component<any, any> = null;
+        ReactTestUtils.renderIntoDocument(<GigaGrid ref={c=>component=c} data={data} columnDefs={columnDefs}/>);
+        const trs = ReactTestUtils.scryRenderedDOMComponentsWithTag(component, "tr");
         expect(trs.length).toBe(11);
         expect((trs as HTMLTableRowElement[])[0].children[0].textContent.substr(0, 10)).toBe("First Name");
     });
@@ -20,8 +21,9 @@ describe('GigaGrid', ()=> {
         const peopleData = TestUtils.newPeopleTestData();
         const data:any[] = peopleData.rawData();
         const columnDefs:ColumnDef[] = peopleData.columnDefs();
-        const component = ReactTestUtils.renderIntoDocument(<GigaGrid data={data} columnDefs={columnDefs} initialSubtotalBys={[{colTag: "gender"}]}/>);
-        const trs = ReactTestUtils.scryRenderedDOMComponentsWithTag(component as React.Component<{},{}>, "tr");
+        var component: React.Component<any, any> = null;
+        ReactTestUtils.renderIntoDocument(<GigaGrid ref={c=>component=c} data={data} columnDefs={columnDefs} initialSubtotalBys={[{colTag: "gender"}]}/>);
+        const trs = ReactTestUtils.scryRenderedDOMComponentsWithTag(component, "tr");
         expect(trs.length).toBe(13); // collapsed by default
         // TODO add test for expanded columns
     });

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {GridSubcomponentProps} from "./TableHeaderCell";
 import {Column} from "../models/ColumnLike";
 import {Row} from "../models/Row";
 import {GigaRow} from "./GigaRow";
 import {PROGRESSIVE_RENDERING_THRESHOLD} from "../store/GigaStore";
+import {GridSubcomponentProps} from "./GigaGrid";
 
 export interface TableBodyProps extends GridSubcomponentProps<TableBody> {
     rows: Row[]

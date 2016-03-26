@@ -1,95 +1,40 @@
 import * as React from "react";
 import * as classNames from "classnames";
 import {Column, ColumnFormat, SortDirection} from "../models/ColumnLike";
-import {DropdownMenu, SimpleDropdownMenuItem} from "./dropdown/DropdownMenu";
-import {SortMenuItem} from "./dropdown/SortMenuItem";
-import {GigaAction, GigaActionType} from "../store/GigaStore";
-import {SubtotalByMenuItem} from "./dropdown/SubtotalByMenuItem";
-import {FilterMenuItem} from "./dropdown/FilterMenuItem";
-import Dispatcher = Flux.Dispatcher;
-import ReactDOM = __React.ReactDOM;
-
-export interface GridSubcomponentProps<T> extends React.Props<T> {
-    dispatcher: Dispatcher<GigaAction>;
-}
+import {GridSubcomponentProps} from "./GigaGrid";
+import {SortUpdateAction, GigaActionType} from "../store/GigaStore";
+import * as _ from "lodash";
 
 export interface TableHeaderProps extends GridSubcomponentProps<TableHeaderCell> {
-    column: Column
-    isFirstColumn?: boolean
-    isLastColumn?: boolean
+    column:Column
+    isFirstColumn?:boolean
+    isLastColumn?:boolean
 }
 
-// Comment
-class TableHeaderState {
-    handleVisible:boolean;
-}
-
-export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeaderState> {
-
-    private dropdownMenuRef:DropdownMenu;
-    private dropdownToggleHandleRef:HTMLElement;
+export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
 
     constructor(props:TableHeaderProps) {
         super(props);
-        this.state = {handleVisible: false};
-    }
-
-    private renderDropdownMenu() {
-
-        const cx = classNames({
-            "dropdown-menu-toggle-handle": true,
-            "fa": true,
-            "fa-bars": true,
-            "dropdown-menu-toggle-handle-hide": !this.state.handleVisible
-        });
-
-        return (
-            <span style={{position:"absolute", right: "5px"}}>
-                <i key={1} className={cx} ref={c=>this.dropdownToggleHandleRef=c}
-                   onClick={()=>this.dropdownMenuRef.toggleDisplay()}/>
-                <DropdownMenu ref={(c:DropdownMenu)=>this.dropdownMenuRef=c} alignLeft={this.props.isLastColumn}
-                              toggleHandle={()=>this.dropdownToggleHandleRef}>
-                    <SortMenuItem tableRowColumnDef={this.props.column} isLastColumn={this.props.isLastColumn}
-                                  dispatcher={this.props.dispatcher}/>
-                    <SubtotalByMenuItem column={this.props.column}
-                                        isLastColumn={this.props.isLastColumn}
-                                        dispatcher={this.props.dispatcher}/>
-                    <FilterMenuItem dispatcher={this.props.dispatcher}
-                                    isLastColumn={this.props.isLastColumn}
-                                    tableRowColumnDef={this.props.column}/>
-                    <SimpleDropdownMenuItem onClick={()=>{
-                                this.props.dispatcher.dispatch({
-                                type: GigaActionType.COLLAPSE_ALL
-                                })
-                        }} text="Collapse All" isLastColumn={this.props.isLastColumn}/>
-                    <SimpleDropdownMenuItem onClick={()=>{
-                                this.props.dispatcher.dispatch({
-                                    type: GigaActionType.EXPAND_ALL
-                                })
-                        }} text="Expand All" isLastColumn={this.props.isLastColumn}/>
-                </DropdownMenu>
-            </span>
-
-        );
     }
 
     renderSortIcon() {
-        if (this.props.column.sortDirection != undefined) {
+        const {direction} = this.props.column;
+        if (direction != undefined) {
             const cx = classNames({
                 "fa": true,
-                "fa-sort-asc": this.props.column.sortDirection === SortDirection.ASC,
-                "fa-sort-desc": this.props.column.sortDirection === SortDirection.DESC
+                "fa-sort-asc": direction === SortDirection.ASC,
+                "fa-sort-desc": direction === SortDirection.DESC
             });
             return (
                 <span>
-                    <i className={cx}/>
+                    {' '}<i className={cx}/>
                 </span>
             );
         }
     }
 
     render() {
-        const columnDef = this.props.column;
+        const column = this.props.column;
 
         const style = {
             overflow: "visible",
@@ -98,19 +43,28 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,TableHeade
 
         const cx = classNames({
             "table-header": true,
-            "numeric": columnDef.format === ColumnFormat.NUMBER,
-            "non-numeric": columnDef.format !== ColumnFormat.NUMBER
+            "numeric": column.format === ColumnFormat.NUMBER,
+            "non-numeric": column.format !== ColumnFormat.NUMBER
         });
 
         return (
-            <th style={style} onMouseEnter={()=>this.setState({handleVisible:true})}
-                onMouseLeave={()=>this.setState({handleVisible:false})}
+            <th style={style}
+                onClick={()=>{
+                    const {direction} = this.props.column;
+                    const sortBy: Column = _.assign<{},Column>({},this.props.column, {
+                        direction: direction === SortDirection.DESC ? SortDirection.ASC : SortDirection.DESC
+                    });
+                    const payload: SortUpdateAction = {
+                        type: GigaActionType.NEW_SORT,
+                        sortBys: [sortBy]
+                    };
+                    this.props.dispatcher.dispatch(payload);
+                }}
                 className={cx}>
                 <span className="header-text">
-                    {columnDef.title || columnDef.colTag}
+                    {column.title || column.colTag}
                 </span>
                 {this.renderSortIcon()}
-                {this.renderDropdownMenu()}
             </th>
         );
     }

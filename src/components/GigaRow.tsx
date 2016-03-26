@@ -2,10 +2,10 @@ import * as React from "react";
 import * as classNames from "classnames";
 import {Row} from "../models/Row";
 import {Column} from "../models/ColumnLike";
-import {GridSubcomponentProps} from "./TableHeaderCell";
 import {GigaActionType} from "../store/GigaStore";
 import {Cell} from "./Cell";
 import SyntheticEvent = __React.SyntheticEvent;
+import {GridSubcomponentProps} from "./GigaGrid";
 
 export interface GigaRowProps extends GridSubcomponentProps<GigaRow> {
     row:Row;
