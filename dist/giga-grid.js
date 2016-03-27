@@ -13179,7 +13179,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }));
 	    };
 	    SettingsPopover.prototype.commitColumnUpdates = function () {
-	        // FIXME we are not communicating single column configuration updates
 	        var payload = {
 	            type: GigaStore_1.GigaActionType.COLUMNS_UPDATE,
 	            columns: this.state.columns,
@@ -13587,8 +13586,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _.clone(state);
 	    };
 	    /*
-	     TODO test these sort handlers
-	     Sort Action Handlers
+	     * Sort Action Handlers
 	     */
 	    GigaStore.handleSortUpdate = function (state, action) {
 	        /**
@@ -13620,15 +13618,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            columns: action.columns || state.columns,
 	            subtotalBys: action.subtotalBys || state.subtotalBys
 	        };
-	        /**
-	         * if subtotalBys has been updated, we must re-create the tree and rerun aggregation
-	         */
-	        if (!_.isEqual(state.subtotalBys, newColumnStates.subtotalBys)) {
-	            var tree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, newColumnStates.subtotalBys);
-	            TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(tree.getRoot(), false);
-	            SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, newColumnStates.columns);
-	            newColumnStates["tree"] = tree;
-	        }
+	        // TODO we might not ALWAYS want to re-aggregate, but we need to think about how the object model works
+	        var tree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, newColumnStates.subtotalBys);
+	        TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(tree.getRoot(), false);
+	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, newColumnStates.columns);
+	        newColumnStates["tree"] = tree;
 	        return _.assign({}, state, newColumnStates);
 	    };
 	    return GigaStore;
@@ -21406,7 +21400,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        else {
 	            renderedCellContent = SubtotalAggregator_1.format(row.data()[cd.colTag], cd.formatInstruction) || "";
 	            // here we perform ad-decorations, so far just for those columns subtotaled as 'COUNT' and 'COUNT_DISTINCT'
-	            if (!row.isDetail() && cd.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT || cd.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT_DISTINCT)
+	            if (!row.isDetail() && (cd.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT || cd.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT_DISTINCT))
 	                renderedCellContent = "[" + renderedCellContent + "]";
 	        }
 	        return renderedCellContent;
