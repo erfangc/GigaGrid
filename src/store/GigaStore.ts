@@ -81,7 +81,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         SubtotalAggregator.aggregateTree(tree, columns);
 
         if (sortBys)
-            tree = SortFactory.sortTree(tree, sortBys);
+            tree = SortFactory.sortTree(tree, sortBys, columns[0]);
 
         const rasterizedRows:Row[] = TreeRasterizer.rasterize(tree);
 
@@ -246,7 +246,7 @@ export class GigaStore extends ReduceStore<GigaState> {
          * go through all the columns in state, flip on/off sort flags as necessary
          */
         var newPartialState = {};
-        state.columns.forEach(column=> {
+        state.columns.forEach((column:Column)=> {
             var sb = _.find(action.sortBys, s=>s.colTag === column.colTag);
             if (sb)
                 column.direction = sb.direction;
@@ -254,13 +254,13 @@ export class GigaStore extends ReduceStore<GigaState> {
                 column.direction = undefined;
         });
         newPartialState['columns'] = state.columns;
-        newPartialState['tree'] = SortFactory.sortTree(state.tree, action.sortBys);
+        newPartialState['tree'] = SortFactory.sortTree(state.tree, action.sortBys, newPartialState['columns'][0]);
         newPartialState['sortBys'] = action.sortBys;
         return _.assign<{}, GigaState>({}, state, newPartialState);
     }
 
     private static handleClearSort(state:GigaState):GigaState {
-        state.columns.forEach(column => column.direction = undefined);
+        state.columns.forEach((column: Column) => column.direction = undefined);
         const newTree:Tree = SortFactory.sortTree(state.tree, []);
         const newState = _.clone(state);
         newState.tree = newTree;

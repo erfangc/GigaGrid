@@ -1,6 +1,6 @@
-import {ColumnDef} from "./ColumnLike";
+import {ColumnDef, BucketInfo} from "./ColumnLike";
+
 export interface Row {
-    title:string
     data(): any
     isDetail(): boolean
     isHidden(): boolean
@@ -19,7 +19,6 @@ abstract class GenericRow implements Row {
     private _sectorPath:string[];
     private _isSelected:boolean = false;
     private _isHidden:boolean = false;
-    public title:string = null;
 
     constructor(data:any) {
         this._data = data;
@@ -90,10 +89,10 @@ export class DetailRow extends GenericRow {
 export class SubtotalRow extends GenericRow {
 
     public detailRows:DetailRow[];
-    public title:string;
     private children:SubtotalRow[] = [];
     private childrenByTitle:{ [title: string] : SubtotalRow; } = {};
     private _isCollapsed:boolean = false;
+    public bucketInfo:BucketInfo;
 
     toggleCollapse(state?:boolean) {
         if (state != undefined)
@@ -112,29 +111,29 @@ export class SubtotalRow extends GenericRow {
 
     private findIndex(child:SubtotalRow) {
         for (var i = 0; i < this.children.length; i++)
-            if (this.children[i].title === child.title)
+            if (this.children[i].bucketInfo.title === child.bucketInfo.title)
                 return i;
         return -1;
     }
 
-    constructor(title:string) {
+    constructor(bucketInfo: BucketInfo) {
         super({});
         this.detailRows = [];
-        this.title = title;
+        this.bucketInfo = bucketInfo;
     }
 
     addChild(child:SubtotalRow) {
         // if already exist, pop it from the children array
         this.removeChild(child);
         this.children.push(child);
-        this.childrenByTitle[child.title] = child;
+        this.childrenByTitle[child.bucketInfo.title] = child;
     }
 
     removeChild(child:SubtotalRow) {
-        if (this.childrenByTitle[child.title] != undefined) {
+        if (this.childrenByTitle[child.bucketInfo.title] != undefined) {
             const idx = this.findIndex(child);
             this.children.splice(idx, 1);
-            this.childrenByTitle[child.title] = undefined;
+            this.childrenByTitle[child.bucketInfo.title] = undefined;
         }
     }
 

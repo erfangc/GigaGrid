@@ -29,14 +29,14 @@ describe("TreeBuilder", ()=> {
         it("should take a few flat rows of data, a SubtotalBy object and turn it into a deep tree structure", () => {
 
             const grandTotal = tree.getRoot();
-            expect(grandTotal.getChildAtIndex(0).title).toBe("A");
-            expect(grandTotal.getChildAtIndex(1).title).toBe("B");
+            expect(grandTotal.getChildAtIndex(0).bucketInfo.title).toBe("A");
+            expect(grandTotal.getChildAtIndex(1).bucketInfo.title).toBe("B");
 
-            expect(grandTotal.getChildAtIndex(0).getChildAtIndex(0).title).toBe("C");
-            expect(grandTotal.getChildAtIndex(1).getChildAtIndex(0).title).toBe("C");
+            expect(grandTotal.getChildAtIndex(0).getChildAtIndex(0).bucketInfo.title).toBe("C");
+            expect(grandTotal.getChildAtIndex(1).getChildAtIndex(0).bucketInfo.title).toBe("C");
 
-            expect(grandTotal.getChildAtIndex(0).getChildAtIndex(1).title).toBe("D");
-            expect(grandTotal.getChildAtIndex(1).getChildAtIndex(1).title).toBe("D");
+            expect(grandTotal.getChildAtIndex(0).getChildAtIndex(1).bucketInfo.title).toBe("D");
+            expect(grandTotal.getChildAtIndex(1).getChildAtIndex(1).bucketInfo.title).toBe("D");
 
         });
 
@@ -59,6 +59,7 @@ describe("TreeBuilder", ()=> {
         const data:any[] = TestUtils.getSimpleRawDataWithMissing();
         const tree:Tree = TreeBuilder.buildTree(data, subtotalBy);
 
+        // FIXME if a detail row is not defined for all the columns we are subtotaling by, it is orphaned (i.e. not part of the tree at all), should we let it 'traverse' back and attach itself to the last subtotal row?
         it("should handle the case where a SubtotalBy colTag is missing entirely in the data", () => {
             expect(tree.getRoot().getChildByTitle("B").getNumChildren()).toBe(0);
         });

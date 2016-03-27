@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as classNames from "classnames";
-import {ColumnDef, Column} from "../../models/ColumnLike";
+import {ColumnDef} from "../../models/ColumnLike";
 import {SortableDataTransfer} from "./SettingsPopover";
 
 interface SortableItemProps extends React.Props<SortableItem> {

@@ -339,7 +339,10 @@ export class TestUtils {
     }
 
     static getSimpleSubtotalRow():SubtotalRow {
-        const subtotalRow:SubtotalRow = new SubtotalRow("Sector X");
+        const subtotalRow:SubtotalRow = new SubtotalRow({
+            title: "Value",
+            value: 1001
+        });
         subtotalRow.setData({
             "numCol1": 2187,
             "numCol2": 117,

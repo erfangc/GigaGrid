@@ -3,10 +3,10 @@ import {Column, AggregationMethod, ColumnFormat} from "../../models/ColumnLike";
 import {SortableItem} from "./SortableItem";
 import * as _ from "lodash";
 import {GigaActionType, ColumnUpdateAction, GigaAction} from "../../store/GigaStore";
+import "./SettingsPopover.styl";
 import DragEvent = __React.DragEvent;
 import Props = __React.Props;
 import SyntheticEvent = __React.SyntheticEvent;
-import "./SettingsPopover.styl";
 
 export interface SettingsPopoverProps {
     subtotalBys:Column[]
@@ -60,14 +60,13 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
      */
     private moveColumn(columns:Column[], src:SortableDataTransfer, dest:SortableDataTransfer) {
         const item = columns.splice(src.idx, 1)[0];
-        // the previous step mutates the columns, dest.idx is no longer reliable, we must find it again ...
+        // need a more reliable way to to determine destIdx, given that the same column could be repeated in the list
         const destIdx = _.findIndex(columns, c=>c.colTag === dest.colTag);
         columns.splice(destIdx + 1, 0, item);
     }
 
     /**
      * insert the column represented by the srcColTag to the column represented by the destColTag
-     * TODO use array index instead in the future!
      * @param src
      * @param dest
      */
@@ -189,7 +188,7 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
         );
     }
 
-    private renderColumnConfigurer(column?:Column) {
+    private renderColumnConfigurer(column?:Column): JSX.Element | string {
         if (!column)
             return "";
 
@@ -201,17 +200,15 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
 
         function onAggregationMethodChange(e:SyntheticEvent) {
             e.preventDefault();
-            // FIXME looks like there are issues mapping string/numerical representation of Enums back to Enums in TypeScript
             //noinspection TypeScriptValidateTypes
-            column.aggregationMethod = (e.target as HTMLSelectElement).value;
+            column.aggregationMethod = parseInt((e.target as HTMLSelectElement).value);
             this.setState(_.assign<{},SettingsPopoverState>({}, this.state, {column: column}));
         }
 
         function onFormatChange(e:SyntheticEvent) {
             e.preventDefault();
-            // FIXME looks like there are issues mapping string/numerical representation of Enums back to Enums in TypeScript
             //noinspection TypeScriptValidateTypes
-            column.format = (e.target as HTMLSelectElement).value;
+            column.format = parseInt((e.target as HTMLSelectElement).value);
             this.setState(_.assign<{},SettingsPopoverState>({}, this.state, {column: column}));
         }
 
