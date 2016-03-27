@@ -237,8 +237,7 @@ export class GigaStore extends ReduceStore<GigaState> {
     }
 
     /*
-     TODO test these sort handlers
-     Sort Action Handlers
+     * Sort Action Handlers
      */
 
     private static handleSortUpdate(state:GigaState, action:SortUpdateAction):GigaState {
@@ -260,7 +259,7 @@ export class GigaStore extends ReduceStore<GigaState> {
     }
 
     private static handleClearSort(state:GigaState):GigaState {
-        state.columns.forEach((column: Column) => column.direction = undefined);
+        state.columns.forEach((column:Column) => column.direction = undefined);
         const newTree:Tree = SortFactory.sortTree(state.tree, []);
         const newState = _.clone(state);
         newState.tree = newTree;
@@ -273,15 +272,11 @@ export class GigaStore extends ReduceStore<GigaState> {
             columns: action.columns || state.columns,
             subtotalBys: action.subtotalBys || state.subtotalBys
         };
-        /**
-         * if subtotalBys has been updated, we must re-create the tree and rerun aggregation
-         */
-        if (!_.isEqual(state.subtotalBys, newColumnStates.subtotalBys)) {
-            const tree:Tree = TreeBuilder.buildTree(this.props.data, newColumnStates.subtotalBys);
-            TreeBuilder.recursivelyToggleChildrenCollapse(tree.getRoot(), false);
-            SubtotalAggregator.aggregateTree(tree, newColumnStates.columns);
-            newColumnStates["tree"] = tree;
-        }
+        // TODO we might not ALWAYS want to re-aggregate, but we need to think about how the object model works
+        const tree:Tree = TreeBuilder.buildTree(this.props.data, newColumnStates.subtotalBys);
+        TreeBuilder.recursivelyToggleChildrenCollapse(tree.getRoot(), false);
+        SubtotalAggregator.aggregateTree(tree, newColumnStates.columns);
+        newColumnStates["tree"] = tree;
         return _.assign<{}, GigaState>({}, state, newColumnStates);
     }
 

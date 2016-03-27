@@ -91,7 +91,6 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
     }
 
     commitColumnUpdates() {
-        // FIXME we are not communicating single column configuration updates
         const payload:ColumnUpdateAction = {
             type: GigaActionType.COLUMNS_UPDATE,
             columns: this.state.columns,
