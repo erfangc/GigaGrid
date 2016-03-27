@@ -1,12 +1,13 @@
 import * as React from "react";
 import * as classNames from "classnames";
-import {ColumnDef} from "../../models/ColumnLike";
+import {ColumnDef, Column} from "../../models/ColumnLike";
 import {SortableDataTransfer} from "./SettingsPopover";
 
 interface SortableItemProps extends React.Props<SortableItem> {
     column:ColumnDef
     idx:number
     type:string
+    onClick:() => any
     onUpdate:(src:SortableDataTransfer, dest:SortableDataTransfer) => any
 }
 
@@ -67,6 +68,7 @@ export class SortableItem extends React.Component<SortableItemProps,{}> {
         });
         return (
             <li className={cx} draggable={true}
+                onClick={()=>this.props.onClick.call(undefined, this.props.column)}
                 onDragStart={(e)=>this.onDragStart.call(this, e)}
                 onDragOver={(e)=>this.onDragOver(e)}
                 onDragLeave={(e)=>this.onDragLeave(e)}

@@ -1,0 +1,33 @@
+@import "../../styles/Variables.styl"
+
+span.giga-grid-button.dismiss
+  float right
+
+h5.inline-label
+  display inline
+
+.giga-grid .giga-grid-settings-pop-over
+  border 1px solid toolbar-border-color
+  padding 1em
+  paper-box-shadow()
+  position absolute
+  left -100%
+  top 100%
+  z-index 1
+  background-color #fff
+  width 660px
+  min-height 350px
+  & ul
+    list-style circle
+    & li
+      display inline-block
+      paper-box-shadow()
+      padding 5px
+      margin-right 3px
+      margin-bottom 5px
+      &:hover
+        cursor: pointer
+        hover-transition()
+        background-color toolbar-border-color
+      &.dragging
+        border-right 2px solid orangered
