@@ -17,7 +17,7 @@ describe("SortFactory", ()=> {
             direction: SortDirection.DESC
         }];
 
-    const byAgeThenChildrenASC = byAgeThenChildrenDESC.map((sortBy: Column)=> {
+    const byAgeThenChildrenASC = byAgeThenChildrenDESC.map((sortBy:Column)=> {
         return {
             colTag: sortBy.colTag,
             format: sortBy.format,
@@ -50,16 +50,16 @@ describe("SortFactory", ()=> {
     describe("Sorting a Subtotaled Tree", ()=> {
         const tree:Tree = TreeBuilder.buildTree(UKBudget.data, UKBudget.initialSubtotalBys);
         it("should sort on age and children in descending order", ()=> {
-            const sorted = SortFactory.sortTree(tree, byAgeThenChildrenDESC);
+            const sorted = SortFactory.sortTree(tree, byAgeThenChildrenDESC, {colTag: "Age"});
             const lvl1Subtotals = sorted.getRoot().getChildren();
-            expect(lvl1Subtotals[0].title).toBe(60);
-            expect(lvl1Subtotals[lvl1Subtotals.length - 1].title).toBe(19);
+            expect(lvl1Subtotals[0].bucketInfo.value).toBe(60);
+            expect(lvl1Subtotals[lvl1Subtotals.length - 1].bucketInfo.value).toBe(19);
         });
         it("should sort on age and children in ascending order", ()=> {
-            const sorted = SortFactory.sortTree(tree, byAgeThenChildrenASC);
+            const sorted = SortFactory.sortTree(tree, byAgeThenChildrenASC, {colTag: "Age"});
             const lvl1Subtotals = sorted.getRoot().getChildren();
-            expect(lvl1Subtotals[0].title).toBe(19);
-            expect(lvl1Subtotals[lvl1Subtotals.length - 1].title).toBe(60);
+            expect(lvl1Subtotals[0].bucketInfo.value).toBe(19);
+            expect(lvl1Subtotals[lvl1Subtotals.length - 1].bucketInfo.value).toBe(60);
         });
     });
 

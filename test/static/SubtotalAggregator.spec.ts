@@ -6,7 +6,10 @@ import {TestUtils} from "../TestUtils";
 
 describe("SubtotalAggregator", () => {
 
-    const subtotalRow = new SubtotalRow("Parent");
+    const subtotalRow = new SubtotalRow({
+        title: "Parent",
+        value: "Parent"
+    });
     subtotalRow.detailRows = [
         new DetailRow({"col1": "A", "col2": "C", "data": 1}),
         new DetailRow({"col1": "A", "col2": "C", "data": 1}),
@@ -73,13 +76,12 @@ describe("SubtotalAggregator", () => {
         });
 
         it("should have aggregated the child SubtotalRow", ()=> {
+            expect(tree.getRoot().getChildByTitle("A").get(straightSumColumnDef)).toBe(5);
+            expect(tree.getRoot().getChildByTitle("B").get(straightSumColumnDef)).toBe(2);
 
-            expect(tree.getRoot().getChildByTitle("A").data()[straightSumColumnDef.colTag]).toBe(5);
-            expect(tree.getRoot().getChildByTitle("B").data()[straightSumColumnDef.colTag]).toBe(2);
-
-            expect(tree.getRoot().getChildByTitle("A").getChildByTitle("C").data()[straightSumColumnDef.colTag]).toBe(3);
-            expect(tree.getRoot().getChildByTitle("A").getChildByTitle("D").data()[straightSumColumnDef.colTag]).toBe(1);
-            expect(tree.getRoot().getChildByTitle("A").getChildByTitle("C").getChildByTitle("F").data()[straightSumColumnDef.colTag]).toBe(2);
+            expect(tree.getRoot().getChildByTitle("A").getChildByTitle("C").get(straightSumColumnDef)).toBe(3);
+            expect(tree.getRoot().getChildByTitle("A").getChildByTitle("D").get(straightSumColumnDef)).toBe(1);
+            expect(tree.getRoot().getChildByTitle("A").getChildByTitle("C").getChildByTitle("F").get(straightSumColumnDef)).toBe(2);
 
             expect(tree.getRoot().getChildByTitle("B").getChildByTitle("E")).toBeUndefined();
 
@@ -95,7 +97,7 @@ describe("SubtotalAggregator", () => {
         const aggregatedRow = SubtotalAggregator.aggregate(detailRows, columnDefs);
 
         it("COUNT subtotal", () => {
-            expect(aggregatedRow["id"]).toBe("[15]");
+            expect(aggregatedRow["id"]).toBe(15);
         });
 
         it("COUNT_DISTINCT subtotal", () => {

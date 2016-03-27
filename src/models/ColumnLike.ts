@@ -11,9 +11,9 @@ export enum ColumnFormat {
 }
 
 export interface ColumnLike {
-    colTag: string
-    title?: string
-    format?: ColumnFormat
+    colTag:string
+    title?:string
+    format?:ColumnFormat
     aggregationMethod?:AggregationMethod
 }
 
@@ -30,23 +30,34 @@ export interface FormatInstruction {
 export interface ColumnDef extends ColumnLike {
     width?:string
     weightBy?:string
-    formatInstruction?: FormatInstruction
+    formatInstruction?:FormatInstruction
     cellTemplateCreator?:(data:any, column?:Column)=>JSX.Element
 }
 
 export interface Column extends ColumnDef {
-    direction?: SortDirection
+    direction?:SortDirection
     customSortFn?:(a:Row, b:Row)=>number
-    colSpan?: number
+    colSpan?:number
 }
 
 export interface FilterBy extends ColumnLike {
-    predicate: (a:any)=>boolean
+    predicate:(a:any)=>boolean
+}
+
+/**
+ * this interface defines metadata for any specific SubtotalRow, such as
+ * - from which column did this subtotal row come from?
+ * - what is the value of this subtotal row if we tried to sort it?
+ * - how shall we display its value? (could be different than the value it is sorted on)
+ */
+export interface BucketInfo {
+    title:string
+    value:any
 }
 
 export interface ColumnGroupDef {
-    title: string
-    columns: string[] // colTags
+    title:string
+    columns:string[] // colTags
 }
 
 export class ColumnFactory {

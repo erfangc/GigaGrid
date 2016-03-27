@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import {Column} from "../models/ColumnLike";
+import {Column, AggregationMethod} from "../models/ColumnLike";
 import {Row} from "../models/Row";
 import {ColumnFormat} from "../models/ColumnLike";
 import {SubtotalRow} from "../models/Row";
@@ -51,13 +51,12 @@ export class Cell extends React.Component<CellProps,any> {
             "fa-plus": row.isCollapsed(),
             "fa-minus": !row.isCollapsed()
         });
-
         return (
             <td style={this.calculateStyle()} onClick={e=>this.onClick()}>
                 <strong>
                     <span>
                         <i className={cx} onClick={e=>this.onCollapseToggle(e)}/>&nbsp;
-                        {row.title || ""}
+                        {row.bucketInfo.title || ""}
                     </span>
                 </strong>
             </td>
@@ -88,16 +87,28 @@ export class Cell extends React.Component<CellProps,any> {
             result = this.renderSubtotalCellWithCollapseBtn(row as SubtotalRow);
         else
             result = (<td className={cx} onClick={e=>this.onClick()}
-                          style={this.calculateStyle()}>{Cell.renderContent(row, cd)}</td>);
+                          style={this.calculateStyle()}>{Cell.renderNormalCellContent(row, cd)}</td>);
 
         return result;
     }
 
-    private static renderContent(row:Row, cd:Column) {
+    /**
+     * Figure out the cell value and then decorated it if necessary. If the user provided a custom renderer this is where we render it and return a component instead of a primitive
+     * @param row
+     * @param cd
+     * @returns {JSX.Element|string|number}
+     */
+    private static renderNormalCellContent(row:Row, cd:Column) {
+        var renderedCellContent: JSX.Element|string|number = "";
         if (cd.cellTemplateCreator)
-            return cd.cellTemplateCreator(row.data()[cd.colTag], cd);
-        else
-            return format(row.data()[cd.colTag], cd.formatInstruction) || "";
+            renderedCellContent = cd.cellTemplateCreator(row.data()[cd.colTag], cd);
+        else {
+            renderedCellContent = format(row.data()[cd.colTag], cd.formatInstruction) || "";
+            // here we perform ad-decorations, so far just for those columns subtotaled as 'COUNT' and 'COUNT_DISTINCT'
+            if (!row.isDetail() && cd.aggregationMethod === AggregationMethod.COUNT || cd.aggregationMethod === AggregationMethod.COUNT_DISTINCT)
+                renderedCellContent = `[${renderedCellContent}]`;
+        }
+        return renderedCellContent;
     }
 }
 

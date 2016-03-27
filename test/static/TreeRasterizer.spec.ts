@@ -1,5 +1,5 @@
 import {Tree, TreeBuilder} from "../../src/static/TreeBuilder";
-import {Row} from "../../src/models/Row";
+import {Row, SubtotalRow} from "../../src/models/Row";
 import {TreeRasterizer} from "../../src/static/TreeRasterizer";
 import {TestUtils} from "../TestUtils";
 
@@ -17,7 +17,7 @@ describe("TreeRasterizer", ()=> {
         });
 
         it("the first row in a subtotaled data set should be a subtotal row", ()=> {
-            expect(rows[0].title).toMatch(/Male|Female/);
+            expect((rows[0] as SubtotalRow).bucketInfo.title).toMatch(/Male|Female/);
             expect(rows[0].isDetail()).toBeFalsy();
         });
 
@@ -34,11 +34,7 @@ describe("TreeRasterizer", ()=> {
             expect(rows.length).toBe(7);
         });
         it("no detailed row can be 'Male'", ()=> {
-            var maleDetailRowEncountered:boolean = false;
-            rows.forEach((row:Row) => {
-                if (row.isDetail() && row.title === "Male")
-                    maleDetailRowEncountered = true;
-            });
+            const maleDetailRowEncountered:boolean = _.findIndex(rows, row=>row.isDetail() && row.getByColTag("gender") === "Male") !== -1;
             expect(maleDetailRowEncountered).toBeFalsy();
         })
     });

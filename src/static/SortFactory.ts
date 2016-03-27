@@ -1,13 +1,19 @@
 import {Tree} from "./TreeBuilder";
 import {Row, SubtotalRow} from "../models/Row";
-import {Column, SortDirection, ColumnFormat, AggregationMethod} from "../models/ColumnLike";
+import {Column, SortDirection} from "../models/ColumnLike";
+import {extractCellValue} from "./SortFactoryHelpers";
 
 export class SortFactory {
 
-
-    public static sortTree(tree:Tree, sortBys:Column[]):Tree {
-        // FIXME the damn tree is so mutable ... but I can't think of a good way to manipulate trees that are immutable
-        var sortFn = SortFactory.createCompositeSortFn(sortBys);
+    /**
+     * sort the given tree according to orders specified in sortBys
+     * handles recursive sorting of subtotal rows
+     * @param tree
+     * @param sortBys
+     * @returns {Tree}
+     */
+    public static sortTree(tree:Tree, sortBys:Column[], firstColumn?: Column):Tree {
+        var sortFn = SortFactory.createCompositeSorter(sortBys, firstColumn);
         SortFactory.recursivelyExecuteSort(tree.getRoot(), sortFn);
         return tree;
     }
@@ -22,7 +28,7 @@ export class SortFactory {
             rootRow.detailRows.sort(fn);
     }
 
-    private static createCompositeSortFn(sortBys:Column[]):(a:Row, b:Row)=>number {
+    private static createCompositeSorter(sortBys:Column[], firstColumn?:Column):(a:Row, b:Row)=>number {
 
         if (!sortBys || sortBys.length === 0)
             return function (a:Row, b:Row):number {
@@ -33,48 +39,31 @@ export class SortFactory {
         // apply that sortBy function to the data, use the next sortBy as tie breaker
         return function (a:Row, b:Row):number {
             let i = 0;
-            var sortFn = SortFactory.buildLexicalSortFn(sortBys[i]);
+            var sortFn = SortFactory.buildLexicalSortFn(sortBys[i], firstColumn);
             var result = sortFn(a, b);
             while (result === 0 && i < (sortBys.length - 1)) {
                 i++;
-                sortFn = SortFactory.resolveSortFn(sortBys[i]);
+                sortFn = SortFactory.resolveSortFnForColumn(sortBys[i]);
                 result = sortFn(a, b);
             }
             return result;
         };
     }
 
-    private static resolveSortFn(sortBy:Column):(a:Row, b:Row)=>number {
-        // todo implement and resolve other sort fn
+    private static resolveSortFnForColumn(sortBy:Column):(a:Row, b:Row)=>number {
+        // TODO implement and test custom sort functions
         if (sortBy.customSortFn)
             return sortBy.customSortFn;
         else
             return SortFactory.buildLexicalSortFn(sortBy);
     }
 
-    private static getColumnValueForRow(row: Row, sortBy: Column) {
-        if (row.isDetail())
-            if (sortBy.format === ColumnFormat.NUMBER)
-                return parseFloat(row.get(sortBy));
-            else
-                return row.get(sortBy);
-        else // deal with SubtotalRow
-            if (row.get(sortBy) !== null && row.get(sortBy) !== undefined && row.get(sortBy) !== "")
-                // if the column aggregation method produces a number, we want to treat it like a number
-                if ([AggregationMethod.WEIGHTED_AVERAGE, AggregationMethod.AVERAGE, AggregationMethod.SUM].indexOf(sortBy.aggregationMethod) !== -1)
-                    return parseFloat(row.get(sortBy));
-                else
-                    return row.get(sortBy);
-            else
-                return row.title;
-    }
-
-    private static buildLexicalSortFn(sortBy:Column):(a:Row, b:Row)=>number {
+    static buildLexicalSortFn(sortBy:Column, firstColumn?:Column):(a:Row, b:Row)=>number {
 
         return function (a:Row, b:Row):number {
 
-            const valA = SortFactory.getColumnValueForRow(a, sortBy);
-            const valB = SortFactory.getColumnValueForRow(b, sortBy);
+            const valA = extractCellValue(a, sortBy, firstColumn);
+            const valB = extractCellValue(b, sortBy, firstColumn);
 
             var result = 0;
 
