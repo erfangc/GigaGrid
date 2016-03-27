@@ -428,10 +428,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ColumnLike_1 = __webpack_require__(10);
 	var Toolbar_1 = __webpack_require__(11);
 	var GigaStore_1 = __webpack_require__(15);
-	var flux_1 = __webpack_require__(43);
-	var TableBody_1 = __webpack_require__(45);
-	var TableHeader_1 = __webpack_require__(48);
-	var $ = __webpack_require__(50);
+	var flux_1 = __webpack_require__(46);
+	var TableBody_1 = __webpack_require__(48);
+	var TableHeader_1 = __webpack_require__(51);
+	var $ = __webpack_require__(53);
 	/**
 	 * The root component of this React library. assembles raw data into `Row` objects which are then translated into their
 	 * virtual DOM representation
@@ -13075,7 +13075,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(6);
 	var SettingsPopover_1 = __webpack_require__(12);
-	__webpack_require__(41);
+	__webpack_require__(44);
 	/**
 	 * The job of the toolbar is to dispatch actions to the flux reduce store. It is free to query the state of the grid
 	 * and its props
@@ -13120,16 +13120,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(6);
+	var ColumnLike_1 = __webpack_require__(10);
 	var SortableItem_1 = __webpack_require__(13);
 	var _ = __webpack_require__(8);
 	var GigaStore_1 = __webpack_require__(15);
+	__webpack_require__(42);
 	var SettingsPopover = (function (_super) {
 	    __extends(SettingsPopover, _super);
 	    function SettingsPopover(props) {
 	        _super.call(this, props);
 	        var columns = _.clone(props.columns);
 	        var subtotalBys = _.clone(props.subtotalBys);
-	        this.state = { columns: columns, subtotalBys: subtotalBys };
+	        var activeColumn = undefined;
+	        this.state = { columns: columns, subtotalBys: subtotalBys, activeColumn: activeColumn };
 	    }
 	    /**
 	     * move the src from the `from` list to after the dest column in the `to` list
@@ -13150,13 +13153,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    SettingsPopover.prototype.moveColumn = function (columns, src, dest) {
 	        var item = columns.splice(src.idx, 1)[0];
-	        // the previous step mutates the columns, dest.idx is no longer reliable, we must find it again ...
+	        // need a more reliable way to to determine destIdx, given that the same column could be repeated in the list
 	        var destIdx = _.findIndex(columns, function (c) { return c.colTag === dest.colTag; });
 	        columns.splice(destIdx + 1, 0, item);
 	    };
 	    /**
 	     * insert the column represented by the srcColTag to the column represented by the destColTag
-	     * TODO use array index instead in the future!
 	     * @param src
 	     * @param dest
 	     */
@@ -13171,10 +13173,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	             * src is in a different list of column than dest, we need to transfer them
 	             */
 	            this.swapToAnotherListOfColumns(this.state[src.type], this.state[dest.type], src, dest);
-	        this.setState({
+	        this.setState(_.assign({}, this.state, {
 	            columns: this.state.columns,
 	            subtotalBys: this.state.subtotalBys
-	        });
+	        }));
 	    };
 	    SettingsPopover.prototype.commitColumnUpdates = function () {
 	        var payload = {
@@ -13187,7 +13189,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    SettingsPopover.prototype.renderSortable = function (type, columns) {
 	        var _this = this;
 	        var items = columns.map(function (c, i) {
-	            return React.createElement(SortableItem_1.SortableItem, {key: i, column: c, idx: i, type: type, onUpdate: function (src, dest) { return _this.updateColumnPosition(src, dest); }});
+	            return React.createElement(SortableItem_1.SortableItem, {key: i, column: c, idx: i, type: type, onClick: (function (column) {
+	                this.setState(_.assign({}, this.state, { activeColumn: column }));
+	            }).bind(_this), onUpdate: function (src, dest) { return _this.updateColumnPosition(src, dest); }});
 	        });
 	        if (columns.length === 0) {
 	            return (
@@ -13209,10 +13213,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    idx: 0
 	                };
 	                _this.swapToAnotherListOfColumns(fromList, toList, src, dest);
-	                _this.setState({
+	                _this.setState(_.assign({}, _this.state, {
 	                    columns: _this.state.columns,
 	                    subtotalBys: _this.state.subtotalBys
-	                });
+	                }));
 	            }}, "Drop a Column Here to Subtotal By It"));
 	        }
 	        else
@@ -13220,7 +13224,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    SettingsPopover.prototype.render = function () {
 	        var _this = this;
-	        return (React.createElement("div", {className: "giga-grid-settings-pop-over", onClick: function (e) { return e.stopPropagation(); }}, React.createElement("div", null, React.createElement("h5", null, "Columns"), this.renderSortable("columns", this.state.columns)), React.createElement("div", null, React.createElement("h5", null, "Subtotal By"), this.renderSortable("subtotalBys", this.state.subtotalBys)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.EXPAND_ALL }); }}, "Expand All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.COLLAPSE_ALL }); }}, "Collapse All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.CLEAR_SORT }); }}, "Clear Sort")), React.createElement("br", null), React.createElement("div", null, React.createElement("span", {className: "submit", style: { color: "green" }, onClick: function (e) { return _this.commitColumnUpdates(); }}, React.createElement("i", {className: "fa fa-2x fa-check-square"})), " ", React.createElement("span", {style: { color: "red" }, className: "dismiss", onClick: function (e) { return _this.props.onDismiss(); }}, React.createElement("i", {className: "fa fa-2x fa-close"})))));
+	        return (React.createElement("div", {className: "giga-grid-settings-pop-over", onClick: function (e) { return e.stopPropagation(); }}, React.createElement("div", {className: "row"}, React.createElement("div", {className: "column-50"}, React.createElement("div", null, React.createElement("h5", null, "Columns"), this.renderSortable("columns", this.state.columns)), React.createElement("div", null, React.createElement("h5", null, "Subtotal By"), this.renderSortable("subtotalBys", this.state.subtotalBys)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.EXPAND_ALL }); }}, "Expand All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.COLLAPSE_ALL }); }}, "Collapse All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.CLEAR_SORT }); }}, "Clear Sort")), React.createElement("br", null), React.createElement("div", null)), this.renderColumnConfigurer(this.state.activeColumn)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", style: { float: "right" }, onClick: function (e) { return _this.commitColumnUpdates(); }}, "Save ", React.createElement("i", {className: "fa fa-save"})))));
+	    };
+	    SettingsPopover.prototype.renderColumnConfigurer = function (column) {
+	        var _this = this;
+	        if (!column)
+	            return "";
+	        function onTitleChange(e) {
+	            e.preventDefault();
+	            column.title = e.target.value;
+	            this.setState(_.assign({}, this.state, { column: column }));
+	        }
+	        function onAggregationMethodChange(e) {
+	            e.preventDefault();
+	            //noinspection TypeScriptValidateTypes
+	            column.aggregationMethod = parseInt(e.target.value);
+	            this.setState(_.assign({}, this.state, { column: column }));
+	        }
+	        function onFormatChange(e) {
+	            e.preventDefault();
+	            //noinspection TypeScriptValidateTypes
+	            column.format = parseInt(e.target.value);
+	            this.setState(_.assign({}, this.state, { column: column }));
+	        }
+	        return (React.createElement("div", {className: "column-50"}, React.createElement("div", null, React.createElement("h5", {className: "inline-label"}, "Title"), React.createElement("span", {className: "giga-grid-button dismiss", onClick: function () { return _this.setState(_.assign({}, _this.state, { activeColumn: undefined })); }}, React.createElement("i", {className: "fa fa-chevron-left"}))), React.createElement("input", {type: "text", className: "giga-grid-text-input", placeholder: "Title", value: column.title, onChange: onTitleChange.bind(this)}), React.createElement("br", null), React.createElement("div", null, React.createElement("div", {className: "column-50"}, React.createElement("h5", null, "Aggregation Method"), React.createElement("select", {value: column.aggregationMethod, onChange: onAggregationMethodChange.bind(this)}, React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.SUM}, "Sum"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.COUNT}, "Count"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.COUNT_DISTINCT}, "Count Distinct"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.RANGE}, "Range"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.AVERAGE}, "Average"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE}, "Weighted Average"))), React.createElement("div", {className: "column-50"}, React.createElement("h5", null, "Format"), React.createElement("select", {value: column.format, onChange: onFormatChange.bind(this)}, React.createElement("option", {value: ColumnLike_1.ColumnFormat.CURRENCY}, "Currency"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.DATE}, "Date"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.NUMBER}, "Number"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.STRING}, "String"))))));
 	    };
 	    return SettingsPopover;
 	}(React.Component));
@@ -13287,7 +13314,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var cx = classNames({
 	            dragging: this.state['isDraggingOver']
 	        });
-	        return (React.createElement("li", {className: cx, draggable: true, onDragStart: function (e) { return _this.onDragStart.call(_this, e); }, onDragOver: function (e) { return _this.onDragOver(e); }, onDragLeave: function (e) { return _this.onDragLeave(e); }, onDrop: function (e) { return _this.onDrop(e); }}, this.props.column.title || this.props.column.colTag));
+	        return (React.createElement("li", {className: cx, draggable: true, onClick: function () { return _this.props.onClick.call(undefined, _this.props.column); }, onDragStart: function (e) { return _this.onDragStart.call(_this, e); }, onDragOver: function (e) { return _this.onDragOver(e); }, onDragLeave: function (e) { return _this.onDragLeave(e); }, onDrop: function (e) { return _this.onDrop(e); }}, this.props.column.title || this.props.column.colTag));
 	    };
 	    return SortableItem;
 	}(React.Component));
@@ -13364,8 +13391,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var TreeBuilder_1 = __webpack_require__(17);
 	var utils_1 = __webpack_require__(19);
 	var SortFactory_1 = __webpack_require__(38);
-	var TreeRasterizer_1 = __webpack_require__(39);
-	var ScrollCalculator_1 = __webpack_require__(40);
+	var TreeRasterizer_1 = __webpack_require__(40);
+	var ScrollCalculator_1 = __webpack_require__(41);
 	/*
 	 define the # of rows necessary to trigger progressive rendering
 	 below which all row display bound change events are ignored
@@ -13419,7 +13446,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var tree = TreeBuilder_1.TreeBuilder.buildTree(data, subtotalBys, this.props.initiallyExpandedSubtotalRows, this.props.initiallySelectedSubtotalRows);
 	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, columns);
 	        if (sortBys)
-	            tree = SortFactory_1.SortFactory.sortTree(tree, sortBys);
+	            tree = SortFactory_1.SortFactory.sortTree(tree, sortBys, columns[0]);
 	        var rasterizedRows = TreeRasterizer_1.TreeRasterizer.rasterize(tree);
 	        return {
 	            rasterizedRows: rasterizedRows,
@@ -13559,8 +13586,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _.clone(state);
 	    };
 	    /*
-	     TODO test these sort handlers
-	     Sort Action Handlers
+	     * Sort Action Handlers
 	     */
 	    GigaStore.handleSortUpdate = function (state, action) {
 	        /**
@@ -13575,7 +13601,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                column.direction = undefined;
 	        });
 	        newPartialState['columns'] = state.columns;
-	        newPartialState['tree'] = SortFactory_1.SortFactory.sortTree(state.tree, action.sortBys);
+	        newPartialState['tree'] = SortFactory_1.SortFactory.sortTree(state.tree, action.sortBys, newPartialState['columns'][0]);
 	        newPartialState['sortBys'] = action.sortBys;
 	        return _.assign({}, state, newPartialState);
 	    };
@@ -13592,15 +13618,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            columns: action.columns || state.columns,
 	            subtotalBys: action.subtotalBys || state.subtotalBys
 	        };
-	        /**
-	         * if subtotalBys has been updated, we must re-create the tree and rerun aggregation
-	         */
-	        if (!_.isEqual(state.subtotalBys, newColumnStates.subtotalBys)) {
-	            var tree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, newColumnStates.subtotalBys);
-	            TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(tree.getRoot(), false);
-	            SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, newColumnStates.columns);
-	            newColumnStates["tree"] = tree;
-	        }
+	        // TODO we might not ALWAYS want to re-aggregate, but we need to think about how the object model works
+	        var tree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, newColumnStates.subtotalBys);
+	        TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(tree.getRoot(), false);
+	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, newColumnStates.columns);
+	        newColumnStates["tree"] = tree;
 	        return _.assign({}, state, newColumnStates);
 	    };
 	    return GigaStore;
@@ -13742,7 +13764,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    value = average(detailRows, column);
 	                    break;
 	                case ColumnLike_1.AggregationMethod.COUNT:
-	                    value = "[" + count(detailRows) + "]";
+	                    value = count(detailRows);
 	                    break;
 	                case ColumnLike_1.AggregationMethod.COUNT_DISTINCT:
 	                    value = countDistinct(detailRows, column);
@@ -13781,8 +13803,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 	var Row_1 = __webpack_require__(18);
-	var Row_2 = __webpack_require__(18);
 	var _ = __webpack_require__(8);
+	var ColumnLike_1 = __webpack_require__(10);
 	var TreeBuilder = (function () {
 	    function TreeBuilder() {
 	    }
@@ -13824,9 +13846,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
 	         * parent SubtotalRow (in other words, find the detailRow's "bucket") and append said detailRow to the parent
 	         */
-	        var grandTotal = new Row_1.SubtotalRow("Grand Total");
+	        var grandTotal = new Row_1.SubtotalRow({ title: "Grand Total", value: null });
 	        grandTotal.setSectorPath([]);
-	        data.forEach(function (datum) { return _this.bucketDetailRow(subtotalBys, new Row_2.DetailRow(datum), grandTotal); });
+	        data.forEach(function (datum) { return _this.bucketDetailRow(subtotalBys, new Row_1.DetailRow(datum), grandTotal); });
 	        TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, false);
 	        /**
 	         * EXPERIMENTAL - these props allow us to expand / select SubtotalRow on construction of the grid component
@@ -13842,18 +13864,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * to traverse the grandTotal and find the detailRow's immediate parent SubtotalRow
 	         * we store the detailRow's sector names in an ordered array
 	         */
-	        var subtotalTitles = []; // temporary array of strings to keep track subtotal titles names in sequence
+	        var buckets = []; // temporary array of strings to keep track subtotal titles names in sequence
 	        grandTotal.detailRows.push(detailedRow);
 	        subtotalBys.forEach(function (subtotalBy) {
 	            // the subtotal title
-	            var bucketTitle = TreeBuilder.resolveSubtotalTitle(subtotalBy, detailedRow);
-	            if (bucketTitle !== undefined) {
-	                subtotalTitles.push(bucketTitle);
-	                var subtotalRow = TreeBuilder.traverseOrCreate(grandTotal, subtotalTitles);
+	            var bucket = TreeBuilder.resolveSubtotalBucket(subtotalBy, detailedRow);
+	            if (bucket !== undefined) {
+	                buckets.push(bucket);
+	                var subtotalRow = TreeBuilder.traverseOrCreate(grandTotal, buckets);
 	                subtotalRow.detailRows.push(detailedRow);
-	            }
+	            } // FIXME if a detail row is not defined for all the columns we are subtotaling by, it is orphaned (i.e. not part of the tree at all), should we let it 'traverse' back and attach itself to the last subtotal row?
 	        });
-	        detailedRow.setSectorPath(subtotalTitles);
+	        detailedRow.setSectorPath(buckets.map(function (b) { return b.title; }));
 	    };
 	    ;
 	    // TODO add tests
@@ -13888,22 +13910,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     *
 	     * @param grandTotal
-	     * @param subtotalTitles
+	     * @param buckets
 	     * @returns {SubtotalRow}
 	     */
-	    TreeBuilder.traverseOrCreate = function (grandTotal, subtotalTitles) {
+	    TreeBuilder.traverseOrCreate = function (grandTotal, buckets) {
 	        // traverse to the correct SubtotalRow
 	        var currentRow = grandTotal;
-	        for (var k = 0; k < subtotalTitles.length; k++) {
+	        for (var k = 0; k < buckets.length; k++) {
 	            // update the current subtotal row
-	            if (currentRow.hasChildWithTitle(subtotalTitles[k]))
-	                currentRow = currentRow.getChildByTitle(subtotalTitles[k]);
+	            var title = buckets[k].title;
+	            if (currentRow.hasChildWithTitle(title))
+	                currentRow = currentRow.getChildByTitle(title);
 	            else {
 	                // create a new sector if it is not already available
-	                var newRow = new Row_1.SubtotalRow(subtotalTitles[k]);
+	                // SubtotalRow are created with a `title` and a `firstCellValue` property, firstCellValue is used to determine the row's sort order
+	                var newRow = new Row_1.SubtotalRow(buckets[k]);
 	                newRow.toggleCollapse(true);
 	                // set the sector path for the new SubtotalRow we just created the length of which determines its depth
-	                newRow.setSectorPath(subtotalTitles.slice(0, k + 1));
+	                newRow.setSectorPath(buckets.slice(0, k + 1).map(function (b) { return b.title; }));
 	                currentRow.addChild(newRow);
 	                currentRow = newRow;
 	            }
@@ -13911,8 +13935,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return currentRow;
 	    };
 	    ;
-	    TreeBuilder.resolveSubtotalTitle = function (subtotalBy, detailedRow) {
-	        return subtotalBy.title ? subtotalBy.title + ": " + detailedRow.getByColTag(subtotalBy.colTag) : detailedRow.getByColTag(subtotalBy.colTag);
+	    TreeBuilder.resolveSubtotalBucket = function (subtotalBy, detailedRow) {
+	        // FIXME this is the naive implementation, cannot handle numerical bands
+	        var title = detailedRow.get(subtotalBy);
+	        // if the given column is not defined in the data, return undefined, this will
+	        if (title === undefined)
+	            return undefined;
+	        return {
+	            title: subtotalBy.title ? subtotalBy.title + ": " + title : title,
+	            value: subtotalBy.format === ColumnLike_1.ColumnFormat.NUMBER ? parseFloat(title) : title
+	        };
 	    };
 	    return TreeBuilder;
 	}());
@@ -13943,7 +13975,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function GenericRow(data) {
 	        this._isSelected = false;
 	        this._isHidden = false;
-	        this.title = null;
 	        this._data = data;
 	    }
 	    GenericRow.prototype.get = function (columnDef) {
@@ -13997,13 +14028,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.DetailRow = DetailRow;
 	var SubtotalRow = (function (_super) {
 	    __extends(SubtotalRow, _super);
-	    function SubtotalRow(title) {
+	    function SubtotalRow(bucketInfo) {
 	        _super.call(this, {});
 	        this.children = [];
 	        this.childrenByTitle = {};
 	        this._isCollapsed = false;
 	        this.detailRows = [];
-	        this.title = title;
+	        this.bucketInfo = bucketInfo;
 	    }
 	    SubtotalRow.prototype.toggleCollapse = function (state) {
 	        if (state != undefined)
@@ -14019,7 +14050,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    SubtotalRow.prototype.findIndex = function (child) {
 	        for (var i = 0; i < this.children.length; i++)
-	            if (this.children[i].title === child.title)
+	            if (this.children[i].bucketInfo.title === child.bucketInfo.title)
 	                return i;
 	        return -1;
 	    };
@@ -14027,13 +14058,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // if already exist, pop it from the children array
 	        this.removeChild(child);
 	        this.children.push(child);
-	        this.childrenByTitle[child.title] = child;
+	        this.childrenByTitle[child.bucketInfo.title] = child;
 	    };
 	    SubtotalRow.prototype.removeChild = function (child) {
-	        if (this.childrenByTitle[child.title] != undefined) {
+	        if (this.childrenByTitle[child.bucketInfo.title] != undefined) {
 	            var idx = this.findIndex(child);
 	            this.children.splice(idx, 1);
-	            this.childrenByTitle[child.title] = undefined;
+	            this.childrenByTitle[child.bucketInfo.title] = undefined;
 	        }
 	    };
 	    SubtotalRow.prototype.getChildByTitle = function (title) {
@@ -20662,12 +20693,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 	var ColumnLike_1 = __webpack_require__(10);
+	var SortFactoryHelpers_1 = __webpack_require__(39);
 	var SortFactory = (function () {
 	    function SortFactory() {
 	    }
-	    SortFactory.sortTree = function (tree, sortBys) {
-	        // FIXME the damn tree is so mutable ... but I can't think of a good way to manipulate trees that are immutable
-	        var sortFn = SortFactory.createCompositeSortFn(sortBys);
+	    /**
+	     * sort the given tree according to orders specified in sortBys
+	     * handles recursive sorting of subtotal rows
+	     * @param tree
+	     * @param sortBys
+	     * @returns {Tree}
+	     */
+	    SortFactory.sortTree = function (tree, sortBys, firstColumn) {
+	        var sortFn = SortFactory.createCompositeSorter(sortBys, firstColumn);
 	        SortFactory.recursivelyExecuteSort(tree.getRoot(), sortFn);
 	        return tree;
 	    };
@@ -20681,7 +20719,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        else
 	            rootRow.detailRows.sort(fn);
 	    };
-	    SortFactory.createCompositeSortFn = function (sortBys) {
+	    SortFactory.createCompositeSorter = function (sortBys, firstColumn) {
 	        if (!sortBys || sortBys.length === 0)
 	            return function (a, b) {
 	                return 0;
@@ -20690,42 +20728,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // apply that sortBy function to the data, use the next sortBy as tie breaker
 	        return function (a, b) {
 	            var i = 0;
-	            var sortFn = SortFactory.buildLexicalSortFn(sortBys[i]);
+	            var sortFn = SortFactory.buildLexicalSortFn(sortBys[i], firstColumn);
 	            var result = sortFn(a, b);
 	            while (result === 0 && i < (sortBys.length - 1)) {
 	                i++;
-	                sortFn = SortFactory.resolveSortFn(sortBys[i]);
+	                sortFn = SortFactory.resolveSortFnForColumn(sortBys[i]);
 	                result = sortFn(a, b);
 	            }
 	            return result;
 	        };
 	    };
-	    SortFactory.resolveSortFn = function (sortBy) {
-	        // todo implement and resolve other sort fn
+	    SortFactory.resolveSortFnForColumn = function (sortBy) {
+	        // TODO implement and test custom sort functions
 	        if (sortBy.customSortFn)
 	            return sortBy.customSortFn;
 	        else
 	            return SortFactory.buildLexicalSortFn(sortBy);
 	    };
-	    SortFactory.getColumnValueForRow = function (row, sortBy) {
-	        if (row.isDetail())
-	            if (sortBy.format === ColumnLike_1.ColumnFormat.NUMBER)
-	                return parseFloat(row.get(sortBy));
-	            else
-	                return row.get(sortBy);
-	        else if (row.get(sortBy) !== null && row.get(sortBy) !== undefined && row.get(sortBy) !== "")
-	            // if the column aggregation method produces a number, we want to treat it like a number
-	            if ([ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE, ColumnLike_1.AggregationMethod.AVERAGE, ColumnLike_1.AggregationMethod.SUM].indexOf(sortBy.aggregationMethod) !== -1)
-	                return parseFloat(row.get(sortBy));
-	            else
-	                return row.get(sortBy);
-	        else
-	            return row.title;
-	    };
-	    SortFactory.buildLexicalSortFn = function (sortBy) {
+	    SortFactory.buildLexicalSortFn = function (sortBy, firstColumn) {
 	        return function (a, b) {
-	            var valA = SortFactory.getColumnValueForRow(a, sortBy);
-	            var valB = SortFactory.getColumnValueForRow(b, sortBy);
+	            var valA = SortFactoryHelpers_1.extractCellValue(a, sortBy, firstColumn);
+	            var valB = SortFactoryHelpers_1.extractCellValue(b, sortBy, firstColumn);
 	            var result = 0;
 	            if (!valA || !valB) {
 	                if (valA)
@@ -20751,6 +20774,49 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var ColumnLike_1 = __webpack_require__(10);
+	/**
+	 * Figure out what value should we sort on. The data in our table can contain Subtotal and Detail rows
+	 * @param row
+	 * @param sortBy
+	 * @param firstColumn
+	 * @returns {any}
+	 */
+	function extractCellValue(row, sortBy, firstColumn) {
+	    if (row.isDetail())
+	        return extractDetailCellValue(row, sortBy);
+	    else
+	        return extractSubtotalCellValue(row, sortBy, firstColumn);
+	}
+	exports.extractCellValue = extractCellValue;
+	function extractSubtotalCellValue(subtotalRow, sortBy, firstColumn) {
+	    // sorting on the 1st Column
+	    // sorting on a numerically summarized column
+	    if (firstColumn && firstColumn.colTag === sortBy.colTag)
+	        return subtotalRow.bucketInfo.value;
+	    if ([ColumnLike_1.AggregationMethod.COUNT,
+	        ColumnLike_1.AggregationMethod.COUNT_DISTINCT,
+	        ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE,
+	        ColumnLike_1.AggregationMethod.AVERAGE,
+	        ColumnLike_1.AggregationMethod.SUM].indexOf(sortBy.aggregationMethod) !== -1)
+	        return parseFloat(subtotalRow.get(sortBy));
+	    else
+	        return subtotalRow.get(sortBy);
+	}
+	function extractDetailCellValue(row, sortBy) {
+	    var cellValue = row.get(sortBy);
+	    if (sortBy.format === ColumnLike_1.ColumnFormat.NUMBER)
+	        return parseFloat(cellValue);
+	    else
+	        return cellValue;
+	}
+
+
+/***/ },
+/* 40 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -20783,7 +20849,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -20807,13 +20873,53 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(42);
+	var content = __webpack_require__(43);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(4)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./SettingsPopover.styl", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./SettingsPopover.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(3)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "span.giga-grid-button.dismiss {\n  float: right;\n}\nh5.inline-label {\n  display: inline;\n}\n.giga-grid .giga-grid-settings-pop-over {\n  border: 1px solid rgba(0,0,0,0.078);\n  padding: 1em;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  position: absolute;\n  left: -100%;\n  top: 100%;\n  z-index: 1;\n  background-color: #fff;\n  width: 660px;\n  min-height: 350px;\n}\n.giga-grid .giga-grid-settings-pop-over ul {\n  list-style: circle;\n}\n.giga-grid .giga-grid-settings-pop-over ul li {\n  display: inline-block;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  padding: 5px;\n  margin-right: 3px;\n  margin-bottom: 5px;\n}\n.giga-grid .giga-grid-settings-pop-over ul li:hover {\n  cursor: pointer;\n  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;\n  background-color: rgba(0,0,0,0.078);\n}\n.giga-grid .giga-grid-settings-pop-over ul li.dragging {\n  border-right: 2px solid #ff4500;\n}\n", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(45);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -20833,7 +20939,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 42 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -20841,13 +20947,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	// module
-	exports.push([module.id, ".giga-grid .giga-grid-toolbar span.toolbar-item {\n  position: relative;\n}\n.giga-grid-toolbar span.toolbar-item-toggle:hover {\n  cursor: pointer;\n  color: #2f6fad;\n}\n.giga-grid-sortable {\n  border: 1px solid rgba(0,0,0,0.078);\n  padding: 1em;\n}\n.giga-grid .giga-grid-settings-pop-over {\n  border: 1px solid rgba(0,0,0,0.078);\n  padding: 1em;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  position: absolute;\n  left: -100%;\n  top: 100%;\n  z-index: 1;\n  background-color: #fff;\n  min-width: 350px;\n  min-height: 350px;\n}\n.giga-grid .giga-grid-settings-pop-over ul {\n  list-style: circle;\n}\n.giga-grid .giga-grid-settings-pop-over ul li {\n  display: inline-block;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  padding: 5px;\n  margin-right: 3px;\n  margin-bottom: 5px;\n}\n.giga-grid .giga-grid-settings-pop-over ul li:hover {\n  cursor: pointer;\n  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;\n  background-color: rgba(0,0,0,0.078);\n}\n.giga-grid .giga-grid-settings-pop-over ul li.dragging {\n  border-right: 2px solid #ff4500;\n}\n.giga-grid .giga-grid-settings-pop-over .dismiss,\n.giga-grid .giga-grid-settings-pop-over .submit {\n  cursor: pointer;\n}\n", ""]);
+	exports.push([module.id, ".giga-grid .giga-grid-toolbar span.toolbar-item {\n  position: relative;\n}\n.giga-grid-toolbar span.toolbar-item-toggle:hover {\n  cursor: pointer;\n  color: #2f6fad;\n}\n.giga-grid-sortable {\n  border: 1px solid rgba(0,0,0,0.078);\n  padding: 1em;\n}\n.column-50 {\n  width: 50%;\n  float: left;\n  padding: 10px;\n}\ninput.giga-grid-text-input {\n  padding: 10px 10px 10px 5px;\n  border: none;\n  border-bottom: 2px solid #757575;\n}\n", ""]);
 	
 	// exports
 
 
 /***/ },
-/* 43 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -20859,11 +20965,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(44);
+	module.exports.Dispatcher = __webpack_require__(47);
 
 
 /***/ },
-/* 44 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -21100,7 +21206,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
 
 /***/ },
-/* 45 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -21110,7 +21216,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(6);
-	var GigaRow_1 = __webpack_require__(46);
+	var GigaRow_1 = __webpack_require__(49);
 	var GigaStore_1 = __webpack_require__(15);
 	var TableBody = (function (_super) {
 	    __extends(TableBody, _super);
@@ -21165,7 +21271,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 46 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -21177,7 +21283,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(6);
 	var classNames = __webpack_require__(14);
 	var GigaStore_1 = __webpack_require__(15);
-	var Cell_1 = __webpack_require__(47);
+	var Cell_1 = __webpack_require__(50);
 	var GigaRow = (function (_super) {
 	    __extends(GigaRow, _super);
 	    function GigaRow(props) {
@@ -21211,7 +21317,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 47 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -21223,6 +21329,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(6);
 	var classNames = __webpack_require__(14);
 	var ColumnLike_1 = __webpack_require__(10);
+	var ColumnLike_2 = __webpack_require__(10);
 	var SubtotalAggregator_1 = __webpack_require__(16);
 	var GigaStore_1 = __webpack_require__(15);
 	var Cell = (function (_super) {
@@ -21254,7 +21361,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "fa-plus": row.isCollapsed(),
 	            "fa-minus": !row.isCollapsed()
 	        });
-	        return (React.createElement("td", {style: this.calculateStyle(), onClick: function (e) { return _this.onClick(); }}, React.createElement("strong", null, React.createElement("span", null, React.createElement("i", {className: cx, onClick: function (e) { return _this.onCollapseToggle(e); }}), " ", row.title || ""))));
+	        return (React.createElement("td", {style: this.calculateStyle(), onClick: function (e) { return _this.onClick(); }}, React.createElement("strong", null, React.createElement("span", null, React.createElement("i", {className: cx, onClick: function (e) { return _this.onCollapseToggle(e); }}), " ", row.bucketInfo.title || ""))));
 	    };
 	    Cell.prototype.calculateStyle = function () {
 	        return {
@@ -21270,21 +21377,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var row = props.row;
 	        var cd = props.column;
 	        var cx = classNames({
-	            "numeric": cd.format === ColumnLike_1.ColumnFormat.NUMBER,
-	            "non-numeric": cd.format !== ColumnLike_1.ColumnFormat.NUMBER
+	            "numeric": cd.format === ColumnLike_2.ColumnFormat.NUMBER,
+	            "non-numeric": cd.format !== ColumnLike_2.ColumnFormat.NUMBER
 	        });
 	        // cell is the first cell of a subtotal row
 	        if (props.isFirstColumn && !row.isDetail())
 	            result = this.renderSubtotalCellWithCollapseBtn(row);
 	        else
-	            result = (React.createElement("td", {className: cx, onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, Cell.renderContent(row, cd)));
+	            result = (React.createElement("td", {className: cx, onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, Cell.renderNormalCellContent(row, cd)));
 	        return result;
 	    };
-	    Cell.renderContent = function (row, cd) {
+	    /**
+	     * Figure out the cell value and then decorated it if necessary. If the user provided a custom renderer this is where we render it and return a component instead of a primitive
+	     * @param row
+	     * @param cd
+	     * @returns {JSX.Element|string|number}
+	     */
+	    Cell.renderNormalCellContent = function (row, cd) {
+	        var renderedCellContent = "";
 	        if (cd.cellTemplateCreator)
-	            return cd.cellTemplateCreator(row.data()[cd.colTag], cd);
-	        else
-	            return SubtotalAggregator_1.format(row.data()[cd.colTag], cd.formatInstruction) || "";
+	            renderedCellContent = cd.cellTemplateCreator(row.data()[cd.colTag], cd);
+	        else {
+	            renderedCellContent = SubtotalAggregator_1.format(row.data()[cd.colTag], cd.formatInstruction) || "";
+	            // here we perform ad-decorations, so far just for those columns subtotaled as 'COUNT' and 'COUNT_DISTINCT'
+	            if (!row.isDetail() && (cd.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT || cd.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT_DISTINCT))
+	                renderedCellContent = "[" + renderedCellContent + "]";
+	        }
+	        return renderedCellContent;
 	    };
 	    return Cell;
 	}(React.Component));
@@ -21308,7 +21427,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 48 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -21318,7 +21437,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(6);
-	var TableHeaderCell_1 = __webpack_require__(49);
+	var TableHeaderCell_1 = __webpack_require__(52);
 	var GigaGrid_1 = __webpack_require__(5);
 	/**
 	 * terminology: column groups are columns that can span multiple `leaf` columns and physically reside
@@ -21366,7 +21485,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 49 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -21426,7 +21545,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 50 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!

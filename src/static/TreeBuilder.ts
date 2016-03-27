@@ -1,7 +1,6 @@
-import {SubtotalRow} from "../models/Row";
-import {DetailRow} from "../models/Row";
-import * as _ from 'lodash';
-import {Column} from "../models/ColumnLike";
+import {SubtotalRow, DetailRow} from "../models/Row";
+import * as _ from "lodash";
+import {Column, ColumnFormat, BucketInfo} from "../models/ColumnLike";
 export class TreeBuilder {
 
     /**
@@ -47,7 +46,7 @@ export class TreeBuilder {
          * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
          * parent SubtotalRow (in other words, find the detailRow's "bucket") and append said detailRow to the parent
          */
-        const grandTotal = new SubtotalRow("Grand Total");
+        const grandTotal = new SubtotalRow({title: "Grand Total", value: null});
         grandTotal.setSectorPath([]);
         data.forEach(datum => this.bucketDetailRow(subtotalBys, new DetailRow(datum), grandTotal));
         TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, false);
@@ -68,18 +67,18 @@ export class TreeBuilder {
          * to traverse the grandTotal and find the detailRow's immediate parent SubtotalRow
          * we store the detailRow's sector names in an ordered array
          */
-        const subtotalTitles:string[] = []; // temporary array of strings to keep track subtotal titles names in sequence
+        const buckets:BucketInfo[] = []; // temporary array of strings to keep track subtotal titles names in sequence
         grandTotal.detailRows.push(detailedRow);
         subtotalBys.forEach(subtotalBy => {
             // the subtotal title
-            const bucketTitle = TreeBuilder.resolveSubtotalTitle(subtotalBy, detailedRow);
-            if (bucketTitle !== undefined) {
-                subtotalTitles.push(bucketTitle);
-                const subtotalRow = TreeBuilder.traverseOrCreate(grandTotal, subtotalTitles);
+            const bucket:BucketInfo = TreeBuilder.resolveSubtotalBucket(subtotalBy, detailedRow);
+            if (bucket !== undefined) {
+                buckets.push(bucket);
+                const subtotalRow = TreeBuilder.traverseOrCreate(grandTotal, buckets);
                 subtotalRow.detailRows.push(detailedRow);
-            }
+            } // FIXME if a detail row is not defined for all the columns we are subtotaling by, it is orphaned (i.e. not part of the tree at all), should we let it 'traverse' back and attach itself to the last subtotal row?
         });
-        detailedRow.setSectorPath(subtotalTitles);
+        detailedRow.setSectorPath(buckets.map(b=>b.title));
     };
 
     // TODO add tests
@@ -114,22 +113,24 @@ export class TreeBuilder {
     /**
      *
      * @param grandTotal
-     * @param subtotalTitles
+     * @param buckets
      * @returns {SubtotalRow}
      */
-    private static traverseOrCreate(grandTotal:SubtotalRow, subtotalTitles:string[]):SubtotalRow {
+    private static traverseOrCreate(grandTotal:SubtotalRow, buckets:BucketInfo[]):SubtotalRow {
         // traverse to the correct SubtotalRow
         var currentRow:SubtotalRow = grandTotal;
-        for (let k = 0; k < subtotalTitles.length; k++) {
+        for (let k = 0; k < buckets.length; k++) {
             // update the current subtotal row
-            if (currentRow.hasChildWithTitle(subtotalTitles[k]))
-                currentRow = currentRow.getChildByTitle(subtotalTitles[k]);
+            const title = buckets[k].title;
+            if (currentRow.hasChildWithTitle(title))
+                currentRow = currentRow.getChildByTitle(title);
             else {
                 // create a new sector if it is not already available
-                const newRow = new SubtotalRow(subtotalTitles[k]);
+                // SubtotalRow are created with a `title` and a `firstCellValue` property, firstCellValue is used to determine the row's sort order
+                const newRow = new SubtotalRow(buckets[k]);
                 newRow.toggleCollapse(true);
                 // set the sector path for the new SubtotalRow we just created the length of which determines its depth
-                newRow.setSectorPath(subtotalTitles.slice(0, k + 1));
+                newRow.setSectorPath(buckets.slice(0, k + 1).map(b=>b.title));
                 currentRow.addChild(newRow);
                 currentRow = newRow;
             }
@@ -137,8 +138,16 @@ export class TreeBuilder {
         return currentRow;
     };
 
-    private static resolveSubtotalTitle(subtotalBy:Column, detailedRow:DetailRow) {
-        return subtotalBy.title ? `${subtotalBy.title}: ${detailedRow.getByColTag(subtotalBy.colTag)}` : detailedRow.getByColTag(subtotalBy.colTag);
+    private static resolveSubtotalBucket(subtotalBy:Column, detailedRow:DetailRow):BucketInfo {
+        // FIXME this is the naive implementation, cannot handle numerical bands
+        const title = detailedRow.get(subtotalBy);
+        // if the given column is not defined in the data, return undefined, this will
+        if (title === undefined)
+            return undefined;
+        return {
+            title: subtotalBy.title ? `${subtotalBy.title}: ${title}` : title,
+            value: subtotalBy.format === ColumnFormat.NUMBER ? parseFloat(title) : title
+        };
     }
 
 }
