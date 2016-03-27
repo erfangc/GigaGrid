@@ -105,7 +105,7 @@ export class Cell extends React.Component<CellProps,any> {
         else {
             renderedCellContent = format(row.data()[cd.colTag], cd.formatInstruction) || "";
             // here we perform ad-decorations, so far just for those columns subtotaled as 'COUNT' and 'COUNT_DISTINCT'
-            if (!row.isDetail() && cd.aggregationMethod === AggregationMethod.COUNT || cd.aggregationMethod === AggregationMethod.COUNT_DISTINCT)
+            if (!row.isDetail() && (cd.aggregationMethod === AggregationMethod.COUNT || cd.aggregationMethod === AggregationMethod.COUNT_DISTINCT))
                 renderedCellContent = `[${renderedCellContent}]`;
         }
         return renderedCellContent;
