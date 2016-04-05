@@ -90,6 +90,11 @@ export interface GigaProps extends React.Props<GigaGrid> {
      * sector paths to mark as "selected"
      */
     initiallySelectedSubtotalRows?:string[][]
+
+    /**
+     * custom classes
+     */
+    tableHeaderClass?:string
 }
 
 export interface GridSubcomponentProps<T> extends React.Props<T> {
@@ -186,7 +191,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                 <Toolbar gridProps={this.props} gridStore={this.store} dispatcher={this.dispatcher}/>
                 <div className="giga-grid-header-container">
                     <table className="header-table">
-                        <TableHeader dispatcher={this.dispatcher} columns={columns}/>
+                        <TableHeader dispatcher={this.dispatcher} columns={columns} tableHeaderClass={this.props.tableHeaderClass}/>
                     </table>
                 </div>
                 <div ref={c=>this.viewport=c}

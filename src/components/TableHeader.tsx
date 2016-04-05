@@ -4,6 +4,7 @@ import {TableHeaderCell} from "./TableHeaderCell";
 import {GridSubcomponentProps, getScrollBarWidth} from "./GigaGrid";
 
 export interface TableHeaderProps extends GridSubcomponentProps<TableHeader> {
+    tableHeaderClass?:string
     columns:Column[][]
 }
 
@@ -53,6 +54,7 @@ export class TableHeader extends React.Component<TableHeaderProps,any> {
             return <TableHeaderCell column={column} key={i}
                                     isFirstColumn={i===0}
                                     isLastColumn={i===columns.length-1}
+                                    tableHeaderClass={this.props.tableHeaderClass}
                                     dispatcher={this.props.dispatcher}/>
         });
         // add a placeholder to offset the scrollbar
