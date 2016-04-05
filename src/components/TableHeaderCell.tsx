@@ -7,6 +7,7 @@ import * as _ from "lodash";
 
 export interface TableHeaderProps extends GridSubcomponentProps<TableHeaderCell> {
     column:Column
+    tableHeaderClass?:string
     isFirstColumn?:boolean
     isLastColumn?:boolean
 }
@@ -41,11 +42,17 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
             position: "relative"
         };
 
-        const cx = classNames({
-            "table-header": true,
+        const componentClasses = {
             "numeric": column.format === ColumnFormat.NUMBER,
             "non-numeric": column.format !== ColumnFormat.NUMBER
-        });
+        };
+
+        if (this.props.tableHeaderClass)
+            componentClasses["this.props.tableHeaderClass"] = true;
+        else
+            componentClasses["table-header"] = true;
+
+        const cx = classNames(componentClasses);
 
         return (
             <th style={style}
