@@ -7,7 +7,7 @@
 		exports["GigaGrid"] = factory(require("react"), require("react-dom"));
 	else
 		root["GigaGrid"] = factory(root["React"], root["ReactDOM"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_7__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -55,10 +55,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	__webpack_require__(1);
-	var GigaGrid_1 = __webpack_require__(5);
+	var GigaGrid_1 = __webpack_require__(1);
 	exports.GigaGrid = GigaGrid_1.GigaGrid;
-	var ColumnLike_1 = __webpack_require__(10);
+	var ColumnLike_1 = __webpack_require__(6);
 	exports.AggregationMethod = ColumnLike_1.AggregationMethod;
 	exports.ColumnFormat = ColumnLike_1.ColumnFormat;
 	exports.SortDirection = ColumnLike_1.SortDirection;
@@ -68,372 +67,22 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(2);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(4)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./GigaGrid.styl", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./GigaGrid.styl");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(3)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, "div.giga-grid {\n  position: relative;\n  margin: 0;\n  font-family: Roboto, sans-serif;\n  color: #333;\n}\ndiv.giga-grid span.giga-grid-button {\n  background-color: #fff;\n  border: 1px solid rgba(0,0,0,0.078);\n  padding: 5px;\n  cursor: pointer;\n  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;\n}\ndiv.giga-grid span.giga-grid-button:hover {\n  background-color: rgba(0,0,0,0.078);\n}\ndiv.giga-grid table {\n  border-collapse: collapse;\n  font-size: 11px;\n}\ndiv.giga-grid table.header-table {\n  table-layout: fixed;\n}\ndiv.giga-grid div.giga-grid-body-viewport {\n  overflow: scroll;\n  display: inline-block;\n  max-width: 100%;\n}\ndiv.giga-grid div.giga-grid-header-container {\n  max-width: 100%;\n  overflow: hidden;\n}\ndiv.giga-grid tr.selected {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row.selected {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid tr td,\ndiv.giga-grid tr th {\n  box-sizing: border-box;\n  padding: 2px 5px;\n  min-width: 8em;\n}\ndiv.giga-grid th:last-child,\ndiv.giga-grid td:last-child {\n  padding-right: 10px;\n}\ndiv.giga-grid th:first-child,\ndiv.giga-grid td:first-child {\n  padding-left: 10px;\n}\ndiv.giga-grid tr th {\n  font-weight: normal;\n  background-color: #4a5564;\n  color: #fff;\n  border-left: 1px solid #f5f5f5;\n  border-right: 1px solid #f5f5f5;\n  border-bottom: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr th.column-group {\n  text-align: center;\n}\ndiv.giga-grid tr td {\n  white-space: nowrap;\n  border: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr td i:hover {\n  cursor: pointer;\n  color: #f5f5f5;\n}\ndiv.giga-grid tr.subtotal-row {\n  background-color: rgba(74,85,100,0.1);\n}\ndiv.giga-grid thead tr:hover {\n  cursor: pointer;\n}\ndiv.giga-grid tbody tr:hover {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row:hover {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid .numeric {\n  text-align: right;\n}\ndiv.giga-grid .non-numeric {\n  text-align: left;\n}\n", ""]);
-	
-	// exports
-
-
-/***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	// css base code, injected by the css-loader
-	module.exports = function() {
-		var list = [];
-	
-		// return the list of modules as css string
-		list.toString = function toString() {
-			var result = [];
-			for(var i = 0; i < this.length; i++) {
-				var item = this[i];
-				if(item[2]) {
-					result.push("@media " + item[2] + "{" + item[1] + "}");
-				} else {
-					result.push(item[1]);
-				}
-			}
-			return result.join("");
-		};
-	
-		// import a list of modules into the list
-		list.i = function(modules, mediaQuery) {
-			if(typeof modules === "string")
-				modules = [[null, modules, ""]];
-			var alreadyImportedModules = {};
-			for(var i = 0; i < this.length; i++) {
-				var id = this[i][0];
-				if(typeof id === "number")
-					alreadyImportedModules[id] = true;
-			}
-			for(i = 0; i < modules.length; i++) {
-				var item = modules[i];
-				// skip already imported module
-				// this implementation is not 100% perfect for weird media query combinations
-				//  when a module is imported multiple times with different media queries.
-				//  I hope this will never occur (Hey this way we have smaller bundles)
-				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-					if(mediaQuery && !item[2]) {
-						item[2] = mediaQuery;
-					} else if(mediaQuery) {
-						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-					}
-					list.push(item);
-				}
-			}
-		};
-		return list;
-	};
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	var stylesInDom = {},
-		memoize = function(fn) {
-			var memo;
-			return function () {
-				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
-				return memo;
-			};
-		},
-		isOldIE = memoize(function() {
-			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
-		}),
-		getHeadElement = memoize(function () {
-			return document.head || document.getElementsByTagName("head")[0];
-		}),
-		singletonElement = null,
-		singletonCounter = 0,
-		styleElementsInsertedAtTop = [];
-	
-	module.exports = function(list, options) {
-		if(false) {
-			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
-		}
-	
-		options = options || {};
-		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-		// tags it will allow on a page
-		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
-	
-		// By default, add <style> tags to the bottom of <head>.
-		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
-	
-		var styles = listToStyles(list);
-		addStylesToDom(styles, options);
-	
-		return function update(newList) {
-			var mayRemove = [];
-			for(var i = 0; i < styles.length; i++) {
-				var item = styles[i];
-				var domStyle = stylesInDom[item.id];
-				domStyle.refs--;
-				mayRemove.push(domStyle);
-			}
-			if(newList) {
-				var newStyles = listToStyles(newList);
-				addStylesToDom(newStyles, options);
-			}
-			for(var i = 0; i < mayRemove.length; i++) {
-				var domStyle = mayRemove[i];
-				if(domStyle.refs === 0) {
-					for(var j = 0; j < domStyle.parts.length; j++)
-						domStyle.parts[j]();
-					delete stylesInDom[domStyle.id];
-				}
-			}
-		};
-	}
-	
-	function addStylesToDom(styles, options) {
-		for(var i = 0; i < styles.length; i++) {
-			var item = styles[i];
-			var domStyle = stylesInDom[item.id];
-			if(domStyle) {
-				domStyle.refs++;
-				for(var j = 0; j < domStyle.parts.length; j++) {
-					domStyle.parts[j](item.parts[j]);
-				}
-				for(; j < item.parts.length; j++) {
-					domStyle.parts.push(addStyle(item.parts[j], options));
-				}
-			} else {
-				var parts = [];
-				for(var j = 0; j < item.parts.length; j++) {
-					parts.push(addStyle(item.parts[j], options));
-				}
-				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
-			}
-		}
-	}
-	
-	function listToStyles(list) {
-		var styles = [];
-		var newStyles = {};
-		for(var i = 0; i < list.length; i++) {
-			var item = list[i];
-			var id = item[0];
-			var css = item[1];
-			var media = item[2];
-			var sourceMap = item[3];
-			var part = {css: css, media: media, sourceMap: sourceMap};
-			if(!newStyles[id])
-				styles.push(newStyles[id] = {id: id, parts: [part]});
-			else
-				newStyles[id].parts.push(part);
-		}
-		return styles;
-	}
-	
-	function insertStyleElement(options, styleElement) {
-		var head = getHeadElement();
-		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
-		if (options.insertAt === "top") {
-			if(!lastStyleElementInsertedAtTop) {
-				head.insertBefore(styleElement, head.firstChild);
-			} else if(lastStyleElementInsertedAtTop.nextSibling) {
-				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
-			} else {
-				head.appendChild(styleElement);
-			}
-			styleElementsInsertedAtTop.push(styleElement);
-		} else if (options.insertAt === "bottom") {
-			head.appendChild(styleElement);
-		} else {
-			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
-		}
-	}
-	
-	function removeStyleElement(styleElement) {
-		styleElement.parentNode.removeChild(styleElement);
-		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
-		if(idx >= 0) {
-			styleElementsInsertedAtTop.splice(idx, 1);
-		}
-	}
-	
-	function createStyleElement(options) {
-		var styleElement = document.createElement("style");
-		styleElement.type = "text/css";
-		insertStyleElement(options, styleElement);
-		return styleElement;
-	}
-	
-	function createLinkElement(options) {
-		var linkElement = document.createElement("link");
-		linkElement.rel = "stylesheet";
-		insertStyleElement(options, linkElement);
-		return linkElement;
-	}
-	
-	function addStyle(obj, options) {
-		var styleElement, update, remove;
-	
-		if (options.singleton) {
-			var styleIndex = singletonCounter++;
-			styleElement = singletonElement || (singletonElement = createStyleElement(options));
-			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
-			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
-		} else if(obj.sourceMap &&
-			typeof URL === "function" &&
-			typeof URL.createObjectURL === "function" &&
-			typeof URL.revokeObjectURL === "function" &&
-			typeof Blob === "function" &&
-			typeof btoa === "function") {
-			styleElement = createLinkElement(options);
-			update = updateLink.bind(null, styleElement);
-			remove = function() {
-				removeStyleElement(styleElement);
-				if(styleElement.href)
-					URL.revokeObjectURL(styleElement.href);
-			};
-		} else {
-			styleElement = createStyleElement(options);
-			update = applyToTag.bind(null, styleElement);
-			remove = function() {
-				removeStyleElement(styleElement);
-			};
-		}
-	
-		update(obj);
-	
-		return function updateStyle(newObj) {
-			if(newObj) {
-				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
-					return;
-				update(obj = newObj);
-			} else {
-				remove();
-			}
-		};
-	}
-	
-	var replaceText = (function () {
-		var textStore = [];
-	
-		return function (index, replacement) {
-			textStore[index] = replacement;
-			return textStore.filter(Boolean).join('\n');
-		};
-	})();
-	
-	function applyToSingletonTag(styleElement, index, remove, obj) {
-		var css = remove ? "" : obj.css;
-	
-		if (styleElement.styleSheet) {
-			styleElement.styleSheet.cssText = replaceText(index, css);
-		} else {
-			var cssNode = document.createTextNode(css);
-			var childNodes = styleElement.childNodes;
-			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
-			if (childNodes.length) {
-				styleElement.insertBefore(cssNode, childNodes[index]);
-			} else {
-				styleElement.appendChild(cssNode);
-			}
-		}
-	}
-	
-	function applyToTag(styleElement, obj) {
-		var css = obj.css;
-		var media = obj.media;
-		var sourceMap = obj.sourceMap;
-	
-		if(media) {
-			styleElement.setAttribute("media", media)
-		}
-	
-		if(styleElement.styleSheet) {
-			styleElement.styleSheet.cssText = css;
-		} else {
-			while(styleElement.firstChild) {
-				styleElement.removeChild(styleElement.firstChild);
-			}
-			styleElement.appendChild(document.createTextNode(css));
-		}
-	}
-	
-	function updateLink(linkElement, obj) {
-		var css = obj.css;
-		var media = obj.media;
-		var sourceMap = obj.sourceMap;
-	
-		if(sourceMap) {
-			// http://stackoverflow.com/a/26603875
-			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
-		}
-	
-		var blob = new Blob([css], { type: "text/css" });
-	
-		var oldSrc = linkElement.href;
-	
-		linkElement.href = URL.createObjectURL(blob);
-	
-		if(oldSrc)
-			URL.revokeObjectURL(oldSrc);
-	}
-
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
 	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(6);
-	var ReactDOM = __webpack_require__(7);
-	var _ = __webpack_require__(8);
-	var ColumnLike_1 = __webpack_require__(10);
-	var GigaStore_1 = __webpack_require__(11);
-	var flux_1 = __webpack_require__(38);
-	var TableBody_1 = __webpack_require__(40);
-	var TableHeader_1 = __webpack_require__(44);
-	var $ = __webpack_require__(49);
-	var SettingsPopover_1 = __webpack_require__(50);
+	var React = __webpack_require__(2);
+	var ReactDOM = __webpack_require__(3);
+	var _ = __webpack_require__(4);
+	var ColumnLike_1 = __webpack_require__(6);
+	var GigaStore_1 = __webpack_require__(7);
+	var flux_1 = __webpack_require__(34);
+	var TableBody_1 = __webpack_require__(36);
+	var TableHeader_1 = __webpack_require__(40);
+	var $ = __webpack_require__(47);
+	var SettingsPopover_1 = __webpack_require__(48);
 	/**
 	 * The root component of this React library. assembles raw data into `Row` objects which are then translated into their
 	 * virtual DOM representation
@@ -481,14 +130,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GigaGrid.prototype.render = function () {
 	        var _this = this;
 	        var columns;
+	        var state = this.store.getState();
 	        if (this.props.columnGroups)
-	            columns = ColumnLike_1.ColumnFactory.createColumnsFromGroupDefinition(this.props.columnGroups, this.state);
+	            columns = ColumnLike_1.ColumnFactory.createColumnsFromGroupDefinition(this.props.columnGroups, state);
 	        else
-	            columns = [this.state.columns];
+	            columns = [state.columns];
 	        var bodyStyle = {
 	            height: this.props.bodyHeight,
 	        };
-	        return (React.createElement("div", {className: "giga-grid"}, this.renderSettingsPopover(), React.createElement("div", {className: "giga-grid-header-container"}, React.createElement("table", {className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns, tableHeaderClass: this.props.tableHeaderClass}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, onScroll: function () { return _this.dispatchDisplayBoundChange(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: this.state.rasterizedRows, columns: columns[columns.length - 1], displayStart: this.state.displayStart, displayEnd: this.state.displayEnd, rowHeight: this.props.rowHeight})))));
+	        return (React.createElement("div", {className: "giga-grid"}, this.renderSettingsPopover(), React.createElement("div", {className: "giga-grid-header-container"}, React.createElement("table", {className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns, tableHeaderClass: this.props.tableHeaderClass}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, onScroll: function () { return _this.dispatchDisplayBoundChange(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: state.rasterizedRows, columns: columns[columns.length - 1], displayStart: state.displayStart, displayEnd: state.displayEnd, rowHeight: this.props.rowHeight})))));
 	    };
 	    GigaGrid.prototype.componentWillReceiveProps = function (nextProps) {
 	        var payload = {
@@ -639,19 +289,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 6 */
+/* 2 */
 /***/ function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_6__;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
 
 /***/ },
-/* 7 */
+/* 3 */
 /***/ function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
 
 /***/ },
-/* 8 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -13006,10 +12656,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}.call(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module), (function() { return this; }())))
 
 /***/ },
-/* 9 */
+/* 5 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -13025,11 +12675,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 10 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var _ = __webpack_require__(8);
+	var _ = __webpack_require__(4);
 	(function (AggregationMethod) {
 	    AggregationMethod[AggregationMethod["SUM"] = 0] = "SUM";
 	    AggregationMethod[AggregationMethod["WEIGHTED_AVERAGE"] = 1] = "WEIGHTED_AVERAGE";
@@ -13082,7 +12732,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 11 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	///<reference path="../../typings/tsd.d.ts"/>
@@ -13092,13 +12742,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var _ = __webpack_require__(8);
-	var SubtotalAggregator_1 = __webpack_require__(12);
-	var TreeBuilder_1 = __webpack_require__(13);
-	var utils_1 = __webpack_require__(15);
-	var SortFactory_1 = __webpack_require__(34);
-	var TreeRasterizer_1 = __webpack_require__(36);
-	var ScrollCalculator_1 = __webpack_require__(37);
+	var _ = __webpack_require__(4);
+	var SubtotalAggregator_1 = __webpack_require__(8);
+	var TreeBuilder_1 = __webpack_require__(9);
+	var utils_1 = __webpack_require__(11);
+	var SortFactory_1 = __webpack_require__(30);
+	var ColumnLike_1 = __webpack_require__(6);
+	var TreeRasterizer_1 = __webpack_require__(32);
+	var ScrollCalculator_1 = __webpack_require__(33);
 	/*
 	 define the # of rows necessary to trigger progressive rendering
 	 below which all row display bound change events are ignored
@@ -13141,14 +12792,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var column = _.find(columns, function (column) { return column.colTag === subtotalBy.colTag; });
 	            return _.assign({}, column, subtotalBy);
 	        });
-	        var filteredColumns = _.filter(columns, function (column) { return subtotalBys.map(function (subtotalBy) { return subtotalBy.colTag; }).indexOf(column.colTag) === -1; });
 	        /**
 	         * create sortBys from columns (any properties passed via initialSortBys will override the same property in the corresponding Column object
 	         */
+	        // FIXME we have a state sync issue, columns have "directions", but so does sortBys, the code below is a temp fix
+	        var columnsWithSort = columns.map(function (column) {
+	            var sortBy = _.find((initialSortBys || []), function (s) { return s.colTag == column.colTag; });
+	            if (sortBy)
+	                return _.assign({}, column, {
+	                    direction: sortBy.direction || ColumnLike_1.SortDirection.DESC
+	                });
+	            else
+	                return column;
+	        });
 	        var sortBys = (initialSortBys || []).map(function (sortBy) {
-	            var column = _.find(columns, function (column) { return column.colTag === sortBy.colTag; });
+	            var column = _.find(columnsWithSort, function (column) { return column.colTag === sortBy.colTag; });
 	            return _.assign({}, column, sortBy);
 	        });
+	        var filteredColumns = _.filter(columnsWithSort, function (column) { return subtotalBys.map(function (subtotalBy) { return subtotalBy.colTag; }).indexOf(column.colTag) === -1; });
 	        var tree = TreeBuilder_1.TreeBuilder.buildTree(data, subtotalBys, this.props.initiallyExpandedSubtotalRows, this.props.initiallySelectedSubtotalRows);
 	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, columns);
 	        if (sortBys)
@@ -13157,7 +12818,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return {
 	            rasterizedRows: rasterizedRows,
 	            displayStart: 0,
-	            columns: columnGroups ? columns : filteredColumns,
+	            columns: columnGroups ? columnsWithSort : filteredColumns,
 	            displayEnd: Math.min(rasterizedRows.length - 1, exports.PROGRESSIVE_RENDERING_THRESHOLD),
 	            subtotalBys: subtotalBys,
 	            sortBys: sortBys,
@@ -13359,12 +13020,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 12 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var ColumnLike_1 = __webpack_require__(10);
-	var _ = __webpack_require__(8);
+	var ColumnLike_1 = __webpack_require__(6);
+	var _ = __webpack_require__(4);
 	function straightSum(detailRows, column) {
 	    return _.sum(detailRows.map(function (r) { return r.getByColTag(column.colTag); }));
 	}
@@ -13498,13 +13159,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 13 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var Row_1 = __webpack_require__(14);
-	var _ = __webpack_require__(8);
-	var ColumnLike_1 = __webpack_require__(10);
+	var Row_1 = __webpack_require__(10);
+	var _ = __webpack_require__(4);
+	var ColumnLike_1 = __webpack_require__(6);
 	var TreeBuilder = (function () {
 	    function TreeBuilder() {
 	    }
@@ -13662,7 +13323,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 14 */
+/* 10 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -13715,6 +13376,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    return GenericRow;
 	}());
+	exports.GenericRow = GenericRow;
 	var DetailRow = (function (_super) {
 	    __extends(DetailRow, _super);
 	    function DetailRow(data) {
@@ -13788,7 +13450,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 15 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -13800,15 +13462,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(16);
-	module.exports.MapStore = __webpack_require__(21);
-	module.exports.Mixin = __webpack_require__(33);
-	module.exports.ReduceStore = __webpack_require__(22);
-	module.exports.Store = __webpack_require__(23);
+	module.exports.Container = __webpack_require__(12);
+	module.exports.MapStore = __webpack_require__(17);
+	module.exports.Mixin = __webpack_require__(29);
+	module.exports.ReduceStore = __webpack_require__(18);
+	module.exports.Store = __webpack_require__(19);
 
 
 /***/ },
-/* 16 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -13830,10 +13492,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStoreGroup = __webpack_require__(18);
+	var FluxStoreGroup = __webpack_require__(14);
 	
-	var invariant = __webpack_require__(19);
-	var shallowEqual = __webpack_require__(20);
+	var invariant = __webpack_require__(15);
+	var shallowEqual = __webpack_require__(16);
 	
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -13988,10 +13650,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	module.exports = { create: create };
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
 
 /***/ },
-/* 17 */
+/* 13 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -14088,7 +13750,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 18 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14107,7 +13769,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(19);
+	var invariant = __webpack_require__(15);
 	
 	/**
 	 * FluxStoreGroup allows you to execute a callback on every dispatch after
@@ -14166,10 +13828,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	module.exports = FluxStoreGroup;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
 
 /***/ },
-/* 19 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14221,10 +13883,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
 
 /***/ },
-/* 20 */
+/* 16 */
 /***/ function(module, exports) {
 
 	/**
@@ -14279,7 +13941,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = shallowEqual;
 
 /***/ },
-/* 21 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14300,10 +13962,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxReduceStore = __webpack_require__(22);
-	var Immutable = __webpack_require__(32);
+	var FluxReduceStore = __webpack_require__(18);
+	var Immutable = __webpack_require__(28);
 	
-	var invariant = __webpack_require__(19);
+	var invariant = __webpack_require__(15);
 	
 	/**
 	 * This is a simple store. It allows caching key value pairs. An implementation
@@ -14426,10 +14088,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(FluxReduceStore);
 	
 	module.exports = FluxMapStore;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
 
 /***/ },
-/* 22 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14450,10 +14112,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(23);
+	var FluxStore = __webpack_require__(19);
 	
-	var abstractMethod = __webpack_require__(31);
-	var invariant = __webpack_require__(19);
+	var abstractMethod = __webpack_require__(27);
+	var invariant = __webpack_require__(15);
 	
 	var FluxReduceStore = (function (_FluxStore) {
 	  _inherits(FluxReduceStore, _FluxStore);
@@ -14533,10 +14195,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(FluxStore);
 	
 	module.exports = FluxReduceStore;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
 
 /***/ },
-/* 23 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14555,11 +14217,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(24);
+	var _require = __webpack_require__(20);
 	
 	var EventEmitter = _require.EventEmitter;
 	
-	var invariant = __webpack_require__(19);
+	var invariant = __webpack_require__(15);
 	
 	/**
 	 * This class should be extended by the stores in your application, like so:
@@ -14716,10 +14378,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	// private
 	
 	// protected, available to subclasses
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
 
 /***/ },
-/* 24 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -14732,14 +14394,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(25)
+	  EventEmitter: __webpack_require__(21)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 25 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14758,11 +14420,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(26);
-	var EventSubscriptionVendor = __webpack_require__(28);
+	var EmitterSubscription = __webpack_require__(22);
+	var EventSubscriptionVendor = __webpack_require__(24);
 	
-	var emptyFunction = __webpack_require__(30);
-	var invariant = __webpack_require__(29);
+	var emptyFunction = __webpack_require__(26);
+	var invariant = __webpack_require__(25);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -14933,10 +14595,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 	
 	module.exports = BaseEventEmitter;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
 
 /***/ },
-/* 26 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -14957,7 +14619,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(27);
+	var EventSubscription = __webpack_require__(23);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -14989,7 +14651,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 27 */
+/* 23 */
 /***/ function(module, exports) {
 
 	/**
@@ -15043,7 +14705,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EventSubscription;
 
 /***/ },
-/* 28 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -15062,7 +14724,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(29);
+	var invariant = __webpack_require__(25);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -15149,10 +14811,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 	
 	module.exports = EventSubscriptionVendor;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
 
 /***/ },
-/* 29 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -15205,10 +14867,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
 
 /***/ },
-/* 30 */
+/* 26 */
 /***/ function(module, exports) {
 
 	/**
@@ -15251,7 +14913,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = emptyFunction;
 
 /***/ },
-/* 31 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -15268,17 +14930,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var invariant = __webpack_require__(19);
+	var invariant = __webpack_require__(15);
 	
 	function abstractMethod(className, methodName) {
 	   true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Subclasses of %s must override %s() with their own implementation.', className, methodName) : invariant(false) : undefined;
 	}
 	
 	module.exports = abstractMethod;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
 
 /***/ },
-/* 32 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -20265,7 +19927,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}));
 
 /***/ },
-/* 33 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -20282,9 +19944,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(18);
+	var FluxStoreGroup = __webpack_require__(14);
 	
-	var invariant = __webpack_require__(19);
+	var invariant = __webpack_require__(15);
 	
 	/**
 	 * `FluxContainer` should be preferred over this mixin, but it requires using
@@ -20385,15 +20047,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	module.exports = FluxMixinLegacy;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
 
 /***/ },
-/* 34 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var ColumnLike_1 = __webpack_require__(10);
-	var SortFactoryHelpers_1 = __webpack_require__(35);
+	var ColumnLike_1 = __webpack_require__(6);
+	var SortFactoryHelpers_1 = __webpack_require__(31);
 	var SortFactory = (function () {
 	    function SortFactory() {
 	    }
@@ -20473,11 +20135,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 35 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var ColumnLike_1 = __webpack_require__(10);
+	var ColumnLike_1 = __webpack_require__(6);
 	/**
 	 * Figure out what value should we sort on. The data in our table can contain Subtotal and Detail rows
 	 * @param row
@@ -20516,7 +20178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 36 */
+/* 32 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -20549,7 +20211,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 37 */
+/* 33 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -20573,7 +20235,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 38 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -20585,11 +20247,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(39);
+	module.exports.Dispatcher = __webpack_require__(35);
 
 
 /***/ },
-/* 39 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -20611,7 +20273,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(19);
+	var invariant = __webpack_require__(15);
 	
 	var _prefix = 'ID_';
 	
@@ -20823,10 +20485,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 	
 	module.exports = Dispatcher;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
 
 /***/ },
-/* 40 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -20835,9 +20497,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(6);
-	var GigaRow_1 = __webpack_require__(41);
-	var GigaStore_1 = __webpack_require__(11);
+	var React = __webpack_require__(2);
+	var GigaRow_1 = __webpack_require__(37);
+	var GigaStore_1 = __webpack_require__(7);
 	var TableBody = (function (_super) {
 	    __extends(TableBody, _super);
 	    function TableBody(props) {
@@ -20891,7 +20553,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 41 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -20900,10 +20562,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(6);
-	var classNames = __webpack_require__(42);
-	var GigaStore_1 = __webpack_require__(11);
-	var Cell_1 = __webpack_require__(43);
+	var React = __webpack_require__(2);
+	var classNames = __webpack_require__(38);
+	var GigaStore_1 = __webpack_require__(7);
+	var Cell_1 = __webpack_require__(39);
 	var GigaRow = (function (_super) {
 	    __extends(GigaRow, _super);
 	    function GigaRow(props) {
@@ -20912,11 +20574,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GigaRow.prototype.render = function () {
 	        var _this = this;
 	        var props = this.props;
-	        var cx = classNames({
+	        var subtotalLvlClassName = "subtotal-row-" + (props.row.sectorPath().length - 1);
+	        var rowClassNames = {
 	            "placeholder-false": true,
 	            "subtotal-row": !props.row.isDetail(),
-	            "selected": props.row.isSelected()
-	        });
+	            "detail-row": props.row.isDetail(),
+	            "selected": props.row.isSelected(),
+	        };
+	        rowClassNames[subtotalLvlClassName] = true;
+	        var cx = classNames(rowClassNames);
 	        var cells = props
 	            .columns
 	            .map(function (column, i) {
@@ -20937,7 +20603,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 42 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -20991,7 +20657,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 43 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -21000,12 +20666,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(6);
-	var classNames = __webpack_require__(42);
-	var ColumnLike_1 = __webpack_require__(10);
-	var ColumnLike_2 = __webpack_require__(10);
-	var SubtotalAggregator_1 = __webpack_require__(12);
-	var GigaStore_1 = __webpack_require__(11);
+	var React = __webpack_require__(2);
+	var classNames = __webpack_require__(38);
+	var ColumnLike_1 = __webpack_require__(6);
+	var ColumnLike_2 = __webpack_require__(6);
+	var SubtotalAggregator_1 = __webpack_require__(8);
+	var GigaStore_1 = __webpack_require__(7);
 	var Cell = (function (_super) {
 	    __extends(Cell, _super);
 	    function Cell(props) {
@@ -21028,14 +20694,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        this.props.dispatcher.dispatch(action);
 	    };
-	    Cell.prototype.renderSubtotalCellWithCollapseBtn = function (row) {
+	    Cell.prototype.renderCellWithCollapseToggle = function (row) {
 	        var _this = this;
 	        var cx = classNames({
 	            "fa": true,
-	            "fa-plus": row.isCollapsed(),
-	            "fa-minus": !row.isCollapsed()
+	            "fa-plus-square-o": row.isCollapsed(),
+	            "fa-minus-square-o": !row.isCollapsed()
 	        });
-	        return (React.createElement("td", {style: this.calculateStyle(), onClick: function (e) { return _this.onClick(); }}, React.createElement("strong", null, React.createElement("span", null, React.createElement("i", {className: cx, onClick: function (e) { return _this.onCollapseToggle(e); }}), " ", row.bucketInfo.title || ""))));
+	        return (React.createElement("td", {style: this.calculateStyle(), onClick: function (e) { return _this.onClick(); }}, React.createElement("span", null, React.createElement("i", {className: cx, onClick: function (e) { return _this.onCollapseToggle(e); }}), " ", row.bucketInfo.title || "")));
 	    };
 	    Cell.prototype.calculateStyle = function () {
 	        return {
@@ -21045,39 +20711,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    };
 	    Cell.prototype.render = function () {
-	        var _this = this;
-	        var result;
 	        var props = this.props;
 	        var row = props.row;
-	        var cd = props.column;
+	        var column = props.column;
+	        if (_.isFunction(column.cellTemplateCreator))
+	            return column.cellTemplateCreator(row, column, props.isFirstColumn);
+	        else
+	            return this.defaultCellRenderer(row, column, props.isFirstColumn);
+	    };
+	    Cell.prototype.defaultCellRenderer = function (row, cd, isFirstColumn) {
+	        if (isFirstColumn && !row.isDetail())
+	            return this.renderCellWithCollapseToggle(row);
+	        else
+	            return this.renderNormalCell(row, cd);
+	    };
+	    Cell.prototype.renderNormalCell = function (row, cd) {
+	        var _this = this;
+	        var renderedCellContent = SubtotalAggregator_1.format(row.data()[cd.colTag], cd.formatInstruction) || "";
+	        if (!row.isDetail()
+	            && (cd.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT || cd.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT_DISTINCT))
+	            renderedCellContent = "[" + renderedCellContent + "]";
 	        var cx = classNames({
 	            "numeric": cd.format === ColumnLike_2.ColumnFormat.NUMBER,
 	            "non-numeric": cd.format !== ColumnLike_2.ColumnFormat.NUMBER
 	        });
-	        // cell is the first cell of a subtotal row
-	        if (props.isFirstColumn && !row.isDetail())
-	            result = this.renderSubtotalCellWithCollapseBtn(row);
-	        else
-	            result = (React.createElement("td", {className: cx, onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, Cell.renderNormalCellContent(row, cd)));
-	        return result;
-	    };
-	    /**
-	     * Figure out the cell value and then decorated it if necessary. If the user provided a custom renderer this is where we render it and return a component instead of a primitive
-	     * @param row
-	     * @param cd
-	     * @returns {JSX.Element|string|number}
-	     */
-	    Cell.renderNormalCellContent = function (row, cd) {
-	        var renderedCellContent = "";
-	        if (cd.cellTemplateCreator && row.isDetail())
-	            renderedCellContent = cd.cellTemplateCreator(row.data()[cd.colTag], cd);
-	        else {
-	            renderedCellContent = SubtotalAggregator_1.format(row.data()[cd.colTag], cd.formatInstruction) || "";
-	            // here we perform ad-decorations, so far just for those columns subtotaled as 'COUNT' and 'COUNT_DISTINCT'
-	            if (!row.isDetail() && (cd.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT || cd.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT_DISTINCT))
-	                renderedCellContent = "[" + renderedCellContent + "]";
-	        }
-	        return renderedCellContent;
+	        return (React.createElement("td", {className: cx, onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, renderedCellContent));
 	    };
 	    return Cell;
 	}(React.Component));
@@ -21101,7 +20759,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 44 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -21110,9 +20768,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(6);
-	var TableHeaderCell_1 = __webpack_require__(45);
-	var GigaGrid_1 = __webpack_require__(5);
+	var React = __webpack_require__(2);
+	var TableHeaderCell_1 = __webpack_require__(41);
+	var GigaGrid_1 = __webpack_require__(1);
 	/**
 	 * terminology: column groups are columns that can span multiple `leaf` columns and physically reside
 	 * on top of `leaf` columns
@@ -21159,7 +20817,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 45 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -21168,12 +20826,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(6);
-	var classNames = __webpack_require__(42);
-	var ColumnLike_1 = __webpack_require__(10);
-	var GigaStore_1 = __webpack_require__(11);
-	var _ = __webpack_require__(8);
-	var Toolbar_1 = __webpack_require__(46);
+	var React = __webpack_require__(2);
+	var classNames = __webpack_require__(38);
+	var ColumnLike_1 = __webpack_require__(6);
+	var GigaStore_1 = __webpack_require__(7);
+	var _ = __webpack_require__(4);
+	var Toolbar_1 = __webpack_require__(42);
 	var TableHeaderCell = (function (_super) {
 	    __extends(TableHeaderCell, _super);
 	    function TableHeaderCell(props) {
@@ -21231,7 +20889,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 46 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -21240,9 +20898,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(6);
-	__webpack_require__(47);
-	var GigaStore_1 = __webpack_require__(11);
+	var React = __webpack_require__(2);
+	__webpack_require__(43);
+	var GigaStore_1 = __webpack_require__(7);
 	/**
 	 * The job of the toolbar is to dispatch actions to the flux reduce store. It is free to query the state of the grid
 	 * and its props
@@ -21269,16 +20927,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 47 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(48);
+	var content = __webpack_require__(44);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(4)(content, {});
+	var update = __webpack_require__(46)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -21295,21 +20953,331 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 48 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(3)();
+	exports = module.exports = __webpack_require__(45)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, ".giga-grid .giga-grid-toolbar {\n  padding-left: 5px;\n}\n.giga-grid .giga-grid-toolbar span.toolbar-item {\n  position: relative;\n}\n.giga-grid .giga-grid-toolbar span.toolbar-item:hover {\n  cursor: pointer;\n  color: #2f6fad;\n}\n.giga-grid-sortable {\n  border: 1px solid rgba(0,0,0,0.078);\n  padding: 1em;\n}\n.giga-grid-flex-column {\n  float: left;\n  padding: 10px;\n}\n.giga-grid-flex-column.column-50 {\n  width: 50%;\n}\n.giga-grid-flex-column.column-100 {\n  width: 100%;\n}\ninput.giga-grid-text-input {\n  padding: 10px 10px 10px 5px;\n  border: none;\n  border-bottom: 2px solid #757575;\n}\n", ""]);
+	exports.push([module.id, ".giga-grid .giga-grid-toolbar {\n  padding-left: 5px;\n}\n.giga-grid-sortable {\n  border: 1px solid toolbar-border-color;\n  padding: 1em;\n}\n.giga-grid-flex-column {\n  float: left;\n  padding: 10px;\n}\n.giga-grid-flex-column.column-50 {\n  width: 50%;\n}\n.giga-grid-flex-column.column-100 {\n  width: 100%;\n}\ninput.giga-grid-text-input {\n  padding: 10px 10px 10px 5px;\n  border: none;\n  border-bottom: 2px solid #757575;\n}\n", ""]);
 	
 	// exports
 
 
 /***/ },
-/* 49 */
+/* 45 */
+/***/ function(module, exports) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function() {
+		var list = [];
+	
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+	
+		// import a list of modules into the list
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for(var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
+			}
+			for(i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if(mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	var stylesInDom = {},
+		memoize = function(fn) {
+			var memo;
+			return function () {
+				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+				return memo;
+			};
+		},
+		isOldIE = memoize(function() {
+			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		}),
+		getHeadElement = memoize(function () {
+			return document.head || document.getElementsByTagName("head")[0];
+		}),
+		singletonElement = null,
+		singletonCounter = 0,
+		styleElementsInsertedAtTop = [];
+	
+	module.exports = function(list, options) {
+		if(false) {
+			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+		}
+	
+		options = options || {};
+		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+		// tags it will allow on a page
+		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+	
+		// By default, add <style> tags to the bottom of <head>.
+		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+	
+		var styles = listToStyles(list);
+		addStylesToDom(styles, options);
+	
+		return function update(newList) {
+			var mayRemove = [];
+			for(var i = 0; i < styles.length; i++) {
+				var item = styles[i];
+				var domStyle = stylesInDom[item.id];
+				domStyle.refs--;
+				mayRemove.push(domStyle);
+			}
+			if(newList) {
+				var newStyles = listToStyles(newList);
+				addStylesToDom(newStyles, options);
+			}
+			for(var i = 0; i < mayRemove.length; i++) {
+				var domStyle = mayRemove[i];
+				if(domStyle.refs === 0) {
+					for(var j = 0; j < domStyle.parts.length; j++)
+						domStyle.parts[j]();
+					delete stylesInDom[domStyle.id];
+				}
+			}
+		};
+	}
+	
+	function addStylesToDom(styles, options) {
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			if(domStyle) {
+				domStyle.refs++;
+				for(var j = 0; j < domStyle.parts.length; j++) {
+					domStyle.parts[j](item.parts[j]);
+				}
+				for(; j < item.parts.length; j++) {
+					domStyle.parts.push(addStyle(item.parts[j], options));
+				}
+			} else {
+				var parts = [];
+				for(var j = 0; j < item.parts.length; j++) {
+					parts.push(addStyle(item.parts[j], options));
+				}
+				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+			}
+		}
+	}
+	
+	function listToStyles(list) {
+		var styles = [];
+		var newStyles = {};
+		for(var i = 0; i < list.length; i++) {
+			var item = list[i];
+			var id = item[0];
+			var css = item[1];
+			var media = item[2];
+			var sourceMap = item[3];
+			var part = {css: css, media: media, sourceMap: sourceMap};
+			if(!newStyles[id])
+				styles.push(newStyles[id] = {id: id, parts: [part]});
+			else
+				newStyles[id].parts.push(part);
+		}
+		return styles;
+	}
+	
+	function insertStyleElement(options, styleElement) {
+		var head = getHeadElement();
+		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+		if (options.insertAt === "top") {
+			if(!lastStyleElementInsertedAtTop) {
+				head.insertBefore(styleElement, head.firstChild);
+			} else if(lastStyleElementInsertedAtTop.nextSibling) {
+				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+			} else {
+				head.appendChild(styleElement);
+			}
+			styleElementsInsertedAtTop.push(styleElement);
+		} else if (options.insertAt === "bottom") {
+			head.appendChild(styleElement);
+		} else {
+			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+		}
+	}
+	
+	function removeStyleElement(styleElement) {
+		styleElement.parentNode.removeChild(styleElement);
+		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+		if(idx >= 0) {
+			styleElementsInsertedAtTop.splice(idx, 1);
+		}
+	}
+	
+	function createStyleElement(options) {
+		var styleElement = document.createElement("style");
+		styleElement.type = "text/css";
+		insertStyleElement(options, styleElement);
+		return styleElement;
+	}
+	
+	function createLinkElement(options) {
+		var linkElement = document.createElement("link");
+		linkElement.rel = "stylesheet";
+		insertStyleElement(options, linkElement);
+		return linkElement;
+	}
+	
+	function addStyle(obj, options) {
+		var styleElement, update, remove;
+	
+		if (options.singleton) {
+			var styleIndex = singletonCounter++;
+			styleElement = singletonElement || (singletonElement = createStyleElement(options));
+			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+		} else if(obj.sourceMap &&
+			typeof URL === "function" &&
+			typeof URL.createObjectURL === "function" &&
+			typeof URL.revokeObjectURL === "function" &&
+			typeof Blob === "function" &&
+			typeof btoa === "function") {
+			styleElement = createLinkElement(options);
+			update = updateLink.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+				if(styleElement.href)
+					URL.revokeObjectURL(styleElement.href);
+			};
+		} else {
+			styleElement = createStyleElement(options);
+			update = applyToTag.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+			};
+		}
+	
+		update(obj);
+	
+		return function updateStyle(newObj) {
+			if(newObj) {
+				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+					return;
+				update(obj = newObj);
+			} else {
+				remove();
+			}
+		};
+	}
+	
+	var replaceText = (function () {
+		var textStore = [];
+	
+		return function (index, replacement) {
+			textStore[index] = replacement;
+			return textStore.filter(Boolean).join('\n');
+		};
+	})();
+	
+	function applyToSingletonTag(styleElement, index, remove, obj) {
+		var css = remove ? "" : obj.css;
+	
+		if (styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = replaceText(index, css);
+		} else {
+			var cssNode = document.createTextNode(css);
+			var childNodes = styleElement.childNodes;
+			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+			if (childNodes.length) {
+				styleElement.insertBefore(cssNode, childNodes[index]);
+			} else {
+				styleElement.appendChild(cssNode);
+			}
+		}
+	}
+	
+	function applyToTag(styleElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+		var sourceMap = obj.sourceMap;
+	
+		if(media) {
+			styleElement.setAttribute("media", media)
+		}
+	
+		if(styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = css;
+		} else {
+			while(styleElement.firstChild) {
+				styleElement.removeChild(styleElement.firstChild);
+			}
+			styleElement.appendChild(document.createTextNode(css));
+		}
+	}
+	
+	function updateLink(linkElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+		var sourceMap = obj.sourceMap;
+	
+		if(sourceMap) {
+			// http://stackoverflow.com/a/26603875
+			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+		}
+	
+		var blob = new Blob([css], { type: "text/css" });
+	
+		var oldSrc = linkElement.href;
+	
+		linkElement.href = URL.createObjectURL(blob);
+	
+		if(oldSrc)
+			URL.revokeObjectURL(oldSrc);
+	}
+
+
+/***/ },
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -31157,7 +31125,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 50 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31166,13 +31134,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(6);
-	var ColumnLike_1 = __webpack_require__(10);
-	var SortableItem_1 = __webpack_require__(51);
-	var _ = __webpack_require__(8);
-	var GigaStore_1 = __webpack_require__(11);
-	__webpack_require__(52);
-	var classNames = __webpack_require__(42);
+	var React = __webpack_require__(2);
+	var ColumnLike_1 = __webpack_require__(6);
+	var SortableItem_1 = __webpack_require__(49);
+	var _ = __webpack_require__(4);
+	var GigaStore_1 = __webpack_require__(7);
+	__webpack_require__(50);
+	var classNames = __webpack_require__(38);
 	var SettingsPopover = (function (_super) {
 	    __extends(SettingsPopover, _super);
 	    function SettingsPopover(props) {
@@ -31309,7 +31277,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 51 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31318,8 +31286,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var React = __webpack_require__(6);
-	var classNames = __webpack_require__(42);
+	var React = __webpack_require__(2);
+	var classNames = __webpack_require__(38);
 	var SortableItem = (function (_super) {
 	    __extends(SortableItem, _super);
 	    function SortableItem(props) {
@@ -31376,16 +31344,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 52 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(53);
+	var content = __webpack_require__(51);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(4)(content, {});
+	var update = __webpack_require__(46)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -31402,15 +31370,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 53 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(3)();
+	exports = module.exports = __webpack_require__(45)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, "span.giga-grid-button.dismiss {\n  float: right;\n}\nh5.inline-label {\n  display: inline;\n}\n.giga-grid .giga-grid-settings-pop-over {\n  border: 1px solid rgba(0,0,0,0.078);\n  padding: 1em;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  position: absolute;\n  top: 20px;\n  z-index: 1;\n  background-color: #fff;\n  width: 660px;\n  min-height: 350px;\n}\n.giga-grid .giga-grid-settings-pop-over ul {\n  list-style: circle;\n}\n.giga-grid .giga-grid-settings-pop-over ul li {\n  display: inline-block;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  padding: 5px;\n  margin-right: 3px;\n  margin-bottom: 5px;\n}\n.giga-grid .giga-grid-settings-pop-over ul li:hover {\n  cursor: pointer;\n  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;\n  background-color: rgba(0,0,0,0.078);\n}\n.giga-grid .giga-grid-settings-pop-over ul li.dragging {\n  border-right: 2px solid #ff4500;\n}\n", ""]);
+	exports.push([module.id, "span.giga-grid-button.dismiss {\n  float: right;\n}\nh5.inline-label {\n  display: inline;\n}\n.giga-grid .giga-grid-settings-pop-over {\n  border: 1px solid toolbar-border-color;\n  padding: 1em;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  position: absolute;\n  top: 20px;\n  z-index: 1;\n  background-color: #fff;\n  width: 660px;\n  min-height: 350px;\n}\n.giga-grid .giga-grid-settings-pop-over ul {\n  list-style: circle;\n}\n.giga-grid .giga-grid-settings-pop-over ul li {\n  display: inline-block;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  padding: 5px;\n  margin-right: 3px;\n  margin-bottom: 5px;\n}\n.giga-grid .giga-grid-settings-pop-over ul li:hover {\n  cursor: pointer;\n  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;\n  background-color: toolbar-border-color;\n}\n.giga-grid .giga-grid-settings-pop-over ul li.dragging {\n  border-right: 2px solid #ff4500;\n}\n", ""]);
 	
 	// exports
 

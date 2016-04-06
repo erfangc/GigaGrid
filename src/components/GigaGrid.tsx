@@ -203,10 +203,11 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
     render() {
 
         var columns:Column[][];
+        const state = this.store.getState();
         if (this.props.columnGroups)
-            columns = ColumnFactory.createColumnsFromGroupDefinition(this.props.columnGroups, this.state);
+            columns = ColumnFactory.createColumnsFromGroupDefinition(this.props.columnGroups, state);
         else
-            columns = [this.state.columns];
+            columns = [state.columns];
 
         const bodyStyle = {
             height: this.props.bodyHeight,
@@ -228,10 +229,10 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                      style={bodyStyle}>
                     <table ref={c=>this.canvas=c} className="giga-grid-body-canvas">
                         <TableBody dispatcher={this.dispatcher}
-                                   rows={this.state.rasterizedRows}
+                                   rows={state.rasterizedRows}
                                    columns={columns[columns.length-1]}
-                                   displayStart={this.state.displayStart}
-                                   displayEnd={this.state.displayEnd}
+                                   displayStart={state.displayStart}
+                                   displayEnd={state.displayEnd}
                                    rowHeight={this.props.rowHeight}
                         />
                     </table>

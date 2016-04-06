@@ -13,7 +13,7 @@ export interface Row {
     setSectorPath(sp:string[])
 }
 
-abstract class GenericRow implements Row {
+export abstract class GenericRow implements Row {
 
     private _data:any;
     private _sectorPath:string[];

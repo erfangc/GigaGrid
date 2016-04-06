@@ -5,13 +5,15 @@ import UKBudget from "./data/UKBudget";
 import {GigaProps, GigaState} from "../src/components/GigaGrid";
 import {Tabs, Tab, Navbar} from "react-bootstrap";
 import {Row} from "../src/models/Row";
+import {SortDirection} from "../src/models/ColumnLike";
+import "../src/styles/theme/Retro.styl";
 
 interface ExamplesProps extends React.Props<Examples> {
     ukBudget:GigaProps
 }
 
 interface ExampleState {
-    activeTabKey: number
+    activeTabKey:number
 }
 
 export class Examples extends React.Component<ExamplesProps, ExampleState> {
@@ -36,14 +38,11 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
                 {Examples.renderNavbar()}
                 <div className="container">
                     <br/>
-                    <Tabs activeKey={this.state.activeTabKey} onSelect={idx=>this.handleTabSelect(idx)} animation={false}>
+                    <Tabs activeKey={this.state.activeTabKey} onSelect={idx=>this.handleTabSelect(idx)}
+                          animation={false}>
                         <Tab eventKey={0} title="Basic Example">
                             <br/>
                             {this.renderBasicExample()}
-                        </Tab>
-                        <Tab eventKey={1} title="With Column Grouping">
-                            <br/>
-                            {this.renderExampleWithColumnGrouping()}
                         </Tab>
                     </Tabs>
                 </div>
@@ -53,11 +52,10 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
 
     private renderBasicExample() {
         return (<GigaGrid
-                    onRowClick={(row:Row, state:GigaState)=>true}
-                    initiallyExpandedSubtotalRows={[["Age: 50","# of Children: 1"]]}
-                    initiallySelectedSubtotalRows={[["Age: 50","# of Children: 1"]]}
-                    {...this.props.ukBudget}
-                />);
+            onRowClick={(row:Row, state:GigaState)=>true}
+            initialSortBys={[{"colTag":"WOther", direction: SortDirection.DESC}]}
+            {...this.props.ukBudget}
+        />);
     }
 
     private renderExampleWithColumnGrouping() {

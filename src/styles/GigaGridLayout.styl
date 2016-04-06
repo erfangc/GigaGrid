@@ -1,19 +1,14 @@
-@import "./Variables.styl"
+@import "Util.styl"
 
 div.giga-grid
   position relative
   margin 0
   font-family Roboto, sans-serif
-  color #333
 
   span.giga-grid-button
-    background-color #fff
-    border 1px solid toolbar-border-color
     padding 5px
     cursor pointer
     hover-transition()
-    &:hover
-      background-color toolbar-border-color
 
   table
     border-collapse collapse
@@ -30,11 +25,6 @@ div.giga-grid
   div.giga-grid-header-container
     max-width 100%
     overflow hidden
-  tr.selected
-    background-color selected-color
-
-  tr.subtotal-row.selected
-    background-color subtotal-selected-color
 
   tr td, tr th
     box-sizing border-box
@@ -49,34 +39,18 @@ div.giga-grid
 
   tr th
     font-weight normal
-    background-color: main-color
-    color header-text-color
-    border-left: 1px solid cell-border-color
-    border-right 1px solid cell-border-color
-    border-bottom 1px solid cell-border-color
 
   tr th.column-group
     text-align center
 
   tr td
     white-space: nowrap
-    border 1px solid cell-border-color
 
   tr td i:hover
     cursor pointer
-    color cell-border-color
-
-  tr.subtotal-row
-    background-color subtotal-color
 
   thead tr:hover
     cursor pointer
-
-  tbody tr:hover
-    background-color selected-color
-
-  tr.subtotal-row:hover
-    background-color subtotal-selected-color
 
   .numeric
     text-align right

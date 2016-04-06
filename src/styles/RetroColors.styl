@@ -1,0 +1,24 @@
+main-color = #DBDBDB
+header-text-color=#333
+cell-border-color = #fff
+toolbar-border-color = rgba(0, 0, 0, 0.07843)
+selected-color = #D0E4D3
+subtotal-color = #D0E4D3
+subtotal-selected-color = #b3c6b5
+
+lighten-background(lvl)
+  background-color lighten(selected-color , (lvl * 10)%)
+
+div.giga-grid
+  table.giga-grid-body-canvas
+    tr
+      &.subtotal-row
+        for lvl in (1..10)
+          &.subtotal-row-{lvl}
+            lighten-background(lvl)
+      &.subtotal-row:hover
+        background-color subtotal-selected-color
+      &.detail-row
+        background-color #fff
+        &:nth-of-type(even)
+          background-color #f1f1f1

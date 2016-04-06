@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as classNames from "classnames";
-import {Row} from "../models/Row";
+import {Row, GenericRow} from "../models/Row";
 import {Column} from "../models/ColumnLike";
 import {GigaActionType} from "../store/GigaStore";
 import {Cell} from "./Cell";
@@ -21,11 +21,15 @@ export class GigaRow extends React.Component<GigaRowProps, any> {
 
     render() {
         const props = this.props;
-        const cx = classNames({
+        const subtotalLvlClassName = `subtotal-row-${(props.row as GenericRow).sectorPath().length - 1}`;
+        const rowClassNames = {
             "placeholder-false": true,
             "subtotal-row": !props.row.isDetail(),
-            "selected": props.row.isSelected()
-        });
+            "detail-row": props.row.isDetail(),
+            "selected": props.row.isSelected(),
+        };
+        rowClassNames[subtotalLvlClassName] = true;
+        const cx = classNames(rowClassNames);
         const cells = props
             .columns
             .map((column:Column, i:number) => {
