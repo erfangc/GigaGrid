@@ -100,7 +100,7 @@ export class Cell extends React.Component<CellProps,any> {
      */
     private static renderNormalCellContent(row:Row, cd:Column) {
         var renderedCellContent: JSX.Element|string|number = "";
-        if (cd.cellTemplateCreator)
+        if (cd.cellTemplateCreator && row.isDetail())
             renderedCellContent = cd.cellTemplateCreator(row.data()[cd.colTag], cd);
         else {
             renderedCellContent = format(row.data()[cd.colTag], cd.formatInstruction) || "";

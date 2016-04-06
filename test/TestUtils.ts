@@ -431,7 +431,8 @@ export class TestUtils {
             filterBys: [],
             rasterizedRows: [],
             displayStart: 0,
-            displayEnd: 1
+            displayEnd: 1,
+            showSettingsPopover: false
         }
     };
 

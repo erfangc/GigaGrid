@@ -4,6 +4,7 @@ import {Column, ColumnFormat, SortDirection} from "../models/ColumnLike";
 import {GridSubcomponentProps} from "./GigaGrid";
 import {SortUpdateAction, GigaActionType} from "../store/GigaStore";
 import * as _ from "lodash";
+import {ToolbarToggle} from "./toolbar/Toolbar";
 
 export interface TableHeaderProps extends GridSubcomponentProps<TableHeaderCell> {
     column:Column
@@ -19,6 +20,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
     }
 
     renderSortIcon() {
+        classNames();
         const {direction} = this.props.column;
         if (direction != undefined) {
             const cx = classNames({
@@ -72,8 +74,16 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
                     {column.title || column.colTag}
                 </span>
                 {this.renderSortIcon()}
+                {this.renderToolbar()}
             </th>
         );
+    }
+
+    renderToolbar() {
+        if (this.props.isFirstColumn)
+            return (<ToolbarToggle dispatcher={this.props.dispatcher}/>);
+        else
+            return null;
     }
 
 }

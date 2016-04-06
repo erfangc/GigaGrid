@@ -4,6 +4,7 @@ import {SortableItem} from "./SortableItem";
 import * as _ from "lodash";
 import {GigaActionType, ColumnUpdateAction, GigaAction} from "../../store/GigaStore";
 import "./SettingsPopover.styl";
+import * as classNames from "classnames";
 import DragEvent = __React.DragEvent;
 import Props = __React.Props;
 import SyntheticEvent = __React.SyntheticEvent;
@@ -149,10 +150,17 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
     }
 
     render() {
+        const activeColumn = this.state.activeColumn;
+        const layoutControlClassName = classNames({
+            "giga-grid-flex-column": true,
+            "column-50": activeColumn,
+            "column-100": !activeColumn
+        });
         return (
             <div className="giga-grid-settings-pop-over" onClick={e=>e.stopPropagation()}>
+                <h3>Configure table columns</h3>
                 <div className="row">
-                    <div className="column-50">
+                    <div className={layoutControlClassName}>
                         <div>
                             <h5>Columns</h5>
                             {this.renderSortable("columns", this.state.columns)}
@@ -175,9 +183,14 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
                         <div>
                         </div>
                     </div>
-                    {this.renderColumnConfigurer(this.state.activeColumn)}
+                    {this.renderColumnConfigurer(activeColumn)}
                 </div>
                 <div>
+                    <span className="giga-grid-button" style={{float: "right"}}
+                          onClick={(e)=>this.props.onDismiss()}>
+                        Close <i className="fa fa-times"/>
+                    </span>
+
                     <span className="giga-grid-button" style={{float: "right"}}
                           onClick={(e)=>this.commitColumnUpdates()}>
                         Save <i className="fa fa-save"/>
@@ -187,7 +200,7 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
         );
     }
 
-    private renderColumnConfigurer(column?:Column): JSX.Element | string {
+    private renderColumnConfigurer(column?:Column):JSX.Element | string {
         if (!column)
             return "";
 
@@ -212,7 +225,7 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
         }
 
         return (
-            <div className="column-50">
+            <div className="giga-grid-flex-column column-50">
                 <div>
                     <h5 className="inline-label">Title</h5>
                     <span className="giga-grid-button dismiss"
