@@ -31,7 +31,7 @@ export interface ColumnDef extends ColumnLike {
     width?:string
     weightBy?:string
     formatInstruction?:FormatInstruction
-    cellTemplateCreator?:(data:any, column?:Column)=>JSX.Element
+    cellTemplateCreator?:(row:Row, column:Column, isFirstColumn: boolean)=>JSX.Element
 }
 
 export interface Column extends ColumnDef {

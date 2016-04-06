@@ -8,7 +8,7 @@ const columnDefs:ColumnDef[] = [
     {colTag: "Age", title: "Age"},
     {
         colTag: "Children",
-        title: "# of Children",
+        title: "No. of Children",
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.COUNT
         // weightBy: "Income"

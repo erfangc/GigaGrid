@@ -44,21 +44,20 @@ export class Cell extends React.Component<CellProps,any> {
         this.props.dispatcher.dispatch(action);
     }
 
-    private renderSubtotalCellWithCollapseBtn(row:SubtotalRow):JSX.Element {
+    private renderCellWithCollapseToggle(row:SubtotalRow):JSX.Element {
 
         const cx = classNames({
             "fa": true,
-            "fa-plus": row.isCollapsed(),
-            "fa-minus": !row.isCollapsed()
+            "fa-plus-square-o": row.isCollapsed(),
+            "fa-minus-square-o": !row.isCollapsed()
         });
         return (
             <td style={this.calculateStyle()} onClick={e=>this.onClick()}>
-                <strong>
-                    <span>
-                        <i className={cx} onClick={e=>this.onCollapseToggle(e)}/>&nbsp;
-                        {row.bucketInfo.title || ""}
-                    </span>
-                </strong>
+                <span>
+                    <i className={cx} onClick={e=>this.onCollapseToggle(e)}/>&nbsp;
+                    {row.bucketInfo.title || ""}
+                </span>
+
             </td>
         );
     }
@@ -72,44 +71,40 @@ export class Cell extends React.Component<CellProps,any> {
     }
 
     render() {
-
-        var result:JSX.Element;
         const props = this.props;
         const row = props.row;
-        const cd = props.column;
+        const column = props.column;
+        if (_.isFunction(column.cellTemplateCreator))
+            return column.cellTemplateCreator(row, column, props.isFirstColumn);
+        else
+            return this.defaultCellRenderer(row, column, props.isFirstColumn);
+    }
+
+    private defaultCellRenderer(row: Row, cd:Column, isFirstColumn: boolean):JSX.Element {
+        if (isFirstColumn && !row.isDetail())
+            return this.renderCellWithCollapseToggle(row as SubtotalRow);
+        else
+            return this.renderNormalCell(row, cd);
+    }
+
+    private renderNormalCell(row:Row, cd:Column):JSX.Element {
+        var renderedCellContent:JSX.Element|string|number = format(row.data()[cd.colTag], cd.formatInstruction) || "";
+        if (!row.isDetail()
+            && (cd.aggregationMethod === AggregationMethod.COUNT || cd.aggregationMethod === AggregationMethod.COUNT_DISTINCT))
+            renderedCellContent = `[${renderedCellContent}]`;
         const cx = classNames({
             "numeric": cd.format === ColumnFormat.NUMBER,
             "non-numeric": cd.format !== ColumnFormat.NUMBER
         });
-
-        // cell is the first cell of a subtotal row
-        if (props.isFirstColumn && !row.isDetail())
-            result = this.renderSubtotalCellWithCollapseBtn(row as SubtotalRow);
-        else
-            result = (<td className={cx} onClick={e=>this.onClick()}
-                          style={this.calculateStyle()}>{Cell.renderNormalCellContent(row, cd)}</td>);
-
-        return result;
+        return (
+            <td className={cx}
+                onClick={e=>this.onClick()}
+                style={this.calculateStyle()}>
+                {renderedCellContent}
+            </td>
+        )
     }
 
-    /**
-     * Figure out the cell value and then decorated it if necessary. If the user provided a custom renderer this is where we render it and return a component instead of a primitive
-     * @param row
-     * @param cd
-     * @returns {JSX.Element|string|number}
-     */
-    private static renderNormalCellContent(row:Row, cd:Column) {
-        var renderedCellContent: JSX.Element|string|number = "";
-        if (cd.cellTemplateCreator && row.isDetail())
-            renderedCellContent = cd.cellTemplateCreator(row.data()[cd.colTag], cd);
-        else {
-            renderedCellContent = format(row.data()[cd.colTag], cd.formatInstruction) || "";
-            // here we perform ad-decorations, so far just for those columns subtotaled as 'COUNT' and 'COUNT_DISTINCT'
-            if (!row.isDetail() && (cd.aggregationMethod === AggregationMethod.COUNT || cd.aggregationMethod === AggregationMethod.COUNT_DISTINCT))
-                renderedCellContent = `[${renderedCellContent}]`;
-        }
-        return renderedCellContent;
-    }
 }
 
 class TableRowUtils {
