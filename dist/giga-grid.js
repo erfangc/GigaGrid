@@ -99,7 +99,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	// module
-	exports.push([module.id, "div.giga-grid {\n  margin: 0;\n  font-family: Roboto, sans-serif;\n  color: #333;\n}\ndiv.giga-grid span.giga-grid-button {\n  background-color: #fff;\n  border: 1px solid rgba(0,0,0,0.078);\n  padding: 5px;\n  cursor: pointer;\n  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;\n}\ndiv.giga-grid span.giga-grid-button:hover {\n  background-color: rgba(0,0,0,0.078);\n}\ndiv.giga-grid table {\n  border-collapse: collapse;\n  font-size: 11px;\n}\ndiv.giga-grid table.header-table {\n  table-layout: fixed;\n}\ndiv.giga-grid div.giga-grid-body-viewport {\n  overflow: scroll;\n  display: inline-block;\n  max-width: 100%;\n}\ndiv.giga-grid div.giga-grid-header-container {\n  max-width: 100%;\n  overflow: hidden;\n}\ndiv.giga-grid tr.selected {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row.selected {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid tr td,\ndiv.giga-grid tr th {\n  box-sizing: border-box;\n  padding: 2px 5px;\n  min-width: 8em;\n}\ndiv.giga-grid th:last-child,\ndiv.giga-grid td:last-child {\n  padding-right: 10px;\n}\ndiv.giga-grid th:first-child,\ndiv.giga-grid td:first-child {\n  padding-left: 10px;\n}\ndiv.giga-grid tr th {\n  font-weight: normal;\n  background-color: #4a5564;\n  color: #fff;\n  border-left: 1px solid #f5f5f5;\n  border-right: 1px solid #f5f5f5;\n  border-bottom: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr th.column-group {\n  text-align: center;\n}\ndiv.giga-grid tr td {\n  white-space: nowrap;\n  border: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr td i:hover {\n  cursor: pointer;\n  color: #f5f5f5;\n}\ndiv.giga-grid tr.subtotal-row {\n  background-color: rgba(74,85,100,0.1);\n}\ndiv.giga-grid thead tr:hover {\n  cursor: pointer;\n}\ndiv.giga-grid tbody tr:hover {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row:hover {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid .numeric {\n  text-align: right;\n}\ndiv.giga-grid .non-numeric {\n  text-align: left;\n}\n", ""]);
+	exports.push([module.id, "div.giga-grid {\n  position: relative;\n  margin: 0;\n  font-family: Roboto, sans-serif;\n  color: #333;\n}\ndiv.giga-grid span.giga-grid-button {\n  background-color: #fff;\n  border: 1px solid rgba(0,0,0,0.078);\n  padding: 5px;\n  cursor: pointer;\n  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;\n}\ndiv.giga-grid span.giga-grid-button:hover {\n  background-color: rgba(0,0,0,0.078);\n}\ndiv.giga-grid table {\n  border-collapse: collapse;\n  font-size: 11px;\n}\ndiv.giga-grid table.header-table {\n  table-layout: fixed;\n}\ndiv.giga-grid div.giga-grid-body-viewport {\n  overflow: scroll;\n  display: inline-block;\n  max-width: 100%;\n}\ndiv.giga-grid div.giga-grid-header-container {\n  max-width: 100%;\n  overflow: hidden;\n}\ndiv.giga-grid tr.selected {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row.selected {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid tr td,\ndiv.giga-grid tr th {\n  box-sizing: border-box;\n  padding: 2px 5px;\n  min-width: 8em;\n}\ndiv.giga-grid th:last-child,\ndiv.giga-grid td:last-child {\n  padding-right: 10px;\n}\ndiv.giga-grid th:first-child,\ndiv.giga-grid td:first-child {\n  padding-left: 10px;\n}\ndiv.giga-grid tr th {\n  font-weight: normal;\n  background-color: #4a5564;\n  color: #fff;\n  border-left: 1px solid #f5f5f5;\n  border-right: 1px solid #f5f5f5;\n  border-bottom: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr th.column-group {\n  text-align: center;\n}\ndiv.giga-grid tr td {\n  white-space: nowrap;\n  border: 1px solid #f5f5f5;\n}\ndiv.giga-grid tr td i:hover {\n  cursor: pointer;\n  color: #f5f5f5;\n}\ndiv.giga-grid tr.subtotal-row {\n  background-color: rgba(74,85,100,0.1);\n}\ndiv.giga-grid thead tr:hover {\n  cursor: pointer;\n}\ndiv.giga-grid tbody tr:hover {\n  background-color: rgba(74,85,100,0.5);\n}\ndiv.giga-grid tr.subtotal-row:hover {\n  background-color: rgba(74,85,100,0.65);\n}\ndiv.giga-grid .numeric {\n  text-align: right;\n}\ndiv.giga-grid .non-numeric {\n  text-align: left;\n}\n", ""]);
 	
 	// exports
 
@@ -377,6 +377,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function applyToTag(styleElement, obj) {
 		var css = obj.css;
 		var media = obj.media;
+		var sourceMap = obj.sourceMap;
 	
 		if(media) {
 			styleElement.setAttribute("media", media)
@@ -394,6 +395,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function updateLink(linkElement, obj) {
 		var css = obj.css;
+		var media = obj.media;
 		var sourceMap = obj.sourceMap;
 	
 		if(sourceMap) {
@@ -426,12 +428,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ReactDOM = __webpack_require__(7);
 	var _ = __webpack_require__(8);
 	var ColumnLike_1 = __webpack_require__(10);
-	var Toolbar_1 = __webpack_require__(11);
-	var GigaStore_1 = __webpack_require__(15);
-	var flux_1 = __webpack_require__(46);
-	var TableBody_1 = __webpack_require__(48);
-	var TableHeader_1 = __webpack_require__(51);
-	var $ = __webpack_require__(53);
+	var GigaStore_1 = __webpack_require__(11);
+	var flux_1 = __webpack_require__(38);
+	var TableBody_1 = __webpack_require__(40);
+	var TableHeader_1 = __webpack_require__(44);
+	var $ = __webpack_require__(49);
+	var SettingsPopover_1 = __webpack_require__(50);
 	/**
 	 * The root component of this React library. assembles raw data into `Row` objects which are then translated into their
 	 * virtual DOM representation
@@ -460,6 +462,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _this.setState(_this.store.getState());
 	        });
 	    }
+	    GigaGrid.prototype.submitColumnConfigChange = function (action) {
+	        this.dispatcher.dispatch(action);
+	    };
+	    GigaGrid.prototype.toggleSettingsPopover = function () {
+	        this.dispatcher.dispatch({
+	            type: GigaStore_1.GigaActionType.TOGGLE_SETTINGS_POPOVER
+	        });
+	    };
+	    GigaGrid.prototype.renderSettingsPopover = function () {
+	        var _this = this;
+	        var state = this.store.getState();
+	        if (state.showSettingsPopover)
+	            return (React.createElement("div", null, React.createElement(SettingsPopover_1.SettingsPopover, {subtotalBys: state.subtotalBys, columns: state.columns, onSubmit: function (action) { return _this.submitColumnConfigChange(action); }, onDismiss: function () { return _this.toggleSettingsPopover(); }})));
+	        else
+	            return null;
+	    };
 	    GigaGrid.prototype.render = function () {
 	        var _this = this;
 	        var columns;
@@ -470,7 +488,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var bodyStyle = {
 	            height: this.props.bodyHeight,
 	        };
-	        return (React.createElement("div", {className: "giga-grid"}, React.createElement(Toolbar_1.Toolbar, {gridProps: this.props, gridStore: this.store, dispatcher: this.dispatcher}), React.createElement("div", {className: "giga-grid-header-container"}, React.createElement("table", {className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, onScroll: function () { return _this.dispatchDisplayBoundChange(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: this.state.rasterizedRows, columns: columns[columns.length - 1], displayStart: this.state.displayStart, displayEnd: this.state.displayEnd, rowHeight: this.props.rowHeight})))));
+	        return (React.createElement("div", {className: "giga-grid"}, this.renderSettingsPopover(), React.createElement("div", {className: "giga-grid-header-container"}, React.createElement("table", {className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns, tableHeaderClass: this.props.tableHeaderClass}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, onScroll: function () { return _this.dispatchDisplayBoundChange(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: this.state.rasterizedRows, columns: columns[columns.length - 1], displayStart: this.state.displayStart, displayEnd: this.state.displayEnd, rowHeight: this.props.rowHeight})))));
 	    };
 	    GigaGrid.prototype.componentWillReceiveProps = function (nextProps) {
 	        var payload = {
@@ -13067,318 +13085,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var React = __webpack_require__(6);
-	var SettingsPopover_1 = __webpack_require__(12);
-	__webpack_require__(44);
-	/**
-	 * The job of the toolbar is to dispatch actions to the flux reduce store. It is free to query the state of the grid
-	 * and its props
-	 */
-	var Toolbar = (function (_super) {
-	    __extends(Toolbar, _super);
-	    function Toolbar(props) {
-	        _super.call(this, props);
-	        this.state = {
-	            showSettingsPopover: false
-	        };
-	    }
-	    Toolbar.prototype.dismissSettingsPopover = function () {
-	        this.setState({
-	            showSettingsPopover: false
-	        });
-	    };
-	    Toolbar.prototype.dispatchAction = function (action) {
-	        this.props.dispatcher.dispatch(action);
-	        this.dismissSettingsPopover();
-	    };
-	    Toolbar.prototype.render = function () {
-	        var _this = this;
-	        var state = this.props.gridStore.getState();
-	        var columns = state.columns, subtotalBys = state.subtotalBys;
-	        return (React.createElement("div", {className: "giga-grid-toolbar"}, React.createElement("span", {className: "toolbar-item", onClick: function () { return _this.setState({ showSettingsPopover: !_this.state.showSettingsPopover }); }}, React.createElement("span", {className: "toolbar-item-toggle"}, React.createElement("i", {className: "fa fa-cogs"}), " Settings"), this.state.showSettingsPopover ?
-	            React.createElement(SettingsPopover_1.SettingsPopover, {onDismiss: function () { return _this.dismissSettingsPopover(); }, onSubmit: function (action) { return _this.dispatchAction(action); }, subtotalBys: subtotalBys, columns: columns}) : "")));
-	    };
-	    return Toolbar;
-	}(React.Component));
-	exports.Toolbar = Toolbar;
-
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var React = __webpack_require__(6);
-	var ColumnLike_1 = __webpack_require__(10);
-	var SortableItem_1 = __webpack_require__(13);
-	var _ = __webpack_require__(8);
-	var GigaStore_1 = __webpack_require__(15);
-	__webpack_require__(42);
-	var SettingsPopover = (function (_super) {
-	    __extends(SettingsPopover, _super);
-	    function SettingsPopover(props) {
-	        _super.call(this, props);
-	        var columns = _.clone(props.columns);
-	        var subtotalBys = _.clone(props.subtotalBys);
-	        var activeColumn = undefined;
-	        this.state = { columns: columns, subtotalBys: subtotalBys, activeColumn: activeColumn };
-	    }
-	    /**
-	     * move the src from the `from` list to after the dest column in the `to` list
-	     * @param from
-	     * @param to
-	     * @param src
-	     * @param dest
-	     */
-	    SettingsPopover.prototype.swapToAnotherListOfColumns = function (from, to, src, dest) {
-	        var item = from.splice(src.idx, 1)[0];
-	        to.splice(dest.idx + 1, 0, item);
-	    };
-	    /**
-	     * moves the src column to after the dest column within the same list
-	     * @param columns
-	     * @param src
-	     * @param dest
-	     */
-	    SettingsPopover.prototype.moveColumn = function (columns, src, dest) {
-	        var item = columns.splice(src.idx, 1)[0];
-	        // need a more reliable way to to determine destIdx, given that the same column could be repeated in the list
-	        var destIdx = _.findIndex(columns, function (c) { return c.colTag === dest.colTag; });
-	        columns.splice(destIdx + 1, 0, item);
-	    };
-	    /**
-	     * insert the column represented by the srcColTag to the column represented by the destColTag
-	     * @param src
-	     * @param dest
-	     */
-	    SettingsPopover.prototype.updateColumnPosition = function (src, dest) {
-	        if (src.type === dest.type)
-	            /**
-	             * move the src column to a different position within the same list of columns
-	             */
-	            this.moveColumn(this.state[src.type], src, dest);
-	        else
-	            /**
-	             * src is in a different list of column than dest, we need to transfer them
-	             */
-	            this.swapToAnotherListOfColumns(this.state[src.type], this.state[dest.type], src, dest);
-	        this.setState(_.assign({}, this.state, {
-	            columns: this.state.columns,
-	            subtotalBys: this.state.subtotalBys
-	        }));
-	    };
-	    SettingsPopover.prototype.commitColumnUpdates = function () {
-	        var payload = {
-	            type: GigaStore_1.GigaActionType.COLUMNS_UPDATE,
-	            columns: this.state.columns,
-	            subtotalBys: this.state.subtotalBys
-	        };
-	        this.props.onSubmit.call(undefined, payload);
-	    };
-	    SettingsPopover.prototype.renderSortable = function (type, columns) {
-	        var _this = this;
-	        var items = columns.map(function (c, i) {
-	            return React.createElement(SortableItem_1.SortableItem, {key: i, column: c, idx: i, type: type, onClick: (function (column) {
-	                this.setState(_.assign({}, this.state, { activeColumn: column }));
-	            }).bind(_this), onUpdate: function (src, dest) { return _this.updateColumnPosition(src, dest); }});
-	        });
-	        if (columns.length === 0) {
-	            return (
-	            /**
-	             * in the event the column is empty, we still want to handle drop events
-	             */
-	            React.createElement("ul", {className: "giga-grid-sortable", onDragOver: function (e) { return e.preventDefault(); }, onDrop: function (e) {
-	                var srcType = e.dataTransfer.getData('type');
-	                var src = {
-	                    type: srcType,
-	                    colTag: e.dataTransfer.getData('colTag'),
-	                    idx: parseInt(e.dataTransfer.getData('idx'))
-	                };
-	                var fromList = _this.state[srcType];
-	                var toList = _this.state[type];
-	                var dest = {
-	                    type: type,
-	                    colTag: null,
-	                    idx: 0
-	                };
-	                _this.swapToAnotherListOfColumns(fromList, toList, src, dest);
-	                _this.setState(_.assign({}, _this.state, {
-	                    columns: _this.state.columns,
-	                    subtotalBys: _this.state.subtotalBys
-	                }));
-	            }}, "Drop a Column Here to Subtotal By It"));
-	        }
-	        else
-	            return (React.createElement("ul", {className: "giga-grid-sortable"}, items));
-	    };
-	    SettingsPopover.prototype.render = function () {
-	        var _this = this;
-	        return (React.createElement("div", {className: "giga-grid-settings-pop-over", onClick: function (e) { return e.stopPropagation(); }}, React.createElement("div", {className: "row"}, React.createElement("div", {className: "column-50"}, React.createElement("div", null, React.createElement("h5", null, "Columns"), this.renderSortable("columns", this.state.columns)), React.createElement("div", null, React.createElement("h5", null, "Subtotal By"), this.renderSortable("subtotalBys", this.state.subtotalBys)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.EXPAND_ALL }); }}, "Expand All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.COLLAPSE_ALL }); }}, "Collapse All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.CLEAR_SORT }); }}, "Clear Sort")), React.createElement("br", null), React.createElement("div", null)), this.renderColumnConfigurer(this.state.activeColumn)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", style: { float: "right" }, onClick: function (e) { return _this.commitColumnUpdates(); }}, "Save ", React.createElement("i", {className: "fa fa-save"})))));
-	    };
-	    SettingsPopover.prototype.renderColumnConfigurer = function (column) {
-	        var _this = this;
-	        if (!column)
-	            return "";
-	        function onTitleChange(e) {
-	            e.preventDefault();
-	            column.title = e.target.value;
-	            this.setState(_.assign({}, this.state, { column: column }));
-	        }
-	        function onAggregationMethodChange(e) {
-	            e.preventDefault();
-	            //noinspection TypeScriptValidateTypes
-	            column.aggregationMethod = parseInt(e.target.value);
-	            this.setState(_.assign({}, this.state, { column: column }));
-	        }
-	        function onFormatChange(e) {
-	            e.preventDefault();
-	            //noinspection TypeScriptValidateTypes
-	            column.format = parseInt(e.target.value);
-	            this.setState(_.assign({}, this.state, { column: column }));
-	        }
-	        return (React.createElement("div", {className: "column-50"}, React.createElement("div", null, React.createElement("h5", {className: "inline-label"}, "Title"), React.createElement("span", {className: "giga-grid-button dismiss", onClick: function () { return _this.setState(_.assign({}, _this.state, { activeColumn: undefined })); }}, React.createElement("i", {className: "fa fa-chevron-left"}))), React.createElement("input", {type: "text", className: "giga-grid-text-input", placeholder: "Title", value: column.title, onChange: onTitleChange.bind(this)}), React.createElement("br", null), React.createElement("div", null, React.createElement("div", {className: "column-50"}, React.createElement("h5", null, "Aggregation Method"), React.createElement("select", {value: column.aggregationMethod, onChange: onAggregationMethodChange.bind(this)}, React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.SUM}, "Sum"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.COUNT}, "Count"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.COUNT_DISTINCT}, "Count Distinct"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.RANGE}, "Range"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.AVERAGE}, "Average"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE}, "Weighted Average"))), React.createElement("div", {className: "column-50"}, React.createElement("h5", null, "Format"), React.createElement("select", {value: column.format, onChange: onFormatChange.bind(this)}, React.createElement("option", {value: ColumnLike_1.ColumnFormat.CURRENCY}, "Currency"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.DATE}, "Date"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.NUMBER}, "Number"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.STRING}, "String"))))));
-	    };
-	    return SettingsPopover;
-	}(React.Component));
-	exports.SettingsPopover = SettingsPopover;
-
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var React = __webpack_require__(6);
-	var classNames = __webpack_require__(14);
-	var SortableItem = (function (_super) {
-	    __extends(SortableItem, _super);
-	    function SortableItem(props) {
-	        _super.call(this, props);
-	        this.state = {
-	            isDraggingOver: false
-	        };
-	    }
-	    SortableItem.prototype.onDrop = function (e) {
-	        var src = {
-	            type: e.dataTransfer.getData('type'),
-	            colTag: e.dataTransfer.getData('colTag'),
-	            idx: parseInt(e.dataTransfer.getData('idx'))
-	        };
-	        var dest = {
-	            type: this.props.type,
-	            colTag: this.props.column.colTag,
-	            idx: this.props.idx
-	        };
-	        this.props.onUpdate(src, dest);
-	    };
-	    SortableItem.prototype.onDragStart = function (e) {
-	        e.dataTransfer.setData('colTag', this.props.column.colTag);
-	        e.dataTransfer.setData('type', this.props.type);
-	        e.dataTransfer.setData('idx', "" + this.props.idx);
-	    };
-	    SortableItem.prototype.onDragOver = function (e) {
-	        e.preventDefault();
-	        this.setState({
-	            isDraggingOver: true
-	        });
-	    };
-	    SortableItem.prototype.onDragLeave = function (e) {
-	        e.preventDefault();
-	        this.setState({
-	            isDraggingOver: false
-	        });
-	    };
-	    SortableItem.prototype.componentWillReceiveProps = function () {
-	        this.setState({
-	            isDraggingOver: false
-	        });
-	    };
-	    SortableItem.prototype.render = function () {
-	        var _this = this;
-	        var cx = classNames({
-	            dragging: this.state['isDraggingOver']
-	        });
-	        return (React.createElement("li", {className: cx, draggable: true, onClick: function () { return _this.props.onClick.call(undefined, _this.props.column); }, onDragStart: function (e) { return _this.onDragStart.call(_this, e); }, onDragOver: function (e) { return _this.onDragOver(e); }, onDragLeave: function (e) { return _this.onDragLeave(e); }, onDrop: function (e) { return _this.onDrop(e); }}, this.props.column.title || this.props.column.colTag));
-	    };
-	    return SortableItem;
-	}(React.Component));
-	exports.SortableItem = SortableItem;
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2016 Jed Watson.
-	  Licensed under the MIT License (MIT), see
-	  http://jedwatson.github.io/classnames
-	*/
-	/* global define */
-	
-	(function () {
-		'use strict';
-	
-		var hasOwn = {}.hasOwnProperty;
-	
-		function classNames () {
-			var classes = [];
-	
-			for (var i = 0; i < arguments.length; i++) {
-				var arg = arguments[i];
-				if (!arg) continue;
-	
-				var argType = typeof arg;
-	
-				if (argType === 'string' || argType === 'number') {
-					classes.push(arg);
-				} else if (Array.isArray(arg)) {
-					classes.push(classNames.apply(null, arg));
-				} else if (argType === 'object') {
-					for (var key in arg) {
-						if (hasOwn.call(arg, key) && arg[key]) {
-							classes.push(key);
-						}
-					}
-				}
-			}
-	
-			return classes.join(' ');
-		}
-	
-		if (typeof module !== 'undefined' && module.exports) {
-			module.exports = classNames;
-		} else if (true) {
-			// register as 'classnames', consistent with npm package name
-			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
-				return classNames;
-			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		} else {
-			window.classNames = classNames;
-		}
-	}());
-
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
 	///<reference path="../../typings/tsd.d.ts"/>
 	"use strict";
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -13387,12 +13093,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var _ = __webpack_require__(8);
-	var SubtotalAggregator_1 = __webpack_require__(16);
-	var TreeBuilder_1 = __webpack_require__(17);
-	var utils_1 = __webpack_require__(19);
-	var SortFactory_1 = __webpack_require__(38);
-	var TreeRasterizer_1 = __webpack_require__(40);
-	var ScrollCalculator_1 = __webpack_require__(41);
+	var SubtotalAggregator_1 = __webpack_require__(12);
+	var TreeBuilder_1 = __webpack_require__(13);
+	var utils_1 = __webpack_require__(15);
+	var SortFactory_1 = __webpack_require__(34);
+	var TreeRasterizer_1 = __webpack_require__(36);
+	var ScrollCalculator_1 = __webpack_require__(37);
 	/*
 	 define the # of rows necessary to trigger progressive rendering
 	 below which all row display bound change events are ignored
@@ -13456,7 +13162,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            subtotalBys: subtotalBys,
 	            sortBys: sortBys,
 	            filterBys: _.cloneDeep(initialFilterBys) || [],
-	            tree: tree
+	            tree: tree,
+	            showSettingsPopover: false
 	        };
 	    };
 	    GigaStore.prototype.reduce = function (state, action) {
@@ -13468,15 +13175,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            case GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS:
 	                newState = GigaStore.handleChangeRowDisplayBounds(state, action);
 	                break;
-	            /*
-	             Subtotal Actions
-	             */
 	            case GigaActionType.COLUMNS_UPDATE:
 	                newState = this.handleColumnUpdate(state, action);
 	                break;
-	            /*
-	             Row Level Actions
-	             */
 	            case GigaActionType.TOGGLE_ROW_COLLAPSE:
 	                newState = GigaStore.handleToggleCollapse(state, action);
 	                break;
@@ -13486,23 +13187,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	            case GigaActionType.EXPAND_ALL:
 	                newState = GigaStore.handleToggleExpandAll(state);
 	                break;
-	            /*
-	             Sort Actions
-	             */
 	            case GigaActionType.NEW_SORT:
 	                newState = GigaStore.handleSortUpdate(state, action);
 	                break;
 	            case GigaActionType.CLEAR_SORT:
 	                newState = GigaStore.handleClearSort(state);
 	                break;
-	            /*
-	             Selection Actions
-	             */
 	            case GigaActionType.TOGGLE_ROW_SELECT:
 	                newState = this.handleRowSelect(state, action);
 	                break;
 	            case GigaActionType.TOGGLE_CELL_SELECT:
 	                newState = this.handleCellSelect(state, action);
+	                break;
+	            case GigaActionType.TOGGLE_SETTINGS_POPOVER:
+	                newState = _.assign({}, state, { showSettingsPopover: !state.showSettingsPopover });
 	                break;
 	            default:
 	                newState = state;
@@ -13616,13 +13314,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GigaStore.prototype.handleColumnUpdate = function (state, action) {
 	        var newColumnStates = {
 	            columns: action.columns || state.columns,
-	            subtotalBys: action.subtotalBys || state.subtotalBys
+	            subtotalBys: action.subtotalBys || state.subtotalBys,
+	            showSettingsPopover: !state.showSettingsPopover
 	        };
 	        // TODO we might not ALWAYS want to re-aggregate, but we need to think about how the object model works
 	        var tree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, newColumnStates.subtotalBys);
 	        TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(tree.getRoot(), false);
 	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, newColumnStates.columns);
-	        newColumnStates["tree"] = tree;
+	        newColumnStates["tree"] = SortFactory_1.SortFactory.sortTree(tree, state.sortBys);
 	        return _.assign({}, state, newColumnStates);
 	    };
 	    return GigaStore;
@@ -13644,7 +13343,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GigaActionType[GigaActionType["TOGGLE_ROW_SELECT"] = 9] = "TOGGLE_ROW_SELECT";
 	    GigaActionType[GigaActionType["TOGGLE_CELL_SELECT"] = 10] = "TOGGLE_CELL_SELECT";
 	    GigaActionType[GigaActionType["CHANGE_ROW_DISPLAY_BOUNDS"] = 11] = "CHANGE_ROW_DISPLAY_BOUNDS";
-	    GigaActionType[GigaActionType["COLUMNS_UPDATE"] = 12] = "COLUMNS_UPDATE";
+	    GigaActionType[GigaActionType["TOGGLE_SETTINGS_POPOVER"] = 12] = "TOGGLE_SETTINGS_POPOVER";
+	    GigaActionType[GigaActionType["COLUMNS_UPDATE"] = 13] = "COLUMNS_UPDATE";
 	})(exports.GigaActionType || (exports.GigaActionType = {}));
 	var GigaActionType = exports.GigaActionType;
 	// define a function
@@ -13659,7 +13359,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 16 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -13798,11 +13498,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 17 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var Row_1 = __webpack_require__(18);
+	var Row_1 = __webpack_require__(14);
 	var _ = __webpack_require__(8);
 	var ColumnLike_1 = __webpack_require__(10);
 	var TreeBuilder = (function () {
@@ -13962,7 +13662,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 18 */
+/* 14 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -14088,7 +13788,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 19 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -14100,15 +13800,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(20);
-	module.exports.MapStore = __webpack_require__(25);
-	module.exports.Mixin = __webpack_require__(37);
-	module.exports.ReduceStore = __webpack_require__(26);
-	module.exports.Store = __webpack_require__(27);
+	module.exports.Container = __webpack_require__(16);
+	module.exports.MapStore = __webpack_require__(21);
+	module.exports.Mixin = __webpack_require__(33);
+	module.exports.ReduceStore = __webpack_require__(22);
+	module.exports.Store = __webpack_require__(23);
 
 
 /***/ },
-/* 20 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14130,10 +13830,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStoreGroup = __webpack_require__(22);
+	var FluxStoreGroup = __webpack_require__(18);
 	
-	var invariant = __webpack_require__(23);
-	var shallowEqual = __webpack_require__(24);
+	var invariant = __webpack_require__(19);
+	var shallowEqual = __webpack_require__(20);
 	
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -14288,10 +13988,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	module.exports = { create: create };
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
 
 /***/ },
-/* 21 */
+/* 17 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -14388,7 +14088,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 22 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14407,7 +14107,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(23);
+	var invariant = __webpack_require__(19);
 	
 	/**
 	 * FluxStoreGroup allows you to execute a callback on every dispatch after
@@ -14466,10 +14166,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	module.exports = FluxStoreGroup;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
 
 /***/ },
-/* 23 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14521,10 +14221,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
 
 /***/ },
-/* 24 */
+/* 20 */
 /***/ function(module, exports) {
 
 	/**
@@ -14579,7 +14279,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = shallowEqual;
 
 /***/ },
-/* 25 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14600,10 +14300,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxReduceStore = __webpack_require__(26);
-	var Immutable = __webpack_require__(36);
+	var FluxReduceStore = __webpack_require__(22);
+	var Immutable = __webpack_require__(32);
 	
-	var invariant = __webpack_require__(23);
+	var invariant = __webpack_require__(19);
 	
 	/**
 	 * This is a simple store. It allows caching key value pairs. An implementation
@@ -14726,10 +14426,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(FluxReduceStore);
 	
 	module.exports = FluxMapStore;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
 
 /***/ },
-/* 26 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14750,10 +14450,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(27);
+	var FluxStore = __webpack_require__(23);
 	
-	var abstractMethod = __webpack_require__(35);
-	var invariant = __webpack_require__(23);
+	var abstractMethod = __webpack_require__(31);
+	var invariant = __webpack_require__(19);
 	
 	var FluxReduceStore = (function (_FluxStore) {
 	  _inherits(FluxReduceStore, _FluxStore);
@@ -14833,10 +14533,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(FluxStore);
 	
 	module.exports = FluxReduceStore;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
 
 /***/ },
-/* 27 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14855,11 +14555,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(28);
+	var _require = __webpack_require__(24);
 	
 	var EventEmitter = _require.EventEmitter;
 	
-	var invariant = __webpack_require__(23);
+	var invariant = __webpack_require__(19);
 	
 	/**
 	 * This class should be extended by the stores in your application, like so:
@@ -15016,10 +14716,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	// private
 	
 	// protected, available to subclasses
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
 
 /***/ },
-/* 28 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -15032,14 +14732,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(29)
+	  EventEmitter: __webpack_require__(25)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 29 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -15058,11 +14758,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(30);
-	var EventSubscriptionVendor = __webpack_require__(32);
+	var EmitterSubscription = __webpack_require__(26);
+	var EventSubscriptionVendor = __webpack_require__(28);
 	
-	var emptyFunction = __webpack_require__(34);
-	var invariant = __webpack_require__(33);
+	var emptyFunction = __webpack_require__(30);
+	var invariant = __webpack_require__(29);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -15233,10 +14933,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 	
 	module.exports = BaseEventEmitter;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
 
 /***/ },
-/* 30 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -15257,7 +14957,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(31);
+	var EventSubscription = __webpack_require__(27);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -15289,7 +14989,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 31 */
+/* 27 */
 /***/ function(module, exports) {
 
 	/**
@@ -15343,7 +15043,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EventSubscription;
 
 /***/ },
-/* 32 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -15362,7 +15062,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(33);
+	var invariant = __webpack_require__(29);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -15449,10 +15149,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 	
 	module.exports = EventSubscriptionVendor;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
 
 /***/ },
-/* 33 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -15505,10 +15205,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
 
 /***/ },
-/* 34 */
+/* 30 */
 /***/ function(module, exports) {
 
 	/**
@@ -15551,7 +15251,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = emptyFunction;
 
 /***/ },
-/* 35 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -15568,17 +15268,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var invariant = __webpack_require__(23);
+	var invariant = __webpack_require__(19);
 	
 	function abstractMethod(className, methodName) {
 	   true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Subclasses of %s must override %s() with their own implementation.', className, methodName) : invariant(false) : undefined;
 	}
 	
 	module.exports = abstractMethod;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
 
 /***/ },
-/* 36 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -20565,7 +20265,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}));
 
 /***/ },
-/* 37 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -20582,9 +20282,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(22);
+	var FluxStoreGroup = __webpack_require__(18);
 	
-	var invariant = __webpack_require__(23);
+	var invariant = __webpack_require__(19);
 	
 	/**
 	 * `FluxContainer` should be preferred over this mixin, but it requires using
@@ -20685,15 +20385,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	module.exports = FluxMixinLegacy;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
 
 /***/ },
-/* 38 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var ColumnLike_1 = __webpack_require__(10);
-	var SortFactoryHelpers_1 = __webpack_require__(39);
+	var SortFactoryHelpers_1 = __webpack_require__(35);
 	var SortFactory = (function () {
 	    function SortFactory() {
 	    }
@@ -20773,7 +20473,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 39 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -20816,7 +20516,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 40 */
+/* 36 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -20849,7 +20549,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 41 */
+/* 37 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -20873,87 +20573,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 42 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(43);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(4)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./SettingsPopover.styl", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./SettingsPopover.styl");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 43 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(3)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, "span.giga-grid-button.dismiss {\n  float: right;\n}\nh5.inline-label {\n  display: inline;\n}\n.giga-grid .giga-grid-settings-pop-over {\n  border: 1px solid rgba(0,0,0,0.078);\n  padding: 1em;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  position: absolute;\n  left: -100%;\n  top: 100%;\n  z-index: 1;\n  background-color: #fff;\n  width: 660px;\n  min-height: 350px;\n}\n.giga-grid .giga-grid-settings-pop-over ul {\n  list-style: circle;\n}\n.giga-grid .giga-grid-settings-pop-over ul li {\n  display: inline-block;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  padding: 5px;\n  margin-right: 3px;\n  margin-bottom: 5px;\n}\n.giga-grid .giga-grid-settings-pop-over ul li:hover {\n  cursor: pointer;\n  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;\n  background-color: rgba(0,0,0,0.078);\n}\n.giga-grid .giga-grid-settings-pop-over ul li.dragging {\n  border-right: 2px solid #ff4500;\n}\n", ""]);
-	
-	// exports
-
-
-/***/ },
-/* 44 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(45);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(4)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./ToolbarToggle.styl", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./ToolbarToggle.styl");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 45 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(3)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, ".giga-grid .giga-grid-toolbar span.toolbar-item {\n  position: relative;\n}\n.giga-grid-toolbar span.toolbar-item-toggle:hover {\n  cursor: pointer;\n  color: #2f6fad;\n}\n.giga-grid-sortable {\n  border: 1px solid rgba(0,0,0,0.078);\n  padding: 1em;\n}\n.column-50 {\n  width: 50%;\n  float: left;\n  padding: 10px;\n}\ninput.giga-grid-text-input {\n  padding: 10px 10px 10px 5px;\n  border: none;\n  border-bottom: 2px solid #757575;\n}\n", ""]);
-	
-	// exports
-
-
-/***/ },
-/* 46 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -20965,11 +20585,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(47);
+	module.exports.Dispatcher = __webpack_require__(39);
 
 
 /***/ },
-/* 47 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -20991,7 +20611,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(23);
+	var invariant = __webpack_require__(19);
 	
 	var _prefix = 'ID_';
 	
@@ -21203,10 +20823,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 	
 	module.exports = Dispatcher;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
 
 /***/ },
-/* 48 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -21216,8 +20836,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(6);
-	var GigaRow_1 = __webpack_require__(49);
-	var GigaStore_1 = __webpack_require__(15);
+	var GigaRow_1 = __webpack_require__(41);
+	var GigaStore_1 = __webpack_require__(11);
 	var TableBody = (function (_super) {
 	    __extends(TableBody, _super);
 	    function TableBody(props) {
@@ -21271,7 +20891,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 49 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -21281,9 +20901,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(6);
-	var classNames = __webpack_require__(14);
-	var GigaStore_1 = __webpack_require__(15);
-	var Cell_1 = __webpack_require__(50);
+	var classNames = __webpack_require__(42);
+	var GigaStore_1 = __webpack_require__(11);
+	var Cell_1 = __webpack_require__(43);
 	var GigaRow = (function (_super) {
 	    __extends(GigaRow, _super);
 	    function GigaRow(props) {
@@ -21317,7 +20937,61 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 50 */
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+	
+	(function () {
+		'use strict';
+	
+		var hasOwn = {}.hasOwnProperty;
+	
+		function classNames () {
+			var classes = [];
+	
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+	
+				var argType = typeof arg;
+	
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+	
+			return classes.join(' ');
+		}
+	
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
+
+/***/ },
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -21327,11 +21001,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(6);
-	var classNames = __webpack_require__(14);
+	var classNames = __webpack_require__(42);
 	var ColumnLike_1 = __webpack_require__(10);
 	var ColumnLike_2 = __webpack_require__(10);
-	var SubtotalAggregator_1 = __webpack_require__(16);
-	var GigaStore_1 = __webpack_require__(15);
+	var SubtotalAggregator_1 = __webpack_require__(12);
+	var GigaStore_1 = __webpack_require__(11);
 	var Cell = (function (_super) {
 	    __extends(Cell, _super);
 	    function Cell(props) {
@@ -21395,7 +21069,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    Cell.renderNormalCellContent = function (row, cd) {
 	        var renderedCellContent = "";
-	        if (cd.cellTemplateCreator)
+	        if (cd.cellTemplateCreator && row.isDetail())
 	            renderedCellContent = cd.cellTemplateCreator(row.data()[cd.colTag], cd);
 	        else {
 	            renderedCellContent = SubtotalAggregator_1.format(row.data()[cd.colTag], cd.formatInstruction) || "";
@@ -21427,7 +21101,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 51 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -21437,7 +21111,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(6);
-	var TableHeaderCell_1 = __webpack_require__(52);
+	var TableHeaderCell_1 = __webpack_require__(45);
 	var GigaGrid_1 = __webpack_require__(5);
 	/**
 	 * terminology: column groups are columns that can span multiple `leaf` columns and physically reside
@@ -21473,7 +21147,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    TableHeader.prototype.renderLeafColumns = function (columns, key) {
 	        var _this = this;
 	        var ths = columns.map(function (column, i) {
-	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {column: column, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, dispatcher: _this.props.dispatcher});
+	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {column: column, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, tableHeaderClass: _this.props.tableHeaderClass, dispatcher: _this.props.dispatcher});
 	        });
 	        // add a placeholder to offset the scrollbar
 	        ths.push(React.createElement("th", {key: ths.length, style: { width: GigaGrid_1.getScrollBarWidth() + "px" }}));
@@ -21485,7 +21159,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 52 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -21495,16 +21169,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(6);
-	var classNames = __webpack_require__(14);
+	var classNames = __webpack_require__(42);
 	var ColumnLike_1 = __webpack_require__(10);
-	var GigaStore_1 = __webpack_require__(15);
+	var GigaStore_1 = __webpack_require__(11);
 	var _ = __webpack_require__(8);
+	var Toolbar_1 = __webpack_require__(46);
 	var TableHeaderCell = (function (_super) {
 	    __extends(TableHeaderCell, _super);
 	    function TableHeaderCell(props) {
 	        _super.call(this, props);
 	    }
 	    TableHeaderCell.prototype.renderSortIcon = function () {
+	        classNames();
 	        var direction = this.props.column.direction;
 	        if (direction != undefined) {
 	            var cx = classNames({
@@ -21522,11 +21198,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            overflow: "visible",
 	            position: "relative"
 	        };
-	        var cx = classNames({
-	            "table-header": true,
+	        var componentClasses = {
 	            "numeric": column.format === ColumnLike_1.ColumnFormat.NUMBER,
 	            "non-numeric": column.format !== ColumnLike_1.ColumnFormat.NUMBER
-	        });
+	        };
+	        if (this.props.tableHeaderClass)
+	            componentClasses["this.props.tableHeaderClass"] = true;
+	        else
+	            componentClasses["table-header"] = true;
+	        var cx = classNames(componentClasses);
 	        return (React.createElement("th", {style: style, onClick: function () {
 	            var direction = _this.props.column.direction;
 	            var sortBy = _.assign({}, _this.props.column, {
@@ -21537,7 +21217,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                sortBys: [sortBy]
 	            };
 	            _this.props.dispatcher.dispatch(payload);
-	        }, className: cx}, React.createElement("span", {className: "header-text"}, column.title || column.colTag), this.renderSortIcon()));
+	        }, className: cx}, React.createElement("span", {className: "header-text"}, column.title || column.colTag), this.renderSortIcon(), this.renderToolbar()));
+	    };
+	    TableHeaderCell.prototype.renderToolbar = function () {
+	        if (this.props.isFirstColumn)
+	            return (React.createElement(Toolbar_1.ToolbarToggle, {dispatcher: this.props.dispatcher}));
+	        else
+	            return null;
 	    };
 	    return TableHeaderCell;
 	}(React.Component));
@@ -21545,7 +21231,85 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 53 */
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(6);
+	__webpack_require__(47);
+	var GigaStore_1 = __webpack_require__(11);
+	/**
+	 * The job of the toolbar is to dispatch actions to the flux reduce store. It is free to query the state of the grid
+	 * and its props
+	 */
+	var ToolbarToggle = (function (_super) {
+	    __extends(ToolbarToggle, _super);
+	    function ToolbarToggle() {
+	        _super.apply(this, arguments);
+	    }
+	    ToolbarToggle.prototype.dispatchAction = function (e) {
+	        e.stopPropagation();
+	        var action = {
+	            type: GigaStore_1.GigaActionType.TOGGLE_SETTINGS_POPOVER
+	        };
+	        this.props.dispatcher.dispatch(action);
+	    };
+	    ToolbarToggle.prototype.render = function () {
+	        var _this = this;
+	        return (React.createElement("span", {className: "giga-grid-toolbar"}, React.createElement("i", {className: "fa fa-cogs", onClick: function (e) { return _this.dispatchAction(e); }})));
+	    };
+	    return ToolbarToggle;
+	}(React.Component));
+	exports.ToolbarToggle = ToolbarToggle;
+
+
+/***/ },
+/* 47 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(48);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(4)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Toolbar.styl", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Toolbar.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(3)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".giga-grid .giga-grid-toolbar {\n  padding-left: 5px;\n}\n.giga-grid .giga-grid-toolbar span.toolbar-item {\n  position: relative;\n}\n.giga-grid .giga-grid-toolbar span.toolbar-item:hover {\n  cursor: pointer;\n  color: #2f6fad;\n}\n.giga-grid-sortable {\n  border: 1px solid rgba(0,0,0,0.078);\n  padding: 1em;\n}\n.giga-grid-flex-column {\n  float: left;\n  padding: 10px;\n}\n.giga-grid-flex-column.column-50 {\n  width: 50%;\n}\n.giga-grid-flex-column.column-100 {\n  width: 100%;\n}\ninput.giga-grid-text-input {\n  padding: 10px 10px 10px 5px;\n  border: none;\n  border-bottom: 2px solid #757575;\n}\n", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -31390,6 +31154,265 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	return jQuery;
 	}));
+
+
+/***/ },
+/* 50 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(6);
+	var ColumnLike_1 = __webpack_require__(10);
+	var SortableItem_1 = __webpack_require__(51);
+	var _ = __webpack_require__(8);
+	var GigaStore_1 = __webpack_require__(11);
+	__webpack_require__(52);
+	var classNames = __webpack_require__(42);
+	var SettingsPopover = (function (_super) {
+	    __extends(SettingsPopover, _super);
+	    function SettingsPopover(props) {
+	        _super.call(this, props);
+	        var columns = _.clone(props.columns);
+	        var subtotalBys = _.clone(props.subtotalBys);
+	        var activeColumn = undefined;
+	        this.state = { columns: columns, subtotalBys: subtotalBys, activeColumn: activeColumn };
+	    }
+	    /**
+	     * move the src from the `from` list to after the dest column in the `to` list
+	     * @param from
+	     * @param to
+	     * @param src
+	     * @param dest
+	     */
+	    SettingsPopover.prototype.swapToAnotherListOfColumns = function (from, to, src, dest) {
+	        var item = from.splice(src.idx, 1)[0];
+	        to.splice(dest.idx + 1, 0, item);
+	    };
+	    /**
+	     * moves the src column to after the dest column within the same list
+	     * @param columns
+	     * @param src
+	     * @param dest
+	     */
+	    SettingsPopover.prototype.moveColumn = function (columns, src, dest) {
+	        var item = columns.splice(src.idx, 1)[0];
+	        // need a more reliable way to to determine destIdx, given that the same column could be repeated in the list
+	        var destIdx = _.findIndex(columns, function (c) { return c.colTag === dest.colTag; });
+	        columns.splice(destIdx + 1, 0, item);
+	    };
+	    /**
+	     * insert the column represented by the srcColTag to the column represented by the destColTag
+	     * @param src
+	     * @param dest
+	     */
+	    SettingsPopover.prototype.updateColumnPosition = function (src, dest) {
+	        if (src.type === dest.type)
+	            /**
+	             * move the src column to a different position within the same list of columns
+	             */
+	            this.moveColumn(this.state[src.type], src, dest);
+	        else
+	            /**
+	             * src is in a different list of column than dest, we need to transfer them
+	             */
+	            this.swapToAnotherListOfColumns(this.state[src.type], this.state[dest.type], src, dest);
+	        this.setState(_.assign({}, this.state, {
+	            columns: this.state.columns,
+	            subtotalBys: this.state.subtotalBys
+	        }));
+	    };
+	    SettingsPopover.prototype.commitColumnUpdates = function () {
+	        var payload = {
+	            type: GigaStore_1.GigaActionType.COLUMNS_UPDATE,
+	            columns: this.state.columns,
+	            subtotalBys: this.state.subtotalBys
+	        };
+	        this.props.onSubmit.call(undefined, payload);
+	    };
+	    SettingsPopover.prototype.renderSortable = function (type, columns) {
+	        var _this = this;
+	        var items = columns.map(function (c, i) {
+	            return React.createElement(SortableItem_1.SortableItem, {key: i, column: c, idx: i, type: type, onClick: (function (column) {
+	                this.setState(_.assign({}, this.state, { activeColumn: column }));
+	            }).bind(_this), onUpdate: function (src, dest) { return _this.updateColumnPosition(src, dest); }});
+	        });
+	        if (columns.length === 0) {
+	            return (
+	            /**
+	             * in the event the column is empty, we still want to handle drop events
+	             */
+	            React.createElement("ul", {className: "giga-grid-sortable", onDragOver: function (e) { return e.preventDefault(); }, onDrop: function (e) {
+	                var srcType = e.dataTransfer.getData('type');
+	                var src = {
+	                    type: srcType,
+	                    colTag: e.dataTransfer.getData('colTag'),
+	                    idx: parseInt(e.dataTransfer.getData('idx'))
+	                };
+	                var fromList = _this.state[srcType];
+	                var toList = _this.state[type];
+	                var dest = {
+	                    type: type,
+	                    colTag: null,
+	                    idx: 0
+	                };
+	                _this.swapToAnotherListOfColumns(fromList, toList, src, dest);
+	                _this.setState(_.assign({}, _this.state, {
+	                    columns: _this.state.columns,
+	                    subtotalBys: _this.state.subtotalBys
+	                }));
+	            }}, "Drop a Column Here to Subtotal By It"));
+	        }
+	        else
+	            return (React.createElement("ul", {className: "giga-grid-sortable"}, items));
+	    };
+	    SettingsPopover.prototype.render = function () {
+	        var _this = this;
+	        var activeColumn = this.state.activeColumn;
+	        var layoutControlClassName = classNames({
+	            "giga-grid-flex-column": true,
+	            "column-50": activeColumn,
+	            "column-100": !activeColumn
+	        });
+	        return (React.createElement("div", {className: "giga-grid-settings-pop-over", onClick: function (e) { return e.stopPropagation(); }}, React.createElement("h3", null, "Configure table columns"), React.createElement("div", {className: "row"}, React.createElement("div", {className: layoutControlClassName}, React.createElement("div", null, React.createElement("h5", null, "Columns"), this.renderSortable("columns", this.state.columns)), React.createElement("div", null, React.createElement("h5", null, "Subtotal By"), this.renderSortable("subtotalBys", this.state.subtotalBys)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.EXPAND_ALL }); }}, "Expand All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.COLLAPSE_ALL }); }}, "Collapse All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.CLEAR_SORT }); }}, "Clear Sort")), React.createElement("br", null), React.createElement("div", null)), this.renderColumnConfigurer(activeColumn)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", style: { float: "right" }, onClick: function (e) { return _this.props.onDismiss(); }}, "Close ", React.createElement("i", {className: "fa fa-times"})), React.createElement("span", {className: "giga-grid-button", style: { float: "right" }, onClick: function (e) { return _this.commitColumnUpdates(); }}, "Save ", React.createElement("i", {className: "fa fa-save"})))));
+	    };
+	    SettingsPopover.prototype.renderColumnConfigurer = function (column) {
+	        var _this = this;
+	        if (!column)
+	            return "";
+	        function onTitleChange(e) {
+	            e.preventDefault();
+	            column.title = e.target.value;
+	            this.setState(_.assign({}, this.state, { column: column }));
+	        }
+	        function onAggregationMethodChange(e) {
+	            e.preventDefault();
+	            //noinspection TypeScriptValidateTypes
+	            column.aggregationMethod = parseInt(e.target.value);
+	            this.setState(_.assign({}, this.state, { column: column }));
+	        }
+	        function onFormatChange(e) {
+	            e.preventDefault();
+	            //noinspection TypeScriptValidateTypes
+	            column.format = parseInt(e.target.value);
+	            this.setState(_.assign({}, this.state, { column: column }));
+	        }
+	        return (React.createElement("div", {className: "giga-grid-flex-column column-50"}, React.createElement("div", null, React.createElement("h5", {className: "inline-label"}, "Title"), React.createElement("span", {className: "giga-grid-button dismiss", onClick: function () { return _this.setState(_.assign({}, _this.state, { activeColumn: undefined })); }}, React.createElement("i", {className: "fa fa-chevron-left"}))), React.createElement("input", {type: "text", className: "giga-grid-text-input", placeholder: "Title", value: column.title, onChange: onTitleChange.bind(this)}), React.createElement("br", null), React.createElement("div", null, React.createElement("div", {className: "column-50"}, React.createElement("h5", null, "Aggregation Method"), React.createElement("select", {value: column.aggregationMethod, onChange: onAggregationMethodChange.bind(this)}, React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.SUM}, "Sum"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.COUNT}, "Count"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.COUNT_DISTINCT}, "Count Distinct"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.RANGE}, "Range"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.AVERAGE}, "Average"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE}, "Weighted Average"))), React.createElement("div", {className: "column-50"}, React.createElement("h5", null, "Format"), React.createElement("select", {value: column.format, onChange: onFormatChange.bind(this)}, React.createElement("option", {value: ColumnLike_1.ColumnFormat.CURRENCY}, "Currency"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.DATE}, "Date"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.NUMBER}, "Number"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.STRING}, "String"))))));
+	    };
+	    return SettingsPopover;
+	}(React.Component));
+	exports.SettingsPopover = SettingsPopover;
+
+
+/***/ },
+/* 51 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(6);
+	var classNames = __webpack_require__(42);
+	var SortableItem = (function (_super) {
+	    __extends(SortableItem, _super);
+	    function SortableItem(props) {
+	        _super.call(this, props);
+	        this.state = {
+	            isDraggingOver: false
+	        };
+	    }
+	    SortableItem.prototype.onDrop = function (e) {
+	        var src = {
+	            type: e.dataTransfer.getData('type'),
+	            colTag: e.dataTransfer.getData('colTag'),
+	            idx: parseInt(e.dataTransfer.getData('idx'))
+	        };
+	        var dest = {
+	            type: this.props.type,
+	            colTag: this.props.column.colTag,
+	            idx: this.props.idx
+	        };
+	        this.props.onUpdate(src, dest);
+	    };
+	    SortableItem.prototype.onDragStart = function (e) {
+	        e.dataTransfer.setData('colTag', this.props.column.colTag);
+	        e.dataTransfer.setData('type', this.props.type);
+	        e.dataTransfer.setData('idx', "" + this.props.idx);
+	    };
+	    SortableItem.prototype.onDragOver = function (e) {
+	        e.preventDefault();
+	        this.setState({
+	            isDraggingOver: true
+	        });
+	    };
+	    SortableItem.prototype.onDragLeave = function (e) {
+	        e.preventDefault();
+	        this.setState({
+	            isDraggingOver: false
+	        });
+	    };
+	    SortableItem.prototype.componentWillReceiveProps = function () {
+	        this.setState({
+	            isDraggingOver: false
+	        });
+	    };
+	    SortableItem.prototype.render = function () {
+	        var _this = this;
+	        var cx = classNames({
+	            dragging: this.state['isDraggingOver']
+	        });
+	        return (React.createElement("li", {className: cx, draggable: true, onClick: function () { return _this.props.onClick.call(undefined, _this.props.column); }, onDragStart: function (e) { return _this.onDragStart.call(_this, e); }, onDragOver: function (e) { return _this.onDragOver(e); }, onDragLeave: function (e) { return _this.onDragLeave(e); }, onDrop: function (e) { return _this.onDrop(e); }}, this.props.column.title || this.props.column.colTag));
+	    };
+	    return SortableItem;
+	}(React.Component));
+	exports.SortableItem = SortableItem;
+
+
+/***/ },
+/* 52 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(53);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(4)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./SettingsPopover.styl", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./SettingsPopover.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 53 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(3)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "span.giga-grid-button.dismiss {\n  float: right;\n}\nh5.inline-label {\n  display: inline;\n}\n.giga-grid .giga-grid-settings-pop-over {\n  border: 1px solid rgba(0,0,0,0.078);\n  padding: 1em;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  position: absolute;\n  top: 20px;\n  z-index: 1;\n  background-color: #fff;\n  width: 660px;\n  min-height: 350px;\n}\n.giga-grid .giga-grid-settings-pop-over ul {\n  list-style: circle;\n}\n.giga-grid .giga-grid-settings-pop-over ul li {\n  display: inline-block;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  padding: 5px;\n  margin-right: 3px;\n  margin-bottom: 5px;\n}\n.giga-grid .giga-grid-settings-pop-over ul li:hover {\n  cursor: pointer;\n  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;\n  background-color: rgba(0,0,0,0.078);\n}\n.giga-grid .giga-grid-settings-pop-over ul li.dragging {\n  border-right: 2px solid #ff4500;\n}\n", ""]);
+	
+	// exports
 
 
 /***/ }
