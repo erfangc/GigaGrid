@@ -1,20 +1,25 @@
 @import "../../styles/Variables.styl"
 
-.giga-grid .giga-grid-toolbar span.toolbar-item
-  position relative
+.giga-grid .giga-grid-toolbar
+  padding-left 5px
+  span.toolbar-item
+    position relative
+    &:hover
+      cursor pointer
+      color #2F6FAD
 
-.giga-grid-toolbar span.toolbar-item-toggle:hover
-  cursor pointer
-  color #2F6FAD
 
 .giga-grid-sortable
   border 1px solid toolbar-border-color
   padding 1em
 
-.column-50
-  width 50%
+.giga-grid-flex-column
   float left
   padding 10px
+  &.column-50
+    width 50%
+  &.column-100
+    width 100%
 
 input.giga-grid-text-input
   padding 10px 10px 10px 5px

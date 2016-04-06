@@ -93,7 +93,8 @@ export class GigaStore extends ReduceStore<GigaState> {
             subtotalBys: subtotalBys,
             sortBys: sortBys,
             filterBys: _.cloneDeep(initialFilterBys) || [],
-            tree: tree
+            tree: tree,
+            showSettingsPopover: false
         }
 
     }
@@ -103,21 +104,18 @@ export class GigaStore extends ReduceStore<GigaState> {
 
         var newState:GigaState;
         switch (action.type) {
+
             case GigaActionType.INITIALIZE:
                 newState = this.initialize(action as InitializeAction);
                 break;
             case GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS:
                 newState = GigaStore.handleChangeRowDisplayBounds(state, action as ChangeRowDisplayBoundsAction);
                 break;
-            /*
-             Subtotal Actions
-             */
+
             case GigaActionType.COLUMNS_UPDATE:
                 newState = this.handleColumnUpdate(state, action as ColumnUpdateAction);
                 break;
-            /*
-             Row Level Actions
-             */
+            
             case GigaActionType.TOGGLE_ROW_COLLAPSE:
                 newState = GigaStore.handleToggleCollapse(state, action as ToggleCollapseAction);
                 break;
@@ -127,23 +125,23 @@ export class GigaStore extends ReduceStore<GigaState> {
             case GigaActionType.EXPAND_ALL:
                 newState = GigaStore.handleToggleExpandAll(state);
                 break;
-            /*
-             Sort Actions
-             */
+            
             case GigaActionType.NEW_SORT:
                 newState = GigaStore.handleSortUpdate(state, action as SortUpdateAction);
                 break;
             case GigaActionType.CLEAR_SORT:
                 newState = GigaStore.handleClearSort(state);
                 break;
-            /*
-             Selection Actions
-             */
+            
             case GigaActionType.TOGGLE_ROW_SELECT:
                 newState = this.handleRowSelect(state, action as ToggleRowSelectAction);
                 break;
             case GigaActionType.TOGGLE_CELL_SELECT:
                 newState = this.handleCellSelect(state, action as ToggleCellSelectAction);
+                break;
+            
+            case GigaActionType.TOGGLE_SETTINGS_POPOVER:
+                newState = _.assign<{},GigaState>({}, state, {showSettingsPopover: !state.showSettingsPopover});
                 break;
             default:
                 newState = state;
@@ -270,13 +268,14 @@ export class GigaStore extends ReduceStore<GigaState> {
     private handleColumnUpdate(state:GigaState, action:ColumnUpdateAction) {
         const newColumnStates = {
             columns: action.columns || state.columns,
-            subtotalBys: action.subtotalBys || state.subtotalBys
+            subtotalBys: action.subtotalBys || state.subtotalBys,
+            showSettingsPopover: !state.showSettingsPopover
         };
         // TODO we might not ALWAYS want to re-aggregate, but we need to think about how the object model works
         const tree:Tree = TreeBuilder.buildTree(this.props.data, newColumnStates.subtotalBys);
         TreeBuilder.recursivelyToggleChildrenCollapse(tree.getRoot(), false);
         SubtotalAggregator.aggregateTree(tree, newColumnStates.columns);
-        newColumnStates["tree"] = tree;
+        newColumnStates["tree"] = SortFactory.sortTree(tree, state.sortBys);
         return _.assign<{}, GigaState>({}, state, newColumnStates);
     }
 
@@ -299,6 +298,7 @@ export enum GigaActionType {
     TOGGLE_ROW_SELECT,
     TOGGLE_CELL_SELECT,
     CHANGE_ROW_DISPLAY_BOUNDS,
+    TOGGLE_SETTINGS_POPOVER,
     COLUMNS_UPDATE
 }
 

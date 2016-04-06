@@ -4,7 +4,6 @@ import * as _ from "lodash";
 import {ColumnDef, Column, FilterBy, ColumnFactory, ColumnGroupDef} from "../models/ColumnLike";
 import {Row} from "../models/Row";
 import {Tree} from "../static/TreeBuilder";
-import {Toolbar} from "./toolbar/Toolbar";
 import {
     GigaStore,
     InitializeAction,
@@ -17,6 +16,7 @@ import {TableBody} from "./TableBody";
 import {TableHeader} from "./TableHeader";
 import $ = require('jquery');
 import ReactElement = __React.ReactElement;
+import {SettingsPopover} from "./toolbar/SettingsPopover";
 
 /**
  * Interface that describe the shape of the `Props` that `GigaGrid` accepts from the user
@@ -127,6 +127,7 @@ export interface GigaState {
     rasterizedRows:Row[]
     displayStart:number
     displayEnd:number
+    showSettingsPopover:boolean
 
 }
 
@@ -174,6 +175,31 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         });
     }
 
+    submitColumnConfigChange(action:GigaAction) {
+        this.dispatcher.dispatch(action);
+    }
+
+    toggleSettingsPopover() {
+        this.dispatcher.dispatch({
+            type: GigaActionType.TOGGLE_SETTINGS_POPOVER
+        });
+    }
+
+    renderSettingsPopover() {
+        const state = this.store.getState();
+        if (state.showSettingsPopover)
+            return (
+                <div>
+                    <SettingsPopover
+                        subtotalBys={state.subtotalBys}
+                        columns={state.columns}
+                        onSubmit={(action:GigaAction) => this.submitColumnConfigChange(action)}
+                        onDismiss={()=>this.toggleSettingsPopover()}/>
+                </div>);
+        else
+            return null;
+    }
+
     render() {
 
         var columns:Column[][];
@@ -188,10 +214,12 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
         return (
             <div className="giga-grid">
-                <Toolbar gridProps={this.props} gridStore={this.store} dispatcher={this.dispatcher}/>
+                {this.renderSettingsPopover()}
                 <div className="giga-grid-header-container">
                     <table className="header-table">
-                        <TableHeader dispatcher={this.dispatcher} columns={columns} tableHeaderClass={this.props.tableHeaderClass}/>
+                        <TableHeader dispatcher={this.dispatcher} 
+                                     columns={columns} 
+                                     tableHeaderClass={this.props.tableHeaderClass} />
                     </table>
                 </div>
                 <div ref={c=>this.viewport=c}
