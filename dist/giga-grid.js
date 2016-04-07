@@ -61,6 +61,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.AggregationMethod = ColumnLike_1.AggregationMethod;
 	exports.ColumnFormat = ColumnLike_1.ColumnFormat;
 	exports.SortDirection = ColumnLike_1.SortDirection;
+	var Cell_tsx_1 = __webpack_require__(39);
+	exports.DefaultCellRenderer = Cell_tsx_1.DefaultCellRenderer;
 
 
 /***/ },
@@ -13337,6 +13339,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._isSelected = false;
 	        this._isHidden = false;
 	        this._data = data;
+	        this._sectorPath = [];
 	    }
 	    GenericRow.prototype.get = function (columnDef) {
 	        return this._data[columnDef.colTag];
@@ -20669,7 +20672,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(2);
 	var classNames = __webpack_require__(38);
 	var ColumnLike_1 = __webpack_require__(6);
-	var ColumnLike_2 = __webpack_require__(6);
 	var SubtotalAggregator_1 = __webpack_require__(8);
 	var GigaStore_1 = __webpack_require__(7);
 	var Cell = (function (_super) {
@@ -20677,7 +20679,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function Cell(props) {
 	        _super.call(this, props);
 	    }
-	    Cell.prototype.onCollapseToggle = function (e) {
+	    Cell.prototype.render = function () {
+	        var props = this.props;
+	        var row = props.row;
+	        var column = props.column;
+	        if (_.isFunction(column.cellTemplateCreator))
+	            return column.cellTemplateCreator(row, column, props);
+	        else
+	            return new DefaultCellRenderer(props).render();
+	    };
+	    return Cell;
+	}(React.Component));
+	exports.Cell = Cell;
+	var DefaultCellRenderer = (function () {
+	    function DefaultCellRenderer(props) {
+	        this.props = props;
+	    }
+	    DefaultCellRenderer.prototype.onCollapseToggle = function (e) {
 	        e.preventDefault();
 	        e.stopPropagation(); // we don't want toggle collapse to also trigger a row / cell clicked event
 	        var action = {
@@ -20686,7 +20704,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        this.props.dispatcher.dispatch(action);
 	    };
-	    Cell.prototype.onClick = function () {
+	    DefaultCellRenderer.prototype.onClick = function () {
 	        var action = {
 	            type: GigaStore_1.GigaActionType.TOGGLE_CELL_SELECT,
 	            row: this.props.row,
@@ -20694,7 +20712,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        this.props.dispatcher.dispatch(action);
 	    };
-	    Cell.prototype.renderCellWithCollapseToggle = function (row) {
+	    DefaultCellRenderer.prototype.calculateStyle = function () {
+	        return {
+	            width: this.props.column.width,
+	            height: this.props.rowHeight,
+	            paddingLeft: this.props.isFirstColumn ? DefaultCellRenderer.calculateFirstColumnIdentation(this.props.row) : undefined
+	        };
+	    };
+	    DefaultCellRenderer.prototype.renderCellWithCollapseToggle = function (row) {
 	        var _this = this;
 	        var cx = classNames({
 	            "fa": true,
@@ -20703,47 +20728,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        return (React.createElement("td", {style: this.calculateStyle(), onClick: function (e) { return _this.onClick(); }}, React.createElement("span", null, React.createElement("i", {className: cx, onClick: function (e) { return _this.onCollapseToggle(e); }}), " ", row.bucketInfo.title || "")));
 	    };
-	    Cell.prototype.calculateStyle = function () {
-	        return {
-	            width: this.props.column.width,
-	            height: this.props.rowHeight,
-	            paddingLeft: this.props.isFirstColumn ? TableRowUtils.calculateFirstColumnIdentation(this.props.row) : undefined
-	        };
-	    };
-	    Cell.prototype.render = function () {
-	        var props = this.props;
-	        var row = props.row;
-	        var column = props.column;
-	        if (_.isFunction(column.cellTemplateCreator))
-	            return column.cellTemplateCreator(row, column, props.isFirstColumn);
-	        else
-	            return this.defaultCellRenderer(row, column, props.isFirstColumn);
-	    };
-	    Cell.prototype.defaultCellRenderer = function (row, cd, isFirstColumn) {
-	        if (isFirstColumn && !row.isDetail())
-	            return this.renderCellWithCollapseToggle(row);
-	        else
-	            return this.renderNormalCell(row, cd);
-	    };
-	    Cell.prototype.renderNormalCell = function (row, cd) {
+	    DefaultCellRenderer.prototype.renderNormalCell = function (row, cd) {
 	        var _this = this;
 	        var renderedCellContent = SubtotalAggregator_1.format(row.data()[cd.colTag], cd.formatInstruction) || "";
 	        if (!row.isDetail()
 	            && (cd.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT || cd.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT_DISTINCT))
 	            renderedCellContent = "[" + renderedCellContent + "]";
 	        var cx = classNames({
-	            "numeric": cd.format === ColumnLike_2.ColumnFormat.NUMBER,
-	            "non-numeric": cd.format !== ColumnLike_2.ColumnFormat.NUMBER
+	            "numeric": cd.format === ColumnLike_1.ColumnFormat.NUMBER,
+	            "non-numeric": cd.format !== ColumnLike_1.ColumnFormat.NUMBER
 	        });
 	        return (React.createElement("td", {className: cx, onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, renderedCellContent));
 	    };
-	    return Cell;
-	}(React.Component));
-	exports.Cell = Cell;
-	var TableRowUtils = (function () {
-	    function TableRowUtils() {
-	    }
-	    TableRowUtils.calculateFirstColumnIdentation = function (row) {
+	    DefaultCellRenderer.calculateFirstColumnIdentation = function (row) {
 	        /*
 	         handle when there are no subtotal rows
 	         */
@@ -20754,8 +20751,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return ((row.isDetail() && identLevel !== 0 ? identLevel + 1 : identLevel) * 25) + 'px';
 	        }
 	    };
-	    return TableRowUtils;
+	    DefaultCellRenderer.prototype.render = function () {
+	        var _a = this.props, isFirstColumn = _a.isFirstColumn, row = _a.row, column = _a.column;
+	        if (isFirstColumn && !row.isDetail())
+	            return this.renderCellWithCollapseToggle(row);
+	        else
+	            return this.renderNormalCell(row, column);
+	    };
+	    return DefaultCellRenderer;
 	}());
+	exports.DefaultCellRenderer = DefaultCellRenderer;
 
 
 /***/ },

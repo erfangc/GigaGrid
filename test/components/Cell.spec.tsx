@@ -5,10 +5,10 @@ import * as Flux from 'flux';
 import * as FluxUtil from 'flux/utils';
 import Dispatcher = Flux.Dispatcher;
 import {GigaAction} from "../../src/store/GigaStore";
-import {DetailRow} from "../../src/models/Row";
+import {DetailRow, Row} from "../../src/models/Row";
 import {TestUtils} from "../TestUtils";
 import {Column} from "../../src/models/ColumnLike";
-import {Cell} from "../../src/components/Cell";
+import {Cell, CellProps} from "../../src/components/Cell";
 import * as $ from 'jquery';
 
 describe("Cell", ()=> {
@@ -43,9 +43,11 @@ describe("Cell", ()=> {
     it("can handle custom cell content", ()=> {
 
         const colDef = columns[2];
-        colDef.cellTemplateCreator = (data:any, column?:Column):JSX.Element => {
+        colDef.cellTemplateCreator = (row:Row, column:Column, props:CellProps):JSX.Element => {
             return (
-                <span style={{"color": "green"}}>Hello World</span>
+                <td>
+                    <span style={{"color": "green"}}>Hello World</span>
+                </td>
             )
         };
 

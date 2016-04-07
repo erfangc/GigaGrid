@@ -76,9 +76,9 @@ export class GigaStore extends ReduceStore<GigaState> {
             else
                 return column;
         });
-        const sortBys = (initialSortBys || []).map(sortBy=> {
+        const sortBys: Column[] = (initialSortBys || []).map(sortBy=> {
             const column = _.find(columnsWithSort, column => column.colTag === sortBy.colTag);
-            return _.assign<{},Column>({}, column, sortBy);
+            return _.assign<{},{},Column>({}, column, sortBy);
         });
 
         const filteredColumns = _.filter(columnsWithSort, column => subtotalBys.map(subtotalBy => subtotalBy.colTag).indexOf(column.colTag) === -1);
