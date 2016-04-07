@@ -5,7 +5,7 @@ import {GigaRow, GigaRowProps} from "../../src/components/GigaRow";
 import {SubtotalRow, Row} from "../../src/models/Row";
 import {TestUtils} from "../TestUtils";
 import "../../src/styles/theme/Default.styl";
-
+// FIXME re-write test, these tests are not useful nor take advantage of ReactTestUtils
 describe("GigaRow Components", () => {
 
     afterAll(()=> {

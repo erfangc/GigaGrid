@@ -104,7 +104,7 @@ export class DefaultCellRenderer {
         )
     }
 
-    private static calculateFirstColumnIdentation(row:Row) {
+    public static calculateFirstColumnIdentation(row:Row) {
         /*
          handle when there are no subtotal rows
          */
