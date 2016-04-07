@@ -22,6 +22,7 @@ export abstract class GenericRow implements Row {
 
     constructor(data:any) {
         this._data = data;
+        this._sectorPath = [];
     }
 
     get(columnDef: ColumnDef):any {

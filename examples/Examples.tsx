@@ -58,16 +58,6 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
         />);
     }
 
-    private renderExampleWithColumnGrouping() {
-        return (<GigaGrid
-            columnGroups={[
-                {title:"Info", columns:["Age","Children"]},
-                {title:"Spending Proportion", columns:["WFood","WFuel","WCloth","WAlc","WTrans","WOther"]},
-                {title:"Average Income vs. Expense", columns:["TotExp","Income"]}
-            ]}
-            {...this.props.ukBudget}/>);
-    }
-
     private static renderNavbar() {
         return (
             <Navbar inverse>

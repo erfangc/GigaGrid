@@ -1,6 +1,7 @@
 import {Row} from "./Row";
 import {GigaState} from "../components/GigaGrid";
 import * as _ from "lodash";
+import {CellProps} from "../components/Cell";
 
 export enum AggregationMethod {
     SUM, WEIGHTED_AVERAGE, AVERAGE, RANGE, COUNT, COUNT_DISTINCT, COUNT_OR_DISTINCT, NONE
@@ -31,7 +32,7 @@ export interface ColumnDef extends ColumnLike {
     width?:string
     weightBy?:string
     formatInstruction?:FormatInstruction
-    cellTemplateCreator?:(row:Row, column:Column, isFirstColumn: boolean)=>JSX.Element
+    cellTemplateCreator?:(row:Row, column:Column, props: CellProps)=>JSX.Element
 }
 
 export interface Column extends ColumnDef {

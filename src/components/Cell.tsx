@@ -1,14 +1,11 @@
-import * as React from 'react';
-import * as classNames from 'classnames';
-import {Column, AggregationMethod} from "../models/ColumnLike";
-import {Row} from "../models/Row";
-import {ColumnFormat} from "../models/ColumnLike";
-import {SubtotalRow} from "../models/Row";
-import {format} from '../static/SubtotalAggregator';
-import SyntheticEvent = __React.SyntheticEvent;
-import {ToggleCollapseAction} from "../store/GigaStore";
-import {GigaActionType} from "../store/GigaStore";
+import * as React from "react";
+import * as classNames from "classnames";
+import {Column, AggregationMethod, ColumnFormat} from "../models/ColumnLike";
+import {Row, SubtotalRow} from "../models/Row";
+import {format} from "../static/SubtotalAggregator";
+import {ToggleCollapseAction, GigaActionType} from "../store/GigaStore";
 import {GridSubcomponentProps} from "./GigaGrid";
+import SyntheticEvent = __React.SyntheticEvent;
 
 export interface CellProps extends GridSubcomponentProps<Cell> {
     row:Row
@@ -22,6 +19,26 @@ export class Cell extends React.Component<CellProps,any> {
 
     constructor(props:CellProps) {
         super(props);
+    }
+
+    render() {
+        const props = this.props;
+        const row = props.row;
+        const column = props.column;
+        if (_.isFunction(column.cellTemplateCreator))
+            return column.cellTemplateCreator(row, column, props);
+        else
+            return new DefaultCellRenderer(props).render();
+    }
+
+}
+
+export class DefaultCellRenderer {
+
+    private props:CellProps;
+
+    constructor(props: CellProps) {
+        this.props = props;
     }
 
     private onCollapseToggle(e:SyntheticEvent) {
@@ -44,6 +61,14 @@ export class Cell extends React.Component<CellProps,any> {
         this.props.dispatcher.dispatch(action);
     }
 
+    private calculateStyle() {
+        return {
+            width: this.props.column.width,
+            height: this.props.rowHeight,
+            paddingLeft: this.props.isFirstColumn ? DefaultCellRenderer.calculateFirstColumnIdentation(this.props.row) : undefined
+        };
+    }
+
     private renderCellWithCollapseToggle(row:SubtotalRow):JSX.Element {
 
         const cx = classNames({
@@ -57,34 +82,8 @@ export class Cell extends React.Component<CellProps,any> {
                     <i className={cx} onClick={e=>this.onCollapseToggle(e)}/>&nbsp;
                     {row.bucketInfo.title || ""}
                 </span>
-
             </td>
         );
-    }
-
-    private calculateStyle() {
-        return {
-            width: this.props.column.width,
-            height: this.props.rowHeight,
-            paddingLeft: this.props.isFirstColumn ? TableRowUtils.calculateFirstColumnIdentation(this.props.row) : undefined
-        };
-    }
-
-    render() {
-        const props = this.props;
-        const row = props.row;
-        const column = props.column;
-        if (_.isFunction(column.cellTemplateCreator))
-            return column.cellTemplateCreator(row, column, props.isFirstColumn);
-        else
-            return this.defaultCellRenderer(row, column, props.isFirstColumn);
-    }
-
-    private defaultCellRenderer(row: Row, cd:Column, isFirstColumn: boolean):JSX.Element {
-        if (isFirstColumn && !row.isDetail())
-            return this.renderCellWithCollapseToggle(row as SubtotalRow);
-        else
-            return this.renderNormalCell(row, cd);
     }
 
     private renderNormalCell(row:Row, cd:Column):JSX.Element {
@@ -105,10 +104,7 @@ export class Cell extends React.Component<CellProps,any> {
         )
     }
 
-}
-
-class TableRowUtils {
-    public static calculateFirstColumnIdentation(row:Row) {
+    private static calculateFirstColumnIdentation(row:Row) {
         /*
          handle when there are no subtotal rows
          */
@@ -119,4 +115,13 @@ class TableRowUtils {
             return ((row.isDetail() && identLevel !== 0 ? identLevel + 1 : identLevel ) * 25) + 'px';
         }
     }
+
+    render(): JSX.Element {
+        const {isFirstColumn, row, column} = this.props;
+        if (isFirstColumn && !row.isDetail())
+            return this.renderCellWithCollapseToggle(row as SubtotalRow);
+        else
+            return this.renderNormalCell(row, column);
+    }
+
 }
