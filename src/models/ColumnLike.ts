@@ -23,7 +23,8 @@ export enum SortDirection {
 }
 
 export interface FormatInstruction {
-    textAlign:"left"|"right"
+    textAlign?:"left"|"right"
+    showAsPercent?:boolean
     roundTo?:number
     multiplier?:number
     separator?:boolean
