@@ -91,17 +91,24 @@ export class DefaultCellRenderer {
         if (!row.isDetail()
             && (column.aggregationMethod === AggregationMethod.COUNT || column.aggregationMethod === AggregationMethod.COUNT_DISTINCT))
             renderedCellContent = `[${renderedCellContent}]`;
-        const cx = classNames({
-            "numeric": column.format === ColumnFormat.NUMBER,
-            "non-numeric": column.format !== ColumnFormat.NUMBER
-        });
         return (
-            <td className={cx}
+            <td className={DefaultCellRenderer.calculateTextAlignment(row, column)}
                 onClick={e=>this.onClick()}
                 style={this.calculateStyle()}>
                 {renderedCellContent}
             </td>
-        )
+        );
+    }
+
+    public static calculateTextAlignment(row: Row, column: Column) {
+        const value = row.get(column);
+        if (column.formatInstruction && column.formatInstruction.textAlign)
+            return `text-align-${column.formatInstruction.textAlign}`;
+        else
+        if (isNaN(value))
+            return `text-align-left`;
+        else
+            return `text-align-right`;
     }
 
     public static calculateFirstColumnIdentation(row:Row) {

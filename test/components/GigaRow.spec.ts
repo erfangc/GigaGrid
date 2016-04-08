@@ -106,7 +106,7 @@ describe("GigaRow Components", () => {
                 expect($tr.children("td").first().css('padding-left')).toEqual("10px");
             });
             it("first child should be a numeric child", ()=> {
-                expect($tr.children("td:nth-child(1)").hasClass('numeric')).toBeTruthy();
+                expect($tr.children("td:nth-child(1)").hasClass('text-align-right')).toBeTruthy();
             });
         });
 
