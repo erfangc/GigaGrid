@@ -86,14 +86,14 @@ export class DefaultCellRenderer {
         );
     }
 
-    private renderNormalCell(row:Row, cd:Column):JSX.Element {
-        var renderedCellContent:JSX.Element|string|number = format(row.data()[cd.colTag], cd.formatInstruction) || "";
+    private renderNormalCell(row:Row, column:Column):JSX.Element {
+        var renderedCellContent:JSX.Element|string|number = format(row.get(column), column.formatInstruction) || "";
         if (!row.isDetail()
-            && (cd.aggregationMethod === AggregationMethod.COUNT || cd.aggregationMethod === AggregationMethod.COUNT_DISTINCT))
+            && (column.aggregationMethod === AggregationMethod.COUNT || column.aggregationMethod === AggregationMethod.COUNT_DISTINCT))
             renderedCellContent = `[${renderedCellContent}]`;
         const cx = classNames({
-            "numeric": cd.format === ColumnFormat.NUMBER,
-            "non-numeric": cd.format !== ColumnFormat.NUMBER
+            "numeric": column.format === ColumnFormat.NUMBER,
+            "non-numeric": column.format !== ColumnFormat.NUMBER
         });
         return (
             <td className={cx}
