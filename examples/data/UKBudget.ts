@@ -25,35 +25,35 @@ const columnDefs:ColumnDef[] = [
         title: "Fuel",
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
-        formatInstruction: {roundTo: 4}
+        formatInstruction: {roundTo: 2, showAsPercent: true, multiplier: 100}
     },
     {
         colTag: "WCloth",
         title: "Cloth",
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
-        formatInstruction: {roundTo: 4}
+        formatInstruction: {roundTo: 2, showAsPercent: true, multiplier: 100}
     },
     {
         colTag: "WAlc",
         title: "Alc",
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
-        formatInstruction: {roundTo: 4}
+        formatInstruction: {roundTo: 2, showAsPercent: true, multiplier: 100}
     },
     {
         colTag: "WTrans",
         title: "Transportation",
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
-        formatInstruction: {roundTo: 4}
+        formatInstruction: {roundTo: 2, showAsPercent: true, multiplier: 100}
     },
     {
         colTag: "WOther",
         title: "Other",
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
-        formatInstruction: {roundTo: 4},
+        formatInstruction: {roundTo: 2, showAsPercent: true, multiplier: 100},
     },
     {
         colTag: "TotExp",

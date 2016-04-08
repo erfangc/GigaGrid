@@ -75,11 +75,13 @@ export function format(value:any, fmtInstruction:FormatInstruction):any {
 
     var result = value;
     if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result))
-        result *= value;
+        result *= fmtInstruction.multiplier;
     if (typeof fmtInstruction.roundTo !== "undefined" && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
         result = parseFloat(result).toFixed(fmtInstruction.roundTo);
     if (fmtInstruction.separator && !isNaN(result))
         result = addCommas(result);
+    if (fmtInstruction.showAsPercent && !isNaN(result))
+        result = `${result}%`;
 
     return result;
 }
