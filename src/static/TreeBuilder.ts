@@ -139,7 +139,7 @@ export class TreeBuilder {
     };
 
     private static resolveSubtotalBucket(subtotalBy:Column, detailedRow:DetailRow):BucketInfo {
-        // FIXME this is the naive implementation, cannot handle numerical bands
+        // FIXME this is the naive implementation, cannot handle text-align-rightal bands
         const title = detailedRow.get(subtotalBy);
         // if the given column is not defined in the data, return undefined, this will
         if (title === undefined)

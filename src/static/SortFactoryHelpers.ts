@@ -17,7 +17,7 @@ export function extractCellValue(row:Row, sortBy:Column, firstColumn?:Column) {
 
 function extractSubtotalCellValue(subtotalRow:SubtotalRow, sortBy:Column, firstColumn?:Column) {
     // sorting on the 1st Column
-    // sorting on a numerically summarized column
+    // sorting on a text-align-rightally summarized column
     if (firstColumn && firstColumn.colTag === sortBy.colTag)
         return subtotalRow.bucketInfo.value;
     if ([AggregationMethod.COUNT,
