@@ -13088,11 +13088,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    var result = value;
 	    if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result))
-	        result *= value;
+	        result *= fmtInstruction.multiplier;
 	    if (typeof fmtInstruction.roundTo !== "undefined" && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
 	        result = parseFloat(result).toFixed(fmtInstruction.roundTo);
 	    if (fmtInstruction.separator && !isNaN(result))
 	        result = addCommas(result);
+	    if (fmtInstruction.showAsPercent && !isNaN(result))
+	        result = result + "%";
 	    return result;
 	}
 	exports.format = format;
@@ -13148,7 +13150,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    value = "";
 	                    break;
 	            }
-	            aggregated[column.colTag] = format(value, column.formatInstruction);
+	            aggregated[column.colTag] = value;
 	        });
 	        return aggregated;
 	    };
@@ -13299,7 +13301,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    ;
 	    TreeBuilder.resolveSubtotalBucket = function (subtotalBy, detailedRow) {
-	        // FIXME this is the naive implementation, cannot handle numerical bands
+	        // FIXME this is the naive implementation, cannot handle text-align-rightal bands
 	        var title = detailedRow.get(subtotalBy);
 	        // if the given column is not defined in the data, return undefined, this will
 	        if (title === undefined)
@@ -20159,7 +20161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.extractCellValue = extractCellValue;
 	function extractSubtotalCellValue(subtotalRow, sortBy, firstColumn) {
 	    // sorting on the 1st Column
-	    // sorting on a numerically summarized column
+	    // sorting on a text-align-rightally summarized column
 	    if (firstColumn && firstColumn.colTag === sortBy.colTag)
 	        return subtotalRow.bucketInfo.value;
 	    if ([ColumnLike_1.AggregationMethod.COUNT,
@@ -20728,17 +20730,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        return (React.createElement("td", {style: this.calculateStyle(), onClick: function (e) { return _this.onClick(); }}, React.createElement("span", null, React.createElement("i", {className: cx, onClick: function (e) { return _this.onCollapseToggle(e); }}), " ", row.bucketInfo.title || "")));
 	    };
-	    DefaultCellRenderer.prototype.renderNormalCell = function (row, cd) {
+	    DefaultCellRenderer.prototype.renderNormalCell = function (row, column) {
 	        var _this = this;
-	        var renderedCellContent = SubtotalAggregator_1.format(row.data()[cd.colTag], cd.formatInstruction) || "";
+	        var renderedCellContent = SubtotalAggregator_1.format(row.get(column), column.formatInstruction) || "";
 	        if (!row.isDetail()
-	            && (cd.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT || cd.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT_DISTINCT))
+	            && (column.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT || column.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT_DISTINCT))
 	            renderedCellContent = "[" + renderedCellContent + "]";
-	        var cx = classNames({
-	            "numeric": cd.format === ColumnLike_1.ColumnFormat.NUMBER,
-	            "non-numeric": cd.format !== ColumnLike_1.ColumnFormat.NUMBER
-	        });
-	        return (React.createElement("td", {className: cx, onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, renderedCellContent));
+	        return (React.createElement("td", {className: DefaultCellRenderer.calculateTextAlignment(row, column), onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, renderedCellContent));
+	    };
+	    DefaultCellRenderer.calculateTextAlignment = function (row, column) {
+	        var value = row.get(column);
+	        if (column.formatInstruction && column.formatInstruction.textAlign)
+	            return "text-align-" + column.formatInstruction.textAlign;
+	        else if (isNaN(value))
+	            return "text-align-left";
+	        else
+	            return "text-align-right";
 	    };
 	    DefaultCellRenderer.calculateFirstColumnIdentation = function (row) {
 	        /*
@@ -20862,8 +20869,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            position: "relative"
 	        };
 	        var componentClasses = {
-	            "numeric": column.format === ColumnLike_1.ColumnFormat.NUMBER,
-	            "non-numeric": column.format !== ColumnLike_1.ColumnFormat.NUMBER
+	            "text-align-right": column.format === ColumnLike_1.ColumnFormat.NUMBER,
+	            "text-align-left": column.format !== ColumnLike_1.ColumnFormat.NUMBER
 	        };
 	        if (this.props.tableHeaderClass)
 	            componentClasses["this.props.tableHeaderClass"] = true;
