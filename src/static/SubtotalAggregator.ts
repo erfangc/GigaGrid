@@ -138,7 +138,7 @@ export class SubtotalAggregator {
                     value = "";
                     break;
             }
-            aggregated[column.colTag] = format(value, column.formatInstruction);
+            aggregated[column.colTag] = value;
         });
         return aggregated;
     }
