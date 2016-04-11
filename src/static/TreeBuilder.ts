@@ -1,6 +1,7 @@
 import {SubtotalRow, DetailRow} from "../models/Row";
 import * as _ from "lodash";
 import {Column, ColumnFormat, BucketInfo} from "../models/ColumnLike";
+
 export class TreeBuilder {
 
     /**
@@ -49,7 +50,7 @@ export class TreeBuilder {
         const grandTotal = new SubtotalRow({title: "Grand Total", value: null});
         grandTotal.setSectorPath([]);
         data.forEach(datum => this.bucketDetailRow(subtotalBys, new DetailRow(datum), grandTotal));
-        TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, false);
+        TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, true);
 
         /**
          * EXPERIMENTAL - these props allow us to expand / select SubtotalRow on construction of the grid component
