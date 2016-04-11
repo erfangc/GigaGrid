@@ -13214,7 +13214,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var grandTotal = new Row_1.SubtotalRow({ title: "Grand Total", value: null });
 	        grandTotal.setSectorPath([]);
 	        data.forEach(function (datum) { return _this.bucketDetailRow(subtotalBys, new Row_1.DetailRow(datum), grandTotal); });
-	        TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, false);
+	        TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, true);
 	        /**
 	         * EXPERIMENTAL - these props allow us to expand / select SubtotalRow on construction of the grid component
 	         */
