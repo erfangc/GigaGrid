@@ -154,6 +154,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * this is the "give up" solution, implemented in 0.1.7
 	     */
 	    GigaGrid.prototype.componentDidUpdate = function () {
+	        this.dispatchDisplayBoundChange();
 	        this.synchTableHeaderWidthToFirstRow();
 	    };
 	    /**
@@ -13266,9 +13267,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _toggleCollapse(child, shouldCollapse);
 	            }
 	            else {
-	                if (child.getChildren().length || child.sectorPath().length === 1) {
+	                if (child.getChildren().length || child.sectorPath().length === 1)
 	                    _toggleCollapse(child, shouldCollapse);
-	                }
 	            }
 	        });
 	    };
