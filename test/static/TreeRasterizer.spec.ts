@@ -12,7 +12,7 @@ describe("TreeRasterizer", ()=> {
         const rows:Row[] = TreeRasterizer.rasterize(tree);
 
         it("can render the correct number of rows including subtotal rows", ()=> {
-            expect(rows.length).toBe(12); // collapsed by default
+            expect(rows.length).toBe(2); // collapsed by default
             // TODO add more test for expanding
         });
 
@@ -33,9 +33,9 @@ describe("TreeRasterizer", ()=> {
         it("only contain 7 rows", () => {
             expect(rows.length).toBe(7);
         });
-        it("no detailed row can be 'Male'", ()=> {
+        it("some detailed row can be 'Male'", ()=> {
             const maleDetailRowEncountered:boolean = _.findIndex(rows, row=>row.isDetail() && row.getByColTag("gender") === "Male") !== -1;
-            expect(maleDetailRowEncountered).toBeFalsy();
+            expect(maleDetailRowEncountered).toBeTruthy();
         })
     });
 
