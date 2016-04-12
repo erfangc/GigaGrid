@@ -253,6 +253,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
      * this is the "give up" solution, implemented in 0.1.7
      */
     componentDidUpdate() {
+        this.dispatchDisplayBoundChange();
         this.synchTableHeaderWidthToFirstRow();
     }
 
