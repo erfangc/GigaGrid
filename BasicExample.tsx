@@ -1,7 +1,7 @@
 ///<reference path="./node_modules/giga-grid/typings/tsd.d.ts"/>
 
 import * as React from "react";
-import {GigaGrid, SortDirection} from "giga-grid/src/index";
+import {GigaGrid, SortDirection} from "giga-grid/index";
 import gigaProps from "./data/UKBudget";
 
 export class BasicExample extends React.Component<any,{}> {

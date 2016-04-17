@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import "giga-grid/src/styles/theme/Default.styl";
+import "giga-grid/styles/theme/Default.styl";
 import {Tabs, Tab, Navbar} from "react-bootstrap";
 import {BasicExample} from "./BasicExample";
 import {Intro} from "./Intro";
