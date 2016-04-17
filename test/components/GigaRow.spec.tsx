@@ -1,7 +1,7 @@
 ///<reference path="../../typings/tsd.d.ts"/>
 
 import * as React from "react";
-import "../../src/styles/theme/Default.styl";
+import "../../styles/theme/Default.styl";
 import {GigaRow} from "../../src/components/GigaRow";
 import * as ReactTestUtils from "react-addons-test-utils";
 import {TestUtils} from "../TestUtils";

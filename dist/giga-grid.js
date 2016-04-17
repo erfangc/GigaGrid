@@ -14371,7 +14371,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	(function (global, factory) {
 	   true ? module.exports = factory() :
 	  typeof define === 'function' && define.amd ? define(factory) :
-	  global.Immutable = factory();
+	  (global.Immutable = factory());
 	}(this, function () { 'use strict';var SLICE$0 = Array.prototype.slice;
 	
 	  function createClass(ctor, superClass) {
@@ -15266,7 +15266,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      return 'Range [ ' +
 	        this._start + '...' + this._end +
-	        (this._step > 1 ? ' by ' + this._step : '') +
+	        (this._step !== 1 ? ' by ' + this._step : '') +
 	      ' ]';
 	    };
 	
@@ -15582,6 +15582,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	          iter.forEach(function(v, k)  {return map.set(k, v)});
 	        });
 	    }
+	
+	    Map.of = function() {var keyValues = SLICE$0.call(arguments, 0);
+	      return emptyMap().withMutations(function(map ) {
+	        for (var i = 0; i < keyValues.length; i += 2) {
+	          if (i + 1 >= keyValues.length) {
+	            throw new Error('Missing value for key: ' + keyValues[i]);
+	          }
+	          map.set(keyValues[i], keyValues[i + 1]);
+	        }
+	      });
+	    };
 	
 	    Map.prototype.toString = function() {
 	      return this.__toString('Map {', '}');
@@ -17495,7 +17506,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      begin = begin | 0;
 	    }
 	    if (end !== undefined) {
-	      end = end | 0;
+	      if (end === Infinity) {
+	        end = originalSize;
+	      } else {
+	        end = end | 0;
+	      }
 	    }
 	
 	    if (wholeSlice(begin, end, originalSize)) {
@@ -18031,6 +18046,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Record.prototype.set = function(k, v) {
 	      if (!this.has(k)) {
 	        throw new Error('Cannot set unknown key "' + k + '" on ' + recordName(this));
+	      }
+	      if (this._map && !this._map.has(k)) {
+	        var defaultVal = this._defaultValues[k];
+	        if (v === defaultVal) {
+	          return this;
+	        }
 	      }
 	      var newMap = this._map && this._map.set(k, v);
 	      if (this.__ownerID || newMap === this._map) {
@@ -18715,8 +18736,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return entry ? entry[1] : notSetValue;
 	    },
 	
-	    findEntry: function(predicate, context) {
-	      var found;
+	    findEntry: function(predicate, context, notSetValue) {
+	      var found = notSetValue;
 	      this.__iterate(function(v, k, c)  {
 	        if (predicate.call(context, v, k, c)) {
 	          found = [k, v];
@@ -18726,8 +18747,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return found;
 	    },
 	
-	    findLastEntry: function(predicate, context) {
-	      return this.toSeq().reverse().findEntry(predicate, context);
+	    findLastEntry: function(predicate, context, notSetValue) {
+	      return this.toSeq().reverse().findEntry(predicate, context, notSetValue);
 	    },
 	
 	    forEach: function(sideEffect, context) {
@@ -19000,35 +19021,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  IterablePrototype.chain = IterablePrototype.flatMap;
 	  IterablePrototype.contains = IterablePrototype.includes;
 	
-	  // Temporary warning about using length
-	  (function () {
-	    try {
-	      Object.defineProperty(IterablePrototype, 'length', {
-	        get: function () {
-	          if (!Iterable.noLengthWarning) {
-	            var stack;
-	            try {
-	              throw new Error();
-	            } catch (error) {
-	              stack = error.stack;
-	            }
-	            if (stack.indexOf('_wrapObject') === -1) {
-	              console && console.warn && console.warn(
-	                'iterable.length has been deprecated, '+
-	                'use iterable.size or iterable.count(). '+
-	                'This warning will become a silent error in a future version. ' +
-	                stack
-	              );
-	              return this.size;
-	            }
-	          }
-	        }
-	      });
-	    } catch (e) {}
-	  })();
-	
-	
-	
 	  mixin(KeyedIterable, {
 	
 	    // ### More sequential methods
@@ -19109,9 +19101,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    lastIndexOf: function(searchValue) {
 	      var key = this.toKeyedSeq().reverse().keyOf(searchValue);
 	      return key === undefined ? -1 : key;
-	
-	      // var index =
-	      // return this.toSeq().reverse().indexOf(searchValue);
 	    },
 	
 	    reverse: function() {
@@ -19235,6 +19224,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 	
 	  SetIterable.prototype.has = IterablePrototype.includes;
+	  SetIterable.prototype.contains = SetIterable.prototype.includes;
 	
 	
 	  // Mixin subclasses
