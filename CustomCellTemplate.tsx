@@ -2,8 +2,7 @@
 ///<reference path="./typings/tsd.d.ts"/>
 
 import * as React from "react";
-import {GigaGrid, ColumnDef} from "giga-grid/index";
-import {SortDirection} from "giga-grid/index";
+import {GigaGrid, ColumnDef, SortDirection} from "giga-grid/index";
 import gigaProps from "./data/UKBudget";
 import * as _ from "lodash";
 import * as chroma from "chroma-js";
