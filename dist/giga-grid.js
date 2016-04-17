@@ -19510,7 +19510,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var TreeBuilder_1 = __webpack_require__(32);
 	var ColumnLike_1 = __webpack_require__(6);
 	function default_1(action) {
-	    var _a = action.props, data = _a.data, columnDefs = _a.columnDefs, columnGroups = _a.columnGroups, initialSubtotalBys = _a.initialSubtotalBys, initialSortBys = _a.initialSortBys, initialFilterBys = _a.initialFilterBys;
+	    var _a = action.props, data = _a.data, columnDefs = _a.columnDefs, columnGroups = _a.columnGroups, initialSubtotalBys = _a.initialSubtotalBys, initialSortBys = _a.initialSortBys, initialFilterBys = _a.initialFilterBys, initiallyExpandedSubtotalRows = _a.initiallyExpandedSubtotalRows, initiallySelectedSubtotalRows = _a.initiallySelectedSubtotalRows;
 	    /**
 	     * turn ColumnDefs into "Columns" which are decorated with behaviors
 	     */
@@ -19542,7 +19542,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _.assign({}, column, sortBy);
 	    });
 	    var filteredColumns = _.filter(columnsWithSort, function (column) { return subtotalBys.map(function (subtotalBy) { return subtotalBy.colTag; }).indexOf(column.colTag) === -1; });
-	    var tree = TreeBuilder_1.TreeBuilder.buildTree(data, subtotalBys, this.props.initiallyExpandedSubtotalRows, this.props.initiallySelectedSubtotalRows);
+	    var tree = TreeBuilder_1.TreeBuilder.buildTree(data, subtotalBys, initiallyExpandedSubtotalRows, initiallySelectedSubtotalRows);
 	    SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, columns);
 	    if (sortBys)
 	        tree = SortFactory_1.SortFactory.sortTree(tree, sortBys, columns[0]);
@@ -20645,7 +20645,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "detail-row": props.row.isDetail(),
 	            "selected": props.row.isSelected(),
 	        };
-	        rowClassNames[subtotalLvlClassName] = true;
+	        rowClassNames[subtotalLvlClassName] = props.row.isDetail() ? false : true;
 	        var cx = classNames(rowClassNames);
 	        var cells = props
 	            .columns

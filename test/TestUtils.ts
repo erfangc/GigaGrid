@@ -356,7 +356,7 @@ export class TestUtils {
      * returns column definitions for two numeric columns: numCol1, numCol2, as well as two string columns: textCol1, textCol2
      * @returns {ColumnDef[]}
      */
-    static getSimpleColumnDefs():ColumnDef[] {
+    static getSimpleColumns():ColumnDef[] {
         const columnDef1:ColumnDef = {
             colTag: "numCol1",
             title: "",

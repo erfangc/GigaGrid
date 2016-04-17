@@ -5,7 +5,7 @@ import {extractCellValue} from "../../src/static/SortFactoryHelpers";
 describe("SortFactoryHelper.extractCellValue()", ()=> {
     
     const detailRow:DetailRow = TestUtils.getDetailRow();
-    const columnDefs:ColumnDef[] = TestUtils.getSimpleColumnDefs();
+    const columnDefs:ColumnDef[] = TestUtils.getSimpleColumns();
     const subtotalRow:SubtotalRow = TestUtils.getSimpleSubtotalRow();
     
     it("should extract a number detail row", ()=> {
