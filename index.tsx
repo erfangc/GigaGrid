@@ -37,8 +37,12 @@ export class Examples extends React.Component<{}, ExampleState> {
                     <h1>
                         Welcome to the GigaGrid Demo Page
                     </h1>
-                    <strong>GigaGrid</strong> and this Documentation is still <strong>Under Development</strong>! Contributions are welcome. Below are some simple examples of what it can do.
-                    However, you can checkout the preview versions by simply using:
+                    
+                    <p>
+                        <strong>GigaGrid</strong> and this Documentation is still <strong>Under Development</strong>! Contributions are welcome. Below are some simple examples of what it can do.
+                        However, you can checkout the preview versions by simply using:
+                    </p>
+                    
                     <pre>
                         <code className="bash">npm install giga-grid</code>
                     </pre>
