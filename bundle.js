@@ -74,10 +74,7 @@
 	    };
 	    Examples.prototype.render = function () {
 	        var _this = this;
-	        return (React.createElement("div", null, Examples.renderNavbar(), React.createElement("div", {className: "container"}, React.createElement("br", null), React.createElement("h1", null, "Welcome to the GigaGrid Demo Page"), React.createElement("p", null, React.createElement("strong", null, "GigaGrid"), " and this Documentation is still ", React.createElement("strong", null, "Under Development"), "! Contributions are welcome. Below are some simple examples of what it can do." + ' ' + "However, you can checkout the preview versions by simply using:"), React.createElement("pre", null, React.createElement("code", {className: "bash"}, "npm install giga-grid")), React.createElement("br", null), React.createElement(react_bootstrap_1.Tabs, {activeKey: this.state.activeTabKey, onSelect: function (idx) { return _this.handleTabSelect(idx); }, animation: false}, React.createElement(react_bootstrap_1.Tab, {eventKey: 0, title: "Intro"}, React.createElement(Intro_1.Intro, null)), React.createElement(react_bootstrap_1.Tab, {eventKey: 1, title: "Basic Example"}, React.createElement(BasicExample_1.BasicExample, null)), React.createElement(react_bootstrap_1.Tab, {eventKey: 2, title: "Custom Cell Template"}, React.createElement(CustomCellTemplate_1.CustomCellTemplate, null))))));
-	    };
-	    Examples.renderNavbar = function () {
-	        return (React.createElement(react_bootstrap_1.Navbar, {inverse: true}, React.createElement(react_bootstrap_1.Navbar.Header, null, React.createElement(react_bootstrap_1.Navbar.Brand, null, React.createElement("a", {href: "#"}, "GigaGrid")), React.createElement(react_bootstrap_1.Navbar.Toggle, null))));
+	        return (React.createElement("div", null, React.createElement("div", {className: "container"}, React.createElement("br", null), React.createElement("h1", null, "Welcome to the GigaGrid Demo Page"), React.createElement("p", null, React.createElement("strong", null, "GigaGrid"), " and this Documentation is still ", React.createElement("strong", null, "Under Development"), "! Contributions are welcome. Below are some simple examples of what it can do." + ' ' + "However, you can checkout the preview versions by simply using:"), React.createElement("pre", null, React.createElement("code", {className: "bash"}, "npm install giga-grid")), React.createElement("br", null), React.createElement(react_bootstrap_1.Tabs, {activeKey: this.state.activeTabKey, onSelect: function (idx) { return _this.handleTabSelect(idx); }, animation: false}, React.createElement(react_bootstrap_1.Tab, {eventKey: 0, title: "Intro"}, React.createElement(Intro_1.Intro, null)), React.createElement(react_bootstrap_1.Tab, {eventKey: 1, title: "Basic Example"}, React.createElement(BasicExample_1.BasicExample, null)), React.createElement(react_bootstrap_1.Tab, {eventKey: 2, title: "Custom Cell Template"}, React.createElement(CustomCellTemplate_1.CustomCellTemplate, null))))));
 	    };
 	    return Examples;
 	}(React.Component));
@@ -87098,11 +87095,11 @@
 	        _super.call(this, props);
 	    }
 	    CustomCellTemplate.prototype.appendCellTemplateCreator = function (columnDefs) {
-	        var scale = chroma.scale(['green', 'red']).colors(10);
+	        var scale = chroma.scale(['green', 'red']).colors(25);
 	        return columnDefs.map(function (columnDef) {
 	            var cellTemplateCreator = function (row, column) {
 	                var style = {
-	                    backgroundColor: scale[Math.floor(Math.random() * (scale.length))],
+	                    backgroundColor: scale[Math.floor(Math.random() * scale.length)],
 	                    color: 'white'
 	                };
 	                return (React.createElement("td", {className: "numeric", style: style}, row.get(column)));
@@ -87112,7 +87109,7 @@
 	    };
 	    CustomCellTemplate.prototype.render = function () {
 	        var data = UKBudget_1.default.data, columnDefs = UKBudget_1.default.columnDefs;
-	        var code = (React.createElement("div", null, React.createElement("strong", null, "Code Sample"), React.createElement("pre", null, React.createElement("code", {className: "typescript"}, "\nconst cellTemplateCreator = (row, column):JSX.Element => {\n                const style = {\n                    backgroundColor: scale[Math.floor(Math.random() * (scale.length ))],\n                    color: 'white'\n                };\n                return (<td className=\"numeric\" style={style}>{row.get(column)}</td>);\n            };\n...\n// then add the cellTemplateCreator as a property of the ColumnDef(s) you want it to apply to\n<GigaGrid\n    initialSortBys={[{\"colTag\":\"WOther\", direction: SortDirection.DESC}]}\n    data={data}\n    columnDefs={columnDefs}\n    />"))));
+	        var code = (React.createElement("div", null, React.createElement("strong", null, "Code Sample"), React.createElement("pre", null, React.createElement("code", {className: "typescript"}, "\nconst cellTemplateCreator = (row, column):JSX.Element => {\n                const style = {\n                    backgroundColor: scale[Math.floor(Math.random() * (scale.length ))],\n                    color: 'white'\n                };\n                return (<td className=\"numeric\" style={style}>{row.get(column)}</td>);\n            };\n...\n// then add the cellTemplateCreator as a property of the ColumnDef(s) you want it to apply to\n<GigaGrid\n    initialSortBys={[{\"colTag\":\"WOther\", direction: SortDirection.DESC}]} data={data} columnDefs={columnDefs} />"))));
 	        return (React.createElement("div", null, React.createElement("br", null), React.createElement(index_1.GigaGrid, {initialSortBys: [{ "colTag": "WOther", direction: index_2.SortDirection.DESC }], data: data, columnDefs: this.appendCellTemplateCreator(columnDefs)}), code));
 	    };
 	    return CustomCellTemplate;

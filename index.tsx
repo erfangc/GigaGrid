@@ -31,7 +31,6 @@ export class Examples extends React.Component<{}, ExampleState> {
     render() {
         return (
             <div>
-                {Examples.renderNavbar()}
                 <div className="container">
                     <br/>
                     <h1>
@@ -63,19 +62,6 @@ export class Examples extends React.Component<{}, ExampleState> {
         );
     }
 
-
-    private static renderNavbar() {
-        return (
-            <Navbar inverse>
-                <Navbar.Header>
-                    <Navbar.Brand>
-                        <a href="#">GigaGrid</a>
-                    </Navbar.Brand>
-                    <Navbar.Toggle />
-                </Navbar.Header>
-            </Navbar>
-        );
-    }
 }
 
 (function main() {

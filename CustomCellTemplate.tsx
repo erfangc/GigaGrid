@@ -15,11 +15,11 @@ export class CustomCellTemplate extends React.Component<any,{}> {
     }
 
     private appendCellTemplateCreator(columnDefs:ColumnDef[]):ColumnDef[] {
-        const scale = chroma.scale(['green', 'red']).colors(10);
+        const scale = chroma.scale(['green', 'red']).colors(25);
         return columnDefs.map((columnDef:ColumnDef) => {
             const cellTemplateCreator = (row, column):JSX.Element => {
                 const style = {
-                    backgroundColor: scale[Math.floor(Math.random() * (scale.length ))],
+                    backgroundColor: scale[Math.floor(Math.random() * scale.length)],
                     color: 'white'
                 };
                 return (<td className="numeric" style={style}>{row.get(column)}</td>);
@@ -46,11 +46,7 @@ const cellTemplateCreator = (row, column):JSX.Element => {
 ...
 // then add the cellTemplateCreator as a property of the ColumnDef(s) you want it to apply to
 <GigaGrid
-    initialSortBys={[{"colTag":"WOther", direction: SortDirection.DESC}]}
-    data={data}
-    columnDefs={columnDefs}
-    />`
-                }
+    initialSortBys={[{"colTag":"WOther", direction: SortDirection.DESC}]} data={data} columnDefs={columnDefs} />`}
                 </code>
             </pre>
         </div>
