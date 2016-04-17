@@ -3,3 +3,4 @@ src/**/*.js
 test/**/*.js
 .idea
 node_modules
+target/

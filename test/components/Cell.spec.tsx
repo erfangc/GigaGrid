@@ -1,15 +1,12 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import * as ReactTestUtils from 'react-addons-test-utils';
-import * as Flux from 'flux';
-import * as FluxUtil from 'flux/utils';
-import Dispatcher = Flux.Dispatcher;
+import * as React from "react";
+import * as ReactTestUtils from "react-addons-test-utils";
 import {GigaAction} from "../../src/store/GigaStore";
 import {DetailRow, Row} from "../../src/models/Row";
 import {TestUtils} from "../TestUtils";
 import {Column} from "../../src/models/ColumnLike";
 import {Cell, CellProps} from "../../src/components/Cell";
-import * as $ from 'jquery';
+import * as $ from "jquery";
+import {Dispatcher} from "flux";
 
 describe("Cell", ()=> {
 
@@ -21,7 +18,7 @@ describe("Cell", ()=> {
     beforeEach(()=> {
         dispatcher = new Dispatcher<GigaAction>();
         row = TestUtils.getDetailRow();
-        columns = TestUtils.getSimpleColumnDefs();
+        columns = TestUtils.getSimpleColumns();
     });
 
     it("renders a td", ()=> {
