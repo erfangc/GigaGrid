@@ -1,12 +1,12 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import {GigaGrid} from "../src/index";
+import {GigaGrid} from "../index";
 import UKBudget from "./data/UKBudget";
 import {GigaProps, GigaState} from "../src/components/GigaGrid";
-import {Tabs, Tab, Navbar} from "react-bootstrap";
+import {Tabs, Tab} from "react-bootstrap";
 import {Row} from "../src/models/Row";
 import {SortDirection} from "../src/models/ColumnLike";
-import "../src/styles/theme/Default.styl";
+import "../styles/theme/Default.styl";
 
 interface ExamplesProps extends React.Props<Examples> {
     ukBudget:GigaProps
@@ -35,7 +35,6 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
     render() {
         return (
             <div>
-                {Examples.renderNavbar()}
                 <div className="container">
                     <br/>
                     <Tabs activeKey={this.state.activeTabKey} onSelect={idx=>this.handleTabSelect(idx)}
@@ -58,18 +57,6 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
         />);
     }
 
-    private static renderNavbar() {
-        return (
-            <Navbar inverse>
-                <Navbar.Header>
-                    <Navbar.Brand>
-                        <a href="#">GigaGrid Examples</a>
-                    </Navbar.Brand>
-                    <Navbar.Toggle />
-                </Navbar.Header>
-            </Navbar>
-        );
-    }
 }
 
 function main() {
