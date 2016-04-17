@@ -1,16 +1,17 @@
 import * as React from "react";
 import * as ReactTestUtils from "react-addons-test-utils";
-import {GigaAction, GigaActionType, SortUpdateAction} from "../../src/store/GigaStore";
+import {GigaAction, GigaActionType} from "../../src/store/GigaStore";
 import {Dispatcher} from "flux";
 import {SortDirection, ColumnFormat} from "../../src/models/ColumnLike";
 import {TableHeaderCell} from "../../src/components/TableHeaderCell";
+import {SortUpdateAction} from "../../src/store/reducers/SortReducers";
 
 describe("clicking on a header cell should sort by that header", ()=> {
 
     var component:React.Component<{},{}> = null;
     const dispatcher = new Dispatcher();
 
-    var sortAction:SortUpdateAction = null;
+    var sortAction:SortUpdateAction  = null;
     dispatcher.register((action:GigaAction)=> {
         sortAction = action as SortUpdateAction;
     });

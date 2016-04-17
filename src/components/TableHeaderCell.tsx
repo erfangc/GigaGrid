@@ -2,9 +2,10 @@ import * as React from "react";
 import * as classNames from "classnames";
 import {Column, ColumnFormat, SortDirection} from "../models/ColumnLike";
 import {GridSubcomponentProps} from "./GigaGrid";
-import {SortUpdateAction, GigaActionType} from "../store/GigaStore";
+import {GigaActionType} from "../store/GigaStore";
 import * as _ from "lodash";
 import {ToolbarToggle} from "./toolbar/Toolbar";
+import {SortUpdateAction} from "../store/reducers/SortReducers";
 
 export interface TableHeaderProps extends GridSubcomponentProps<TableHeaderCell> {
     column:Column
@@ -44,7 +45,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
             position: "relative"
         };
 
-        const componentClasses = {
+        const componentClasses:ClassDictionary = {
             "text-align-right": column.format === ColumnFormat.NUMBER,
             "text-align-left": column.format !== ColumnFormat.NUMBER
         };

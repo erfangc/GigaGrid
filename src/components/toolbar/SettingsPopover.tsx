@@ -2,12 +2,13 @@ import * as React from "react";
 import {Column, AggregationMethod, ColumnFormat} from "../../models/ColumnLike";
 import {SortableItem} from "./SortableItem";
 import * as _ from "lodash";
-import {GigaActionType, ColumnUpdateAction, GigaAction} from "../../store/GigaStore";
+import {GigaActionType, GigaAction} from "../../store/GigaStore";
 import "./SettingsPopover.styl";
 import * as classNames from "classnames";
 import DragEvent = __React.DragEvent;
 import Props = __React.Props;
 import SyntheticEvent = __React.SyntheticEvent;
+import {ColumnUpdateAction} from "../../store/reducers/ColumnUpdateReducer";
 
 export interface SettingsPopoverProps {
     subtotalBys:Column[]
@@ -151,11 +152,12 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
 
     render() {
         const activeColumn = this.state.activeColumn;
-        const layoutControlClassName = classNames({
+        const layoutControlClassDict:ClassDictionary = {
             "giga-grid-flex-column": true,
-            "column-50": activeColumn,
-            "column-100": !activeColumn
-        });
+            "column-50": activeColumn ? true : false,
+            "column-100": !activeColumn ? false : true
+        };
+        const layoutControlClassName = classNames(layoutControlClassDict);
         return (
             <div className="giga-grid-settings-pop-over" onClick={e=>e.stopPropagation()}>
                 <h3>Configure table columns</h3>

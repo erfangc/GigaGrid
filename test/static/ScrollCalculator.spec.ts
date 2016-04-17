@@ -1,3 +1,5 @@
+////<reference path="../"/>
+
 import {ScrollCalculator} from "../../src/static/ScrollCalculator";
 import * as $ from 'jquery';
 

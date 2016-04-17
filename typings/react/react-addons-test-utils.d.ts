@@ -95,7 +95,7 @@ declare namespace __React {
             }
 
             export function renderIntoDocument(
-                element: DOMElement<any>): Element;
+                element: DOMElement<any,any>): Element;
             export function renderIntoDocument<P>(
                 element: ReactElement<P>): Component<P, any>;
             export function renderIntoDocument<C extends Component<any, any>>(
