@@ -1,10 +1,12 @@
 ///<reference path="./node_modules/giga-grid/typings/tsd.d.ts"/>
+///<reference path="./typings/tsd.d.ts"/>
 
 import * as React from "react";
-import {GigaGrid, ColumnDef, DefaultCellRenderer} from "giga-grid/src/index";
+import {GigaGrid, ColumnDef} from "giga-grid/src/index";
 import {SortDirection} from "giga-grid/src/index";
 import gigaProps from "./data/UKBudget";
 import * as _ from "lodash";
+import * as chroma from "chroma-js";
 
 export class CustomCellTemplate extends React.Component<any,{}> {
 
@@ -13,9 +15,14 @@ export class CustomCellTemplate extends React.Component<any,{}> {
     }
 
     private appendCellTemplateCreator(columnDefs:ColumnDef[]):ColumnDef[] {
+        const scale = chroma.scale(['green', 'red']).colors(10);
         return columnDefs.map((columnDef:ColumnDef) => {
-            const cellTemplateCreator = (row, column, props):JSX.Element => {
-                return new DefaultCellRenderer(props).render();
+            const cellTemplateCreator = (row, column):JSX.Element => {
+                const style = {
+                    backgroundColor: scale[Math.floor(Math.random() * (scale.length ))],
+                    color: 'white'
+                };
+                return (<td className="numeric" style={style}>{row.get(column)}</td>);
             };
             return _.assign<{},{},{},ColumnDef>({}, columnDef, {cellTemplateCreator: cellTemplateCreator});
         });
@@ -27,8 +34,17 @@ export class CustomCellTemplate extends React.Component<any,{}> {
             <div>
                 <strong>Code Sample</strong>
                 <pre>
-                <code className="html">
+                <code className="typescript">
             {`
+const cellTemplateCreator = (row, column):JSX.Element => {
+                const style = {
+                    backgroundColor: scale[Math.floor(Math.random() * (scale.length ))],
+                    color: 'white'
+                };
+                return (<td className="numeric" style={style}>{row.get(column)}</td>);
+            };
+...
+// then add the cellTemplateCreator as a property of the ColumnDef(s) you want it to apply to
 <GigaGrid
     initialSortBys={[{"colTag":"WOther", direction: SortDirection.DESC}]}
     data={data}
