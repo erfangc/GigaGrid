@@ -12,7 +12,7 @@ export class Intro extends React.Component<any,{}> {
                 <h2>Getting Started</h2>
 
                 <p>
-                    You simply use <code>GigaGrid</code> like any other React component. After <code>npm install</code>
+                    Use <code>GigaGrid</code> like any other React component
                 </p>
                 <pre>
                     <code className="typescript">
@@ -29,14 +29,14 @@ ReactDOM.render(myGrid, document.body);`}
 
                 <h3>Key Concepts</h3>
                 <p>
-                    Advanced users should familiarize with the following concepts / classes when interacting with the grid
+                    Advanced users should familiarize with the following classes when interacting with the grid
                 </p>
                 <ListGroup>
                     <ListGroupItem>
                         <pre>Row|SubtotalRow|DetailRow</pre>
                         <p>
-                            Represents a single row in the table, you do not have to create these. They are created from the <code>data</code> prop you pass to the grid.
-                            The only time you must deal <code>Row</code> objects is during callbacks that you provide in response to user events.
+                            Represents a single row in the table. You do not have to create these. They are created from the <code>data</code> prop you pass to the grid.
+                            The only time you must deal with <code>Row</code> objects is during callbacks that you provide in response to user events
                         </p>
                         <p>
                             You can find out if a <code>Row</code> given to you is a <code>DetailRow</code> or a <code>SubtotalRow</code> via the <code>isDetail()</code> method.
@@ -47,13 +47,13 @@ ReactDOM.render(myGrid, document.body);`}
                             ColumnDef|Column
                         </pre>
                         <p>
-                            Defines a column in the grid. You must provide <code>ColumnDef</code> objects that describe column properties such as <code>format</code>, <code>title</code> etc.
-                            <code>Column</code> are different from <code>ColumnDefs</code> in that you do not create <code>Column</code> objects, they are simply enriched <code>ColumnDef</code> objects. The only time you deal with them
-                            is in callbacks.
+                            Defines a column in the grid. You must provide <code>ColumnDef</code> objects to describe column-wide properties such as <code>format</code>, <code>title</code> etc.
+                            <code>Column</code> is different from <code>ColumnDef</code> in that you do not create <code>Column</code> objects directly, as they are enriched <code>ColumnDef</code> objects created by the grid.
+                            Similar to <code>Row</code> objects, The only time you deal with them is in callbacks.
                         </p>
                     </ListGroupItem>
                     <ListGroupItem>
-                        <strong>Documentation To be Completed</strong>
+                        ... <strong>To be Completed</strong> ...
                     </ListGroupItem>
                 </ListGroup>
 
