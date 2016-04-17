@@ -1,4 +1,4 @@
-import {GigaGrid} from "../src/index";
+import {GigaGrid} from "../index";
 import {GigaProps} from "../src/components/GigaGrid";
 import {ColumnFormat, AggregationMethod} from "../src/models/ColumnLike";
 import * as $ from "jquery";
