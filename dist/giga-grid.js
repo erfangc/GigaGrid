@@ -61,7 +61,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.AggregationMethod = ColumnLike_1.AggregationMethod;
 	exports.ColumnFormat = ColumnLike_1.ColumnFormat;
 	exports.SortDirection = ColumnLike_1.SortDirection;
-	var Cell_tsx_1 = __webpack_require__(39);
+	var Cell_tsx_1 = __webpack_require__(45);
 	exports.DefaultCellRenderer = Cell_tsx_1.DefaultCellRenderer;
 
 
@@ -80,11 +80,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _ = __webpack_require__(4);
 	var ColumnLike_1 = __webpack_require__(6);
 	var GigaStore_1 = __webpack_require__(7);
-	var flux_1 = __webpack_require__(34);
-	var TableBody_1 = __webpack_require__(36);
-	var TableHeader_1 = __webpack_require__(40);
-	var $ = __webpack_require__(47);
-	var SettingsPopover_1 = __webpack_require__(48);
+	var flux_1 = __webpack_require__(40);
+	var TableBody_1 = __webpack_require__(42);
+	var TableHeader_1 = __webpack_require__(46);
+	var SettingsPopover_1 = __webpack_require__(53);
+	var $ = __webpack_require__(57);
 	/**
 	 * The root component of this React library. assembles raw data into `Row` objects which are then translated into their
 	 * virtual DOM representation
@@ -154,7 +154,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * this is the "give up" solution, implemented in 0.1.7
 	     */
 	    GigaGrid.prototype.componentDidUpdate = function () {
-	        this.dispatchDisplayBoundChange();
 	        this.synchTableHeaderWidthToFirstRow();
 	    };
 	    /**
@@ -178,7 +177,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            $th.innerWidth($td.innerWidth());
 	        }).value();
 	    };
-	    GigaGrid.prototype.horizontalScrollHandler = function () {
+	    GigaGrid.horizontalScrollHandler = function () {
 	        var scrollLeftAmount = $('.giga-grid-body-viewport').scrollLeft();
 	        $('.giga-grid-header-container').scrollLeft(scrollLeftAmount);
 	    };
@@ -194,11 +193,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.dispatchDisplayBoundChange();
 	        this.synchTableHeaderWidthToFirstRow();
 	        // Bind scroll listener to move headers when data container is srcolled
-	        $('.giga-grid-body-viewport').scroll(this.horizontalScrollHandler);
+	        $('.giga-grid-body-viewport').scroll(GigaGrid.horizontalScrollHandler);
 	    };
 	    GigaGrid.prototype.componentWillUnmount = function () {
 	        // Unbind the scroll listener
-	        $('.giga-grid-body-viewport').unbind('scroll', this.horizontalScrollHandler);
+	        $('.giga-grid-body-viewport').unbind('scroll', GigaGrid.horizontalScrollHandler);
 	        /*
 	         * unsubscribe to window.resize
 	         */
@@ -12746,13 +12745,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var _ = __webpack_require__(4);
-	var SubtotalAggregator_1 = __webpack_require__(8);
-	var TreeBuilder_1 = __webpack_require__(9);
-	var utils_1 = __webpack_require__(11);
-	var SortFactory_1 = __webpack_require__(30);
-	var ColumnLike_1 = __webpack_require__(6);
-	var TreeRasterizer_1 = __webpack_require__(32);
-	var ScrollCalculator_1 = __webpack_require__(33);
+	var utils_1 = __webpack_require__(8);
+	var TreeRasterizer_1 = __webpack_require__(27);
+	var InitializeReducer_1 = __webpack_require__(28);
+	var SelectReducers_1 = __webpack_require__(34);
+	var ChangeRowDisplayBoundsReducer_1 = __webpack_require__(35);
+	var SortReducers_1 = __webpack_require__(37);
+	var RowCollapseReducers_1 = __webpack_require__(38);
+	var ColumnUpdateReducer_1 = __webpack_require__(39);
 	/*
 	 define the # of rows necessary to trigger progressive rendering
 	 below which all row display bound change events are ignored
@@ -12777,58 +12777,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    /**
 	     * ES6 disallow using `this` before `super()`, however we need the props to derive the initial state
-	     * so we kind of hack around it ... the designers of the Flux paradigm never though I would use flux store to manage widget
-	     * state as oppose to application state?
+	     * so we kind of hack around it ... the designers of the Flux paradigm never thought I would use flux store to manage widget
+	     * state as oppose to application state ...
+	     * This however, allow us a mechanism to derive initial state again when props change (i.e. such as when the parent component give us new props without un-mounting)
 	     */
 	    GigaStore.prototype.initialize = function (action) {
-	        var _a = (action.props || this.props), data = _a.data, columnDefs = _a.columnDefs, columnGroups = _a.columnGroups, initialSubtotalBys = _a.initialSubtotalBys, initialSortBys = _a.initialSortBys, initialFilterBys = _a.initialFilterBys;
-	        /**
-	         * turn ColumnDefs into "Columns" which are decorated with behaviors
-	         */
-	        var columns = columnDefs.map(function (columnDef) {
-	            return _.assign({}, columnDef, {});
-	        });
-	        /**
-	         * create subtotalBys from columns (any properties passed in via initialSubtotalBys will override the same property on the corresponding Column object
-	         */
-	        var subtotalBys = (initialSubtotalBys || []).map(function (subtotalBy) {
-	            var column = _.find(columns, function (column) { return column.colTag === subtotalBy.colTag; });
-	            return _.assign({}, column, subtotalBy);
-	        });
-	        /**
-	         * create sortBys from columns (any properties passed via initialSortBys will override the same property in the corresponding Column object
-	         */
-	        // FIXME we have a state sync issue, columns have "directions", but so does sortBys, the code below is a temp fix
-	        var columnsWithSort = columns.map(function (column) {
-	            var sortBy = _.find((initialSortBys || []), function (s) { return s.colTag == column.colTag; });
-	            if (sortBy)
-	                return _.assign({}, column, {
-	                    direction: sortBy.direction || ColumnLike_1.SortDirection.DESC
-	                });
-	            else
-	                return column;
-	        });
-	        var sortBys = (initialSortBys || []).map(function (sortBy) {
-	            var column = _.find(columnsWithSort, function (column) { return column.colTag === sortBy.colTag; });
-	            return _.assign({}, column, sortBy);
-	        });
-	        var filteredColumns = _.filter(columnsWithSort, function (column) { return subtotalBys.map(function (subtotalBy) { return subtotalBy.colTag; }).indexOf(column.colTag) === -1; });
-	        var tree = TreeBuilder_1.TreeBuilder.buildTree(data, subtotalBys, this.props.initiallyExpandedSubtotalRows, this.props.initiallySelectedSubtotalRows);
-	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, columns);
-	        if (sortBys)
-	            tree = SortFactory_1.SortFactory.sortTree(tree, sortBys, columns[0]);
-	        var rasterizedRows = TreeRasterizer_1.TreeRasterizer.rasterize(tree);
-	        return {
-	            rasterizedRows: rasterizedRows,
-	            displayStart: 0,
-	            columns: columnGroups ? columnsWithSort : filteredColumns,
-	            displayEnd: Math.min(rasterizedRows.length - 1, exports.PROGRESSIVE_RENDERING_THRESHOLD),
-	            subtotalBys: subtotalBys,
-	            sortBys: sortBys,
-	            filterBys: _.cloneDeep(initialFilterBys) || [],
-	            tree: tree,
-	            showSettingsPopover: false
-	        };
+	        // if props not passed we will use this.props
+	        var overrideAction = _.assign({}, action, { props: action.props || this.props });
+	        return InitializeReducer_1.default(overrideAction);
 	    };
 	    GigaStore.prototype.reduce = function (state, action) {
 	        var newState;
@@ -12837,31 +12793,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	                newState = this.initialize(action);
 	                break;
 	            case GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS:
-	                newState = GigaStore.handleChangeRowDisplayBounds(state, action);
+	                newState = ChangeRowDisplayBoundsReducer_1.changeDisplayBoundsReducer(state, action);
 	                break;
 	            case GigaActionType.COLUMNS_UPDATE:
-	                newState = this.handleColumnUpdate(state, action);
+	                newState = ColumnUpdateReducer_1.columnUpdateReducer(state, action, this.props);
 	                break;
 	            case GigaActionType.TOGGLE_ROW_COLLAPSE:
-	                newState = GigaStore.handleToggleCollapse(state, action);
+	                newState = RowCollapseReducers_1.toggleCollapseReducer(state, action);
 	                break;
 	            case GigaActionType.COLLAPSE_ALL:
-	                newState = GigaStore.handleToggleCollapseAll(state);
+	                newState = RowCollapseReducers_1.collapseAllReducer(state);
 	                break;
 	            case GigaActionType.EXPAND_ALL:
-	                newState = GigaStore.handleToggleExpandAll(state);
+	                newState = RowCollapseReducers_1.expandAllReducer(state);
 	                break;
 	            case GigaActionType.NEW_SORT:
-	                newState = GigaStore.handleSortUpdate(state, action);
+	                newState = SortReducers_1.sortUpdateReducer(state, action);
 	                break;
 	            case GigaActionType.CLEAR_SORT:
-	                newState = GigaStore.handleClearSort(state);
+	                newState = SortReducers_1.cleartSortReducer(state);
 	                break;
 	            case GigaActionType.TOGGLE_ROW_SELECT:
-	                newState = this.handleRowSelect(state, action);
+	                newState = SelectReducers_1.rowSelectReducer(state, action, this.props);
 	                break;
 	            case GigaActionType.TOGGLE_CELL_SELECT:
-	                newState = this.handleCellSelect(state, action);
+	                newState = SelectReducers_1.cellSelectReducer(state, action, this.props);
 	                break;
 	            case GigaActionType.TOGGLE_SETTINGS_POPOVER:
 	                newState = _.assign({}, state, { showSettingsPopover: !state.showSettingsPopover });
@@ -12879,114 +12835,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    GigaStore.shouldTriggerRasterization = function (action) {
 	        return [
-	            GigaActionType.ADD_FILTER,
-	            GigaActionType.CLEAR_FILTER,
 	            GigaActionType.CLEAR_SORT,
-	            GigaActionType.NEW_FILTER,
 	            GigaActionType.NEW_SORT,
 	            GigaActionType.TOGGLE_ROW_COLLAPSE,
 	            GigaActionType.COLLAPSE_ALL,
 	            GigaActionType.EXPAND_ALL,
 	            GigaActionType.COLUMNS_UPDATE
 	        ].indexOf(action.type) !== -1;
-	    };
-	    /*
-	     Selection Action Handlers
-	     */
-	    GigaStore.prototype.handleRowSelect = function (state, action) {
-	        if (_.isFunction(this.props.onRowClick)) {
-	            var udfResult = this.props.onRowClick(action.row, state);
-	            if (udfResult !== undefined &&
-	                udfResult === false)
-	                return state;
-	            else {
-	                // de-select every other row unless enableMultiRowSelect is turned on
-	                if (!this.props.enableMultiRowSelect) {
-	                    var toggleTo = !action.row.isSelected();
-	                    recursivelyDeselect(state.tree.getRoot());
-	                    action.row.toggleSelect(toggleTo);
-	                }
-	                else
-	                    action.row.toggleSelect();
-	                return _.clone(state);
-	            }
-	        }
-	        else
-	            return state;
-	    };
-	    GigaStore.prototype.handleCellSelect = function (state, action) {
-	        if (_.isFunction(this.props.onCellClick)) {
-	            if (!this.props.onCellClick(action.row, action.column))
-	                return state; // will not emit state mutation event
-	            else
-	                return _.clone(state); // will emit state mutation event
-	        }
-	        else
-	            return state;
-	    };
-	    GigaStore.handleChangeRowDisplayBounds = function (state, action) {
-	        var _a = ScrollCalculator_1.ScrollCalculator.computeDisplayBoundaries(action.rowHeight, action.viewport, action.canvas), displayStart = _a.displayStart, displayEnd = _a.displayEnd;
-	        var newState = _.clone(state);
-	        newState.displayStart = displayStart;
-	        newState.displayEnd = displayEnd;
-	        return newState;
-	    };
-	    /*
-	     Subtotal Action Handlers
-	     */
-	    GigaStore.handleToggleExpandAll = function (state) {
-	        TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(state.tree.getRoot(), false);
-	        return _.clone(state);
-	    };
-	    GigaStore.handleToggleCollapseAll = function (state) {
-	        TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(state.tree.getRoot());
-	        return _.clone(state);
-	    };
-	    GigaStore.handleToggleCollapse = function (state, action) {
-	        var row = action.subtotalRow;
-	        row.toggleCollapse();
-	        return _.clone(state);
-	    };
-	    /*
-	     * Sort Action Handlers
-	     */
-	    GigaStore.handleSortUpdate = function (state, action) {
-	        /**
-	         * go through all the columns in state, flip on/off sort flags as necessary
-	         */
-	        var newPartialState = {};
-	        state.columns.forEach(function (column) {
-	            var sb = _.find(action.sortBys, function (s) { return s.colTag === column.colTag; });
-	            if (sb)
-	                column.direction = sb.direction;
-	            else
-	                column.direction = undefined;
-	        });
-	        newPartialState['columns'] = state.columns;
-	        newPartialState['tree'] = SortFactory_1.SortFactory.sortTree(state.tree, action.sortBys, newPartialState['columns'][0]);
-	        newPartialState['sortBys'] = action.sortBys;
-	        return _.assign({}, state, newPartialState);
-	    };
-	    GigaStore.handleClearSort = function (state) {
-	        state.columns.forEach(function (column) { return column.direction = undefined; });
-	        var newTree = SortFactory_1.SortFactory.sortTree(state.tree, []);
-	        var newState = _.clone(state);
-	        newState.tree = newTree;
-	        newState.sortBys = [];
-	        return newState;
-	    };
-	    GigaStore.prototype.handleColumnUpdate = function (state, action) {
-	        var newColumnStates = {
-	            columns: action.columns || state.columns,
-	            subtotalBys: action.subtotalBys || state.subtotalBys,
-	            showSettingsPopover: !state.showSettingsPopover
-	        };
-	        // TODO we might not ALWAYS want to re-aggregate, but we need to think about how the object model works
-	        var tree = TreeBuilder_1.TreeBuilder.buildTree(this.props.data, newColumnStates.subtotalBys);
-	        TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(tree.getRoot(), false);
-	        SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, newColumnStates.columns);
-	        newColumnStates["tree"] = SortFactory_1.SortFactory.sortTree(tree, state.sortBys);
-	        return _.assign({}, state, newColumnStates);
 	    };
 	    return GigaStore;
 	}(utils_1.ReduceStore));
@@ -12998,464 +12853,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GigaActionType[GigaActionType["INITIALIZE"] = 0] = "INITIALIZE";
 	    GigaActionType[GigaActionType["NEW_SORT"] = 1] = "NEW_SORT";
 	    GigaActionType[GigaActionType["CLEAR_SORT"] = 2] = "CLEAR_SORT";
-	    GigaActionType[GigaActionType["NEW_FILTER"] = 3] = "NEW_FILTER";
-	    GigaActionType[GigaActionType["ADD_FILTER"] = 4] = "ADD_FILTER";
-	    GigaActionType[GigaActionType["CLEAR_FILTER"] = 5] = "CLEAR_FILTER";
-	    GigaActionType[GigaActionType["TOGGLE_ROW_COLLAPSE"] = 6] = "TOGGLE_ROW_COLLAPSE";
-	    GigaActionType[GigaActionType["COLLAPSE_ALL"] = 7] = "COLLAPSE_ALL";
-	    GigaActionType[GigaActionType["EXPAND_ALL"] = 8] = "EXPAND_ALL";
-	    GigaActionType[GigaActionType["TOGGLE_ROW_SELECT"] = 9] = "TOGGLE_ROW_SELECT";
-	    GigaActionType[GigaActionType["TOGGLE_CELL_SELECT"] = 10] = "TOGGLE_CELL_SELECT";
-	    GigaActionType[GigaActionType["CHANGE_ROW_DISPLAY_BOUNDS"] = 11] = "CHANGE_ROW_DISPLAY_BOUNDS";
-	    GigaActionType[GigaActionType["TOGGLE_SETTINGS_POPOVER"] = 12] = "TOGGLE_SETTINGS_POPOVER";
-	    GigaActionType[GigaActionType["COLUMNS_UPDATE"] = 13] = "COLUMNS_UPDATE";
+	    GigaActionType[GigaActionType["TOGGLE_ROW_COLLAPSE"] = 3] = "TOGGLE_ROW_COLLAPSE";
+	    GigaActionType[GigaActionType["COLLAPSE_ALL"] = 4] = "COLLAPSE_ALL";
+	    GigaActionType[GigaActionType["EXPAND_ALL"] = 5] = "EXPAND_ALL";
+	    GigaActionType[GigaActionType["TOGGLE_ROW_SELECT"] = 6] = "TOGGLE_ROW_SELECT";
+	    GigaActionType[GigaActionType["TOGGLE_CELL_SELECT"] = 7] = "TOGGLE_CELL_SELECT";
+	    GigaActionType[GigaActionType["CHANGE_ROW_DISPLAY_BOUNDS"] = 8] = "CHANGE_ROW_DISPLAY_BOUNDS";
+	    GigaActionType[GigaActionType["TOGGLE_SETTINGS_POPOVER"] = 9] = "TOGGLE_SETTINGS_POPOVER";
+	    GigaActionType[GigaActionType["COLUMNS_UPDATE"] = 10] = "COLUMNS_UPDATE";
 	})(exports.GigaActionType || (exports.GigaActionType = {}));
 	var GigaActionType = exports.GigaActionType;
-	// define a function
-	function recursivelyDeselect(row) {
-	    row.toggleSelect(false);
-	    if (!row.isDetail()) {
-	        var subtotalRow = row;
-	        var children = subtotalRow.getChildren().length === 0 ? subtotalRow.detailRows : subtotalRow.getChildren();
-	        children.forEach(function (child) { return recursivelyDeselect(child); });
-	    }
-	}
 
 
 /***/ },
 /* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var ColumnLike_1 = __webpack_require__(6);
-	var _ = __webpack_require__(4);
-	function straightSum(detailRows, column) {
-	    return _.sum(detailRows.map(function (r) { return r.getByColTag(column.colTag); }));
-	}
-	function weightedAverage(detailRows, column) {
-	    var denom = 0.0;
-	    var sumproduct = 0.0;
-	    for (var i = 0; i < detailRows.length; i++) {
-	        denom = denom + detailRows[i].getByColTag(column.weightBy);
-	        sumproduct = sumproduct + detailRows[i].getByColTag(column.colTag) * detailRows[i].getByColTag(column.weightBy);
-	    }
-	    if (denom !== 0.0)
-	        return sumproduct / denom;
-	}
-	function average(detailRows, column) {
-	    if (detailRows.length === 0)
-	        return 0;
-	    return straightSum(detailRows, column) / detailRows.length;
-	}
-	function count(detailRows) {
-	    return detailRows.length;
-	}
-	function countOrDistinct(detailRows, column) {
-	    var distinctCount = countDistinct(detailRows, column);
-	    var c = count(detailRows);
-	    if (distinctCount !== 1)
-	        return distinctCount + "/" + c;
-	    else
-	        return detailRows[0].getByColTag(column.colTag);
-	}
-	function countDistinct(detailRows, column) {
-	    return _.chain(detailRows).map(function (r) { return r.getByColTag(column.colTag); }).sortBy().uniq(true).value().length;
-	}
-	function range(detailRows, column) {
-	    var val = detailRows.map(function (r) { return r.getByColTag(column.colTag); });
-	    return _.min(val) + " - " + _.max(val);
-	}
-	/**
-	 * formats a given value per the format instruction
-	 * TODO add tests
-	 * TODO this does not belong to a file called SubtotalAggregator.ts
-	 * @param value
-	 * @param fmtInstruction
-	 * @returns {any}
-	 */
-	function format(value, fmtInstruction) {
-	    if (!fmtInstruction)
-	        return value;
-	    function addCommas(nStr) {
-	        nStr += '';
-	        var x = nStr.split('.');
-	        var x1 = x[0];
-	        var x2 = x.length > 1 ? '.' + x[1] : '';
-	        var rgx = /(\d+)(\d{3})/;
-	        while (rgx.test(x1)) {
-	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
-	        }
-	        return x1 + x2;
-	    }
-	    var result = value;
-	    if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result))
-	        result *= fmtInstruction.multiplier;
-	    if (typeof fmtInstruction.roundTo !== "undefined" && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
-	        result = parseFloat(result).toFixed(fmtInstruction.roundTo);
-	    if (fmtInstruction.separator && !isNaN(result))
-	        result = addCommas(result);
-	    if (fmtInstruction.showAsPercent && !isNaN(result))
-	        result = result + "%";
-	    return result;
-	}
-	exports.format = format;
-	/**
-	 * these should return Tree(s) as oppose to being void ... I want to use Immutable.js to simplify things where possible
-	 */
-	var SubtotalAggregator = (function () {
-	    function SubtotalAggregator() {
-	    }
-	    SubtotalAggregator.aggregateTree = function (tree, columns) {
-	        SubtotalAggregator.aggregateSubtotalRow(tree.getRoot(), columns);
-	        SubtotalAggregator.aggregateChildren(tree.getRoot(), columns);
-	    };
-	    /**
-	     * depth first recursive implementation of the tree traversal
-	     * @param subtotalRow
-	     * @param columns
-	     */
-	    SubtotalAggregator.aggregateChildren = function (subtotalRow, columns) {
-	        subtotalRow.getChildren().forEach(function (childRow) {
-	            SubtotalAggregator.aggregateSubtotalRow(childRow, columns);
-	            if (childRow.getChildren().length > 0)
-	                SubtotalAggregator.aggregateChildren(childRow, columns);
-	        });
-	    };
-	    SubtotalAggregator.aggregate = function (detailRows, columns) {
-	        var aggregated = {};
-	        columns.forEach(function (column) {
-	            var value;
-	            switch (column.aggregationMethod) {
-	                case ColumnLike_1.AggregationMethod.AVERAGE:
-	                    value = average(detailRows, column);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.COUNT:
-	                    value = count(detailRows);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.COUNT_DISTINCT:
-	                    value = countDistinct(detailRows, column);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.COUNT_OR_DISTINCT:
-	                    value = countOrDistinct(detailRows, column);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.RANGE:
-	                    value = range(detailRows, column);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.SUM:
-	                    value = straightSum(detailRows, column);
-	                    break;
-	                case ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE:
-	                    value = weightedAverage(detailRows, column);
-	                    break;
-	                default:
-	                    value = "";
-	                    break;
-	            }
-	            aggregated[column.colTag] = value;
-	        });
-	        return aggregated;
-	    };
-	    SubtotalAggregator.aggregateSubtotalRow = function (subtotalRow, column) {
-	        subtotalRow.setData(SubtotalAggregator.aggregate(subtotalRow.detailRows, column));
-	    };
-	    return SubtotalAggregator;
-	}());
-	exports.SubtotalAggregator = SubtotalAggregator;
-
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var Row_1 = __webpack_require__(10);
-	var _ = __webpack_require__(4);
-	var ColumnLike_1 = __webpack_require__(6);
-	var TreeBuilder = (function () {
-	    function TreeBuilder() {
-	    }
-	    /**
-	     * traverse the tree and find nodes that has identical sector path, set toggleCollapse to false
-	     * TODO add tests to ensure it does not break
-	     * @param node
-	     * @param initiallyExpandedSubtotalRows
-	     */
-	    TreeBuilder.selectivelyExpand = function (node, initiallyExpandedSubtotalRows) {
-	        initiallyExpandedSubtotalRows.forEach(function (sp) {
-	            for (var i = 1; i <= sp.length; i++)
-	                if (_.isEqual(node.sectorPath(), sp.slice(0, i)))
-	                    node.toggleCollapse(false);
-	        });
-	        if (node.getNumChildren() != 0)
-	            node.getChildren().forEach(function (child) { return TreeBuilder.selectivelyExpand(child, initiallyExpandedSubtotalRows); });
-	    };
-	    /**
-	     * traverse the tree and find nodes that has identical sector path, set isSelected to true
-	     * TODO add tests to ensure it does not break
-	     * @param node
-	     * @param initiallySelectedSubtotalRows
-	     */
-	    TreeBuilder.selectivelySelect = function (node, initiallySelectedSubtotalRows) {
-	        initiallySelectedSubtotalRows.forEach(function (sp) {
-	            if (_.isEqual(node.sectorPath(), sp))
-	                node.toggleSelect(true);
-	        });
-	        if (node.getNumChildren() != 0)
-	            node.getChildren().forEach(function (child) { return TreeBuilder.selectivelySelect(child, initiallySelectedSubtotalRows); });
-	    };
-	    TreeBuilder.buildTree = function (data, subtotalBys, initiallyExpandedSubtotalRows, initiallySelectedSubtotalRows) {
-	        var _this = this;
-	        if (subtotalBys === void 0) { subtotalBys = []; }
-	        /*
-	         * the way we create a Tree is as follows
-	         * since each detailRow in data can only belong to ONE SubtotalRow and each SubtotalRow can have only 1 parent
-	         * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
-	         * parent SubtotalRow (in other words, find the detailRow's "bucket") and append said detailRow to the parent
-	         */
-	        var grandTotal = new Row_1.SubtotalRow({ title: "Grand Total", value: null });
-	        grandTotal.setSectorPath([]);
-	        data.forEach(function (datum) { return _this.bucketDetailRow(subtotalBys, new Row_1.DetailRow(datum), grandTotal); });
-	        TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, true);
-	        /**
-	         * EXPERIMENTAL - these props allow us to expand / select SubtotalRow on construction of the grid component
-	         */
-	        if (initiallyExpandedSubtotalRows)
-	            TreeBuilder.selectivelyExpand(grandTotal, initiallyExpandedSubtotalRows);
-	        if (initiallySelectedSubtotalRows)
-	            TreeBuilder.selectivelySelect(grandTotal, initiallySelectedSubtotalRows);
-	        return new Tree(grandTotal);
-	    };
-	    TreeBuilder.bucketDetailRow = function (subtotalBys, detailedRow, grandTotal) {
-	        /*
-	         * to traverse the grandTotal and find the detailRow's immediate parent SubtotalRow
-	         * we store the detailRow's sector names in an ordered array
-	         */
-	        var buckets = []; // temporary array of strings to keep track subtotal titles names in sequence
-	        grandTotal.detailRows.push(detailedRow);
-	        subtotalBys.forEach(function (subtotalBy) {
-	            // the subtotal title
-	            var bucket = TreeBuilder.resolveSubtotalBucket(subtotalBy, detailedRow);
-	            if (bucket !== undefined) {
-	                buckets.push(bucket);
-	                var subtotalRow = TreeBuilder.traverseOrCreate(grandTotal, buckets);
-	                subtotalRow.detailRows.push(detailedRow);
-	            } // FIXME if a detail row is not defined for all the columns we are subtotaling by, it is orphaned (i.e. not part of the tree at all), should we let it 'traverse' back and attach itself to the last subtotal row?
-	        });
-	        detailedRow.setSectorPath(buckets.map(function (b) { return b.title; }));
-	    };
-	    ;
-	    // TODO add tests
-	    /**
-	     * recurisvely collapse the given node
-	     * @param node
-	     * @param shouldCollapse
-	     */
-	    TreeBuilder.recursivelyToggleChildrenCollapse = function (node, shouldCollapse) {
-	        if (shouldCollapse === void 0) { shouldCollapse = true; }
-	        /**
-	         *
-	         * @param node
-	         * @param shouldCollapse
-	         * @private
-	         */
-	        function _toggleCollapse(node, shouldCollapse) {
-	            node.toggleCollapse(shouldCollapse);
-	            TreeBuilder.recursivelyToggleChildrenCollapse(node, shouldCollapse);
-	        }
-	        node.getChildren().forEach(function (child) {
-	            if (shouldCollapse) {
-	                _toggleCollapse(child, shouldCollapse);
-	            }
-	            else {
-	                if (child.getChildren().length || child.sectorPath().length === 1)
-	                    _toggleCollapse(child, shouldCollapse);
-	            }
-	        });
-	    };
-	    /**
-	     *
-	     * @param grandTotal
-	     * @param buckets
-	     * @returns {SubtotalRow}
-	     */
-	    TreeBuilder.traverseOrCreate = function (grandTotal, buckets) {
-	        // traverse to the correct SubtotalRow
-	        var currentRow = grandTotal;
-	        for (var k = 0; k < buckets.length; k++) {
-	            // update the current subtotal row
-	            var title = buckets[k].title;
-	            if (currentRow.hasChildWithTitle(title))
-	                currentRow = currentRow.getChildByTitle(title);
-	            else {
-	                // create a new sector if it is not already available
-	                // SubtotalRow are created with a `title` and a `firstCellValue` property, firstCellValue is used to determine the row's sort order
-	                var newRow = new Row_1.SubtotalRow(buckets[k]);
-	                newRow.toggleCollapse(true);
-	                // set the sector path for the new SubtotalRow we just created the length of which determines its depth
-	                newRow.setSectorPath(buckets.slice(0, k + 1).map(function (b) { return b.title; }));
-	                currentRow.addChild(newRow);
-	                currentRow = newRow;
-	            }
-	        }
-	        return currentRow;
-	    };
-	    ;
-	    TreeBuilder.resolveSubtotalBucket = function (subtotalBy, detailedRow) {
-	        // FIXME this is the naive implementation, cannot handle text-align-rightal bands
-	        var title = detailedRow.get(subtotalBy);
-	        // if the given column is not defined in the data, return undefined, this will
-	        if (title === undefined)
-	            return undefined;
-	        return {
-	            title: subtotalBy.title ? subtotalBy.title + ": " + title : title,
-	            value: subtotalBy.format === ColumnLike_1.ColumnFormat.NUMBER ? parseFloat(title) : title
-	        };
-	    };
-	    return TreeBuilder;
-	}());
-	exports.TreeBuilder = TreeBuilder;
-	var Tree = (function () {
-	    function Tree(root) {
-	        this.root = root;
-	    }
-	    Tree.prototype.getRoot = function () {
-	        return this.root;
-	    };
-	    return Tree;
-	}());
-	exports.Tree = Tree;
-
-
-/***/ },
-/* 10 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var GenericRow = (function () {
-	    function GenericRow(data) {
-	        this._isSelected = false;
-	        this._isHidden = false;
-	        this._data = data;
-	        this._sectorPath = [];
-	    }
-	    GenericRow.prototype.get = function (columnDef) {
-	        return this._data[columnDef.colTag];
-	    };
-	    GenericRow.prototype.getByColTag = function (colTag) {
-	        return this._data[colTag];
-	    };
-	    GenericRow.prototype.toggleSelect = function (select) {
-	        if (typeof select !== "undefined")
-	            this._isSelected = select;
-	        else
-	            this._isSelected = !this._isSelected;
-	    };
-	    GenericRow.prototype.isSelected = function () {
-	        return this._isSelected;
-	    };
-	    GenericRow.prototype.isHidden = function () {
-	        return this._isHidden;
-	    };
-	    GenericRow.prototype.toggleHide = function (hide) {
-	        if (typeof hide !== "undefined")
-	            this._isHidden = hide;
-	        else
-	            this._isHidden = !this._isHidden;
-	    };
-	    GenericRow.prototype.sectorPath = function () {
-	        return this._sectorPath;
-	    };
-	    GenericRow.prototype.setSectorPath = function (sectorPath) {
-	        this._sectorPath = sectorPath;
-	    };
-	    GenericRow.prototype.data = function () {
-	        return this._data;
-	    };
-	    GenericRow.prototype.setData = function (data) {
-	        this._data = data;
-	    };
-	    return GenericRow;
-	}());
-	exports.GenericRow = GenericRow;
-	var DetailRow = (function (_super) {
-	    __extends(DetailRow, _super);
-	    function DetailRow(data) {
-	        _super.call(this, data);
-	    }
-	    DetailRow.prototype.isDetail = function () {
-	        return true;
-	    };
-	    return DetailRow;
-	}(GenericRow));
-	exports.DetailRow = DetailRow;
-	var SubtotalRow = (function (_super) {
-	    __extends(SubtotalRow, _super);
-	    function SubtotalRow(bucketInfo) {
-	        _super.call(this, {});
-	        this.children = [];
-	        this.childrenByTitle = {};
-	        this._isCollapsed = false;
-	        this.detailRows = [];
-	        this.bucketInfo = bucketInfo;
-	    }
-	    SubtotalRow.prototype.toggleCollapse = function (state) {
-	        if (state != undefined)
-	            this._isCollapsed = state;
-	        else
-	            this._isCollapsed = !this._isCollapsed;
-	    };
-	    SubtotalRow.prototype.isCollapsed = function () {
-	        return this._isCollapsed;
-	    };
-	    SubtotalRow.prototype.isDetail = function () {
-	        return false;
-	    };
-	    SubtotalRow.prototype.findIndex = function (child) {
-	        for (var i = 0; i < this.children.length; i++)
-	            if (this.children[i].bucketInfo.title === child.bucketInfo.title)
-	                return i;
-	        return -1;
-	    };
-	    SubtotalRow.prototype.addChild = function (child) {
-	        // if already exist, pop it from the children array
-	        this.removeChild(child);
-	        this.children.push(child);
-	        this.childrenByTitle[child.bucketInfo.title] = child;
-	    };
-	    SubtotalRow.prototype.removeChild = function (child) {
-	        if (this.childrenByTitle[child.bucketInfo.title] != undefined) {
-	            var idx = this.findIndex(child);
-	            this.children.splice(idx, 1);
-	            this.childrenByTitle[child.bucketInfo.title] = undefined;
-	        }
-	    };
-	    SubtotalRow.prototype.getChildByTitle = function (title) {
-	        return this.childrenByTitle[title];
-	    };
-	    SubtotalRow.prototype.getNumChildren = function () {
-	        return this.children.length;
-	    };
-	    SubtotalRow.prototype.getChildren = function () {
-	        return this.children;
-	    };
-	    SubtotalRow.prototype.getChildAtIndex = function (idx) {
-	        return this.children[idx];
-	    };
-	    SubtotalRow.prototype.hasChildWithTitle = function (title) {
-	        return this.getChildByTitle(title) != undefined;
-	    };
-	    return SubtotalRow;
-	}(GenericRow));
-	exports.SubtotalRow = SubtotalRow;
-
-
-/***/ },
-/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -13467,15 +12878,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(12);
-	module.exports.MapStore = __webpack_require__(17);
-	module.exports.Mixin = __webpack_require__(29);
-	module.exports.ReduceStore = __webpack_require__(18);
-	module.exports.Store = __webpack_require__(19);
+	module.exports.Container = __webpack_require__(9);
+	module.exports.MapStore = __webpack_require__(14);
+	module.exports.Mixin = __webpack_require__(26);
+	module.exports.ReduceStore = __webpack_require__(15);
+	module.exports.Store = __webpack_require__(16);
 
 
 /***/ },
-/* 12 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -13497,10 +12908,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStoreGroup = __webpack_require__(14);
+	var FluxStoreGroup = __webpack_require__(11);
 	
-	var invariant = __webpack_require__(15);
-	var shallowEqual = __webpack_require__(16);
+	var invariant = __webpack_require__(12);
+	var shallowEqual = __webpack_require__(13);
 	
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -13655,10 +13066,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	module.exports = { create: create };
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 13 */
+/* 10 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -13755,7 +13166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 14 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -13774,7 +13185,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(15);
+	var invariant = __webpack_require__(12);
 	
 	/**
 	 * FluxStoreGroup allows you to execute a callback on every dispatch after
@@ -13833,10 +13244,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	module.exports = FluxStoreGroup;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 15 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -13888,10 +13299,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 16 */
+/* 13 */
 /***/ function(module, exports) {
 
 	/**
@@ -13946,7 +13357,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = shallowEqual;
 
 /***/ },
-/* 17 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -13967,10 +13378,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxReduceStore = __webpack_require__(18);
-	var Immutable = __webpack_require__(28);
+	var FluxReduceStore = __webpack_require__(15);
+	var Immutable = __webpack_require__(25);
 	
-	var invariant = __webpack_require__(15);
+	var invariant = __webpack_require__(12);
 	
 	/**
 	 * This is a simple store. It allows caching key value pairs. An implementation
@@ -14093,10 +13504,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(FluxReduceStore);
 	
 	module.exports = FluxMapStore;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 18 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14117,10 +13528,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(19);
+	var FluxStore = __webpack_require__(16);
 	
-	var abstractMethod = __webpack_require__(27);
-	var invariant = __webpack_require__(15);
+	var abstractMethod = __webpack_require__(24);
+	var invariant = __webpack_require__(12);
 	
 	var FluxReduceStore = (function (_FluxStore) {
 	  _inherits(FluxReduceStore, _FluxStore);
@@ -14200,10 +13611,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(FluxStore);
 	
 	module.exports = FluxReduceStore;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 19 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14222,11 +13633,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(20);
+	var _require = __webpack_require__(17);
 	
 	var EventEmitter = _require.EventEmitter;
 	
-	var invariant = __webpack_require__(15);
+	var invariant = __webpack_require__(12);
 	
 	/**
 	 * This class should be extended by the stores in your application, like so:
@@ -14383,10 +13794,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	// private
 	
 	// protected, available to subclasses
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 20 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -14399,14 +13810,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(21)
+	  EventEmitter: __webpack_require__(18)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 21 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14425,11 +13836,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(22);
-	var EventSubscriptionVendor = __webpack_require__(24);
+	var EmitterSubscription = __webpack_require__(19);
+	var EventSubscriptionVendor = __webpack_require__(21);
 	
-	var emptyFunction = __webpack_require__(26);
-	var invariant = __webpack_require__(25);
+	var emptyFunction = __webpack_require__(23);
+	var invariant = __webpack_require__(22);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -14600,10 +14011,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 	
 	module.exports = BaseEventEmitter;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 22 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -14624,7 +14035,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(23);
+	var EventSubscription = __webpack_require__(20);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -14656,7 +14067,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 23 */
+/* 20 */
 /***/ function(module, exports) {
 
 	/**
@@ -14710,7 +14121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EventSubscription;
 
 /***/ },
-/* 24 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14729,7 +14140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(25);
+	var invariant = __webpack_require__(22);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -14816,10 +14227,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 	
 	module.exports = EventSubscriptionVendor;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 25 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14872,10 +14283,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 26 */
+/* 23 */
 /***/ function(module, exports) {
 
 	/**
@@ -14918,7 +14329,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = emptyFunction;
 
 /***/ },
-/* 27 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -14935,17 +14346,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var invariant = __webpack_require__(15);
+	var invariant = __webpack_require__(12);
 	
 	function abstractMethod(className, methodName) {
 	   true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Subclasses of %s must override %s() with their own implementation.', className, methodName) : invariant(false) : undefined;
 	}
 	
 	module.exports = abstractMethod;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 28 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -19932,7 +19343,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}));
 
 /***/ },
-/* 29 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -19949,9 +19360,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(14);
+	var FluxStoreGroup = __webpack_require__(11);
 	
-	var invariant = __webpack_require__(15);
+	var invariant = __webpack_require__(12);
 	
 	/**
 	 * `FluxContainer` should be preferred over this mixin, but it requires using
@@ -20052,15 +19463,113 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	module.exports = FluxMixinLegacy;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 30 */
+/* 27 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var TreeRasterizer = (function () {
+	    function TreeRasterizer() {
+	    }
+	    TreeRasterizer.rasterize = function (tree) {
+	        var grandTotal = tree.getRoot();
+	        var rasterizedRows = [];
+	        // TODO implement this non-recursively ... to avoid stack related issues
+	        TreeRasterizer.rasterizeChildren(grandTotal, rasterizedRows);
+	        rasterizedRows.shift(); // remove grand total
+	        return rasterizedRows;
+	    };
+	    TreeRasterizer.rasterizeChildren = function (subtotalRow, rasterizedRows) {
+	        // push self
+	        rasterizedRows.push(subtotalRow);
+	        // push children (at which point recurse)
+	        if (!subtotalRow.isCollapsed())
+	            if (subtotalRow.getChildren().length === 0)
+	                subtotalRow.detailRows.forEach(function (detailRow) { return rasterizedRows.push(detailRow); });
+	            else
+	                subtotalRow.getChildren().forEach(function (child) {
+	                    TreeRasterizer.rasterizeChildren(child, rasterizedRows);
+	                });
+	    };
+	    return TreeRasterizer;
+	}());
+	exports.TreeRasterizer = TreeRasterizer;
+
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var GigaStore_1 = __webpack_require__(7);
+	var TreeRasterizer_1 = __webpack_require__(27);
+	var SortFactory_1 = __webpack_require__(29);
+	var SubtotalAggregator_1 = __webpack_require__(31);
+	var TreeBuilder_1 = __webpack_require__(32);
+	var ColumnLike_1 = __webpack_require__(6);
+	function default_1(action) {
+	    var _a = action.props, data = _a.data, columnDefs = _a.columnDefs, columnGroups = _a.columnGroups, initialSubtotalBys = _a.initialSubtotalBys, initialSortBys = _a.initialSortBys, initialFilterBys = _a.initialFilterBys;
+	    /**
+	     * turn ColumnDefs into "Columns" which are decorated with behaviors
+	     */
+	    var columns = columnDefs.map(function (columnDef) {
+	        return _.assign({}, columnDef, {});
+	    });
+	    /**
+	     * create subtotalBys from columns (any properties passed in via initialSubtotalBys will override the same property on the corresponding Column object
+	     */
+	    var subtotalBys = (initialSubtotalBys || []).map(function (subtotalBy) {
+	        var column = _.find(columns, function (column) { return column.colTag === subtotalBy.colTag; });
+	        return _.assign({}, column, subtotalBy);
+	    });
+	    /**
+	     * create sortBys from columns (any properties passed via initialSortBys will override the same property in the corresponding Column object
+	     */
+	    // FIXME we have a state sync issue, columns have "directions", but so does sortBys, the code below is a temp fix
+	    var columnsWithSort = columns.map(function (column) {
+	        var sortBy = _.find((initialSortBys || []), function (s) { return s.colTag == column.colTag; });
+	        if (sortBy)
+	            return _.assign({}, column, {
+	                direction: sortBy.direction || ColumnLike_1.SortDirection.DESC
+	            });
+	        else
+	            return column;
+	    });
+	    var sortBys = (initialSortBys || []).map(function (sortBy) {
+	        var column = _.find(columnsWithSort, function (column) { return column.colTag === sortBy.colTag; });
+	        return _.assign({}, column, sortBy);
+	    });
+	    var filteredColumns = _.filter(columnsWithSort, function (column) { return subtotalBys.map(function (subtotalBy) { return subtotalBy.colTag; }).indexOf(column.colTag) === -1; });
+	    var tree = TreeBuilder_1.TreeBuilder.buildTree(data, subtotalBys, this.props.initiallyExpandedSubtotalRows, this.props.initiallySelectedSubtotalRows);
+	    SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, columns);
+	    if (sortBys)
+	        tree = SortFactory_1.SortFactory.sortTree(tree, sortBys, columns[0]);
+	    var rasterizedRows = TreeRasterizer_1.TreeRasterizer.rasterize(tree);
+	    return {
+	        rasterizedRows: rasterizedRows,
+	        displayStart: 0,
+	        columns: columnGroups ? columnsWithSort : filteredColumns,
+	        displayEnd: Math.min(rasterizedRows.length - 1, GigaStore_1.PROGRESSIVE_RENDERING_THRESHOLD),
+	        subtotalBys: subtotalBys,
+	        sortBys: sortBys,
+	        filterBys: _.cloneDeep(initialFilterBys) || [],
+	        tree: tree,
+	        showSettingsPopover: false
+	    };
+	}
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = default_1;
+
+
+/***/ },
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var ColumnLike_1 = __webpack_require__(6);
-	var SortFactoryHelpers_1 = __webpack_require__(31);
+	var SortFactoryHelpers_1 = __webpack_require__(30);
 	var SortFactory = (function () {
 	    function SortFactory() {
 	    }
@@ -20140,7 +19649,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 31 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -20183,40 +19692,504 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 32 */
-/***/ function(module, exports) {
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var TreeRasterizer = (function () {
-	    function TreeRasterizer() {
+	var ColumnLike_1 = __webpack_require__(6);
+	var _ = __webpack_require__(4);
+	function straightSum(detailRows, column) {
+	    return _.sum(detailRows.map(function (r) { return r.getByColTag(column.colTag); }));
+	}
+	function weightedAverage(detailRows, column) {
+	    var denom = 0.0;
+	    var sumproduct = 0.0;
+	    for (var i = 0; i < detailRows.length; i++) {
+	        denom = denom + detailRows[i].getByColTag(column.weightBy);
+	        sumproduct = sumproduct + detailRows[i].getByColTag(column.colTag) * detailRows[i].getByColTag(column.weightBy);
 	    }
-	    TreeRasterizer.rasterize = function (tree) {
-	        var grandTotal = tree.getRoot();
-	        var rasterizedRows = [];
-	        // TODO implement this non-recursively ... to avoid stack related issues
-	        TreeRasterizer.rasterizeChildren(grandTotal, rasterizedRows);
-	        rasterizedRows.shift(); // remove grand total
-	        return rasterizedRows;
+	    if (denom !== 0.0)
+	        return sumproduct / denom;
+	}
+	function average(detailRows, column) {
+	    if (detailRows.length === 0)
+	        return 0;
+	    return straightSum(detailRows, column) / detailRows.length;
+	}
+	function count(detailRows) {
+	    return detailRows.length;
+	}
+	function countOrDistinct(detailRows, column) {
+	    var distinctCount = countDistinct(detailRows, column);
+	    var c = count(detailRows);
+	    if (distinctCount !== 1)
+	        return distinctCount + "/" + c;
+	    else
+	        return detailRows[0].getByColTag(column.colTag);
+	}
+	function countDistinct(detailRows, column) {
+	    return _.chain(detailRows).map(function (r) { return r.getByColTag(column.colTag); }).sortBy().uniq(true).value().length;
+	}
+	function range(detailRows, column) {
+	    var val = detailRows.map(function (r) { return r.getByColTag(column.colTag); });
+	    return _.min(val) + " - " + _.max(val);
+	}
+	/**
+	 * formats a given value per the format instruction
+	 * TODO add tests
+	 * TODO this does not belong to a file called SubtotalAggregator.ts
+	 * @param value
+	 * @param fmtInstruction
+	 * @returns {any}
+	 */
+	function format(value, fmtInstruction) {
+	    if (!fmtInstruction)
+	        return value;
+	    function addCommas(nStr) {
+	        nStr += '';
+	        var x = nStr.split('.');
+	        var x1 = x[0];
+	        var x2 = x.length > 1 ? '.' + x[1] : '';
+	        var rgx = /(\d+)(\d{3})/;
+	        while (rgx.test(x1)) {
+	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	        }
+	        return x1 + x2;
+	    }
+	    var result = value;
+	    if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result))
+	        result *= fmtInstruction.multiplier;
+	    if (typeof fmtInstruction.roundTo !== "undefined" && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
+	        result = parseFloat(result).toFixed(fmtInstruction.roundTo);
+	    if (fmtInstruction.separator && !isNaN(result))
+	        result = addCommas(result);
+	    if (fmtInstruction.showAsPercent && !isNaN(result))
+	        result = result + "%";
+	    return result;
+	}
+	exports.format = format;
+	/**
+	 * these should return Tree(s) as oppose to being void ... I want to use Immutable.js to simplify things where possible
+	 */
+	var SubtotalAggregator = (function () {
+	    function SubtotalAggregator() {
+	    }
+	    SubtotalAggregator.aggregateTree = function (tree, columns) {
+	        SubtotalAggregator.aggregateSubtotalRow(tree.getRoot(), columns);
+	        SubtotalAggregator.aggregateChildren(tree.getRoot(), columns);
 	    };
-	    TreeRasterizer.rasterizeChildren = function (subtotalRow, rasterizedRows) {
-	        // push self
-	        rasterizedRows.push(subtotalRow);
-	        // push children (at which point recurse)
-	        if (!subtotalRow.isCollapsed())
-	            if (subtotalRow.getChildren().length === 0)
-	                subtotalRow.detailRows.forEach(function (detailRow) { return rasterizedRows.push(detailRow); });
-	            else
-	                subtotalRow.getChildren().forEach(function (child) {
-	                    TreeRasterizer.rasterizeChildren(child, rasterizedRows);
-	                });
+	    /**
+	     * depth first recursive implementation of the tree traversal
+	     * @param subtotalRow
+	     * @param columns
+	     */
+	    SubtotalAggregator.aggregateChildren = function (subtotalRow, columns) {
+	        subtotalRow.getChildren().forEach(function (childRow) {
+	            SubtotalAggregator.aggregateSubtotalRow(childRow, columns);
+	            if (childRow.getChildren().length > 0)
+	                SubtotalAggregator.aggregateChildren(childRow, columns);
+	        });
 	    };
-	    return TreeRasterizer;
+	    SubtotalAggregator.aggregate = function (detailRows, columns) {
+	        var aggregated = {};
+	        columns.forEach(function (column) {
+	            var value;
+	            switch (column.aggregationMethod) {
+	                case ColumnLike_1.AggregationMethod.AVERAGE:
+	                    value = average(detailRows, column);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.COUNT:
+	                    value = count(detailRows);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.COUNT_DISTINCT:
+	                    value = countDistinct(detailRows, column);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.COUNT_OR_DISTINCT:
+	                    value = countOrDistinct(detailRows, column);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.RANGE:
+	                    value = range(detailRows, column);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.SUM:
+	                    value = straightSum(detailRows, column);
+	                    break;
+	                case ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE:
+	                    value = weightedAverage(detailRows, column);
+	                    break;
+	                default:
+	                    value = "";
+	                    break;
+	            }
+	            aggregated[column.colTag] = value;
+	        });
+	        return aggregated;
+	    };
+	    SubtotalAggregator.aggregateSubtotalRow = function (subtotalRow, column) {
+	        subtotalRow.setData(SubtotalAggregator.aggregate(subtotalRow.detailRows, column));
+	    };
+	    return SubtotalAggregator;
 	}());
-	exports.TreeRasterizer = TreeRasterizer;
+	exports.SubtotalAggregator = SubtotalAggregator;
+
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var Row_1 = __webpack_require__(33);
+	var _ = __webpack_require__(4);
+	var ColumnLike_1 = __webpack_require__(6);
+	var TreeBuilder = (function () {
+	    function TreeBuilder() {
+	    }
+	    /**
+	     * traverse the tree and find nodes that has identical sector path, set toggleCollapse to false
+	     * TODO add tests to ensure it does not break
+	     * @param node
+	     * @param initiallyExpandedSubtotalRows
+	     */
+	    TreeBuilder.selectivelyExpand = function (node, initiallyExpandedSubtotalRows) {
+	        initiallyExpandedSubtotalRows.forEach(function (sp) {
+	            for (var i = 1; i <= sp.length; i++)
+	                if (_.isEqual(node.sectorPath(), sp.slice(0, i)))
+	                    node.toggleCollapse(false);
+	        });
+	        if (node.getNumChildren() != 0)
+	            node.getChildren().forEach(function (child) { return TreeBuilder.selectivelyExpand(child, initiallyExpandedSubtotalRows); });
+	    };
+	    /**
+	     * traverse the tree and find nodes that has identical sector path, set isSelected to true
+	     * TODO add tests to ensure it does not break
+	     * @param node
+	     * @param initiallySelectedSubtotalRows
+	     */
+	    TreeBuilder.selectivelySelect = function (node, initiallySelectedSubtotalRows) {
+	        initiallySelectedSubtotalRows.forEach(function (sp) {
+	            if (_.isEqual(node.sectorPath(), sp))
+	                node.toggleSelect(true);
+	        });
+	        if (node.getNumChildren() != 0)
+	            node.getChildren().forEach(function (child) { return TreeBuilder.selectivelySelect(child, initiallySelectedSubtotalRows); });
+	    };
+	    TreeBuilder.buildTree = function (data, subtotalBys, initiallyExpandedSubtotalRows, initiallySelectedSubtotalRows) {
+	        var _this = this;
+	        if (subtotalBys === void 0) { subtotalBys = []; }
+	        /*
+	         * the way we create a Tree is as follows
+	         * since each detailRow in data can only belong to ONE SubtotalRow and each SubtotalRow can have only 1 parent
+	         * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
+	         * parent SubtotalRow (in other words, find the detailRow's "bucket") and append said detailRow to the parent
+	         */
+	        var grandTotal = new Row_1.SubtotalRow({ title: "Grand Total", value: null });
+	        grandTotal.setSectorPath([]);
+	        data.forEach(function (datum) { return _this.bucketDetailRow(subtotalBys, new Row_1.DetailRow(datum), grandTotal); });
+	        TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, true);
+	        /**
+	         * EXPERIMENTAL - these props allow us to expand / select SubtotalRow on construction of the grid component
+	         */
+	        if (initiallyExpandedSubtotalRows)
+	            TreeBuilder.selectivelyExpand(grandTotal, initiallyExpandedSubtotalRows);
+	        if (initiallySelectedSubtotalRows)
+	            TreeBuilder.selectivelySelect(grandTotal, initiallySelectedSubtotalRows);
+	        return new Tree(grandTotal);
+	    };
+	    TreeBuilder.bucketDetailRow = function (subtotalBys, detailedRow, grandTotal) {
+	        /*
+	         * to traverse the grandTotal and find the detailRow's immediate parent SubtotalRow
+	         * we store the detailRow's sector names in an ordered array
+	         */
+	        var buckets = []; // temporary array of strings to keep track subtotal titles names in sequence
+	        grandTotal.detailRows.push(detailedRow);
+	        subtotalBys.forEach(function (subtotalBy) {
+	            // the subtotal title
+	            var bucket = TreeBuilder.resolveSubtotalBucket(subtotalBy, detailedRow);
+	            if (bucket !== undefined) {
+	                buckets.push(bucket);
+	                var subtotalRow = TreeBuilder.traverseOrCreate(grandTotal, buckets);
+	                subtotalRow.detailRows.push(detailedRow);
+	            } // FIXME if a detail row is not defined for all the columns we are subtotaling by, it is orphaned (i.e. not part of the tree at all), should we let it 'traverse' back and attach itself to the last subtotal row?
+	        });
+	        detailedRow.setSectorPath(buckets.map(function (b) { return b.title; }));
+	    };
+	    ;
+	    // TODO add tests
+	    /**
+	     * recurisvely collapse the given node
+	     * @param node
+	     * @param shouldCollapse
+	     */
+	    TreeBuilder.recursivelyToggleChildrenCollapse = function (node, shouldCollapse) {
+	        if (shouldCollapse === void 0) { shouldCollapse = true; }
+	        /**
+	         *
+	         * @param node
+	         * @param shouldCollapse
+	         * @private
+	         */
+	        function _toggleCollapse(node, shouldCollapse) {
+	            node.toggleCollapse(shouldCollapse);
+	            TreeBuilder.recursivelyToggleChildrenCollapse(node, shouldCollapse);
+	        }
+	        node.getChildren().forEach(function (child) {
+	            if (shouldCollapse) {
+	                _toggleCollapse(child, shouldCollapse);
+	            }
+	            else {
+	                if (child.getChildren().length || child.sectorPath().length === 1)
+	                    _toggleCollapse(child, shouldCollapse);
+	            }
+	        });
+	    };
+	    /**
+	     *
+	     * @param grandTotal
+	     * @param buckets
+	     * @returns {SubtotalRow}
+	     */
+	    TreeBuilder.traverseOrCreate = function (grandTotal, buckets) {
+	        // traverse to the correct SubtotalRow
+	        var currentRow = grandTotal;
+	        for (var k = 0; k < buckets.length; k++) {
+	            // update the current subtotal row
+	            var title = buckets[k].title;
+	            if (currentRow.hasChildWithTitle(title))
+	                currentRow = currentRow.getChildByTitle(title);
+	            else {
+	                // create a new sector if it is not already available
+	                // SubtotalRow are created with a `title` and a `firstCellValue` property, firstCellValue is used to determine the row's sort order
+	                var newRow = new Row_1.SubtotalRow(buckets[k]);
+	                newRow.toggleCollapse(true);
+	                // set the sector path for the new SubtotalRow we just created the length of which determines its depth
+	                newRow.setSectorPath(buckets.slice(0, k + 1).map(function (b) { return b.title; }));
+	                currentRow.addChild(newRow);
+	                currentRow = newRow;
+	            }
+	        }
+	        return currentRow;
+	    };
+	    ;
+	    TreeBuilder.resolveSubtotalBucket = function (subtotalBy, detailedRow) {
+	        // FIXME this is the naive implementation, cannot handle text-align-rightal bands
+	        var title = detailedRow.get(subtotalBy);
+	        // if the given column is not defined in the data, return undefined, this will
+	        if (title === undefined)
+	            return undefined;
+	        return {
+	            title: subtotalBy.title ? subtotalBy.title + ": " + title : title,
+	            value: subtotalBy.format === ColumnLike_1.ColumnFormat.NUMBER ? parseFloat(title) : title
+	        };
+	    };
+	    return TreeBuilder;
+	}());
+	exports.TreeBuilder = TreeBuilder;
+	var Tree = (function () {
+	    function Tree(root) {
+	        this.root = root;
+	    }
+	    Tree.prototype.getRoot = function () {
+	        return this.root;
+	    };
+	    return Tree;
+	}());
+	exports.Tree = Tree;
 
 
 /***/ },
 /* 33 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var GenericRow = (function () {
+	    function GenericRow(data) {
+	        this._isSelected = false;
+	        this._isHidden = false;
+	        this._data = data;
+	        this._sectorPath = [];
+	    }
+	    GenericRow.prototype.get = function (columnDef) {
+	        return this._data[columnDef.colTag];
+	    };
+	    GenericRow.prototype.getByColTag = function (colTag) {
+	        return this._data[colTag];
+	    };
+	    GenericRow.prototype.toggleSelect = function (select) {
+	        if (typeof select !== "undefined")
+	            this._isSelected = select;
+	        else
+	            this._isSelected = !this._isSelected;
+	    };
+	    GenericRow.prototype.isSelected = function () {
+	        return this._isSelected;
+	    };
+	    GenericRow.prototype.isHidden = function () {
+	        return this._isHidden;
+	    };
+	    GenericRow.prototype.toggleHide = function (hide) {
+	        if (typeof hide !== "undefined")
+	            this._isHidden = hide;
+	        else
+	            this._isHidden = !this._isHidden;
+	    };
+	    GenericRow.prototype.sectorPath = function () {
+	        return this._sectorPath;
+	    };
+	    GenericRow.prototype.setSectorPath = function (sectorPath) {
+	        this._sectorPath = sectorPath;
+	    };
+	    GenericRow.prototype.data = function () {
+	        return this._data;
+	    };
+	    GenericRow.prototype.setData = function (data) {
+	        this._data = data;
+	    };
+	    return GenericRow;
+	}());
+	exports.GenericRow = GenericRow;
+	var DetailRow = (function (_super) {
+	    __extends(DetailRow, _super);
+	    function DetailRow(data) {
+	        _super.call(this, data);
+	    }
+	    DetailRow.prototype.isDetail = function () {
+	        return true;
+	    };
+	    return DetailRow;
+	}(GenericRow));
+	exports.DetailRow = DetailRow;
+	var SubtotalRow = (function (_super) {
+	    __extends(SubtotalRow, _super);
+	    function SubtotalRow(bucketInfo) {
+	        _super.call(this, {});
+	        this.children = [];
+	        this.childrenByTitle = {};
+	        this._isCollapsed = false;
+	        this.detailRows = [];
+	        this.bucketInfo = bucketInfo;
+	    }
+	    SubtotalRow.prototype.toggleCollapse = function (state) {
+	        if (state != undefined)
+	            this._isCollapsed = state;
+	        else
+	            this._isCollapsed = !this._isCollapsed;
+	    };
+	    SubtotalRow.prototype.isCollapsed = function () {
+	        return this._isCollapsed;
+	    };
+	    SubtotalRow.prototype.isDetail = function () {
+	        return false;
+	    };
+	    SubtotalRow.prototype.findIndex = function (child) {
+	        for (var i = 0; i < this.children.length; i++)
+	            if (this.children[i].bucketInfo.title === child.bucketInfo.title)
+	                return i;
+	        return -1;
+	    };
+	    SubtotalRow.prototype.addChild = function (child) {
+	        // if already exist, pop it from the children array
+	        this.removeChild(child);
+	        this.children.push(child);
+	        this.childrenByTitle[child.bucketInfo.title] = child;
+	    };
+	    SubtotalRow.prototype.removeChild = function (child) {
+	        if (this.childrenByTitle[child.bucketInfo.title] != undefined) {
+	            var idx = this.findIndex(child);
+	            this.children.splice(idx, 1);
+	            this.childrenByTitle[child.bucketInfo.title] = undefined;
+	        }
+	    };
+	    SubtotalRow.prototype.getChildByTitle = function (title) {
+	        return this.childrenByTitle[title];
+	    };
+	    SubtotalRow.prototype.getNumChildren = function () {
+	        return this.children.length;
+	    };
+	    SubtotalRow.prototype.getChildren = function () {
+	        return this.children;
+	    };
+	    SubtotalRow.prototype.getChildAtIndex = function (idx) {
+	        return this.children[idx];
+	    };
+	    SubtotalRow.prototype.hasChildWithTitle = function (title) {
+	        return this.getChildByTitle(title) != undefined;
+	    };
+	    return SubtotalRow;
+	}(GenericRow));
+	exports.SubtotalRow = SubtotalRow;
+
+
+/***/ },
+/* 34 */
+/***/ function(module, exports) {
+
+	"use strict";
+	function cellSelectReducer(state, action, props) {
+	    if (_.isFunction(props.onCellClick)) {
+	        if (!props.onCellClick(action.row, action.column))
+	            return state; // will not emit state mutation event
+	        else
+	            return _.clone(state); // will emit state mutation event
+	    }
+	    else
+	        return state;
+	}
+	exports.cellSelectReducer = cellSelectReducer;
+	function rowSelectReducer(state, action, props) {
+	    if (_.isFunction(props.onRowClick)) {
+	        var udfResult = props.onRowClick(action.row, state);
+	        if (udfResult !== undefined &&
+	            udfResult === false)
+	            return state;
+	        else {
+	            // de-select every other row unless enableMultiRowSelect is turned on
+	            if (!props.enableMultiRowSelect) {
+	                var toggleTo = !action.row.isSelected();
+	                recursivelyDeselect(state.tree.getRoot());
+	                action.row.toggleSelect(toggleTo);
+	            }
+	            else
+	                action.row.toggleSelect();
+	            return _.clone(state);
+	        }
+	    }
+	    else
+	        return state;
+	}
+	exports.rowSelectReducer = rowSelectReducer;
+	// define a function
+	function recursivelyDeselect(row) {
+	    row.toggleSelect(false);
+	    if (!row.isDetail()) {
+	        var subtotalRow = row;
+	        var children = subtotalRow.getChildren().length === 0 ? subtotalRow.detailRows : subtotalRow.getChildren();
+	        children.forEach(function (child) { return recursivelyDeselect(child); });
+	    }
+	}
+
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var ScrollCalculator_1 = __webpack_require__(36);
+	function changeDisplayBoundsReducer(state, action) {
+	    var _a = ScrollCalculator_1.ScrollCalculator.computeDisplayBoundaries(action.rowHeight, action.viewport, action.canvas), displayStart = _a.displayStart, displayEnd = _a.displayEnd;
+	    var newState = _.clone(state);
+	    newState.displayStart = displayStart;
+	    newState.displayEnd = displayEnd;
+	    return newState;
+	}
+	exports.changeDisplayBoundsReducer = changeDisplayBoundsReducer;
+
+
+/***/ },
+/* 36 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -20240,7 +20213,93 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 34 */
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * Sort Action Handlers
+	 */
+	"use strict";
+	var SortFactory_1 = __webpack_require__(29);
+	function sortUpdateReducer(state, action) {
+	    /**
+	     * go through all the columns in state, flip on/off sort flags as necessary
+	     */
+	    var newPartialState = {};
+	    state.columns.forEach(function (column) {
+	        var sb = _.find(action.sortBys, function (s) { return s.colTag === column.colTag; });
+	        if (sb)
+	            column.direction = sb.direction;
+	        else
+	            column.direction = undefined;
+	    });
+	    newPartialState['columns'] = state.columns;
+	    newPartialState['tree'] = SortFactory_1.SortFactory.sortTree(state.tree, action.sortBys, newPartialState['columns'][0]);
+	    newPartialState['sortBys'] = action.sortBys;
+	    return _.assign({}, state, newPartialState);
+	}
+	exports.sortUpdateReducer = sortUpdateReducer;
+	function cleartSortReducer(state) {
+	    state.columns.forEach(function (column) { return column.direction = undefined; });
+	    var newTree = SortFactory_1.SortFactory.sortTree(state.tree, []);
+	    var newState = _.clone(state);
+	    newState.tree = newTree;
+	    newState.sortBys = [];
+	    return newState;
+	}
+	exports.cleartSortReducer = cleartSortReducer;
+
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var TreeBuilder_1 = __webpack_require__(32);
+	function expandAllReducer(state) {
+	    TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(state.tree.getRoot(), false);
+	    return _.clone(state);
+	}
+	exports.expandAllReducer = expandAllReducer;
+	function collapseAllReducer(state) {
+	    TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(state.tree.getRoot());
+	    return _.clone(state);
+	}
+	exports.collapseAllReducer = collapseAllReducer;
+	function toggleCollapseReducer(state, action) {
+	    var row = action.subtotalRow;
+	    row.toggleCollapse();
+	    return _.clone(state);
+	}
+	exports.toggleCollapseReducer = toggleCollapseReducer;
+
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var SortFactory_1 = __webpack_require__(29);
+	var SubtotalAggregator_1 = __webpack_require__(31);
+	var TreeBuilder_1 = __webpack_require__(32);
+	function columnUpdateReducer(state, action, props) {
+	    var newColumnStates = {
+	        columns: action.columns || state.columns,
+	        subtotalBys: action.subtotalBys || state.subtotalBys,
+	        showSettingsPopover: !state.showSettingsPopover
+	    };
+	    // TODO we might not ALWAYS want to re-aggregate, but we need to think about how the object model works
+	    var tree = TreeBuilder_1.TreeBuilder.buildTree(props.data, newColumnStates.subtotalBys);
+	    TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(tree.getRoot(), false);
+	    SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, newColumnStates.columns);
+	    newColumnStates["tree"] = SortFactory_1.SortFactory.sortTree(tree, state.sortBys);
+	    return _.assign({}, state, newColumnStates);
+	}
+	exports.columnUpdateReducer = columnUpdateReducer;
+
+
+/***/ },
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -20252,11 +20311,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(35);
+	module.exports.Dispatcher = __webpack_require__(41);
 
 
 /***/ },
-/* 35 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -20278,7 +20337,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(15);
+	var invariant = __webpack_require__(12);
 	
 	var _prefix = 'ID_';
 	
@@ -20490,10 +20549,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 	
 	module.exports = Dispatcher;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 36 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -20503,7 +20562,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var GigaRow_1 = __webpack_require__(37);
+	var GigaRow_1 = __webpack_require__(43);
 	var GigaStore_1 = __webpack_require__(7);
 	var TableBody = (function (_super) {
 	    __extends(TableBody, _super);
@@ -20558,7 +20617,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 37 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -20568,9 +20627,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(38);
+	var classNames = __webpack_require__(44);
 	var GigaStore_1 = __webpack_require__(7);
-	var Cell_1 = __webpack_require__(39);
+	var Cell_1 = __webpack_require__(45);
 	var GigaRow = (function (_super) {
 	    __extends(GigaRow, _super);
 	    function GigaRow(props) {
@@ -20608,7 +20667,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 38 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -20662,7 +20721,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 39 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -20672,9 +20731,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(38);
+	var classNames = __webpack_require__(44);
 	var ColumnLike_1 = __webpack_require__(6);
-	var SubtotalAggregator_1 = __webpack_require__(8);
+	var SubtotalAggregator_1 = __webpack_require__(31);
 	var GigaStore_1 = __webpack_require__(7);
 	var Cell = (function (_super) {
 	    __extends(Cell, _super);
@@ -20771,7 +20830,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 40 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -20781,7 +20840,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var TableHeaderCell_1 = __webpack_require__(41);
+	var TableHeaderCell_1 = __webpack_require__(47);
 	var GigaGrid_1 = __webpack_require__(1);
 	/**
 	 * terminology: column groups are columns that can span multiple `leaf` columns and physically reside
@@ -20829,7 +20888,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 41 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -20839,11 +20898,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(38);
+	var classNames = __webpack_require__(44);
 	var ColumnLike_1 = __webpack_require__(6);
 	var GigaStore_1 = __webpack_require__(7);
 	var _ = __webpack_require__(4);
-	var Toolbar_1 = __webpack_require__(42);
+	var Toolbar_1 = __webpack_require__(48);
 	var TableHeaderCell = (function (_super) {
 	    __extends(TableHeaderCell, _super);
 	    function TableHeaderCell(props) {
@@ -20901,7 +20960,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 42 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -20911,7 +20970,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	__webpack_require__(43);
+	__webpack_require__(49);
 	var GigaStore_1 = __webpack_require__(7);
 	/**
 	 * The job of the toolbar is to dispatch actions to the flux reduce store. It is free to query the state of the grid
@@ -20939,16 +20998,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 43 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(44);
+	var content = __webpack_require__(50);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(46)(content, {});
+	var update = __webpack_require__(52)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -20965,10 +21024,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 44 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(45)();
+	exports = module.exports = __webpack_require__(51)();
 	// imports
 	
 	
@@ -20979,7 +21038,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 45 */
+/* 51 */
 /***/ function(module, exports) {
 
 	/*
@@ -21035,7 +21094,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 46 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -21251,7 +21310,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	function applyToTag(styleElement, obj) {
 		var css = obj.css;
 		var media = obj.media;
-		var sourceMap = obj.sourceMap;
 	
 		if(media) {
 			styleElement.setAttribute("media", media)
@@ -21269,7 +21327,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function updateLink(linkElement, obj) {
 		var css = obj.css;
-		var media = obj.media;
 		var sourceMap = obj.sourceMap;
 	
 		if(sourceMap) {
@@ -21289,11 +21346,271 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 47 */
+/* 53 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(2);
+	var ColumnLike_1 = __webpack_require__(6);
+	var SortableItem_1 = __webpack_require__(54);
+	var _ = __webpack_require__(4);
+	var GigaStore_1 = __webpack_require__(7);
+	__webpack_require__(55);
+	var classNames = __webpack_require__(44);
+	var SettingsPopover = (function (_super) {
+	    __extends(SettingsPopover, _super);
+	    function SettingsPopover(props) {
+	        _super.call(this, props);
+	        var columns = _.clone(props.columns);
+	        var subtotalBys = _.clone(props.subtotalBys);
+	        var activeColumn = undefined;
+	        this.state = { columns: columns, subtotalBys: subtotalBys, activeColumn: activeColumn };
+	    }
+	    /**
+	     * move the src from the `from` list to after the dest column in the `to` list
+	     * @param from
+	     * @param to
+	     * @param src
+	     * @param dest
+	     */
+	    SettingsPopover.prototype.swapToAnotherListOfColumns = function (from, to, src, dest) {
+	        var item = from.splice(src.idx, 1)[0];
+	        to.splice(dest.idx + 1, 0, item);
+	    };
+	    /**
+	     * moves the src column to after the dest column within the same list
+	     * @param columns
+	     * @param src
+	     * @param dest
+	     */
+	    SettingsPopover.prototype.moveColumn = function (columns, src, dest) {
+	        var item = columns.splice(src.idx, 1)[0];
+	        // need a more reliable way to to determine destIdx, given that the same column could be repeated in the list
+	        var destIdx = _.findIndex(columns, function (c) { return c.colTag === dest.colTag; });
+	        columns.splice(destIdx + 1, 0, item);
+	    };
+	    /**
+	     * insert the column represented by the srcColTag to the column represented by the destColTag
+	     * @param src
+	     * @param dest
+	     */
+	    SettingsPopover.prototype.updateColumnPosition = function (src, dest) {
+	        if (src.type === dest.type)
+	            /**
+	             * move the src column to a different position within the same list of columns
+	             */
+	            this.moveColumn(this.state[src.type], src, dest);
+	        else
+	            /**
+	             * src is in a different list of column than dest, we need to transfer them
+	             */
+	            this.swapToAnotherListOfColumns(this.state[src.type], this.state[dest.type], src, dest);
+	        this.setState(_.assign({}, this.state, {
+	            columns: this.state.columns,
+	            subtotalBys: this.state.subtotalBys
+	        }));
+	    };
+	    SettingsPopover.prototype.commitColumnUpdates = function () {
+	        var payload = {
+	            type: GigaStore_1.GigaActionType.COLUMNS_UPDATE,
+	            columns: this.state.columns,
+	            subtotalBys: this.state.subtotalBys
+	        };
+	        this.props.onSubmit.call(undefined, payload);
+	    };
+	    SettingsPopover.prototype.renderSortable = function (type, columns) {
+	        var _this = this;
+	        var items = columns.map(function (c, i) {
+	            return React.createElement(SortableItem_1.SortableItem, {key: i, column: c, idx: i, type: type, onClick: (function (column) {
+	                this.setState(_.assign({}, this.state, { activeColumn: column }));
+	            }).bind(_this), onUpdate: function (src, dest) { return _this.updateColumnPosition(src, dest); }});
+	        });
+	        if (columns.length === 0) {
+	            return (
+	            /**
+	             * in the event the column is empty, we still want to handle drop events
+	             */
+	            React.createElement("ul", {className: "giga-grid-sortable", onDragOver: function (e) { return e.preventDefault(); }, onDrop: function (e) {
+	                var srcType = e.dataTransfer.getData('type');
+	                var src = {
+	                    type: srcType,
+	                    colTag: e.dataTransfer.getData('colTag'),
+	                    idx: parseInt(e.dataTransfer.getData('idx'))
+	                };
+	                var fromList = _this.state[srcType];
+	                var toList = _this.state[type];
+	                var dest = {
+	                    type: type,
+	                    colTag: null,
+	                    idx: 0
+	                };
+	                _this.swapToAnotherListOfColumns(fromList, toList, src, dest);
+	                _this.setState(_.assign({}, _this.state, {
+	                    columns: _this.state.columns,
+	                    subtotalBys: _this.state.subtotalBys
+	                }));
+	            }}, "Drop a Column Here to Subtotal By It"));
+	        }
+	        else
+	            return (React.createElement("ul", {className: "giga-grid-sortable"}, items));
+	    };
+	    SettingsPopover.prototype.render = function () {
+	        var _this = this;
+	        var activeColumn = this.state.activeColumn;
+	        var layoutControlClassDict = {
+	            "giga-grid-flex-column": true,
+	            "column-50": activeColumn ? true : false,
+	            "column-100": !activeColumn ? false : true
+	        };
+	        var layoutControlClassName = classNames(layoutControlClassDict);
+	        return (React.createElement("div", {className: "giga-grid-settings-pop-over", onClick: function (e) { return e.stopPropagation(); }}, React.createElement("h3", null, "Configure table columns"), React.createElement("div", {className: "row"}, React.createElement("div", {className: layoutControlClassName}, React.createElement("div", null, React.createElement("h5", null, "Columns"), this.renderSortable("columns", this.state.columns)), React.createElement("div", null, React.createElement("h5", null, "Subtotal By"), this.renderSortable("subtotalBys", this.state.subtotalBys)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.EXPAND_ALL }); }}, "Expand All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.COLLAPSE_ALL }); }}, "Collapse All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.CLEAR_SORT }); }}, "Clear Sort")), React.createElement("br", null), React.createElement("div", null)), this.renderColumnConfigurer(activeColumn)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", style: { float: "right" }, onClick: function (e) { return _this.props.onDismiss(); }}, "Close ", React.createElement("i", {className: "fa fa-times"})), React.createElement("span", {className: "giga-grid-button", style: { float: "right" }, onClick: function (e) { return _this.commitColumnUpdates(); }}, "Save ", React.createElement("i", {className: "fa fa-save"})))));
+	    };
+	    SettingsPopover.prototype.renderColumnConfigurer = function (column) {
+	        var _this = this;
+	        if (!column)
+	            return "";
+	        function onTitleChange(e) {
+	            e.preventDefault();
+	            column.title = e.target.value;
+	            this.setState(_.assign({}, this.state, { column: column }));
+	        }
+	        function onAggregationMethodChange(e) {
+	            e.preventDefault();
+	            //noinspection TypeScriptValidateTypes
+	            column.aggregationMethod = parseInt(e.target.value);
+	            this.setState(_.assign({}, this.state, { column: column }));
+	        }
+	        function onFormatChange(e) {
+	            e.preventDefault();
+	            //noinspection TypeScriptValidateTypes
+	            column.format = parseInt(e.target.value);
+	            this.setState(_.assign({}, this.state, { column: column }));
+	        }
+	        return (React.createElement("div", {className: "giga-grid-flex-column column-50"}, React.createElement("div", null, React.createElement("h5", {className: "inline-label"}, "Title"), React.createElement("span", {className: "giga-grid-button dismiss", onClick: function () { return _this.setState(_.assign({}, _this.state, { activeColumn: undefined })); }}, React.createElement("i", {className: "fa fa-chevron-left"}))), React.createElement("input", {type: "text", className: "giga-grid-text-input", placeholder: "Title", value: column.title, onChange: onTitleChange.bind(this)}), React.createElement("br", null), React.createElement("div", null, React.createElement("div", {className: "column-50"}, React.createElement("h5", null, "Aggregation Method"), React.createElement("select", {value: column.aggregationMethod, onChange: onAggregationMethodChange.bind(this)}, React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.SUM}, "Sum"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.COUNT}, "Count"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.COUNT_DISTINCT}, "Count Distinct"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.RANGE}, "Range"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.AVERAGE}, "Average"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE}, "Weighted Average"))), React.createElement("div", {className: "column-50"}, React.createElement("h5", null, "Format"), React.createElement("select", {value: column.format, onChange: onFormatChange.bind(this)}, React.createElement("option", {value: ColumnLike_1.ColumnFormat.CURRENCY}, "Currency"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.DATE}, "Date"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.NUMBER}, "Number"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.STRING}, "String"))))));
+	    };
+	    return SettingsPopover;
+	}(React.Component));
+	exports.SettingsPopover = SettingsPopover;
+
+
+/***/ },
+/* 54 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(2);
+	var classNames = __webpack_require__(44);
+	var SortableItem = (function (_super) {
+	    __extends(SortableItem, _super);
+	    function SortableItem(props) {
+	        _super.call(this, props);
+	        this.state = {
+	            isDraggingOver: false
+	        };
+	    }
+	    SortableItem.prototype.onDrop = function (e) {
+	        var src = {
+	            type: e.dataTransfer.getData('type'),
+	            colTag: e.dataTransfer.getData('colTag'),
+	            idx: parseInt(e.dataTransfer.getData('idx'))
+	        };
+	        var dest = {
+	            type: this.props.type,
+	            colTag: this.props.column.colTag,
+	            idx: this.props.idx
+	        };
+	        this.props.onUpdate(src, dest);
+	    };
+	    SortableItem.prototype.onDragStart = function (e) {
+	        e.dataTransfer.setData('colTag', this.props.column.colTag);
+	        e.dataTransfer.setData('type', this.props.type);
+	        e.dataTransfer.setData('idx', "" + this.props.idx);
+	    };
+	    SortableItem.prototype.onDragOver = function (e) {
+	        e.preventDefault();
+	        this.setState({
+	            isDraggingOver: true
+	        });
+	    };
+	    SortableItem.prototype.onDragLeave = function (e) {
+	        e.preventDefault();
+	        this.setState({
+	            isDraggingOver: false
+	        });
+	    };
+	    SortableItem.prototype.componentWillReceiveProps = function () {
+	        this.setState({
+	            isDraggingOver: false
+	        });
+	    };
+	    SortableItem.prototype.render = function () {
+	        var _this = this;
+	        var cx = classNames({
+	            dragging: this.state['isDraggingOver']
+	        });
+	        return (React.createElement("li", {className: cx, draggable: true, onClick: function () { return _this.props.onClick.call(undefined, _this.props.column); }, onDragStart: function (e) { return _this.onDragStart.call(_this, e); }, onDragOver: function (e) { return _this.onDragOver(e); }, onDragLeave: function (e) { return _this.onDragLeave(e); }, onDrop: function (e) { return _this.onDrop(e); }}, this.props.column.title || this.props.column.colTag));
+	    };
+	    return SortableItem;
+	}(React.Component));
+	exports.SortableItem = SortableItem;
+
+
+/***/ },
+/* 55 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(56);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(52)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./SettingsPopover.styl", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./SettingsPopover.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 56 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(51)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "span.giga-grid-button.dismiss {\n  float: right;\n}\nh5.inline-label {\n  display: inline;\n}\n.giga-grid .giga-grid-settings-pop-over {\n  border: 1px solid toolbar-border-color;\n  padding: 1em;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  position: absolute;\n  top: 20px;\n  z-index: 1;\n  background-color: #fff;\n  width: 660px;\n  min-height: 350px;\n}\n.giga-grid .giga-grid-settings-pop-over ul {\n  list-style: circle;\n}\n.giga-grid .giga-grid-settings-pop-over ul li {\n  display: inline-block;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  padding: 5px;\n  margin-right: 3px;\n  margin-bottom: 5px;\n}\n.giga-grid .giga-grid-settings-pop-over ul li:hover {\n  cursor: pointer;\n  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;\n  background-color: toolbar-border-color;\n}\n.giga-grid .giga-grid-settings-pop-over ul li.dragging {\n  border-right: 2px solid #ff4500;\n}\n", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	 * jQuery JavaScript Library v2.2.2
+	 * jQuery JavaScript Library v2.2.3
 	 * http://jquery.com/
 	 *
 	 * Includes Sizzle.js
@@ -21303,7 +21620,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Released under the MIT license
 	 * http://jquery.org/license
 	 *
-	 * Date: 2016-03-17T17:51Z
+	 * Date: 2016-04-05T19:26Z
 	 */
 	
 	(function( global, factory ) {
@@ -21359,7 +21676,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var
-		version = "2.2.2",
+		version = "2.2.3",
 	
 		// Define a local copy of jQuery
 		jQuery = function( selector, context ) {
@@ -30769,7 +31086,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			// If it fails, this function gets "jqXHR", "status", "error"
 			} ).always( callback && function( jqXHR, status ) {
 				self.each( function() {
-					callback.apply( self, response || [ jqXHR.responseText, status, jqXHR ] );
+					callback.apply( this, response || [ jqXHR.responseText, status, jqXHR ] );
 				} );
 			} );
 		}
@@ -31134,265 +31451,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	return jQuery;
 	}));
-
-
-/***/ },
-/* 48 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var React = __webpack_require__(2);
-	var ColumnLike_1 = __webpack_require__(6);
-	var SortableItem_1 = __webpack_require__(49);
-	var _ = __webpack_require__(4);
-	var GigaStore_1 = __webpack_require__(7);
-	__webpack_require__(50);
-	var classNames = __webpack_require__(38);
-	var SettingsPopover = (function (_super) {
-	    __extends(SettingsPopover, _super);
-	    function SettingsPopover(props) {
-	        _super.call(this, props);
-	        var columns = _.clone(props.columns);
-	        var subtotalBys = _.clone(props.subtotalBys);
-	        var activeColumn = undefined;
-	        this.state = { columns: columns, subtotalBys: subtotalBys, activeColumn: activeColumn };
-	    }
-	    /**
-	     * move the src from the `from` list to after the dest column in the `to` list
-	     * @param from
-	     * @param to
-	     * @param src
-	     * @param dest
-	     */
-	    SettingsPopover.prototype.swapToAnotherListOfColumns = function (from, to, src, dest) {
-	        var item = from.splice(src.idx, 1)[0];
-	        to.splice(dest.idx + 1, 0, item);
-	    };
-	    /**
-	     * moves the src column to after the dest column within the same list
-	     * @param columns
-	     * @param src
-	     * @param dest
-	     */
-	    SettingsPopover.prototype.moveColumn = function (columns, src, dest) {
-	        var item = columns.splice(src.idx, 1)[0];
-	        // need a more reliable way to to determine destIdx, given that the same column could be repeated in the list
-	        var destIdx = _.findIndex(columns, function (c) { return c.colTag === dest.colTag; });
-	        columns.splice(destIdx + 1, 0, item);
-	    };
-	    /**
-	     * insert the column represented by the srcColTag to the column represented by the destColTag
-	     * @param src
-	     * @param dest
-	     */
-	    SettingsPopover.prototype.updateColumnPosition = function (src, dest) {
-	        if (src.type === dest.type)
-	            /**
-	             * move the src column to a different position within the same list of columns
-	             */
-	            this.moveColumn(this.state[src.type], src, dest);
-	        else
-	            /**
-	             * src is in a different list of column than dest, we need to transfer them
-	             */
-	            this.swapToAnotherListOfColumns(this.state[src.type], this.state[dest.type], src, dest);
-	        this.setState(_.assign({}, this.state, {
-	            columns: this.state.columns,
-	            subtotalBys: this.state.subtotalBys
-	        }));
-	    };
-	    SettingsPopover.prototype.commitColumnUpdates = function () {
-	        var payload = {
-	            type: GigaStore_1.GigaActionType.COLUMNS_UPDATE,
-	            columns: this.state.columns,
-	            subtotalBys: this.state.subtotalBys
-	        };
-	        this.props.onSubmit.call(undefined, payload);
-	    };
-	    SettingsPopover.prototype.renderSortable = function (type, columns) {
-	        var _this = this;
-	        var items = columns.map(function (c, i) {
-	            return React.createElement(SortableItem_1.SortableItem, {key: i, column: c, idx: i, type: type, onClick: (function (column) {
-	                this.setState(_.assign({}, this.state, { activeColumn: column }));
-	            }).bind(_this), onUpdate: function (src, dest) { return _this.updateColumnPosition(src, dest); }});
-	        });
-	        if (columns.length === 0) {
-	            return (
-	            /**
-	             * in the event the column is empty, we still want to handle drop events
-	             */
-	            React.createElement("ul", {className: "giga-grid-sortable", onDragOver: function (e) { return e.preventDefault(); }, onDrop: function (e) {
-	                var srcType = e.dataTransfer.getData('type');
-	                var src = {
-	                    type: srcType,
-	                    colTag: e.dataTransfer.getData('colTag'),
-	                    idx: parseInt(e.dataTransfer.getData('idx'))
-	                };
-	                var fromList = _this.state[srcType];
-	                var toList = _this.state[type];
-	                var dest = {
-	                    type: type,
-	                    colTag: null,
-	                    idx: 0
-	                };
-	                _this.swapToAnotherListOfColumns(fromList, toList, src, dest);
-	                _this.setState(_.assign({}, _this.state, {
-	                    columns: _this.state.columns,
-	                    subtotalBys: _this.state.subtotalBys
-	                }));
-	            }}, "Drop a Column Here to Subtotal By It"));
-	        }
-	        else
-	            return (React.createElement("ul", {className: "giga-grid-sortable"}, items));
-	    };
-	    SettingsPopover.prototype.render = function () {
-	        var _this = this;
-	        var activeColumn = this.state.activeColumn;
-	        var layoutControlClassName = classNames({
-	            "giga-grid-flex-column": true,
-	            "column-50": activeColumn,
-	            "column-100": !activeColumn
-	        });
-	        return (React.createElement("div", {className: "giga-grid-settings-pop-over", onClick: function (e) { return e.stopPropagation(); }}, React.createElement("h3", null, "Configure table columns"), React.createElement("div", {className: "row"}, React.createElement("div", {className: layoutControlClassName}, React.createElement("div", null, React.createElement("h5", null, "Columns"), this.renderSortable("columns", this.state.columns)), React.createElement("div", null, React.createElement("h5", null, "Subtotal By"), this.renderSortable("subtotalBys", this.state.subtotalBys)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.EXPAND_ALL }); }}, "Expand All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.COLLAPSE_ALL }); }}, "Collapse All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.CLEAR_SORT }); }}, "Clear Sort")), React.createElement("br", null), React.createElement("div", null)), this.renderColumnConfigurer(activeColumn)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", style: { float: "right" }, onClick: function (e) { return _this.props.onDismiss(); }}, "Close ", React.createElement("i", {className: "fa fa-times"})), React.createElement("span", {className: "giga-grid-button", style: { float: "right" }, onClick: function (e) { return _this.commitColumnUpdates(); }}, "Save ", React.createElement("i", {className: "fa fa-save"})))));
-	    };
-	    SettingsPopover.prototype.renderColumnConfigurer = function (column) {
-	        var _this = this;
-	        if (!column)
-	            return "";
-	        function onTitleChange(e) {
-	            e.preventDefault();
-	            column.title = e.target.value;
-	            this.setState(_.assign({}, this.state, { column: column }));
-	        }
-	        function onAggregationMethodChange(e) {
-	            e.preventDefault();
-	            //noinspection TypeScriptValidateTypes
-	            column.aggregationMethod = parseInt(e.target.value);
-	            this.setState(_.assign({}, this.state, { column: column }));
-	        }
-	        function onFormatChange(e) {
-	            e.preventDefault();
-	            //noinspection TypeScriptValidateTypes
-	            column.format = parseInt(e.target.value);
-	            this.setState(_.assign({}, this.state, { column: column }));
-	        }
-	        return (React.createElement("div", {className: "giga-grid-flex-column column-50"}, React.createElement("div", null, React.createElement("h5", {className: "inline-label"}, "Title"), React.createElement("span", {className: "giga-grid-button dismiss", onClick: function () { return _this.setState(_.assign({}, _this.state, { activeColumn: undefined })); }}, React.createElement("i", {className: "fa fa-chevron-left"}))), React.createElement("input", {type: "text", className: "giga-grid-text-input", placeholder: "Title", value: column.title, onChange: onTitleChange.bind(this)}), React.createElement("br", null), React.createElement("div", null, React.createElement("div", {className: "column-50"}, React.createElement("h5", null, "Aggregation Method"), React.createElement("select", {value: column.aggregationMethod, onChange: onAggregationMethodChange.bind(this)}, React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.SUM}, "Sum"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.COUNT}, "Count"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.COUNT_DISTINCT}, "Count Distinct"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.RANGE}, "Range"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.AVERAGE}, "Average"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE}, "Weighted Average"))), React.createElement("div", {className: "column-50"}, React.createElement("h5", null, "Format"), React.createElement("select", {value: column.format, onChange: onFormatChange.bind(this)}, React.createElement("option", {value: ColumnLike_1.ColumnFormat.CURRENCY}, "Currency"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.DATE}, "Date"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.NUMBER}, "Number"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.STRING}, "String"))))));
-	    };
-	    return SettingsPopover;
-	}(React.Component));
-	exports.SettingsPopover = SettingsPopover;
-
-
-/***/ },
-/* 49 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(38);
-	var SortableItem = (function (_super) {
-	    __extends(SortableItem, _super);
-	    function SortableItem(props) {
-	        _super.call(this, props);
-	        this.state = {
-	            isDraggingOver: false
-	        };
-	    }
-	    SortableItem.prototype.onDrop = function (e) {
-	        var src = {
-	            type: e.dataTransfer.getData('type'),
-	            colTag: e.dataTransfer.getData('colTag'),
-	            idx: parseInt(e.dataTransfer.getData('idx'))
-	        };
-	        var dest = {
-	            type: this.props.type,
-	            colTag: this.props.column.colTag,
-	            idx: this.props.idx
-	        };
-	        this.props.onUpdate(src, dest);
-	    };
-	    SortableItem.prototype.onDragStart = function (e) {
-	        e.dataTransfer.setData('colTag', this.props.column.colTag);
-	        e.dataTransfer.setData('type', this.props.type);
-	        e.dataTransfer.setData('idx', "" + this.props.idx);
-	    };
-	    SortableItem.prototype.onDragOver = function (e) {
-	        e.preventDefault();
-	        this.setState({
-	            isDraggingOver: true
-	        });
-	    };
-	    SortableItem.prototype.onDragLeave = function (e) {
-	        e.preventDefault();
-	        this.setState({
-	            isDraggingOver: false
-	        });
-	    };
-	    SortableItem.prototype.componentWillReceiveProps = function () {
-	        this.setState({
-	            isDraggingOver: false
-	        });
-	    };
-	    SortableItem.prototype.render = function () {
-	        var _this = this;
-	        var cx = classNames({
-	            dragging: this.state['isDraggingOver']
-	        });
-	        return (React.createElement("li", {className: cx, draggable: true, onClick: function () { return _this.props.onClick.call(undefined, _this.props.column); }, onDragStart: function (e) { return _this.onDragStart.call(_this, e); }, onDragOver: function (e) { return _this.onDragOver(e); }, onDragLeave: function (e) { return _this.onDragLeave(e); }, onDrop: function (e) { return _this.onDrop(e); }}, this.props.column.title || this.props.column.colTag));
-	    };
-	    return SortableItem;
-	}(React.Component));
-	exports.SortableItem = SortableItem;
-
-
-/***/ },
-/* 50 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(51);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(46)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./SettingsPopover.styl", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./SettingsPopover.styl");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 51 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(45)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, "span.giga-grid-button.dismiss {\n  float: right;\n}\nh5.inline-label {\n  display: inline;\n}\n.giga-grid .giga-grid-settings-pop-over {\n  border: 1px solid toolbar-border-color;\n  padding: 1em;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  position: absolute;\n  top: 20px;\n  z-index: 1;\n  background-color: #fff;\n  width: 660px;\n  min-height: 350px;\n}\n.giga-grid .giga-grid-settings-pop-over ul {\n  list-style: circle;\n}\n.giga-grid .giga-grid-settings-pop-over ul li {\n  display: inline-block;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  padding: 5px;\n  margin-right: 3px;\n  margin-bottom: 5px;\n}\n.giga-grid .giga-grid-settings-pop-over ul li:hover {\n  cursor: pointer;\n  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;\n  background-color: toolbar-border-color;\n}\n.giga-grid .giga-grid-settings-pop-over ul li.dragging {\n  border-right: 2px solid #ff4500;\n}\n", ""]);
-	
-	// exports
 
 
 /***/ }

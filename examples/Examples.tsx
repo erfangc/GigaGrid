@@ -6,7 +6,7 @@ import {GigaProps, GigaState} from "../src/components/GigaGrid";
 import {Tabs, Tab, Navbar} from "react-bootstrap";
 import {Row} from "../src/models/Row";
 import {SortDirection} from "../src/models/ColumnLike";
-import "../src/styles/theme/Retro.styl";
+import "../src/styles/theme/Default.styl";
 
 interface ExamplesProps extends React.Props<Examples> {
     ukBudget:GigaProps

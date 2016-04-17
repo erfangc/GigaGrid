@@ -6,17 +6,17 @@ import {Row} from "../models/Row";
 import {Tree} from "../static/TreeBuilder";
 import {
     GigaStore,
-    InitializeAction,
     GigaAction,
     GigaActionType,
-    ChangeRowDisplayBoundsAction
 } from "../store/GigaStore";
 import {Dispatcher} from "flux";
 import {TableBody} from "./TableBody";
 import {TableHeader} from "./TableHeader";
+import {SettingsPopover} from "./toolbar/SettingsPopover";
 import $ = require('jquery');
 import ReactElement = __React.ReactElement;
-import {SettingsPopover} from "./toolbar/SettingsPopover";
+import {InitializeAction} from "../store/reducers/InitializeReducer";
+import {ChangeRowDisplayBoundsAction} from "../store/reducers/ChangeRowDisplayBoundsReducer";
 
 /**
  * Interface that describe the shape of the `Props` that `GigaGrid` accepts from the user
@@ -280,7 +280,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         }).value();
     }
 
-    horizontalScrollHandler() {
+    static horizontalScrollHandler() {
         const scrollLeftAmount:number = $('.giga-grid-body-viewport').scrollLeft();
         $('.giga-grid-header-container').scrollLeft(scrollLeftAmount);
     }
@@ -299,12 +299,12 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         this.synchTableHeaderWidthToFirstRow();
 
         // Bind scroll listener to move headers when data container is srcolled
-        $('.giga-grid-body-viewport').scroll(this.horizontalScrollHandler)
+        $('.giga-grid-body-viewport').scroll(GigaGrid.horizontalScrollHandler)
     }
 
     componentWillUnmount() {
         // Unbind the scroll listener
-        $('.giga-grid-body-viewport').unbind('scroll', this.horizontalScrollHandler);
+        $('.giga-grid-body-viewport').unbind('scroll', GigaGrid.horizontalScrollHandler);
         /*
          * unsubscribe to window.resize
          */

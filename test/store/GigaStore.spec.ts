@@ -1,15 +1,13 @@
 import {
     GigaAction,
     GigaStore,
-    GigaActionType,
-    SortUpdateAction,
-    AddSortAction,
-    ClearSortAction
+    GigaActionType
 } from "../../src/store/GigaStore";
 import {GigaProps} from "../../src/components/GigaGrid";
 import {TestUtils} from "../TestUtils";
 import {ColumnFormat, SortDirection} from "../../src/models/ColumnLike";
 import {Dispatcher} from "flux";
+import {SortUpdateAction, ClearSortAction} from "../../src/store/reducers/SortReducers";
 
 describe("GigaStore", ()=> {
 

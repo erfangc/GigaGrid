@@ -6,7 +6,11 @@ A central aim is that this project will completely be free. However, I do have l
 
 See the Grid in Action [Here](http://erfangc.github.io/GigaGrid/)
 
+## Default Theme
 ![GigaGrd](https://raw.githubusercontent.com/erfangc/GigaGrid/master/giga-grid.png)
+
+## Retro Theme
+![GigaGrd](https://raw.githubusercontent.com/erfangc/GigaGrid/master/giga-grid-retro.png)
 
 # GigaGrid [![Build Status](https://travis-ci.org/erfangc/GigaGrid.svg?branch=master)](https://travis-ci.org/erfangc/GigaGrid)
 
@@ -38,7 +42,6 @@ If you are importing a `CommonJS` library, make sure you understand the differen
 See:
 
 [Stackoverflow Explanation 1](http://stackoverflow.com/questions/34622598/typescript-importing-from-libraries-written-in-es5-vs-es6)
-
 [Stackoverflow Explanation 2](http://stackoverflow.com/questions/29596714/new-es6-syntax-for-importing-commonjs-amd-modules-i-e-import-foo-require)
 
 # Testing

@@ -11,7 +11,7 @@ declare namespace __React {
         function findDOMNode(instance: ReactInstance): Element;
 
         function render<P>(
-            element: DOMElement<P>,
+            element: DOMElement<P, any>,
             container: Element,
             callback?: (element: Element) => any): Element;
         function render<P, S>(
@@ -33,7 +33,7 @@ declare namespace __React {
 
         function unstable_renderSubtreeIntoContainer<P>(
             parentComponent: Component<any, any>,
-            nextElement: DOMElement<P>,
+            nextElement: DOMElement<P, any>,
             container: Element,
             callback?: (element: Element) => any): Element;
         function unstable_renderSubtreeIntoContainer<P, S>(

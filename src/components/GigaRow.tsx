@@ -22,7 +22,7 @@ export class GigaRow extends React.Component<GigaRowProps, any> {
     render() {
         const props = this.props;
         const subtotalLvlClassName = `subtotal-row-${(props.row as GenericRow).sectorPath().length - 1}`;
-        const rowClassNames = {
+        const rowClassNames:ClassDictionary = {
             "placeholder-false": true,
             "subtotal-row": !props.row.isDetail(),
             "detail-row": props.row.isDetail(),

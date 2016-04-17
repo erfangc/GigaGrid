@@ -1,11 +1,12 @@
 import * as React from "react";
 import * as classNames from "classnames";
-import {Column, AggregationMethod, ColumnFormat} from "../models/ColumnLike";
+import {Column, AggregationMethod} from "../models/ColumnLike";
 import {Row, SubtotalRow} from "../models/Row";
 import {format} from "../static/SubtotalAggregator";
-import {ToggleCollapseAction, GigaActionType} from "../store/GigaStore";
+import {GigaActionType} from "../store/GigaStore";
 import {GridSubcomponentProps} from "./GigaGrid";
 import SyntheticEvent = __React.SyntheticEvent;
+import {ToggleCollapseAction} from "../store/reducers/RowCollapseReducers";
 
 export interface CellProps extends GridSubcomponentProps<Cell> {
     row:Row
