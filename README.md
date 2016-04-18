@@ -1,6 +1,6 @@
 # Demo
 
-(This Project is Currently Development - Some Features are Not Working and I am Currently Accepting All Help!)
+(This project is currently in active development - Some features are not working and I am happy to accept all helpful pull requests!)
 
 A central aim is that this project will completely be free. However, I do have limited time to work on it.
 
