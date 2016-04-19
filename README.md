@@ -1,3 +1,9 @@
+# GigaGrid [![Build Status](https://travis-ci.org/erfangc/GigaGrid.svg?branch=master)](https://travis-ci.org/erfangc/GigaGrid) [![npm version](https://badge.fury.io/js/giga-grid.svg)](https://badge.fury.io/js/giga-grid)
+
+[![NPM](https://nodei.co/npm/giga-grid.png)](https://nodei.co/npm/giga-grid/)
+
+High performance, React.js table widget with Subtotals (Written in TypeScript)
+
 # Demo
 
 (This project is currently in active development - Some features are not working and I am happy to accept all helpful pull requests!)
@@ -11,10 +17,6 @@ See the Grid in Action [Here](http://erfangc.github.io/GigaGrid/)
 
 ## Retro Theme
 ![GigaGrd](https://raw.githubusercontent.com/erfangc/GigaGrid/master/giga-grid-retro.png)
-
-# GigaGrid [![Build Status](https://travis-ci.org/erfangc/GigaGrid.svg?branch=master)](https://travis-ci.org/erfangc/GigaGrid)
-
-High performance, React.js table widget with Subtotals (Written in TypeScript)
 
 # Running
 
