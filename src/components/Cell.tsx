@@ -7,12 +7,19 @@ import {GigaActionType} from "../store/GigaStore";
 import {GridSubcomponentProps} from "./GigaGrid";
 import SyntheticEvent = __React.SyntheticEvent;
 import {ToggleCollapseAction} from "../store/reducers/RowCollapseReducers";
+import {ChangeRowDisplayBoundsAction} from "../store/reducers/ChangeRowDisplayBoundsReducer";
+import $ = require('jquery');
 
 export interface CellProps extends GridSubcomponentProps<Cell> {
     row:Row
     column:Column
     rowHeight:string
     isFirstColumn?:boolean
+
+    //-----------------------------
+    viewport:any
+    canvas:any
+    //-----------------------------
 }
 
 
@@ -42,26 +49,34 @@ export class DefaultCellRenderer {
         this.props = props;
     }
 
-    onCollapseToggle(e:SyntheticEvent) {
+    private onCollapseToggle(e:SyntheticEvent) {
         e.preventDefault();
         e.stopPropagation(); // we don't want toggle collapse to also trigger a row / cell clicked event
 
-        const gridProps = this.props.gridProps;
-        if (gridProps && gridProps.useServerStore) {
-            if (gridProps.fetchRowsActionCreator)
-                gridProps.fetchRowsActionCreator(this.props.row, this.props.dispatcher);
-            else
-                throw "error: server store in use yet fetchRowsActionCreator not defined on GigaGrid props";
-        } else {
-            const action:ToggleCollapseAction = {
-                type: GigaActionType.TOGGLE_ROW_COLLAPSE,
-                subtotalRow: this.props.row as SubtotalRow
-            };
-            this.props.dispatcher.dispatch(action);
-        }
-    }
+        const action:ToggleCollapseAction = {
+            type: GigaActionType.TOGGLE_ROW_COLLAPSE,
+            subtotalRow: this.props.row as SubtotalRow
+        };
+        this.props.dispatcher.dispatch(action);
 
-    onClick() {
+        //TODO : on ToggleCollapseAction call ChangeRowDisplayBoundsAction
+        this.dispatchDisplayBoundChange()
+    }
+  //----------------------------------------------------------
+    private dispatchDisplayBoundChange() {
+        const $viewport = $(this.props.viewport);
+        const $canvas = $(this.props.canvas);
+        const action:ChangeRowDisplayBoundsAction = {
+            type: GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS,
+            canvas: $canvas,
+            viewport: $viewport,
+            rowHeight: this.props.rowHeight
+        };
+        this.props.dispatcher.dispatch(action);
+    }
+    //----------------------------------------------------------
+
+    private onClick() {
         var action = {
             type: GigaActionType.TOGGLE_CELL_SELECT,
             row: this.props.row,
@@ -70,7 +85,7 @@ export class DefaultCellRenderer {
         this.props.dispatcher.dispatch(action);
     }
 
-    calculateStyle() {
+    private calculateStyle() {
         return {
             width: this.props.column.width,
             height: this.props.rowHeight,
@@ -78,7 +93,8 @@ export class DefaultCellRenderer {
         };
     }
 
-    renderCellWithCollapseToggle(row:SubtotalRow):JSX.Element {
+    private renderCellWithCollapseToggle(row:SubtotalRow):JSX.Element {
+
         const cx = classNames({
             "fa": true,
             "fa-plus-square-o": row.isCollapsed(),
@@ -89,13 +105,12 @@ export class DefaultCellRenderer {
                 <span>
                     <i className={cx} onClick={e=>this.onCollapseToggle(e)}/>&nbsp;
                     {row.bucketInfo.title || ""}
-                    {row.isLoading() ? [" ",<i className="fa fa-spinner fa-spin"/>] : null}
                 </span>
             </td>
         );
     }
 
-    renderNormalCell(row:Row, column:Column):JSX.Element {
+    private renderNormalCell(row:Row, column:Column):JSX.Element {
         var renderedCellContent:JSX.Element|string|number = format(row.get(column), column.formatInstruction) || "";
         if (!row.isDetail()
             && (column.aggregationMethod === AggregationMethod.COUNT || column.aggregationMethod === AggregationMethod.COUNT_DISTINCT))

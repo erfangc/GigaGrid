@@ -2,7 +2,8 @@ declare var require:any;
 
 import {ColumnFormat, AggregationMethod, ColumnDef, Column} from "../../src/models/ColumnLike";
 import {GigaProps} from "../../src/components/GigaGrid";
-var json = require("./UKBudget.json");
+//var json = require("./UKBudget.json");
+var json = require("./BugFixTestData.json");
 
 const columnDefs:ColumnDef[] = [
     {colTag: "Age", title: "Age"},
