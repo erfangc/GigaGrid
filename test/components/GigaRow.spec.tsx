@@ -11,13 +11,15 @@ import {Column} from "../../src/models/ColumnLike";
 describe("GigaRow Components", () => {
 
     describe("GigaRow rendering of a SubtotalRow", () => {
+        var viewport = null;
+        var canvas =null;
         var component = null;
         const row:Row = TestUtils.getSimpleSubtotalRow();
         const columns:Column[] = TestUtils.getSimpleColumns();
         ReactTestUtils.renderIntoDocument(
             <table>
                 <tbody>
-                <GigaRow ref={c=>component=c} row={row} rowHeight="25px" columns={columns} dispatcher={null}/>
+                <GigaRow ref={c=>component=c} row={row} rowHeight="25px" columns={columns} canvas = {canvas} viewport = {viewport} dispatcher={null}/>
                 </tbody>
             </table>
         );
@@ -41,12 +43,14 @@ describe("GigaRow Components", () => {
 
     describe("GigaRow rendering of a DetailRow", () => {
         var component = null;
+        var viewport = null;
+        var canvas =null;
         const row:Row = TestUtils.getDetailRow();
         const columns:Column[] = TestUtils.getSimpleColumns();
         ReactTestUtils.renderIntoDocument(
             <table>
                 <tbody>
-                <GigaRow ref={c=>component=c} row={row} rowHeight="25px" columns={columns} dispatcher={null}/>
+                <GigaRow ref={c=>component=c} row={row} rowHeight="25px" columns={columns}  canvas = {canvas} viewport = {viewport} dispatcher={null}/>
                 </tbody>
             </table>
         );

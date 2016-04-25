@@ -14,7 +14,8 @@ describe("Cell", ()=> {
     var row:DetailRow;
     var columns:Column[];
     var component;
-
+    var viewport = null;
+    var canvas =null;
     beforeEach(()=> {
         dispatcher = new Dispatcher<GigaAction>();
         row = TestUtils.getDetailRow();
@@ -27,6 +28,8 @@ describe("Cell", ()=> {
                 <tbody>
                     <tr>
                         <Cell ref={c=>component=c} rowHeight={""} isFirstColumn={true} dispatcher={dispatcher}
+                              canvas = {canvas}
+                              viewport = {viewport}
                               column={columns[2]}
                               row={row}/>
                     </tr>
@@ -40,6 +43,7 @@ describe("Cell", ()=> {
     it("can handle custom cell content", ()=> {
 
         const colDef = columns[2];
+
         colDef.cellTemplateCreator = (row:Row, column:Column, props:CellProps):JSX.Element => {
             return (
                 <td>
@@ -57,6 +61,8 @@ describe("Cell", ()=> {
                               rowHeight={""}
                               dispatcher={dispatcher}
                               column={colDef}
+                              canvas = {canvas}
+                              viewport = {viewport}
                               row={row}/>
                     </tr>
                 </tbody>
@@ -74,6 +80,7 @@ describe("Cell", ()=> {
     it("can deduce the correct identation for 1st rows in a subtotaled tree", ()=> {
         row.setSectorPath(["Level 1", "Level 2"]);
         const colDef = columns[0];
+
         ReactTestUtils.renderIntoDocument(
             <table>
                 <tbody>
@@ -83,6 +90,8 @@ describe("Cell", ()=> {
                               isFirstColumn={true}
                               dispatcher={dispatcher}
                               column={colDef}
+                              canvas = {canvas}
+                              viewport = {viewport}
                               row={row}/>
                     </tr>
                 </tbody>
@@ -103,6 +112,8 @@ describe("Cell", ()=> {
                               isFirstColumn={true}
                               dispatcher={dispatcher}
                               column={colDef}
+                              canvas = {canvas}
+                              viewport = {viewport}
                               row={subtotalRow}/>
                     </tr>
                 </tbody>

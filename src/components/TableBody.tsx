@@ -11,6 +11,10 @@ export interface TableBodyProps extends GridSubcomponentProps<TableBody> {
     displayStart?: number
     displayEnd?: number
     rowHeight?: string
+    //-----------------------------
+    viewport:any
+    canvas:any
+    //-----------------------------
 }
 
 export class TableBody extends React.Component<TableBodyProps,any> {
@@ -39,8 +43,12 @@ export class TableBody extends React.Component<TableBodyProps,any> {
                              columns={this.props.columns}
                              row={row}
                              rowHeight={`${rowHeight}`}
-                             gridProps={this.props.gridProps}
-                             dispatcher={this.props.dispatcher}/>);
+                             dispatcher={this.props.dispatcher}
+
+                             viewport = {this.props.viewport}
+                             canvas = {this.props.canvas}
+
+                    />);
         });
     }
 
