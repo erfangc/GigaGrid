@@ -7,12 +7,19 @@ import {GigaActionType} from "../store/GigaStore";
 import {GridSubcomponentProps} from "./GigaGrid";
 import SyntheticEvent = __React.SyntheticEvent;
 import {ToggleCollapseAction} from "../store/reducers/RowCollapseReducers";
+import {ChangeRowDisplayBoundsAction} from "../store/reducers/ChangeRowDisplayBoundsReducer";
+import $ = require('jquery');
 
 export interface CellProps extends GridSubcomponentProps<Cell> {
     row:Row
     column:Column
     rowHeight:string
     isFirstColumn?:boolean
+
+    //-----------------------------
+    viewport:any
+    canvas:any
+    //-----------------------------
 }
 
 
@@ -51,7 +58,23 @@ export class DefaultCellRenderer {
             subtotalRow: this.props.row as SubtotalRow
         };
         this.props.dispatcher.dispatch(action);
+
+        //TODO : on ToggleCollapseAction call ChangeRowDisplayBoundsAction
+        this.dispatchDisplayBoundChange()
     }
+  //----------------------------------------------------------
+    private dispatchDisplayBoundChange() {
+        const $viewport = $(this.props.viewport);
+        const $canvas = $(this.props.canvas);
+        const action:ChangeRowDisplayBoundsAction = {
+            type: GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS,
+            canvas: $canvas,
+            viewport: $viewport,
+            rowHeight: this.props.rowHeight
+        };
+        this.props.dispatcher.dispatch(action);
+    }
+    //----------------------------------------------------------
 
     private onClick() {
         var action = {

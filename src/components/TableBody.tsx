@@ -11,6 +11,10 @@ export interface TableBodyProps extends GridSubcomponentProps<TableBody> {
     displayStart?: number
     displayEnd?: number
     rowHeight?: string
+    //-----------------------------
+    viewport:any
+    canvas:any
+    //-----------------------------
 }
 
 export class TableBody extends React.Component<TableBodyProps,any> {
@@ -32,6 +36,7 @@ export class TableBody extends React.Component<TableBodyProps,any> {
         function validateBounds() {
             return typeof start !== "undefined" && typeof end !== "undefined";
         }
+        console.log(this.props.viewport);
 
         const rows = validateBounds() ? this.props.rows.slice(start, end + 1) : this.props.rows;
         return rows.map((row:Row, i:number) => {
@@ -39,7 +44,12 @@ export class TableBody extends React.Component<TableBodyProps,any> {
                              columns={this.props.columns}
                              row={row}
                              rowHeight={`${rowHeight}`}
-                             dispatcher={this.props.dispatcher}/>);
+                             dispatcher={this.props.dispatcher}
+
+                             viewport = {this.props.viewport}
+                             canvas = {this.props.canvas}
+
+                    />);
         });
     }
 
