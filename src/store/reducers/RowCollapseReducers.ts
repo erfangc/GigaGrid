@@ -17,10 +17,6 @@ export function collapseAllReducer(state:GigaState):GigaState {
 }
 
 export function toggleCollapseReducer(state:GigaState, action:ToggleCollapseAction,props:GigaProps):GigaState {
-    //const row = action.subtotalRow;
-    //row.toggleCollapse();
-    //return _.clone(state);
-
     const row = action.subtotalRow;
     row.toggleCollapse();
     const newState = _.clone(state);

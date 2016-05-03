@@ -153,9 +153,6 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
     private store:GigaStore;
     private dispatcher:Dispatcher<GigaAction>;
 
-    //private canvas:HTMLElement;
-    //private viewport:HTMLElement;
-
     static defaultProps:GigaProps = {
         initialSubtotalBys: [],
         initialSortBys: [],
@@ -237,10 +234,6 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                                    displayStart={state.displayStart}
                                    displayEnd={state.displayEnd}
                                    rowHeight={this.props.rowHeight}
-
-                                   viewport = {state.viewport}
-                                   canvas = {state.canvas}
-
                         />
                     </table>
                 </div>

@@ -11,8 +11,6 @@ export interface GigaRowProps extends GridSubcomponentProps<GigaRow> {
     row:Row;
     rowHeight: string;
     columns:Column[];
-    viewport:any
-    canvas:any
 }
 
 export class GigaRow extends React.Component<GigaRowProps, any> {
@@ -41,9 +39,6 @@ export class GigaRow extends React.Component<GigaRowProps, any> {
                               rowHeight={this.props.rowHeight}
                               dispatcher={this.props.dispatcher}
                               row={this.props.row}
-
-                              viewport = {this.props.viewport}
-                              canvas = {this.props.canvas}
                 />)
             });
         return <tr className={cx} style={{height: this.props.rowHeight}} onClick={(e:SyntheticEvent)=>{
