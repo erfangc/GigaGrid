@@ -11,11 +11,8 @@ export interface GigaRowProps extends GridSubcomponentProps<GigaRow> {
     row:Row;
     rowHeight: string;
     columns:Column[];
-
-    //-----------------------------
     viewport:any
     canvas:any
-    //-----------------------------
 }
 
 export class GigaRow extends React.Component<GigaRowProps, any> {

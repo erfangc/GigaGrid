@@ -223,7 +223,6 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                                      tableHeaderClass={this.props.tableHeaderClass} />
                     </table>
                 </div>
-                {console.log(this.viewport)}
                 <div ref={c=>this.viewport=c}
                      onScroll={()=>this.dispatchDisplayBoundChange()}
                      className="giga-grid-body-viewport"

@@ -36,7 +36,6 @@ export class TableBody extends React.Component<TableBodyProps,any> {
         function validateBounds() {
             return typeof start !== "undefined" && typeof end !== "undefined";
         }
-        console.log(this.props.viewport);
 
         const rows = validateBounds() ? this.props.rows.slice(start, end + 1) : this.props.rows;
         return rows.map((row:Row, i:number) => {
