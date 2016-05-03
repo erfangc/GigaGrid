@@ -433,7 +433,9 @@ export class TestUtils {
             rasterizedRows: [],
             displayStart: 0,
             displayEnd: 1,
-            showSettingsPopover: false
+            showSettingsPopover: false,
+            viewport:undefined,
+            canvas:undefined
         }
     };
 

@@ -5,8 +5,7 @@ import {TreeRasterizer} from "../../src/static/TreeRasterizer";
 import {TableBody} from "../../src/components/TableBody";
 
 describe("TableBody", ()=> {
-    var viewport = null;
-    var canvas =null;
+
     it("consists of many rows", ()=> {
         const data = TestUtils.newPeopleTestData();
         var component;
@@ -14,8 +13,6 @@ describe("TableBody", ()=> {
             <table>
                 <TableBody ref={c=>component=c} dispatcher={null}
                            rows={data.detailRows()}
-                           canvas = {canvas}
-                           viewport = {viewport}
                            columns={data.columns()}/>
             </table>);
         const trs = ReactTestUtils.scryRenderedDOMComponentsWithTag(component, "tr");
@@ -30,8 +27,6 @@ describe("TableBody", ()=> {
             <table>
                 <TableBody ref={c=>component=c} dispatcher={null}
                            rows={rows}
-                           canvas = {canvas}
-                           viewport = {viewport}
                            columns={data.columns()}/>
             </table>
         );

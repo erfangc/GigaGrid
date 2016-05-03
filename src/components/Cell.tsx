@@ -15,11 +15,6 @@ export interface CellProps extends GridSubcomponentProps<Cell> {
     column:Column
     rowHeight:string
     isFirstColumn?:boolean
-
-    //-----------------------------
-    viewport:any
-    canvas:any
-    //-----------------------------
 }
 
 
@@ -58,24 +53,7 @@ export class DefaultCellRenderer {
             subtotalRow: this.props.row as SubtotalRow
         };
         this.props.dispatcher.dispatch(action);
-
-        //TODO : on ToggleCollapseAction call ChangeRowDisplayBoundsAction
-        this.dispatchDisplayBoundChange()
     }
-  //----------------------------------------------------------
-    private dispatchDisplayBoundChange() {
-        const $viewport = $(this.props.viewport);
-        const $canvas = $(this.props.canvas);
-        const action:ChangeRowDisplayBoundsAction = {
-            type: GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS,
-            canvas: $canvas,
-            viewport: $viewport,
-            rowHeight: this.props.rowHeight
-        };
-        this.props.dispatcher.dispatch(action);
-    }
-    //----------------------------------------------------------
-
     private onClick() {
         var action = {
             type: GigaActionType.TOGGLE_CELL_SELECT,

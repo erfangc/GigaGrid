@@ -14,8 +14,6 @@ describe("Cell", ()=> {
     var row:DetailRow;
     var columns:Column[];
     var component;
-    var viewport = null;
-    var canvas =null;
     beforeEach(()=> {
         dispatcher = new Dispatcher<GigaAction>();
         row = TestUtils.getDetailRow();
@@ -28,8 +26,6 @@ describe("Cell", ()=> {
                 <tbody>
                     <tr>
                         <Cell ref={c=>component=c} rowHeight={""} isFirstColumn={true} dispatcher={dispatcher}
-                              canvas = {canvas}
-                              viewport = {viewport}
                               column={columns[2]}
                               row={row}/>
                     </tr>
@@ -61,8 +57,6 @@ describe("Cell", ()=> {
                               rowHeight={""}
                               dispatcher={dispatcher}
                               column={colDef}
-                              canvas = {canvas}
-                              viewport = {viewport}
                               row={row}/>
                     </tr>
                 </tbody>
@@ -90,8 +84,6 @@ describe("Cell", ()=> {
                               isFirstColumn={true}
                               dispatcher={dispatcher}
                               column={colDef}
-                              canvas = {canvas}
-                              viewport = {viewport}
                               row={row}/>
                     </tr>
                 </tbody>
@@ -112,8 +104,6 @@ describe("Cell", ()=> {
                               isFirstColumn={true}
                               dispatcher={dispatcher}
                               column={colDef}
-                              canvas = {canvas}
-                              viewport = {viewport}
                               row={subtotalRow}/>
                     </tr>
                 </tbody>
