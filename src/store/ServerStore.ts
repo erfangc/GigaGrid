@@ -1,6 +1,8 @@
 import {ReduceStore} from "flux/utils";
 import {Dispatcher} from "flux";
 import {GigaState, GigaProps} from "../components/GigaGrid";
+import {ScrollCalculator} from "../static/ScrollCalculator";
+import $ = require('jquery');
 import {GigaStore, GigaActionType, GigaAction, PROGRESSIVE_RENDERING_THRESHOLD} from "./GigaStore";
 import {InitializeAction, decorateInitialSortBys, decorateColumnsWithSort} from "./reducers/InitializeReducer";
 import {TreeRasterizer} from "../static/TreeRasterizer";
@@ -103,6 +105,9 @@ export class ServerStore extends ReduceStore<GigaState> {
                 let row = (action as LoadingMoreDataAction).parentRow;
                 row.setIsLoading(true);
                 newState = _.clone(state);
+                const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, $(state.viewport), $(state.canvas));
+                newState.displayStart = displayStart;
+                newState.displayEnd = displayEnd;
                 break;
             case GigaActionType.GOT_MORE_DATA:
                 const myAction = action as GotMoreDataAction;
@@ -121,6 +126,9 @@ export class ServerStore extends ReduceStore<GigaState> {
                 }
                 SortFactory.sortRows(parentRow, state.sortBys, state.columns[0]);
                 newState = _.clone(state); // force update
+                const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, $(state.viewport), $(state.canvas));
+                newState.displayStart = displayStart;
+                newState.displayEnd = displayEnd;
                 break;
             case GigaActionType.COLLAPSE_ROW:
                 break;
@@ -149,7 +157,7 @@ export class ServerStore extends ReduceStore<GigaState> {
                 newState = _.assign<{},GigaState>({}, state, {showSettingsPopover: !state.showSettingsPopover});
                 break;
             case GigaActionType.TOGGLE_ROW_COLLAPSE:
-                newState = toggleCollapseReducer(state, action as ToggleCollapseAction);
+                newState = toggleCollapseReducer(state, action as ToggleCollapseAction,this.props);
                 break;
             /**
              * not supported actions for server rendering mode

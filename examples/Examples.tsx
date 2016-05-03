@@ -50,19 +50,14 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
     }
 
     private renderBasicExample() {
-        console.log(UKBudget);
         return (<GigaGrid
             onRowClick={(row:Row, state:GigaState)=>{
                 row; state;
+                debugger;
                 return true;
             }}
-            initialSortBys={[
-                {colTag:"Age", direction: SortDirection.ASC, customSortFn: function(a,b){ return a - b },},
-                {colTag:"Children", direction: SortDirection.ASC, customSortFn: function(a,b){ return b - a }},
-                {colTag:"Income", direction: SortDirection.ASC, customSortFn: function(a,b){ return b - a }}
-            ]}
-            staticLeftHeaders={1}
-            {...UKBudget}
+            initialSortBys={[{"colTag":"WOther", direction: SortDirection.DESC}]}
+            {...this.props.ukBudget}
         />);
     }
 

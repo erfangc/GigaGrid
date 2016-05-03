@@ -61,8 +61,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.AggregationMethod = ColumnLike_1.AggregationMethod;
 	exports.ColumnFormat = ColumnLike_1.ColumnFormat;
 	exports.SortDirection = ColumnLike_1.SortDirection;
-	var Cell_tsx_1 = __webpack_require__(45);
+	var Cell_tsx_1 = __webpack_require__(47);
 	exports.DefaultCellRenderer = Cell_tsx_1.DefaultCellRenderer;
+	var GigaStore_1 = __webpack_require__(7);
+	exports.GigaActionType = GigaStore_1.GigaActionType;
+	var SubtotalAggregator_1 = __webpack_require__(31);
+	exports.format = SubtotalAggregator_1.format;
 
 
 /***/ },
@@ -80,11 +84,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _ = __webpack_require__(4);
 	var ColumnLike_1 = __webpack_require__(6);
 	var GigaStore_1 = __webpack_require__(7);
-	var flux_1 = __webpack_require__(40);
-	var TableBody_1 = __webpack_require__(42);
-	var TableHeader_1 = __webpack_require__(47);
-	var SettingsPopover_1 = __webpack_require__(54);
-	var $ = __webpack_require__(46);
+	var flux_1 = __webpack_require__(42);
+	var TableBody_1 = __webpack_require__(44);
+	var TableHeader_1 = __webpack_require__(48);
+	var SettingsPopover_1 = __webpack_require__(55);
+	var ServerStore_1 = __webpack_require__(34);
+	var $ = __webpack_require__(36);
 	/**
 	 * The root component of this React library. assembles raw data into `Row` objects which are then translated into their
 	 * virtual DOM representation
@@ -105,7 +110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _this = this;
 	        _super.call(this, props);
 	        this.dispatcher = new flux_1.Dispatcher();
-	        this.store = new GigaStore_1.GigaStore(this.dispatcher, props);
+	        this.store = GigaGrid.createStore(props, this.dispatcher);
 	        this.state = this.store.getState();
 	        // do not call setState again, this is the only place! otherwise you are violating the principles of Flux
 	        // not that would be wrong but it would break the 1 way data flow and make keeping track of mutation difficult
@@ -113,6 +118,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _this.setState(_this.store.getState());
 	        });
 	    }
+	    GigaGrid.createStore = function (props, dispatcher) {
+	        if (props.useServerStore)
+	            return new ServerStore_1.ServerStore(dispatcher, props);
+	        else
+	            return new GigaStore_1.GigaStore(dispatcher, props);
+	    };
 	    GigaGrid.prototype.submitColumnConfigChange = function (action) {
 	        this.dispatcher.dispatch(action);
 	    };
@@ -137,10 +148,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            columns = ColumnLike_1.ColumnFactory.createColumnsFromGroupDefinition(this.props.columnGroups, state);
 	        else
 	            columns = [state.columns];
-	        var bodyStyle = {
-	            height: this.props.bodyHeight,
-	        };
-	        return (React.createElement("div", {className: "giga-grid"}, this.renderSettingsPopover(), React.createElement("div", {className: "giga-grid-header-container"}, React.createElement("table", {className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns, tableHeaderClass: this.props.tableHeaderClass}))), console.log(this.viewport), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, onScroll: function () { return _this.dispatchDisplayBoundChange(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: state.rasterizedRows, columns: columns[columns.length - 1], displayStart: state.displayStart, displayEnd: state.displayEnd, rowHeight: this.props.rowHeight, viewport: this.viewport, canvas: this.canvas})))));
+	        var bodyStyle = {};
+	        /**
+	         * As noted in the collapseHeight property of the GigaProps interface, if collapseHeight is true, the table will
+	         * collapse to the height of the table itself it is smaller than the container
+	         */
+	        if (this.props.collapseHeight)
+	            bodyStyle.maxHeight = this.props.bodyHeight;
+	        else
+	            bodyStyle.height = this.props.bodyHeight;
+	        return (React.createElement("div", {className: "giga-grid"}, this.renderSettingsPopover(), React.createElement("div", {className: "giga-grid-header-container"}, React.createElement("table", {className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns, tableHeaderClass: this.props.tableHeaderClass, gridProps: this.props}))), React.createElement("div", {ref: function (c) { return state.viewport = c; }, onScroll: function () { return _this.dispatchDisplayBoundChange(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return state.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: state.rasterizedRows, columns: columns[columns.length - 1], displayStart: state.displayStart, displayEnd: state.displayEnd, rowHeight: this.props.rowHeight, gridProps: this.props})))));
 	    };
 	    GigaGrid.prototype.componentWillReceiveProps = function (nextProps) {
 	        var payload = {
@@ -148,6 +165,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            props: nextProps
 	        };
 	        this.dispatcher.dispatch(payload);
+	        this.expandTable();
 	    };
 	    /**
 	     * on component update, we use jquery to align table headers
@@ -177,9 +195,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            $th.innerWidth($td.innerWidth());
 	        }).value();
 	    };
-	    GigaGrid.horizontalScrollHandler = function () {
-	        var scrollLeftAmount = $('.giga-grid-body-viewport').scrollLeft();
-	        $('.giga-grid-header-container').scrollLeft(scrollLeftAmount);
+	    GigaGrid.prototype.horizontalScrollHandler = function () {
+	        var node = ReactDOM.findDOMNode(this);
+	        var scrollLeftAmount = $(node).scrollLeft();
+	        $(node).parent().find('.giga-grid-header-container').scrollLeft(scrollLeftAmount);
 	    };
 	    GigaGrid.prototype.componentDidMount = function () {
 	        /*
@@ -192,12 +211,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 	        this.dispatchDisplayBoundChange();
 	        this.synchTableHeaderWidthToFirstRow();
-	        // Bind scroll listener to move headers when data container is srcolled
-	        $('.giga-grid-body-viewport').scroll(GigaGrid.horizontalScrollHandler);
+	        this.expandTable();
+	        // Bind scroll listener to move headers when data container is scrolled
+	        var node = ReactDOM.findDOMNode(this);
+	        $(node).find('.giga-grid-body-viewport').scroll(this.horizontalScrollHandler);
 	    };
 	    GigaGrid.prototype.componentWillUnmount = function () {
 	        // Unbind the scroll listener
-	        $('.giga-grid-body-viewport').unbind('scroll', GigaGrid.horizontalScrollHandler);
+	        var node = ReactDOM.findDOMNode(this);
+	        $(node).find('.giga-grid-body-viewport').unbind('scroll', this.horizontalScrollHandler);
 	        /*
 	         * unsubscribe to window.resize
 	         */
@@ -205,8 +227,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            window.removeEventListener('resize', this.synchTableHeaderWidthToFirstRow);
 	    };
 	    GigaGrid.prototype.dispatchDisplayBoundChange = function () {
-	        var $viewport = $(this.viewport);
-	        var $canvas = $(this.canvas);
+	        var state = this.store.getState();
+	        var $viewport = $(state.viewport);
+	        var $canvas = $(state.canvas);
 	        var action = {
 	            type: GigaStore_1.GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS,
 	            canvas: $canvas,
@@ -215,6 +238,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        this.dispatcher.dispatch(action);
 	    };
+	    GigaGrid.prototype.expandTable = function () {
+	        if (this.props.expandTable) {
+	            this.dispatcher.dispatch({
+	                type: GigaStore_1.GigaActionType.EXPAND_ALL
+	            });
+	        }
+	    };
 	    GigaGrid.defaultProps = {
 	        initialSubtotalBys: [],
 	        initialSortBys: [],
@@ -222,7 +252,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        data: [],
 	        columnDefs: [],
 	        bodyHeight: "500px",
-	        rowHeight: "25px"
+	        rowHeight: "25px",
+	        collapseHeight: false,
+	        expandTable: false
 	    };
 	    return GigaGrid;
 	}(React.Component));
@@ -283,10 +315,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {number}
 	 */
 	function computeCanvasWidth($canvas, rootNodeWidth) {
-	    var canvasWidth = $canvas.innerWidth();
-	    if (rootNodeWidth > canvasWidth)
-	        canvasWidth = rootNodeWidth - getScrollBarWidth();
-	    return canvasWidth;
+	    return rootNodeWidth - getScrollBarWidth();
 	}
 
 
@@ -12748,11 +12777,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var utils_1 = __webpack_require__(8);
 	var TreeRasterizer_1 = __webpack_require__(27);
 	var InitializeReducer_1 = __webpack_require__(28);
-	var SelectReducers_1 = __webpack_require__(34);
-	var ChangeRowDisplayBoundsReducer_1 = __webpack_require__(35);
-	var SortReducers_1 = __webpack_require__(37);
-	var RowCollapseReducers_1 = __webpack_require__(38);
-	var ColumnUpdateReducer_1 = __webpack_require__(39);
+	var SelectReducers_1 = __webpack_require__(37);
+	var ChangeRowDisplayBoundsReducer_1 = __webpack_require__(39);
+	var SortReducers_1 = __webpack_require__(38);
+	var RowCollapseReducers_1 = __webpack_require__(40);
+	var ColumnUpdateReducer_1 = __webpack_require__(41);
 	/*
 	 define the # of rows necessary to trigger progressive rendering
 	 below which all row display bound change events are ignored
@@ -12799,7 +12828,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                newState = ColumnUpdateReducer_1.columnUpdateReducer(state, action, this.props);
 	                break;
 	            case GigaActionType.TOGGLE_ROW_COLLAPSE:
-	                newState = RowCollapseReducers_1.toggleCollapseReducer(state, action);
+	                newState = RowCollapseReducers_1.toggleCollapseReducer(state, action, this.props);
 	                break;
 	            case GigaActionType.COLLAPSE_ALL:
 	                newState = RowCollapseReducers_1.collapseAllReducer(state);
@@ -12840,6 +12869,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            GigaActionType.TOGGLE_ROW_COLLAPSE,
 	            GigaActionType.COLLAPSE_ALL,
 	            GigaActionType.EXPAND_ALL,
+	            GigaActionType.COLLAPSE_ROW,
+	            GigaActionType.GOT_MORE_DATA,
 	            GigaActionType.COLUMNS_UPDATE
 	        ].indexOf(action.type) !== -1;
 	    };
@@ -12856,11 +12887,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GigaActionType[GigaActionType["TOGGLE_ROW_COLLAPSE"] = 3] = "TOGGLE_ROW_COLLAPSE";
 	    GigaActionType[GigaActionType["COLLAPSE_ALL"] = 4] = "COLLAPSE_ALL";
 	    GigaActionType[GigaActionType["EXPAND_ALL"] = 5] = "EXPAND_ALL";
-	    GigaActionType[GigaActionType["TOGGLE_ROW_SELECT"] = 6] = "TOGGLE_ROW_SELECT";
-	    GigaActionType[GigaActionType["TOGGLE_CELL_SELECT"] = 7] = "TOGGLE_CELL_SELECT";
-	    GigaActionType[GigaActionType["CHANGE_ROW_DISPLAY_BOUNDS"] = 8] = "CHANGE_ROW_DISPLAY_BOUNDS";
-	    GigaActionType[GigaActionType["TOGGLE_SETTINGS_POPOVER"] = 9] = "TOGGLE_SETTINGS_POPOVER";
-	    GigaActionType[GigaActionType["COLUMNS_UPDATE"] = 10] = "COLUMNS_UPDATE";
+	    GigaActionType[GigaActionType["GOT_MORE_DATA"] = 6] = "GOT_MORE_DATA";
+	    GigaActionType[GigaActionType["LOADING_MORE_DATA"] = 7] = "LOADING_MORE_DATA";
+	    GigaActionType[GigaActionType["COLLAPSE_ROW"] = 8] = "COLLAPSE_ROW";
+	    GigaActionType[GigaActionType["TOGGLE_ROW_SELECT"] = 9] = "TOGGLE_ROW_SELECT";
+	    GigaActionType[GigaActionType["TOGGLE_CELL_SELECT"] = 10] = "TOGGLE_CELL_SELECT";
+	    GigaActionType[GigaActionType["CHANGE_ROW_DISPLAY_BOUNDS"] = 11] = "CHANGE_ROW_DISPLAY_BOUNDS";
+	    GigaActionType[GigaActionType["TOGGLE_SETTINGS_POPOVER"] = 12] = "TOGGLE_SETTINGS_POPOVER";
+	    GigaActionType[GigaActionType["COLUMNS_UPDATE"] = 13] = "COLUMNS_UPDATE";
 	})(exports.GigaActionType || (exports.GigaActionType = {}));
 	var GigaActionType = exports.GigaActionType;
 
@@ -19506,8 +19540,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	var SubtotalAggregator_1 = __webpack_require__(31);
 	var TreeBuilder_1 = __webpack_require__(32);
 	var ColumnLike_1 = __webpack_require__(6);
+	/**
+	 * decorate any sortBy(s) with properties that might exist on the column - properties defined in sortBys override those
+	 * defined in the column definition
+	 * @param initialSortBys
+	 * @param columnsWithSort
+	 * @returns {Column[]}
+	 */
+	function decorateInitialSortBys(initialSortBys, columnsWithSort) {
+	    return (initialSortBys || []).map(function (sortBy) {
+	        var column = _.find(columnsWithSort, function (column) { return column.colTag === sortBy.colTag; });
+	        return _.assign({}, column, sortBy);
+	    });
+	}
+	exports.decorateInitialSortBys = decorateInitialSortBys;
+	/**
+	 * for every column, add the direction property if it is part of a initialSortBy
+	 * @param columns
+	 * @param initialSortBys
+	 * @returns {any}
+	 */
+	function decorateColumnsWithSort(columns, initialSortBys) {
+	    return columns.map(function (column) {
+	        var sortBy = _.find((initialSortBys || []), function (s) { return s.colTag == column.colTag; });
+	        if (sortBy)
+	            return _.assign({}, column, {
+	                direction: sortBy.direction || ColumnLike_1.SortDirection.DESC
+	            });
+	        else
+	            return column;
+	    });
+	}
+	exports.decorateColumnsWithSort = decorateColumnsWithSort;
 	function default_1(action) {
-	    var _a = action.props, data = _a.data, columnDefs = _a.columnDefs, columnGroups = _a.columnGroups, initialSubtotalBys = _a.initialSubtotalBys, initialSortBys = _a.initialSortBys, initialFilterBys = _a.initialFilterBys, initiallyExpandedSubtotalRows = _a.initiallyExpandedSubtotalRows, initiallySelectedSubtotalRows = _a.initiallySelectedSubtotalRows;
+	    var _a = action.props, data = _a.data, columnDefs = _a.columnDefs, columnGroups = _a.columnGroups, initialSubtotalBys = _a.initialSubtotalBys, initialSortBys = _a.initialSortBys, initialFilterBys = _a.initialFilterBys, initiallyExpandedSubtotalRows = _a.initiallyExpandedSubtotalRows, initiallySelectedSubtotalRows = _a.initiallySelectedSubtotalRows, expandTable = _a.expandTable;
 	    /**
 	     * turn ColumnDefs into "Columns" which are decorated with behaviors
 	     */
@@ -19524,20 +19590,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * create sortBys from columns (any properties passed via initialSortBys will override the same property in the corresponding Column object
 	     */
-	    // FIXME we have a state sync issue, columns have "directions", but so does sortBys, the code below is a temp fix
-	    var columnsWithSort = columns.map(function (column) {
-	        var sortBy = _.find((initialSortBys || []), function (s) { return s.colTag == column.colTag; });
-	        if (sortBy)
-	            return _.assign({}, column, {
-	                direction: sortBy.direction || ColumnLike_1.SortDirection.DESC
-	            });
-	        else
-	            return column;
-	    });
-	    var sortBys = (initialSortBys || []).map(function (sortBy) {
-	        var column = _.find(columnsWithSort, function (column) { return column.colTag === sortBy.colTag; });
-	        return _.assign({}, column, sortBy);
-	    });
+	    var columnsWithSort = decorateColumnsWithSort(columns, initialSortBys);
+	    var sortBys = decorateInitialSortBys(initialSortBys, columnsWithSort);
 	    var filteredColumns = _.filter(columnsWithSort, function (column) { return subtotalBys.map(function (subtotalBy) { return subtotalBy.colTag; }).indexOf(column.colTag) === -1; });
 	    var tree = TreeBuilder_1.TreeBuilder.buildTree(data, subtotalBys, initiallyExpandedSubtotalRows, initiallySelectedSubtotalRows);
 	    SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, columns);
@@ -19553,7 +19607,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        sortBys: sortBys,
 	        filterBys: _.cloneDeep(initialFilterBys) || [],
 	        tree: tree,
-	        showSettingsPopover: false
+	        showSettingsPopover: false,
+	        viewport: undefined,
+	        canvas: undefined,
+	        expandTable: expandTable
 	    };
 	}
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -19581,6 +19638,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var sortFn = SortFactory.createCompositeSorter(sortBys, firstColumn);
 	        SortFactory.recursivelyExecuteSort(tree.getRoot(), sortFn);
 	        return tree;
+	    };
+	    /**
+	     * sort the given rows
+	     * @param rows
+	     */
+	    SortFactory.sortRows = function (row, sortBys, firstColumn) {
+	        var sortFn = SortFactory.createCompositeSorter(sortBys, firstColumn);
+	        SortFactory.recursivelyExecuteSort(row, sortFn);
 	    };
 	    SortFactory.recursivelyExecuteSort = function (rootRow, fn) {
 	        if (rootRow.getNumChildren() !== 0) {
@@ -19670,12 +19735,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // sorting on a text-align-rightally summarized column
 	    if (firstColumn && firstColumn.colTag === sortBy.colTag)
 	        return subtotalRow.bucketInfo.value;
-	    if ([ColumnLike_1.AggregationMethod.COUNT,
-	        ColumnLike_1.AggregationMethod.COUNT_DISTINCT,
-	        ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE,
-	        ColumnLike_1.AggregationMethod.AVERAGE,
-	        ColumnLike_1.AggregationMethod.SUM].indexOf(sortBy.aggregationMethod) !== -1)
-	        return parseFloat(subtotalRow.get(sortBy));
+	    if (sortBy.format === ColumnLike_1.ColumnFormat.NUMBER) {
+	        // Remove all non numbers from string (except dot)
+	        var value = subtotalRow.get(sortBy).toString().replace(/[^\d.-]/g, '');
+	        return parseFloat(value);
+	    }
 	    else
 	        return subtotalRow.get(sortBy);
 	}
@@ -19742,6 +19806,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function format(value, fmtInstruction) {
 	    if (!fmtInstruction)
 	        return value;
+	    if (value === '')
+	        return null;
 	    function addCommas(nStr) {
 	        nStr += '';
 	        var x = nStr.split('.');
@@ -19837,9 +19903,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Row_1 = __webpack_require__(33);
 	var _ = __webpack_require__(4);
 	var ColumnLike_1 = __webpack_require__(6);
+	var ServerStore_1 = __webpack_require__(34);
 	var TreeBuilder = (function () {
 	    function TreeBuilder() {
 	    }
+	    /**
+	     * create a shallow tree (with only 1 level - and assume it represents the results of the top most layer subtotal logic
+	     * @param rows
+	     * @param subtotalBys
+	     * @returns {Tree}
+	     */
+	    TreeBuilder.buildShallowTree = function (rows) {
+	        var grandTotal = new Row_1.SubtotalRow({ colTag: null, title: "Grand Total", value: null });
+	        grandTotal.setSectorPath([]);
+	        ServerStore_1.dataToSubtotalRows(rows).forEach(function (row) {
+	            grandTotal.addChild(row);
+	        });
+	        return new Tree(grandTotal);
+	    };
 	    /**
 	     * traverse the tree and find nodes that has identical sector path, set toggleCollapse to false
 	     * TODO add tests to ensure it does not break
@@ -19878,7 +19959,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
 	         * parent SubtotalRow (in other words, find the detailRow's "bucket") and append said detailRow to the parent
 	         */
-	        var grandTotal = new Row_1.SubtotalRow({ title: "Grand Total", value: null });
+	        var grandTotal = new Row_1.SubtotalRow({ colTag: null, title: "Grand Total", value: null });
 	        grandTotal.setSectorPath([]);
 	        data.forEach(function (datum) { return _this.bucketDetailRow(subtotalBys, new Row_1.DetailRow(datum), grandTotal); });
 	        TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, true);
@@ -19907,7 +19988,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                subtotalRow.detailRows.push(detailedRow);
 	            } // FIXME if a detail row is not defined for all the columns we are subtotaling by, it is orphaned (i.e. not part of the tree at all), should we let it 'traverse' back and attach itself to the last subtotal row?
 	        });
-	        detailedRow.setSectorPath(buckets.map(function (b) { return b.title; }));
+	        detailedRow.setSectorPath(buckets);
 	    };
 	    ;
 	    // TODO add tests
@@ -19958,7 +20039,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var newRow = new Row_1.SubtotalRow(buckets[k]);
 	                newRow.toggleCollapse(true);
 	                // set the sector path for the new SubtotalRow we just created the length of which determines its depth
-	                newRow.setSectorPath(buckets.slice(0, k + 1).map(function (b) { return b.title; }));
+	                newRow.setSectorPath(buckets.slice(0, k + 1));
 	                currentRow.addChild(newRow);
 	                currentRow = newRow;
 	            }
@@ -19973,6 +20054,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (title === undefined)
 	            return undefined;
 	        return {
+	            colTag: subtotalBy.colTag,
 	            title: subtotalBy.title ? subtotalBy.title + ": " + title : title,
 	            value: subtotalBy.format === ColumnLike_1.ColumnFormat.NUMBER ? parseFloat(title) : title
 	        };
@@ -20059,16 +20141,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return DetailRow;
 	}(GenericRow));
 	exports.DetailRow = DetailRow;
+	/**
+	 * creating a subtotal row has the following ingredients
+	 *  - bucketInfo
+	 *  - sectorPath
+	 *  - data
+	 *  - optional: children
+	 *  - optional: detailRows
+	 */
 	var SubtotalRow = (function (_super) {
 	    __extends(SubtotalRow, _super);
 	    function SubtotalRow(bucketInfo) {
 	        _super.call(this, {});
+	        this._isLoading = false;
 	        this.children = [];
 	        this.childrenByTitle = {};
 	        this._isCollapsed = false;
 	        this.detailRows = [];
 	        this.bucketInfo = bucketInfo;
 	    }
+	    SubtotalRow.prototype.isLoading = function () {
+	        return this._isLoading;
+	    };
+	    SubtotalRow.prototype.setIsLoading = function (state) {
+	        this._isLoading = state;
+	    };
 	    SubtotalRow.prototype.toggleCollapse = function (state) {
 	        if (state != undefined)
 	            this._isCollapsed = state;
@@ -20122,71 +20219,210 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 34 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	function cellSelectReducer(state, action, props) {
-	    if (_.isFunction(props.onCellClick)) {
-	        if (!props.onCellClick(action.row, action.column))
-	            return state; // will not emit state mutation event
-	        else
-	            return _.clone(state); // will emit state mutation event
-	    }
-	    else
-	        return state;
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var utils_1 = __webpack_require__(8);
+	var ScrollCalculator_1 = __webpack_require__(35);
+	var $ = __webpack_require__(36);
+	var GigaStore_1 = __webpack_require__(7);
+	var InitializeReducer_1 = __webpack_require__(28);
+	var TreeRasterizer_1 = __webpack_require__(27);
+	var SelectReducers_1 = __webpack_require__(37);
+	var SortReducers_1 = __webpack_require__(38);
+	var ChangeRowDisplayBoundsReducer_1 = __webpack_require__(39);
+	var TreeBuilder_1 = __webpack_require__(32);
+	var Row_1 = __webpack_require__(33);
+	var RowCollapseReducers_1 = __webpack_require__(40);
+	var SortFactory_1 = __webpack_require__(29);
+	/**
+	 * Initial state reducer for Server store
+	 * will not use client side aggregation or pre-sorting etc ... won't even read the `data` prop
+	 * @param action
+	 * @returns {{rasterizedRows: Row[], displayStart: number, columns: any, displayEnd: number, subtotalBys: Column[], sortBys: Array, filterBys: (T|Array), tree: Tree, showSettingsPopover: boolean}}
+	 */
+	function initialStateReducer(action) {
+	    var _a = action.props, initialData = _a.initialData, columnDefs = _a.columnDefs, initialSortBys = _a.initialSortBys, initialSubtotalBys = _a.initialSubtotalBys, initialFilterBys = _a.initialFilterBys;
+	    /**
+	     * turn ColumnDefs into "Columns" which are decorated with behaviors
+	     */
+	    var columns = columnDefs.map(function (columnDef) {
+	        return _.assign({}, columnDef, {});
+	    });
+	    /**
+	     * create sortBys from columns (any properties passed via initialSortBys will override the same property in the corresponding Column object
+	     */
+	    var columnsWithSort = InitializeReducer_1.decorateColumnsWithSort(columns, initialSortBys);
+	    var sortBys = InitializeReducer_1.decorateInitialSortBys(initialSortBys, columnsWithSort);
+	    /**
+	     * create subtotalBys from columns (any properties passed in via initialSubtotalBys will override the same property on the corresponding Column object
+	     */
+	    var subtotalBys = (initialSubtotalBys || []).map(function (subtotalBy) {
+	        var column = _.find(columns, function (column) { return column.colTag === subtotalBy.colTag; });
+	        return _.assign({}, column, subtotalBy);
+	    });
+	    // create a simple shallow tree based on the initial data
+	    var tree = TreeBuilder_1.TreeBuilder.buildShallowTree(initialData);
+	    SortFactory_1.SortFactory.sortTree(tree, sortBys, columnsWithSort[0]);
+	    var rasterizedRows = TreeRasterizer_1.TreeRasterizer.rasterize(tree);
+	    return {
+	        rasterizedRows: rasterizedRows,
+	        displayStart: 0,
+	        columns: columnsWithSort,
+	        displayEnd: Math.min(rasterizedRows.length - 1, GigaStore_1.PROGRESSIVE_RENDERING_THRESHOLD),
+	        subtotalBys: subtotalBys,
+	        sortBys: sortBys,
+	        filterBys: _.cloneDeep(initialFilterBys) || [],
+	        tree: tree,
+	        showSettingsPopover: false
+	    };
 	}
-	exports.cellSelectReducer = cellSelectReducer;
-	function rowSelectReducer(state, action, props) {
-	    if (_.isFunction(props.onRowClick)) {
-	        var udfResult = props.onRowClick(action.row, state);
-	        if (udfResult !== undefined &&
-	            udfResult === false)
-	            return state;
-	        else {
-	            // de-select every other row unless enableMultiRowSelect is turned on
-	            if (!props.enableMultiRowSelect) {
-	                var toggleTo = !action.row.isSelected();
-	                recursivelyDeselect(state.tree.getRoot());
-	                action.row.toggleSelect(toggleTo);
-	            }
-	            else
-	                action.row.toggleSelect();
-	            return _.clone(state);
+	var ServerStore = (function (_super) {
+	    __extends(ServerStore, _super);
+	    function ServerStore(dispatcher, props) {
+	        _super.call(this, dispatcher);
+	        this.props = props;
+	        dispatcher.dispatch({
+	            type: GigaStore_1.GigaActionType.INITIALIZE
+	        });
+	    }
+	    ServerStore.prototype.getInitialState = function () {
+	        return null;
+	    };
+	    ServerStore.prototype.initialize = function (action) {
+	        // if props not passed we will use this.props
+	        var overrideAction = _.assign({}, action, { props: action.props || this.props });
+	        return initialStateReducer(overrideAction); // TODO create initialize reducer
+	    };
+	    ServerStore.prototype.reduce = function (state, action) {
+	        switch (action.type) {
+	            /**
+	             * server only action handlers
+	             */
+	            case GigaStore_1.GigaActionType.LOADING_MORE_DATA:
+	                var row = action.parentRow;
+	                row.setIsLoading(true);
+	                newState = _.clone(state);
+	                var _a = ScrollCalculator_1.ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, $(state.viewport), $(state.canvas)), displayStart = _a.displayStart, displayEnd = _a.displayEnd;
+	                newState.displayStart = displayStart;
+	                newState.displayEnd = displayEnd;
+	                break;
+	            case GigaStore_1.GigaActionType.GOT_MORE_DATA:
+	                var myAction = action;
+	                var parentRow_1 = myAction.parentRow, rows = myAction.rows, isDetail = myAction.isDetail;
+	                parentRow_1.toggleCollapse(false);
+	                parentRow_1.setIsLoading(false);
+	                // empty and existing children / detail children
+	                if (isDetail) {
+	                    // add data as detail rows
+	                    parentRow_1.detailRows = [];
+	                    dataToDetailRows(rows).forEach(function (row) { return parentRow_1.detailRows.push(row); });
+	                }
+	                else {
+	                    // add data as subtotal rows
+	                    parentRow_1.children = [];
+	                    dataToSubtotalRows(rows).forEach(function (row) { return parentRow_1.addChild(row); });
+	                }
+	                SortFactory_1.SortFactory.sortRows(parentRow_1, state.sortBys, state.columns[0]);
+	                newState = _.clone(state); // force update
+	                var _b = ScrollCalculator_1.ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, $(state.viewport), $(state.canvas)), displayStart = _b.displayStart, displayEnd = _b.displayEnd;
+	                newState.displayStart = displayStart;
+	                newState.displayEnd = displayEnd;
+	                break;
+	            case GigaStore_1.GigaActionType.COLLAPSE_ROW:
+	                break;
+	            /**
+	             * plain old action handlers
+	             */
+	            case GigaStore_1.GigaActionType.INITIALIZE:
+	                newState = this.initialize(action);
+	                break;
+	            case GigaStore_1.GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS:
+	                newState = ChangeRowDisplayBoundsReducer_1.changeDisplayBoundsReducer(state, action);
+	                break;
+	            case GigaStore_1.GigaActionType.NEW_SORT:
+	                newState = SortReducers_1.sortUpdateReducer(state, action);
+	                break;
+	            case GigaStore_1.GigaActionType.CLEAR_SORT:
+	                newState = SortReducers_1.cleartSortReducer(state);
+	                break;
+	            case GigaStore_1.GigaActionType.TOGGLE_ROW_SELECT:
+	                newState = SelectReducers_1.rowSelectReducer(state, action, this.props);
+	                break;
+	            case GigaStore_1.GigaActionType.TOGGLE_CELL_SELECT:
+	                newState = SelectReducers_1.cellSelectReducer(state, action, this.props);
+	                break;
+	            case GigaStore_1.GigaActionType.TOGGLE_SETTINGS_POPOVER:
+	                newState = _.assign({}, state, { showSettingsPopover: !state.showSettingsPopover });
+	                break;
+	            case GigaStore_1.GigaActionType.TOGGLE_ROW_COLLAPSE:
+	                newState = RowCollapseReducers_1.toggleCollapseReducer(state, action, this.props);
+	                break;
+	            /**
+	             * not supported actions for server rendering mode
+	             */
+	            case GigaStore_1.GigaActionType.COLUMNS_UPDATE:
+	                newState = state; // not handled
+	                break;
+	            case GigaStore_1.GigaActionType.COLLAPSE_ALL:
+	                newState = state; // not handled
+	                break;
+	            case GigaStore_1.GigaActionType.EXPAND_ALL:
+	                newState = state; // not handled
+	                break;
+	            default:
+	                newState = state;
 	        }
-	    }
-	    else
-	        return state;
+	        var newState;
+	        /*
+	         determine if an action should trigger rasterization
+	         todo I wonder if we need to re-compute display bounds after rasterization if so, viewport and canvas must become states so we can access them here
+	         */
+	        if (GigaStore_1.GigaStore.shouldTriggerRasterization(action))
+	            newState.rasterizedRows = TreeRasterizer_1.TreeRasterizer.rasterize(newState.tree);
+	        return newState;
+	    };
+	    return ServerStore;
+	}(utils_1.ReduceStore));
+	exports.ServerStore = ServerStore;
+	/**
+	 * convert server provided rows into DetailRow objects (the server can't give us true ES6 JavaScript instances, so we have
+	 * to manually instantiate them!)
+	 * @param rows
+	 * @returns {DetailRow[]}
+	 */
+	function dataToDetailRows(rows) {
+	    return rows.map(function (row) {
+	        var detailRow = new Row_1.DetailRow(row.data);
+	        detailRow.setSectorPath(row.sectorPath);
+	        return detailRow;
+	    });
 	}
-	exports.rowSelectReducer = rowSelectReducer;
-	// define a function
-	function recursivelyDeselect(row) {
-	    row.toggleSelect(false);
-	    if (!row.isDetail()) {
-	        var subtotalRow = row;
-	        var children = subtotalRow.getChildren().length === 0 ? subtotalRow.detailRows : subtotalRow.getChildren();
-	        children.forEach(function (child) { return recursivelyDeselect(child); });
-	    }
+	/**
+	 * convert server provided rows into DetailRow objects (the server can't give us true ES6 JavaScript instances, so we have
+	 * to manually instantiate them!)
+	 * @param rows
+	 * @returns {SubtotalRow[]}
+	 */
+	function dataToSubtotalRows(rows) {
+	    return rows.map(function (row) {
+	        var subtotalRow = new Row_1.SubtotalRow(row.bucketInfo);
+	        subtotalRow.setSectorPath(row.sectorPath);
+	        subtotalRow.setData(row.data);
+	        subtotalRow.toggleCollapse(true);
+	        return subtotalRow;
+	    });
 	}
+	exports.dataToSubtotalRows = dataToSubtotalRows;
 
 
 /***/ },
 /* 35 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var ScrollCalculator_1 = __webpack_require__(36);
-	function changeDisplayBoundsReducer(state, action) {
-	    var _a = ScrollCalculator_1.ScrollCalculator.computeDisplayBoundaries(action.rowHeight, action.viewport, action.canvas), displayStart = _a.displayStart, displayEnd = _a.displayEnd;
-	    var newState = _.clone(state);
-	    newState.displayStart = displayStart;
-	    newState.displayEnd = displayEnd;
-	    return newState;
-	}
-	exports.changeDisplayBoundsReducer = changeDisplayBoundsReducer;
-
-
-/***/ },
-/* 36 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -20198,7 +20434,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var canvasOffset = canvas.offset().top;
 	        var progress = viewportOffset - canvasOffset;
 	        var displayStart = Math.floor(progress / parseInt(rowHeight));
-	        var displayEnd = displayStart + Math.ceil(viewport.height() / parseInt(rowHeight));
+	        var tableHeight = viewport[0].style.maxHeight ? viewport[0].style.maxHeight : viewport[0].style.height ? viewport[0].style.height : "";
+	        var displayEnd = displayStart + Math.ceil(parseInt(tableHeight) / parseInt(rowHeight));
 	        return {
 	            displayStart: displayStart,
 	            displayEnd: displayEnd
@@ -20210,641 +20447,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 37 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-	 * Sort Action Handlers
-	 */
-	"use strict";
-	var SortFactory_1 = __webpack_require__(29);
-	function sortUpdateReducer(state, action) {
-	    /**
-	     * go through all the columns in state, flip on/off sort flags as necessary
-	     */
-	    var newPartialState = {};
-	    state.columns.forEach(function (column) {
-	        var sb = _.find(action.sortBys, function (s) { return s.colTag === column.colTag; });
-	        if (sb)
-	            column.direction = sb.direction;
-	        else
-	            column.direction = undefined;
-	    });
-	    newPartialState['columns'] = state.columns;
-	    newPartialState['tree'] = SortFactory_1.SortFactory.sortTree(state.tree, action.sortBys, newPartialState['columns'][0]);
-	    newPartialState['sortBys'] = action.sortBys;
-	    return _.assign({}, state, newPartialState);
-	}
-	exports.sortUpdateReducer = sortUpdateReducer;
-	function cleartSortReducer(state) {
-	    state.columns.forEach(function (column) { return column.direction = undefined; });
-	    var newTree = SortFactory_1.SortFactory.sortTree(state.tree, []);
-	    var newState = _.clone(state);
-	    newState.tree = newTree;
-	    newState.sortBys = [];
-	    return newState;
-	}
-	exports.cleartSortReducer = cleartSortReducer;
-
-
-/***/ },
-/* 38 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var TreeBuilder_1 = __webpack_require__(32);
-	function expandAllReducer(state) {
-	    TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(state.tree.getRoot(), false);
-	    return _.clone(state);
-	}
-	exports.expandAllReducer = expandAllReducer;
-	function collapseAllReducer(state) {
-	    TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(state.tree.getRoot());
-	    return _.clone(state);
-	}
-	exports.collapseAllReducer = collapseAllReducer;
-	function toggleCollapseReducer(state, action) {
-	    var row = action.subtotalRow;
-	    row.toggleCollapse();
-	    return _.clone(state);
-	}
-	exports.toggleCollapseReducer = toggleCollapseReducer;
-
-
-/***/ },
-/* 39 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var SortFactory_1 = __webpack_require__(29);
-	var SubtotalAggregator_1 = __webpack_require__(31);
-	var TreeBuilder_1 = __webpack_require__(32);
-	function columnUpdateReducer(state, action, props) {
-	    var newColumnStates = {
-	        columns: action.columns || state.columns,
-	        subtotalBys: action.subtotalBys || state.subtotalBys,
-	        showSettingsPopover: !state.showSettingsPopover
-	    };
-	    // TODO we might not ALWAYS want to re-aggregate, but we need to think about how the object model works
-	    var tree = TreeBuilder_1.TreeBuilder.buildTree(props.data, newColumnStates.subtotalBys);
-	    TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(tree.getRoot(), false);
-	    SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, newColumnStates.columns);
-	    newColumnStates["tree"] = SortFactory_1.SortFactory.sortTree(tree, state.sortBys);
-	    return _.assign({}, state, newColumnStates);
-	}
-	exports.columnUpdateReducer = columnUpdateReducer;
-
-
-/***/ },
-/* 40 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright (c) 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 */
-	
-	module.exports.Dispatcher = __webpack_require__(41);
-
-
-/***/ },
-/* 41 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright (c) 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule Dispatcher
-	 * 
-	 * @preventMunge
-	 */
-	
-	'use strict';
-	
-	exports.__esModule = true;
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
-	var invariant = __webpack_require__(12);
-	
-	var _prefix = 'ID_';
-	
-	/**
-	 * Dispatcher is used to broadcast payloads to registered callbacks. This is
-	 * different from generic pub-sub systems in two ways:
-	 *
-	 *   1) Callbacks are not subscribed to particular events. Every payload is
-	 *      dispatched to every registered callback.
-	 *   2) Callbacks can be deferred in whole or part until other callbacks have
-	 *      been executed.
-	 *
-	 * For example, consider this hypothetical flight destination form, which
-	 * selects a default city when a country is selected:
-	 *
-	 *   var flightDispatcher = new Dispatcher();
-	 *
-	 *   // Keeps track of which country is selected
-	 *   var CountryStore = {country: null};
-	 *
-	 *   // Keeps track of which city is selected
-	 *   var CityStore = {city: null};
-	 *
-	 *   // Keeps track of the base flight price of the selected city
-	 *   var FlightPriceStore = {price: null}
-	 *
-	 * When a user changes the selected city, we dispatch the payload:
-	 *
-	 *   flightDispatcher.dispatch({
-	 *     actionType: 'city-update',
-	 *     selectedCity: 'paris'
-	 *   });
-	 *
-	 * This payload is digested by `CityStore`:
-	 *
-	 *   flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'city-update') {
-	 *       CityStore.city = payload.selectedCity;
-	 *     }
-	 *   });
-	 *
-	 * When the user selects a country, we dispatch the payload:
-	 *
-	 *   flightDispatcher.dispatch({
-	 *     actionType: 'country-update',
-	 *     selectedCountry: 'australia'
-	 *   });
-	 *
-	 * This payload is digested by both stores:
-	 *
-	 *   CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'country-update') {
-	 *       CountryStore.country = payload.selectedCountry;
-	 *     }
-	 *   });
-	 *
-	 * When the callback to update `CountryStore` is registered, we save a reference
-	 * to the returned token. Using this token with `waitFor()`, we can guarantee
-	 * that `CountryStore` is updated before the callback that updates `CityStore`
-	 * needs to query its data.
-	 *
-	 *   CityStore.dispatchToken = flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'country-update') {
-	 *       // `CountryStore.country` may not be updated.
-	 *       flightDispatcher.waitFor([CountryStore.dispatchToken]);
-	 *       // `CountryStore.country` is now guaranteed to be updated.
-	 *
-	 *       // Select the default city for the new country
-	 *       CityStore.city = getDefaultCityForCountry(CountryStore.country);
-	 *     }
-	 *   });
-	 *
-	 * The usage of `waitFor()` can be chained, for example:
-	 *
-	 *   FlightPriceStore.dispatchToken =
-	 *     flightDispatcher.register(function(payload) {
-	 *       switch (payload.actionType) {
-	 *         case 'country-update':
-	 *         case 'city-update':
-	 *           flightDispatcher.waitFor([CityStore.dispatchToken]);
-	 *           FlightPriceStore.price =
-	 *             getFlightPriceStore(CountryStore.country, CityStore.city);
-	 *           break;
-	 *     }
-	 *   });
-	 *
-	 * The `country-update` payload will be guaranteed to invoke the stores'
-	 * registered callbacks in order: `CountryStore`, `CityStore`, then
-	 * `FlightPriceStore`.
-	 */
-	
-	var Dispatcher = (function () {
-	  function Dispatcher() {
-	    _classCallCheck(this, Dispatcher);
-	
-	    this._callbacks = {};
-	    this._isDispatching = false;
-	    this._isHandled = {};
-	    this._isPending = {};
-	    this._lastID = 1;
-	  }
-	
-	  /**
-	   * Registers a callback to be invoked with every dispatched payload. Returns
-	   * a token that can be used with `waitFor()`.
-	   */
-	
-	  Dispatcher.prototype.register = function register(callback) {
-	    var id = _prefix + this._lastID++;
-	    this._callbacks[id] = callback;
-	    return id;
-	  };
-	
-	  /**
-	   * Removes a callback based on its token.
-	   */
-	
-	  Dispatcher.prototype.unregister = function unregister(id) {
-	    !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.unregister(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
-	    delete this._callbacks[id];
-	  };
-	
-	  /**
-	   * Waits for the callbacks specified to be invoked before continuing execution
-	   * of the current callback. This method should only be used by a callback in
-	   * response to a dispatched payload.
-	   */
-	
-	  Dispatcher.prototype.waitFor = function waitFor(ids) {
-	    !this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Must be invoked while dispatching.') : invariant(false) : undefined;
-	    for (var ii = 0; ii < ids.length; ii++) {
-	      var id = ids[ii];
-	      if (this._isPending[id]) {
-	        !this._isHandled[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Circular dependency detected while ' + 'waiting for `%s`.', id) : invariant(false) : undefined;
-	        continue;
-	      }
-	      !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
-	      this._invokeCallback(id);
-	    }
-	  };
-	
-	  /**
-	   * Dispatches a payload to all registered callbacks.
-	   */
-	
-	  Dispatcher.prototype.dispatch = function dispatch(payload) {
-	    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.') : invariant(false) : undefined;
-	    this._startDispatching(payload);
-	    try {
-	      for (var id in this._callbacks) {
-	        if (this._isPending[id]) {
-	          continue;
-	        }
-	        this._invokeCallback(id);
-	      }
-	    } finally {
-	      this._stopDispatching();
-	    }
-	  };
-	
-	  /**
-	   * Is this Dispatcher currently dispatching.
-	   */
-	
-	  Dispatcher.prototype.isDispatching = function isDispatching() {
-	    return this._isDispatching;
-	  };
-	
-	  /**
-	   * Call the callback stored with the given id. Also do some internal
-	   * bookkeeping.
-	   *
-	   * @internal
-	   */
-	
-	  Dispatcher.prototype._invokeCallback = function _invokeCallback(id) {
-	    this._isPending[id] = true;
-	    this._callbacks[id](this._pendingPayload);
-	    this._isHandled[id] = true;
-	  };
-	
-	  /**
-	   * Set up bookkeeping needed when dispatching.
-	   *
-	   * @internal
-	   */
-	
-	  Dispatcher.prototype._startDispatching = function _startDispatching(payload) {
-	    for (var id in this._callbacks) {
-	      this._isPending[id] = false;
-	      this._isHandled[id] = false;
-	    }
-	    this._pendingPayload = payload;
-	    this._isDispatching = true;
-	  };
-	
-	  /**
-	   * Clear bookkeeping used for dispatching.
-	   *
-	   * @internal
-	   */
-	
-	  Dispatcher.prototype._stopDispatching = function _stopDispatching() {
-	    delete this._pendingPayload;
-	    this._isDispatching = false;
-	  };
-	
-	  return Dispatcher;
-	})();
-	
-	module.exports = Dispatcher;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
-
-/***/ },
-/* 42 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var React = __webpack_require__(2);
-	var GigaRow_1 = __webpack_require__(43);
-	var GigaStore_1 = __webpack_require__(7);
-	var TableBody = (function (_super) {
-	    __extends(TableBody, _super);
-	    function TableBody(props) {
-	        _super.call(this, props);
-	    }
-	    TableBody.prototype.isProgressiveRenderingEnabled = function () {
-	        return (this.props.rows.length > GigaStore_1.PROGRESSIVE_RENDERING_THRESHOLD
-	            && typeof this.props.displayStart !== "undefined"
-	            && typeof this.props.displayEnd !== "undefined"
-	            && typeof this.props.rowHeight !== this.props.rowHeight);
-	    };
-	    TableBody.prototype.renderRows = function (rowHeight, start, end) {
-	        var _this = this;
-	        function validateBounds() {
-	            return typeof start !== "undefined" && typeof end !== "undefined";
-	        }
-	        console.log(this.props.viewport);
-	        var rows = validateBounds() ? this.props.rows.slice(start, end + 1) : this.props.rows;
-	        return rows.map(function (row, i) {
-	            return (React.createElement(GigaRow_1.GigaRow, {key: i, columns: _this.props.columns, row: row, rowHeight: "" + rowHeight, dispatcher: _this.props.dispatcher, viewport: _this.props.viewport, canvas: _this.props.canvas}));
-	        });
-	    };
-	    TableBody.prototype.render = function () {
-	        if (this.isProgressiveRenderingEnabled()) {
-	            /*
-	             we only render from displayStart -> displayEnd in rows
-	             we compute the theoretical height of elements between 0 -> displayStart
-	             and the theoretical height of elements between displayEnd -> rows.length
-	             and create a placeholder for each quantity
-	
-	             this allow us to preserve the total height of contents in tbody without actually rendering every row
-	             */
-	            var rows = this.renderRows(parseInt(this.props.rowHeight), this.props.displayStart, this.props.displayEnd);
-	            var placeholderHeights = this.calculatePlaceholderHeight();
-	            return (React.createElement("tbody", null, React.createElement("tr", {style: { height: placeholderHeights.upperPlaceholderHeight + "px" }, className: "placeholder"}), rows, React.createElement("tr", {style: { height: placeholderHeights.lowerPlaceholderHeight + "px" }, className: "placeholder"})));
-	        }
-	        else {
-	            var rows = this.renderRows(parseInt(this.props.rowHeight));
-	            return (React.createElement("tbody", null, rows));
-	        }
-	    };
-	    TableBody.prototype.calculatePlaceholderHeight = function () {
-	        var rowHeight = parseInt(this.props.rowHeight);
-	        return {
-	            upperPlaceholderHeight: Math.max(this.props.displayStart * rowHeight, 0),
-	            lowerPlaceholderHeight: Math.max((this.props.rows.length - this.props.displayEnd) * rowHeight, 0)
-	        };
-	    };
-	    return TableBody;
-	}(React.Component));
-	exports.TableBody = TableBody;
-
-
-/***/ },
-/* 43 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(44);
-	var GigaStore_1 = __webpack_require__(7);
-	var Cell_1 = __webpack_require__(45);
-	var GigaRow = (function (_super) {
-	    __extends(GigaRow, _super);
-	    function GigaRow(props) {
-	        _super.call(this, props);
-	    }
-	    GigaRow.prototype.render = function () {
-	        var _this = this;
-	        var props = this.props;
-	        var subtotalLvlClassName = "subtotal-row-" + (props.row.sectorPath().length - 1);
-	        var rowClassNames = {
-	            "placeholder-false": true,
-	            "subtotal-row": !props.row.isDetail(),
-	            "detail-row": props.row.isDetail(),
-	            "selected": props.row.isSelected(),
-	        };
-	        rowClassNames[subtotalLvlClassName] = props.row.isDetail() ? false : true;
-	        var cx = classNames(rowClassNames);
-	        var cells = props
-	            .columns
-	            .map(function (column, i) {
-	            return (React.createElement(Cell_1.Cell, {key: i, isFirstColumn: i === 0, column: column, rowHeight: _this.props.rowHeight, dispatcher: _this.props.dispatcher, row: _this.props.row, viewport: _this.props.viewport, canvas: _this.props.canvas}));
-	        });
-	        return React.createElement("tr", {className: cx, style: { height: this.props.rowHeight }, onClick: function (e) {
-	            e.preventDefault();
-	            var action = {
-	                type: GigaStore_1.GigaActionType.TOGGLE_ROW_SELECT,
-	                row: _this.props.row
-	            };
-	            _this.props.dispatcher.dispatch(action);
-	        }}, cells);
-	    };
-	    return GigaRow;
-	}(React.Component));
-	exports.GigaRow = GigaRow;
-
-
-/***/ },
-/* 44 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2016 Jed Watson.
-	  Licensed under the MIT License (MIT), see
-	  http://jedwatson.github.io/classnames
-	*/
-	/* global define */
-	
-	(function () {
-		'use strict';
-	
-		var hasOwn = {}.hasOwnProperty;
-	
-		function classNames () {
-			var classes = [];
-	
-			for (var i = 0; i < arguments.length; i++) {
-				var arg = arguments[i];
-				if (!arg) continue;
-	
-				var argType = typeof arg;
-	
-				if (argType === 'string' || argType === 'number') {
-					classes.push(arg);
-				} else if (Array.isArray(arg)) {
-					classes.push(classNames.apply(null, arg));
-				} else if (argType === 'object') {
-					for (var key in arg) {
-						if (hasOwn.call(arg, key) && arg[key]) {
-							classes.push(key);
-						}
-					}
-				}
-			}
-	
-			return classes.join(' ');
-		}
-	
-		if (typeof module !== 'undefined' && module.exports) {
-			module.exports = classNames;
-		} else if (true) {
-			// register as 'classnames', consistent with npm package name
-			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
-				return classNames;
-			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		} else {
-			window.classNames = classNames;
-		}
-	}());
-
-
-/***/ },
-/* 45 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(44);
-	var ColumnLike_1 = __webpack_require__(6);
-	var SubtotalAggregator_1 = __webpack_require__(31);
-	var GigaStore_1 = __webpack_require__(7);
-	var $ = __webpack_require__(46);
-	var Cell = (function (_super) {
-	    __extends(Cell, _super);
-	    function Cell(props) {
-	        _super.call(this, props);
-	    }
-	    Cell.prototype.render = function () {
-	        var props = this.props;
-	        var row = props.row;
-	        var column = props.column;
-	        if (_.isFunction(column.cellTemplateCreator))
-	            return column.cellTemplateCreator(row, column, props);
-	        else
-	            return new DefaultCellRenderer(props).render();
-	    };
-	    return Cell;
-	}(React.Component));
-	exports.Cell = Cell;
-	var DefaultCellRenderer = (function () {
-	    function DefaultCellRenderer(props) {
-	        this.props = props;
-	    }
-	    DefaultCellRenderer.prototype.onCollapseToggle = function (e) {
-	        e.preventDefault();
-	        e.stopPropagation(); // we don't want toggle collapse to also trigger a row / cell clicked event
-	        var action = {
-	            type: GigaStore_1.GigaActionType.TOGGLE_ROW_COLLAPSE,
-	            subtotalRow: this.props.row
-	        };
-	        this.props.dispatcher.dispatch(action);
-	        //TODO : on ToggleCollapseAction call ChangeRowDisplayBoundsAction
-	        this.dispatchDisplayBoundChange();
-	    };
-	    //----------------------------------------------------------
-	    DefaultCellRenderer.prototype.dispatchDisplayBoundChange = function () {
-	        var $viewport = $(this.props.viewport);
-	        var $canvas = $(this.props.canvas);
-	        var action = {
-	            type: GigaStore_1.GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS,
-	            canvas: $canvas,
-	            viewport: $viewport,
-	            rowHeight: this.props.rowHeight
-	        };
-	        this.props.dispatcher.dispatch(action);
-	    };
-	    //----------------------------------------------------------
-	    DefaultCellRenderer.prototype.onClick = function () {
-	        var action = {
-	            type: GigaStore_1.GigaActionType.TOGGLE_CELL_SELECT,
-	            row: this.props.row,
-	            column: this.props.column
-	        };
-	        this.props.dispatcher.dispatch(action);
-	    };
-	    DefaultCellRenderer.prototype.calculateStyle = function () {
-	        return {
-	            width: this.props.column.width,
-	            height: this.props.rowHeight,
-	            paddingLeft: this.props.isFirstColumn ? DefaultCellRenderer.calculateFirstColumnIdentation(this.props.row) : undefined
-	        };
-	    };
-	    DefaultCellRenderer.prototype.renderCellWithCollapseToggle = function (row) {
-	        var _this = this;
-	        var cx = classNames({
-	            "fa": true,
-	            "fa-plus-square-o": row.isCollapsed(),
-	            "fa-minus-square-o": !row.isCollapsed()
-	        });
-	        return (React.createElement("td", {style: this.calculateStyle(), onClick: function (e) { return _this.onClick(); }}, React.createElement("span", null, React.createElement("i", {className: cx, onClick: function (e) { return _this.onCollapseToggle(e); }}), " ", row.bucketInfo.title || "")));
-	    };
-	    DefaultCellRenderer.prototype.renderNormalCell = function (row, column) {
-	        var _this = this;
-	        var renderedCellContent = SubtotalAggregator_1.format(row.get(column), column.formatInstruction) || "";
-	        if (!row.isDetail()
-	            && (column.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT || column.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT_DISTINCT))
-	            renderedCellContent = "[" + renderedCellContent + "]";
-	        return (React.createElement("td", {className: DefaultCellRenderer.calculateTextAlignment(row, column), onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, renderedCellContent));
-	    };
-	    DefaultCellRenderer.calculateTextAlignment = function (row, column) {
-	        var value = row.get(column);
-	        if (column.formatInstruction && column.formatInstruction.textAlign)
-	            return "text-align-" + column.formatInstruction.textAlign;
-	        else if (isNaN(value))
-	            return "text-align-left";
-	        else
-	            return "text-align-right";
-	    };
-	    DefaultCellRenderer.calculateFirstColumnIdentation = function (row) {
-	        /*
-	         handle when there are no subtotal rows
-	         */
-	        if ((row.sectorPath() || []).length === 0)
-	            return "10px";
-	        else {
-	            var identLevel = (row.sectorPath() || []).length;
-	            return ((row.isDetail() && identLevel !== 0 ? identLevel + 1 : identLevel) * 25) + 'px';
-	        }
-	    };
-	    DefaultCellRenderer.prototype.render = function () {
-	        var _a = this.props, isFirstColumn = _a.isFirstColumn, row = _a.row, column = _a.column;
-	        if (isFirstColumn && !row.isDetail())
-	            return this.renderCellWithCollapseToggle(row);
-	        else
-	            return this.renderNormalCell(row, column);
-	    };
-	    return DefaultCellRenderer;
-	}());
-	exports.DefaultCellRenderer = DefaultCellRenderer;
-
-
-/***/ },
-/* 46 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -30692,6 +30295,585 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
+/* 37 */
+/***/ function(module, exports) {
+
+	"use strict";
+	function cellSelectReducer(state, action, props) {
+	    if (_.isFunction(props.onCellClick)) {
+	        if (!props.onCellClick(action.row, action.column))
+	            return state; // will not emit state mutation event
+	        else
+	            return _.clone(state); // will emit state mutation event
+	    }
+	    else
+	        return state;
+	}
+	exports.cellSelectReducer = cellSelectReducer;
+	function rowSelectReducer(state, action, props) {
+	    if (_.isFunction(props.onRowClick)) {
+	        var udfResult = props.onRowClick(action.row, state);
+	        if (udfResult !== undefined &&
+	            udfResult === false)
+	            return state;
+	        else {
+	            // de-select every other row unless enableMultiRowSelect is turned on
+	            if (!props.enableMultiRowSelect) {
+	                var toggleTo = !action.row.isSelected();
+	                recursivelyDeselect(state.tree.getRoot());
+	                action.row.toggleSelect(toggleTo);
+	            }
+	            else
+	                action.row.toggleSelect();
+	            return _.clone(state);
+	        }
+	    }
+	    else
+	        return state;
+	}
+	exports.rowSelectReducer = rowSelectReducer;
+	// define a function
+	function recursivelyDeselect(row) {
+	    row.toggleSelect(false);
+	    if (!row.isDetail()) {
+	        var subtotalRow = row;
+	        var children = subtotalRow.getChildren().length === 0 ? subtotalRow.detailRows : subtotalRow.getChildren();
+	        children.forEach(function (child) { return recursivelyDeselect(child); });
+	    }
+	}
+
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * Sort Action Handlers
+	 */
+	"use strict";
+	var SortFactory_1 = __webpack_require__(29);
+	function sortUpdateReducer(state, action) {
+	    /**
+	     * go through all the columns in state, flip on/off sort flags as necessary
+	     */
+	    var newPartialState = {};
+	    state.columns.forEach(function (column) {
+	        var sb = _.find(action.sortBys, function (s) { return s.colTag === column.colTag; });
+	        if (sb)
+	            column.direction = sb.direction;
+	        else
+	            column.direction = undefined;
+	    });
+	    newPartialState['columns'] = state.columns;
+	    newPartialState['tree'] = SortFactory_1.SortFactory.sortTree(state.tree, action.sortBys, newPartialState['columns'][0]);
+	    newPartialState['sortBys'] = action.sortBys;
+	    return _.assign({}, state, newPartialState);
+	}
+	exports.sortUpdateReducer = sortUpdateReducer;
+	function cleartSortReducer(state) {
+	    state.columns.forEach(function (column) { return column.direction = undefined; });
+	    var newTree = SortFactory_1.SortFactory.sortTree(state.tree, []);
+	    var newState = _.clone(state);
+	    newState.tree = newTree;
+	    newState.sortBys = [];
+	    return newState;
+	}
+	exports.cleartSortReducer = cleartSortReducer;
+
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var ScrollCalculator_1 = __webpack_require__(35);
+	function changeDisplayBoundsReducer(state, action) {
+	    var _a = ScrollCalculator_1.ScrollCalculator.computeDisplayBoundaries(action.rowHeight, action.viewport, action.canvas), displayStart = _a.displayStart, displayEnd = _a.displayEnd;
+	    var newState = _.clone(state);
+	    newState.displayStart = displayStart;
+	    newState.displayEnd = displayEnd;
+	    return newState;
+	}
+	exports.changeDisplayBoundsReducer = changeDisplayBoundsReducer;
+
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var TreeBuilder_1 = __webpack_require__(32);
+	var ScrollCalculator_1 = __webpack_require__(35);
+	var $ = __webpack_require__(36);
+	function expandAllReducer(state) {
+	    TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(state.tree.getRoot(), false);
+	    return _.clone(state);
+	}
+	exports.expandAllReducer = expandAllReducer;
+	function collapseAllReducer(state) {
+	    TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(state.tree.getRoot());
+	    return _.clone(state);
+	}
+	exports.collapseAllReducer = collapseAllReducer;
+	function toggleCollapseReducer(state, action, props) {
+	    var row = action.subtotalRow;
+	    row.toggleCollapse();
+	    var newState = _.clone(state);
+	    var _a = ScrollCalculator_1.ScrollCalculator.computeDisplayBoundaries(props.rowHeight, $(state.viewport), $(state.canvas)), displayStart = _a.displayStart, displayEnd = _a.displayEnd;
+	    newState.displayStart = displayStart;
+	    newState.displayEnd = displayEnd;
+	    return newState;
+	}
+	exports.toggleCollapseReducer = toggleCollapseReducer;
+
+
+/***/ },
+/* 41 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var SortFactory_1 = __webpack_require__(29);
+	var SubtotalAggregator_1 = __webpack_require__(31);
+	var TreeBuilder_1 = __webpack_require__(32);
+	function columnUpdateReducer(state, action, props) {
+	    var newColumnStates = {
+	        columns: action.columns || state.columns,
+	        subtotalBys: action.subtotalBys || state.subtotalBys,
+	        showSettingsPopover: !state.showSettingsPopover
+	    };
+	    // TODO we might not ALWAYS want to re-aggregate, but we need to think about how the object model works
+	    var tree = TreeBuilder_1.TreeBuilder.buildTree(props.data, newColumnStates.subtotalBys);
+	    TreeBuilder_1.TreeBuilder.recursivelyToggleChildrenCollapse(tree.getRoot(), false);
+	    SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, newColumnStates.columns);
+	    newColumnStates["tree"] = SortFactory_1.SortFactory.sortTree(tree, state.sortBys);
+	    return _.assign({}, state, newColumnStates);
+	}
+	exports.columnUpdateReducer = columnUpdateReducer;
+
+
+/***/ },
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	module.exports.Dispatcher = __webpack_require__(43);
+
+
+/***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule Dispatcher
+	 * 
+	 * @preventMunge
+	 */
+	
+	'use strict';
+	
+	exports.__esModule = true;
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	var invariant = __webpack_require__(12);
+	
+	var _prefix = 'ID_';
+	
+	/**
+	 * Dispatcher is used to broadcast payloads to registered callbacks. This is
+	 * different from generic pub-sub systems in two ways:
+	 *
+	 *   1) Callbacks are not subscribed to particular events. Every payload is
+	 *      dispatched to every registered callback.
+	 *   2) Callbacks can be deferred in whole or part until other callbacks have
+	 *      been executed.
+	 *
+	 * For example, consider this hypothetical flight destination form, which
+	 * selects a default city when a country is selected:
+	 *
+	 *   var flightDispatcher = new Dispatcher();
+	 *
+	 *   // Keeps track of which country is selected
+	 *   var CountryStore = {country: null};
+	 *
+	 *   // Keeps track of which city is selected
+	 *   var CityStore = {city: null};
+	 *
+	 *   // Keeps track of the base flight price of the selected city
+	 *   var FlightPriceStore = {price: null}
+	 *
+	 * When a user changes the selected city, we dispatch the payload:
+	 *
+	 *   flightDispatcher.dispatch({
+	 *     actionType: 'city-update',
+	 *     selectedCity: 'paris'
+	 *   });
+	 *
+	 * This payload is digested by `CityStore`:
+	 *
+	 *   flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'city-update') {
+	 *       CityStore.city = payload.selectedCity;
+	 *     }
+	 *   });
+	 *
+	 * When the user selects a country, we dispatch the payload:
+	 *
+	 *   flightDispatcher.dispatch({
+	 *     actionType: 'country-update',
+	 *     selectedCountry: 'australia'
+	 *   });
+	 *
+	 * This payload is digested by both stores:
+	 *
+	 *   CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'country-update') {
+	 *       CountryStore.country = payload.selectedCountry;
+	 *     }
+	 *   });
+	 *
+	 * When the callback to update `CountryStore` is registered, we save a reference
+	 * to the returned token. Using this token with `waitFor()`, we can guarantee
+	 * that `CountryStore` is updated before the callback that updates `CityStore`
+	 * needs to query its data.
+	 *
+	 *   CityStore.dispatchToken = flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'country-update') {
+	 *       // `CountryStore.country` may not be updated.
+	 *       flightDispatcher.waitFor([CountryStore.dispatchToken]);
+	 *       // `CountryStore.country` is now guaranteed to be updated.
+	 *
+	 *       // Select the default city for the new country
+	 *       CityStore.city = getDefaultCityForCountry(CountryStore.country);
+	 *     }
+	 *   });
+	 *
+	 * The usage of `waitFor()` can be chained, for example:
+	 *
+	 *   FlightPriceStore.dispatchToken =
+	 *     flightDispatcher.register(function(payload) {
+	 *       switch (payload.actionType) {
+	 *         case 'country-update':
+	 *         case 'city-update':
+	 *           flightDispatcher.waitFor([CityStore.dispatchToken]);
+	 *           FlightPriceStore.price =
+	 *             getFlightPriceStore(CountryStore.country, CityStore.city);
+	 *           break;
+	 *     }
+	 *   });
+	 *
+	 * The `country-update` payload will be guaranteed to invoke the stores'
+	 * registered callbacks in order: `CountryStore`, `CityStore`, then
+	 * `FlightPriceStore`.
+	 */
+	
+	var Dispatcher = (function () {
+	  function Dispatcher() {
+	    _classCallCheck(this, Dispatcher);
+	
+	    this._callbacks = {};
+	    this._isDispatching = false;
+	    this._isHandled = {};
+	    this._isPending = {};
+	    this._lastID = 1;
+	  }
+	
+	  /**
+	   * Registers a callback to be invoked with every dispatched payload. Returns
+	   * a token that can be used with `waitFor()`.
+	   */
+	
+	  Dispatcher.prototype.register = function register(callback) {
+	    var id = _prefix + this._lastID++;
+	    this._callbacks[id] = callback;
+	    return id;
+	  };
+	
+	  /**
+	   * Removes a callback based on its token.
+	   */
+	
+	  Dispatcher.prototype.unregister = function unregister(id) {
+	    !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.unregister(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
+	    delete this._callbacks[id];
+	  };
+	
+	  /**
+	   * Waits for the callbacks specified to be invoked before continuing execution
+	   * of the current callback. This method should only be used by a callback in
+	   * response to a dispatched payload.
+	   */
+	
+	  Dispatcher.prototype.waitFor = function waitFor(ids) {
+	    !this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Must be invoked while dispatching.') : invariant(false) : undefined;
+	    for (var ii = 0; ii < ids.length; ii++) {
+	      var id = ids[ii];
+	      if (this._isPending[id]) {
+	        !this._isHandled[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Circular dependency detected while ' + 'waiting for `%s`.', id) : invariant(false) : undefined;
+	        continue;
+	      }
+	      !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
+	      this._invokeCallback(id);
+	    }
+	  };
+	
+	  /**
+	   * Dispatches a payload to all registered callbacks.
+	   */
+	
+	  Dispatcher.prototype.dispatch = function dispatch(payload) {
+	    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.') : invariant(false) : undefined;
+	    this._startDispatching(payload);
+	    try {
+	      for (var id in this._callbacks) {
+	        if (this._isPending[id]) {
+	          continue;
+	        }
+	        this._invokeCallback(id);
+	      }
+	    } finally {
+	      this._stopDispatching();
+	    }
+	  };
+	
+	  /**
+	   * Is this Dispatcher currently dispatching.
+	   */
+	
+	  Dispatcher.prototype.isDispatching = function isDispatching() {
+	    return this._isDispatching;
+	  };
+	
+	  /**
+	   * Call the callback stored with the given id. Also do some internal
+	   * bookkeeping.
+	   *
+	   * @internal
+	   */
+	
+	  Dispatcher.prototype._invokeCallback = function _invokeCallback(id) {
+	    this._isPending[id] = true;
+	    this._callbacks[id](this._pendingPayload);
+	    this._isHandled[id] = true;
+	  };
+	
+	  /**
+	   * Set up bookkeeping needed when dispatching.
+	   *
+	   * @internal
+	   */
+	
+	  Dispatcher.prototype._startDispatching = function _startDispatching(payload) {
+	    for (var id in this._callbacks) {
+	      this._isPending[id] = false;
+	      this._isHandled[id] = false;
+	    }
+	    this._pendingPayload = payload;
+	    this._isDispatching = true;
+	  };
+	
+	  /**
+	   * Clear bookkeeping used for dispatching.
+	   *
+	   * @internal
+	   */
+	
+	  Dispatcher.prototype._stopDispatching = function _stopDispatching() {
+	    delete this._pendingPayload;
+	    this._isDispatching = false;
+	  };
+	
+	  return Dispatcher;
+	})();
+	
+	module.exports = Dispatcher;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
+
+/***/ },
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(2);
+	var GigaRow_1 = __webpack_require__(45);
+	var GigaStore_1 = __webpack_require__(7);
+	var TableBody = (function (_super) {
+	    __extends(TableBody, _super);
+	    function TableBody(props) {
+	        _super.call(this, props);
+	    }
+	    TableBody.prototype.isProgressiveRenderingEnabled = function () {
+	        return (this.props.rows.length > GigaStore_1.PROGRESSIVE_RENDERING_THRESHOLD
+	            && typeof this.props.displayStart !== "undefined"
+	            && typeof this.props.displayEnd !== "undefined"
+	            && typeof this.props.rowHeight !== this.props.rowHeight);
+	    };
+	    TableBody.prototype.renderRows = function (rowHeight, start, end) {
+	        var _this = this;
+	        function validateBounds() {
+	            return typeof start !== "undefined" && typeof end !== "undefined";
+	        }
+	        var rows = validateBounds() ? this.props.rows.slice(start, end + 1) : this.props.rows;
+	        return rows.map(function (row, i) {
+	            return (React.createElement(GigaRow_1.GigaRow, {key: i, columns: _this.props.columns, row: row, rowHeight: "" + rowHeight, gridProps: _this.props.gridProps, dispatcher: _this.props.dispatcher}));
+	        });
+	    };
+	    TableBody.prototype.render = function () {
+	        if (this.isProgressiveRenderingEnabled()) {
+	            /*
+	             we only render from displayStart -> displayEnd in rows
+	             we compute the theoretical height of elements between 0 -> displayStart
+	             and the theoretical height of elements between displayEnd -> rows.length
+	             and create a placeholder for each quantity
+	
+	             this allow us to preserve the total height of contents in tbody without actually rendering every row
+	             */
+	            var rows = this.renderRows(parseInt(this.props.rowHeight), this.props.displayStart, this.props.displayEnd);
+	            var placeholderHeights = this.calculatePlaceholderHeight();
+	            return (React.createElement("tbody", null, React.createElement("tr", {style: { height: placeholderHeights.upperPlaceholderHeight + "px" }, className: "placeholder"}), rows, React.createElement("tr", {style: { height: placeholderHeights.lowerPlaceholderHeight + "px" }, className: "placeholder"})));
+	        }
+	        else {
+	            var rows = this.renderRows(parseInt(this.props.rowHeight));
+	            return (React.createElement("tbody", null, rows));
+	        }
+	    };
+	    TableBody.prototype.calculatePlaceholderHeight = function () {
+	        var rowHeight = parseInt(this.props.rowHeight);
+	        return {
+	            upperPlaceholderHeight: Math.max(this.props.displayStart * rowHeight, 0),
+	            lowerPlaceholderHeight: Math.max((this.props.rows.length - this.props.displayEnd) * rowHeight, 0)
+	        };
+	    };
+	    return TableBody;
+	}(React.Component));
+	exports.TableBody = TableBody;
+
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(2);
+	var classNames = __webpack_require__(46);
+	var GigaStore_1 = __webpack_require__(7);
+	var Cell_1 = __webpack_require__(47);
+	var GigaRow = (function (_super) {
+	    __extends(GigaRow, _super);
+	    function GigaRow(props) {
+	        _super.call(this, props);
+	    }
+	    GigaRow.prototype.render = function () {
+	        var _this = this;
+	        var props = this.props;
+	        var subtotalLvlClassName = "subtotal-row-" + (props.row.sectorPath().length - 1);
+	        var rowClassNames = {
+	            "placeholder-false": true,
+	            "subtotal-row": !props.row.isDetail(),
+	            "detail-row": props.row.isDetail(),
+	            "selected": props.row.isSelected(),
+	        };
+	        rowClassNames[subtotalLvlClassName] = props.row.isDetail() ? false : true;
+	        var cx = classNames(rowClassNames);
+	        var cells = props
+	            .columns
+	            .map(function (column, i) {
+	            return (React.createElement(Cell_1.Cell, {key: i, isFirstColumn: i === 0, column: column, rowHeight: _this.props.rowHeight, dispatcher: _this.props.dispatcher, gridProps: _this.props.gridProps, row: _this.props.row}));
+	        });
+	        return React.createElement("tr", {className: cx, style: { height: this.props.rowHeight }, onClick: function (e) {
+	            e.preventDefault();
+	            var action = {
+	                type: GigaStore_1.GigaActionType.TOGGLE_ROW_SELECT,
+	                row: _this.props.row
+	            };
+	            _this.props.dispatcher.dispatch(action);
+	        }}, cells);
+	    };
+	    return GigaRow;
+	}(React.Component));
+	exports.GigaRow = GigaRow;
+
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+	
+	(function () {
+		'use strict';
+	
+		var hasOwn = {}.hasOwnProperty;
+	
+		function classNames () {
+			var classes = [];
+	
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+	
+				var argType = typeof arg;
+	
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+	
+			return classes.join(' ');
+		}
+	
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
+
+/***/ },
 /* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -30702,7 +30884,125 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var TableHeaderCell_1 = __webpack_require__(48);
+	var classNames = __webpack_require__(46);
+	var ColumnLike_1 = __webpack_require__(6);
+	var SubtotalAggregator_1 = __webpack_require__(31);
+	var GigaStore_1 = __webpack_require__(7);
+	var Cell = (function (_super) {
+	    __extends(Cell, _super);
+	    function Cell(props) {
+	        _super.call(this, props);
+	    }
+	    Cell.prototype.render = function () {
+	        var props = this.props;
+	        var row = props.row;
+	        var column = props.column;
+	        if (_.isFunction(column.cellTemplateCreator))
+	            return column.cellTemplateCreator(row, column, props);
+	        else
+	            return new DefaultCellRenderer(props).render();
+	    };
+	    return Cell;
+	}(React.Component));
+	exports.Cell = Cell;
+	var DefaultCellRenderer = (function () {
+	    function DefaultCellRenderer(props) {
+	        this.props = props;
+	    }
+	    DefaultCellRenderer.prototype.onCollapseToggle = function (e) {
+	        e.preventDefault();
+	        e.stopPropagation(); // we don't want toggle collapse to also trigger a row / cell clicked event
+	        var gridProps = this.props.gridProps;
+	        if (gridProps && gridProps.useServerStore) {
+	            if (gridProps.fetchRowsActionCreator)
+	                gridProps.fetchRowsActionCreator(this.props.row, this.props.dispatcher);
+	            else
+	                throw "error: server store in use yet fetchRowsActionCreator not defined on GigaGrid props";
+	        }
+	        else {
+	            var action = {
+	                type: GigaStore_1.GigaActionType.TOGGLE_ROW_COLLAPSE,
+	                subtotalRow: this.props.row
+	            };
+	            this.props.dispatcher.dispatch(action);
+	        }
+	    };
+	    DefaultCellRenderer.prototype.onClick = function () {
+	        var action = {
+	            type: GigaStore_1.GigaActionType.TOGGLE_CELL_SELECT,
+	            row: this.props.row,
+	            column: this.props.column
+	        };
+	        this.props.dispatcher.dispatch(action);
+	    };
+	    DefaultCellRenderer.prototype.calculateStyle = function () {
+	        return {
+	            width: this.props.column.width,
+	            height: this.props.rowHeight,
+	            paddingLeft: this.props.isFirstColumn ? DefaultCellRenderer.calculateFirstColumnIdentation(this.props.row) : undefined
+	        };
+	    };
+	    DefaultCellRenderer.prototype.renderCellWithCollapseToggle = function (row) {
+	        var _this = this;
+	        var cx = classNames({
+	            "fa": true,
+	            "fa-plus-square-o": row.isCollapsed(),
+	            "fa-minus-square-o": !row.isCollapsed()
+	        });
+	        return (React.createElement("td", {style: this.calculateStyle(), onClick: function (e) { return _this.onClick(); }}, React.createElement("span", null, React.createElement("i", {className: cx, onClick: function (e) { return _this.onCollapseToggle(e); }}), " ", row.bucketInfo.title || "", row.isLoading() ? [" ", React.createElement("i", {className: "fa fa-spinner fa-spin"})] : null)));
+	    };
+	    DefaultCellRenderer.prototype.renderNormalCell = function (row, column) {
+	        var _this = this;
+	        var renderedCellContent = SubtotalAggregator_1.format(row.get(column), column.formatInstruction) || "";
+	        if (!row.isDetail()
+	            && (column.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT || column.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT_DISTINCT))
+	            renderedCellContent = "[" + renderedCellContent + "]";
+	        return (React.createElement("td", {className: DefaultCellRenderer.calculateTextAlignment(row, column), onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, renderedCellContent));
+	    };
+	    DefaultCellRenderer.calculateTextAlignment = function (row, column) {
+	        var value = row.get(column);
+	        if (column.formatInstruction && column.formatInstruction.textAlign)
+	            return "text-align-" + column.formatInstruction.textAlign;
+	        else if (isNaN(value))
+	            return "text-align-left";
+	        else
+	            return "text-align-right";
+	    };
+	    DefaultCellRenderer.calculateFirstColumnIdentation = function (row) {
+	        /*
+	         handle when there are no subtotal rows
+	         */
+	        if ((row.sectorPath() || []).length === 0)
+	            return "10px";
+	        else {
+	            var identLevel = (row.sectorPath() || []).length;
+	            return ((row.isDetail() && identLevel !== 0 ? identLevel + 1 : identLevel) * 25) + 'px';
+	        }
+	    };
+	    DefaultCellRenderer.prototype.render = function () {
+	        var _a = this.props, isFirstColumn = _a.isFirstColumn, row = _a.row, column = _a.column;
+	        if (isFirstColumn && !row.isDetail())
+	            return this.renderCellWithCollapseToggle(row);
+	        else
+	            return this.renderNormalCell(row, column);
+	    };
+	    return DefaultCellRenderer;
+	}());
+	exports.DefaultCellRenderer = DefaultCellRenderer;
+
+
+/***/ },
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(2);
+	var TableHeaderCell_1 = __webpack_require__(49);
 	var GigaGrid_1 = __webpack_require__(1);
 	/**
 	 * terminology: column groups are columns that can span multiple `leaf` columns and physically reside
@@ -30738,7 +31038,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    TableHeader.prototype.renderLeafColumns = function (columns, key) {
 	        var _this = this;
 	        var ths = columns.map(function (column, i) {
-	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {column: column, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, tableHeaderClass: _this.props.tableHeaderClass, dispatcher: _this.props.dispatcher});
+	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {column: column, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, tableHeaderClass: _this.props.tableHeaderClass, gridProps: _this.props.gridProps, dispatcher: _this.props.dispatcher});
 	        });
 	        // add a placeholder to offset the scrollbar
 	        ths.push(React.createElement("th", {key: ths.length, style: { width: GigaGrid_1.getScrollBarWidth() + "px" }}));
@@ -30750,7 +31050,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -30760,11 +31060,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(44);
+	var classNames = __webpack_require__(46);
 	var ColumnLike_1 = __webpack_require__(6);
 	var GigaStore_1 = __webpack_require__(7);
 	var _ = __webpack_require__(4);
-	var Toolbar_1 = __webpack_require__(49);
+	var Toolbar_1 = __webpack_require__(50);
 	var TableHeaderCell = (function (_super) {
 	    __extends(TableHeaderCell, _super);
 	    function TableHeaderCell(props) {
@@ -30785,33 +31085,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	    TableHeaderCell.prototype.render = function () {
 	        var _this = this;
 	        var column = this.props.column;
-	        var style = {
-	            overflow: "visible",
-	            position: "relative"
-	        };
-	        var componentClasses = {
-	            "text-align-right": column.format === ColumnLike_1.ColumnFormat.NUMBER,
-	            "text-align-left": column.format !== ColumnLike_1.ColumnFormat.NUMBER
-	        };
-	        if (this.props.tableHeaderClass)
-	            componentClasses["this.props.tableHeaderClass"] = true;
-	        else
-	            componentClasses["table-header"] = true;
-	        var cx = classNames(componentClasses);
-	        return (React.createElement("th", {style: style, onClick: function () {
-	            var direction = _this.props.column.direction;
-	            var sortBy = _.assign({}, _this.props.column, {
-	                direction: direction === ColumnLike_1.SortDirection.DESC ? ColumnLike_1.SortDirection.ASC : ColumnLike_1.SortDirection.DESC
-	            });
-	            var payload = {
-	                type: GigaStore_1.GigaActionType.NEW_SORT,
-	                sortBys: [sortBy]
+	        if (_.isFunction(column.headerTemplateCreator)) {
+	            return column.headerTemplateCreator(column);
+	        }
+	        else {
+	            var style = {
+	                overflow: "visible",
+	                position: "relative"
 	            };
-	            _this.props.dispatcher.dispatch(payload);
-	        }, className: cx}, React.createElement("span", {className: "header-text"}, column.title || column.colTag), this.renderSortIcon(), this.renderToolbar()));
+	            var componentClasses = {
+	                "text-align-right": column.format === ColumnLike_1.ColumnFormat.NUMBER,
+	                "text-align-left": column.format !== ColumnLike_1.ColumnFormat.NUMBER
+	            };
+	            if (this.props.tableHeaderClass)
+	                componentClasses["this.props.tableHeaderClass"] = true;
+	            else
+	                componentClasses["table-header"] = true;
+	            var cx = classNames(componentClasses);
+	            return (React.createElement("th", {style: style, onClick: function () {
+	                var direction = _this.props.column.direction;
+	                var sortBy = _.assign({}, _this.props.column, {
+	                    direction: direction === ColumnLike_1.SortDirection.DESC ? ColumnLike_1.SortDirection.ASC : ColumnLike_1.SortDirection.DESC
+	                });
+	                var payload = {
+	                    type: GigaStore_1.GigaActionType.NEW_SORT,
+	                    sortBys: [sortBy]
+	                };
+	                _this.props.dispatcher.dispatch(payload);
+	            }, className: cx}, React.createElement("span", {className: "header-text"}, column.title || column.colTag), this.renderSortIcon(), this.renderToolbar()));
+	        }
 	    };
 	    TableHeaderCell.prototype.renderToolbar = function () {
-	        if (this.props.isFirstColumn)
+	        if (this.props.isFirstColumn && !this.props.gridProps.disableConfiguration)
 	            return (React.createElement(Toolbar_1.ToolbarToggle, {dispatcher: this.props.dispatcher}));
 	        else
 	            return null;
@@ -30822,7 +31127,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -30832,7 +31137,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	__webpack_require__(50);
+	__webpack_require__(51);
 	var GigaStore_1 = __webpack_require__(7);
 	/**
 	 * The job of the toolbar is to dispatch actions to the flux reduce store. It is free to query the state of the grid
@@ -30860,16 +31165,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(51);
+	var content = __webpack_require__(52);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(53)(content, {});
+	var update = __webpack_require__(54)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -30886,10 +31191,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(52)();
+	exports = module.exports = __webpack_require__(53)();
 	// imports
 	
 	
@@ -30900,7 +31205,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports) {
 
 	/*
@@ -30956,7 +31261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -31208,7 +31513,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31219,11 +31524,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(2);
 	var ColumnLike_1 = __webpack_require__(6);
-	var SortableItem_1 = __webpack_require__(55);
+	var SortableItem_1 = __webpack_require__(56);
 	var _ = __webpack_require__(4);
 	var GigaStore_1 = __webpack_require__(7);
-	__webpack_require__(56);
-	var classNames = __webpack_require__(44);
+	__webpack_require__(57);
+	var classNames = __webpack_require__(46);
 	var SettingsPopover = (function (_super) {
 	    __extends(SettingsPopover, _super);
 	    function SettingsPopover(props) {
@@ -31361,7 +31666,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31371,7 +31676,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(44);
+	var classNames = __webpack_require__(46);
 	var SortableItem = (function (_super) {
 	    __extends(SortableItem, _super);
 	    function SortableItem(props) {
@@ -31428,16 +31733,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(57);
+	var content = __webpack_require__(58);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(53)(content, {});
+	var update = __webpack_require__(54)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -31454,10 +31759,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(52)();
+	exports = module.exports = __webpack_require__(53)();
 	// imports
 	
 	

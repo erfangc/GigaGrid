@@ -80,6 +80,12 @@ export interface GigaProps extends React.Props<GigaGrid> {
     rowHeight?:string
 
     /**
+     * If the height of the table itself is less than the container as defined in bodyHeight, the table's height will
+     * be the size of the table itself
+     */
+    collapseHeight?:boolean
+
+    /**
      * EXPERIMENTAL - these props allow us to expand / select SubtotalRow on construction of the grid component
      */
     /**
@@ -129,6 +135,8 @@ export interface GigaState {
     displayEnd:number
     showSettingsPopover:boolean
 
+     canvas:HTMLElement;
+     viewport:HTMLElement;
 }
 
 /**
@@ -150,8 +158,6 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
     private store:GigaStore;
     private dispatcher:Dispatcher<GigaAction>;
-    private canvas:HTMLElement;
-    private viewport:HTMLElement;
 
     static defaultProps:GigaProps = {
         initialSubtotalBys: [],
@@ -160,7 +166,8 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         data: [],
         columnDefs: [],
         bodyHeight: "500px",
-        rowHeight: "25px"
+        rowHeight: "25px",
+        collapseHeight: false
     };
 
     constructor(props:GigaProps) {
@@ -209,9 +216,16 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         else
             columns = [state.columns];
 
-        const bodyStyle = {
-            height: this.props.bodyHeight,
-        };
+        var bodyStyle:any = {};
+
+        /**
+         * As noted in the collapseHeight property of the GigaProps interface, if collapseHeight is true, the table will
+         * collapse to the height of the table itself it is smaller than the container
+         */
+        if (this.props.collapseHeight)
+            bodyStyle.maxHeight = this.props.bodyHeight;
+        else
+            bodyStyle.height = this.props.bodyHeight;
 
         return (
             <div className="giga-grid">
@@ -223,21 +237,17 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                                      tableHeaderClass={this.props.tableHeaderClass} />
                     </table>
                 </div>
-                <div ref={c=>this.viewport=c}
+                <div ref={c=>state.viewport=c}
                      onScroll={()=>this.dispatchDisplayBoundChange()}
                      className="giga-grid-body-viewport"
                      style={bodyStyle}>
-                    <table ref={c=>this.canvas=c} className="giga-grid-body-canvas">
+                    <table ref={c=>state.canvas=c} className="giga-grid-body-canvas">
                         <TableBody dispatcher={this.dispatcher}
                                    rows={state.rasterizedRows}
                                    columns={columns[columns.length-1]}
                                    displayStart={state.displayStart}
                                    displayEnd={state.displayEnd}
                                    rowHeight={this.props.rowHeight}
-
-                                   viewport = {this.viewport}
-                                   canvas = {this.canvas}
-
                         />
                     </table>
                 </div>
@@ -284,9 +294,10 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         }).value();
     }
 
-    static horizontalScrollHandler() {
-        const scrollLeftAmount:number = $('.giga-grid-body-viewport').scrollLeft();
-        $('.giga-grid-header-container').scrollLeft(scrollLeftAmount);
+    horizontalScrollHandler() {
+        const node:Element = ReactDOM.findDOMNode<Element>(this);
+        const scrollLeftAmount:number = $(node).scrollLeft();
+        $(node).parent().find('.giga-grid-header-container').scrollLeft(scrollLeftAmount);
     }
 
     componentDidMount() {
@@ -302,13 +313,15 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         this.dispatchDisplayBoundChange();
         this.synchTableHeaderWidthToFirstRow();
 
-        // Bind scroll listener to move headers when data container is srcolled
-        $('.giga-grid-body-viewport').scroll(GigaGrid.horizontalScrollHandler)
+        // Bind scroll listener to move headers when data container is scrolled
+        const node:Element = ReactDOM.findDOMNode<Element>(this);
+        $(node).find('.giga-grid-body-viewport').scroll(this.horizontalScrollHandler);
     }
 
     componentWillUnmount() {
         // Unbind the scroll listener
-        $('.giga-grid-body-viewport').unbind('scroll', GigaGrid.horizontalScrollHandler);
+        const node:Element = ReactDOM.findDOMNode<Element>(this);
+        $(node).find('.giga-grid-body-viewport').unbind('scroll', this.horizontalScrollHandler);
         /*
          * unsubscribe to window.resize
          */
@@ -317,8 +330,9 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
     }
 
     private dispatchDisplayBoundChange() {
-        const $viewport = $(this.viewport);
-        const $canvas = $(this.canvas);
+        const state = this.store.getState();
+        const $viewport = $(state.viewport);
+        const $canvas = $(state.canvas);
         const action:ChangeRowDisplayBoundsAction = {
             type: GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS,
             canvas: $canvas,

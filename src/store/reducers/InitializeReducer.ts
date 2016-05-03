@@ -17,8 +17,7 @@ export default function (action:InitializeAction):GigaState {
         initialSortBys,
         initialFilterBys,
         initiallyExpandedSubtotalRows,
-        initiallySelectedSubtotalRows,
-        expandTable
+        initiallySelectedSubtotalRows
     } = action.props;
 
     /**
@@ -79,7 +78,8 @@ export default function (action:InitializeAction):GigaState {
         filterBys: _.cloneDeep(initialFilterBys) || [],
         tree: tree,
         showSettingsPopover: false,
-        expandTable
+        viewport:undefined,
+        canvas:undefined
     }
 
 }
