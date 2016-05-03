@@ -60,20 +60,20 @@ export class DefaultCellRenderer {
         this.props.dispatcher.dispatch(action);
 
         //TODO : on ToggleCollapseAction call ChangeRowDisplayBoundsAction
-        this.dispatchDisplayBoundChange()
+      //  this.dispatchDisplayBoundChange()
     }
   //----------------------------------------------------------
-    private dispatchDisplayBoundChange() {
-        const $viewport = $(this.props.viewport);
-        const $canvas = $(this.props.canvas);
-        const action:ChangeRowDisplayBoundsAction = {
-            type: GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS,
-            canvas: $canvas,
-            viewport: $viewport,
-            rowHeight: this.props.rowHeight
-        };
-        this.props.dispatcher.dispatch(action);
-    }
+  //  private dispatchDisplayBoundChange() {
+  //      const $viewport = $(this.props.viewport);
+  //      const $canvas = $(this.props.canvas);
+  //      const action:ChangeRowDisplayBoundsAction = {
+  //          type: GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS,
+  //          canvas: $canvas,
+  //          viewport: $viewport,
+  //          rowHeight: this.props.rowHeight
+  //      };
+  //      this.props.dispatcher.dispatch(action);
+  //  }
     //----------------------------------------------------------
 
     private onClick() {

@@ -76,7 +76,7 @@ export class GigaStore extends ReduceStore<GigaState> {
                 newState = columnUpdateReducer(state, action as ColumnUpdateAction, this.props);
                 break;
             case GigaActionType.TOGGLE_ROW_COLLAPSE:
-                newState = toggleCollapseReducer(state, action as ToggleCollapseAction);
+                newState = toggleCollapseReducer(state, action as ToggleCollapseAction,this.props);
                 break;
             case GigaActionType.COLLAPSE_ALL:
                 newState = collapseAllReducer(state);
