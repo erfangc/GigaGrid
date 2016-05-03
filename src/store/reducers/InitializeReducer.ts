@@ -77,7 +77,9 @@ export default function (action:InitializeAction):GigaState {
         sortBys: sortBys,
         filterBys: _.cloneDeep(initialFilterBys) || [],
         tree: tree,
-        showSettingsPopover: false
+        showSettingsPopover: false,
+        viewport:undefined,
+        canvas:undefined
     }
 
 }

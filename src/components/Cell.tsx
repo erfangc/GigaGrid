@@ -7,6 +7,8 @@ import {GigaActionType} from "../store/GigaStore";
 import {GridSubcomponentProps} from "./GigaGrid";
 import SyntheticEvent = __React.SyntheticEvent;
 import {ToggleCollapseAction} from "../store/reducers/RowCollapseReducers";
+import {ChangeRowDisplayBoundsAction} from "../store/reducers/ChangeRowDisplayBoundsReducer";
+import $ = require('jquery');
 
 export interface CellProps extends GridSubcomponentProps<Cell> {
     row:Row
@@ -52,7 +54,6 @@ export class DefaultCellRenderer {
         };
         this.props.dispatcher.dispatch(action);
     }
-
     private onClick() {
         var action = {
             type: GigaActionType.TOGGLE_CELL_SELECT,

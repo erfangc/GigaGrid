@@ -14,7 +14,6 @@ describe("Cell", ()=> {
     var row:DetailRow;
     var columns:Column[];
     var component;
-
     beforeEach(()=> {
         dispatcher = new Dispatcher<GigaAction>();
         row = TestUtils.getDetailRow();
@@ -40,6 +39,7 @@ describe("Cell", ()=> {
     it("can handle custom cell content", ()=> {
 
         const colDef = columns[2];
+
         colDef.cellTemplateCreator = (row:Row, column:Column, props:CellProps):JSX.Element => {
             return (
                 <td>
@@ -74,6 +74,7 @@ describe("Cell", ()=> {
     it("can deduce the correct identation for 1st rows in a subtotaled tree", ()=> {
         row.setSectorPath(["Level 1", "Level 2"]);
         const colDef = columns[0];
+
         ReactTestUtils.renderIntoDocument(
             <table>
                 <tbody>

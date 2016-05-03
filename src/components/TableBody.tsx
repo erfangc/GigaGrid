@@ -39,7 +39,8 @@ export class TableBody extends React.Component<TableBodyProps,any> {
                              columns={this.props.columns}
                              row={row}
                              rowHeight={`${rowHeight}`}
-                             dispatcher={this.props.dispatcher}/>);
+                             dispatcher={this.props.dispatcher}
+                    />);
         });
     }
 

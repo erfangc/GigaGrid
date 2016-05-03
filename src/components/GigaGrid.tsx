@@ -129,6 +129,8 @@ export interface GigaState {
     displayEnd:number
     showSettingsPopover:boolean
 
+     canvas:HTMLElement;
+     viewport:HTMLElement;
 }
 
 /**
@@ -150,8 +152,6 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
     private store:GigaStore;
     private dispatcher:Dispatcher<GigaAction>;
-    private canvas:HTMLElement;
-    private viewport:HTMLElement;
 
     static defaultProps:GigaProps = {
         initialSubtotalBys: [],
@@ -223,11 +223,11 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                                      tableHeaderClass={this.props.tableHeaderClass} />
                     </table>
                 </div>
-                <div ref={c=>this.viewport=c}
+                <div ref={c=>state.viewport=c}
                      onScroll={()=>this.dispatchDisplayBoundChange()}
                      className="giga-grid-body-viewport"
                      style={bodyStyle}>
-                    <table ref={c=>this.canvas=c} className="giga-grid-body-canvas">
+                    <table ref={c=>state.canvas=c} className="giga-grid-body-canvas">
                         <TableBody dispatcher={this.dispatcher}
                                    rows={state.rasterizedRows}
                                    columns={columns[columns.length-1]}
@@ -313,8 +313,9 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
     }
 
     private dispatchDisplayBoundChange() {
-        const $viewport = $(this.viewport);
-        const $canvas = $(this.canvas);
+        const state = this.store.getState();
+        const $viewport = $(state.viewport);
+        const $canvas = $(state.canvas);
         const action:ChangeRowDisplayBoundsAction = {
             type: GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS,
             canvas: $canvas,
