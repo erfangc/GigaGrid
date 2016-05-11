@@ -51,7 +51,11 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
 
     private renderBasicExample() {
         return (<GigaGrid
-            onRowClick={(row:Row, state:GigaState)=>true}
+            onRowClick={(row:Row, state:GigaState)=>{
+                row; state;
+                debugger;
+                return true;
+            }}
             initialSortBys={[{"colTag":"WOther", direction: SortDirection.DESC}]}
             {...this.props.ukBudget}
         />);
