@@ -13081,6 +13081,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var queueIndex = -1;
 	
 	function cleanUpNextTick() {
+	    if (!draining || !currentQueue) {
+	        return;
+	    }
 	    draining = false;
 	    if (currentQueue.length) {
 	        queue = currentQueue.concat(queue);
@@ -15398,6 +15401,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    var type = typeof o;
 	    if (type === 'number') {
+	      if (o !== o || o === Infinity) {
+	        return 0;
+	      }
 	      var h = o | 0;
 	      if (h !== o) {
 	        h ^= o * 0xFFFFFFFF;
@@ -18736,21 +18742,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return entry ? entry[1] : notSetValue;
 	    },
 	
-	    findEntry: function(predicate, context, notSetValue) {
-	      var found = notSetValue;
-	      this.__iterate(function(v, k, c)  {
-	        if (predicate.call(context, v, k, c)) {
-	          found = [k, v];
-	          return false;
-	        }
-	      });
-	      return found;
-	    },
-	
-	    findLastEntry: function(predicate, context, notSetValue) {
-	      return this.toSeq().reverse().findEntry(predicate, context, notSetValue);
-	    },
-	
 	    forEach: function(sideEffect, context) {
 	      assertNotInfinite(this.size);
 	      return this.__iterate(context ? sideEffect.bind(context) : sideEffect);
@@ -18861,8 +18852,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this.filter(not(predicate), context);
 	    },
 	
+	    findEntry: function(predicate, context, notSetValue) {
+	      var found = notSetValue;
+	      this.__iterate(function(v, k, c)  {
+	        if (predicate.call(context, v, k, c)) {
+	          found = [k, v];
+	          return false;
+	        }
+	      });
+	      return found;
+	    },
+	
+	    findKey: function(predicate, context) {
+	      var entry = this.findEntry(predicate, context);
+	      return entry && entry[0];
+	    },
+	
 	    findLast: function(predicate, context, notSetValue) {
 	      return this.toKeyedSeq().reverse().find(predicate, context, notSetValue);
+	    },
+	
+	    findLastEntry: function(predicate, context, notSetValue) {
+	      return this.toKeyedSeq().reverse().findEntry(predicate, context, notSetValue);
+	    },
+	
+	    findLastKey: function(predicate, context) {
+	      return this.toKeyedSeq().reverse().findKey(predicate, context);
 	    },
 	
 	    first: function() {
@@ -18923,12 +18938,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return iter.isSubset(this);
 	    },
 	
+	    keyOf: function(searchValue) {
+	      return this.findKey(function(value ) {return is(value, searchValue)});
+	    },
+	
 	    keySeq: function() {
 	      return this.toSeq().map(keyMapper).toIndexedSeq();
 	    },
 	
 	    last: function() {
 	      return this.toSeq().reverse().first();
+	    },
+	
+	    lastKeyOf: function(searchValue) {
+	      return this.toKeyedSeq().reverse().keyOf(searchValue);
 	    },
 	
 	    max: function(comparator) {
@@ -19029,23 +19052,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return reify(this, flipFactory(this));
 	    },
 	
-	    findKey: function(predicate, context) {
-	      var entry = this.findEntry(predicate, context);
-	      return entry && entry[0];
-	    },
-	
-	    findLastKey: function(predicate, context) {
-	      return this.toSeq().reverse().findKey(predicate, context);
-	    },
-	
-	    keyOf: function(searchValue) {
-	      return this.findKey(function(value ) {return is(value, searchValue)});
-	    },
-	
-	    lastKeyOf: function(searchValue) {
-	      return this.findLastKey(function(value ) {return is(value, searchValue)});
-	    },
-	
 	    mapEntries: function(mapper, context) {var this$0 = this;
 	      var iterations = 0;
 	      return reify(this,
@@ -19094,12 +19100,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	
 	    indexOf: function(searchValue) {
-	      var key = this.toKeyedSeq().keyOf(searchValue);
+	      var key = this.keyOf(searchValue);
 	      return key === undefined ? -1 : key;
 	    },
 	
 	    lastIndexOf: function(searchValue) {
-	      var key = this.toKeyedSeq().reverse().keyOf(searchValue);
+	      var key = this.lastKeyOf(searchValue);
 	      return key === undefined ? -1 : key;
 	    },
 	
@@ -19134,8 +19140,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // ### More collection methods
 	
 	    findLastIndex: function(predicate, context) {
-	      var key = this.toKeyedSeq().findLastKey(predicate, context);
-	      return key === undefined ? -1 : key;
+	      var entry = this.findLastEntry(predicate, context);
+	      return entry ? entry[0] : -1;
 	    },
 	
 	    first: function() {
@@ -19174,6 +19180,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        interleaved.size = zipped.size * iterables.length;
 	      }
 	      return reify(this, interleaved);
+	    },
+	
+	    keySeq: function() {
+	      return Range(0, this.size);
 	    },
 	
 	    last: function() {
@@ -19261,7 +19271,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	
 	  function quoteString(value) {
-	    return typeof value === 'string' ? JSON.stringify(value) : value;
+	    return typeof value === 'string' ? JSON.stringify(value) : String(value);
 	  }
 	
 	  function defaultZipper() {
@@ -19871,7 +19881,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
 	         * parent SubtotalRow (in other words, find the detailRow's "bucket") and append said detailRow to the parent
 	         */
-	        var grandTotal = new Row_1.SubtotalRow({ title: "Grand Total", value: null });
+	        var grandTotal = new Row_1.SubtotalRow({ colTag: null, title: "Grand Total", value: null });
 	        grandTotal.setSectorPath([]);
 	        data.forEach(function (datum) { return _this.bucketDetailRow(subtotalBys, new Row_1.DetailRow(datum), grandTotal); });
 	        TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, true);
@@ -19900,7 +19910,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                subtotalRow.detailRows.push(detailedRow);
 	            } // FIXME if a detail row is not defined for all the columns we are subtotaling by, it is orphaned (i.e. not part of the tree at all), should we let it 'traverse' back and attach itself to the last subtotal row?
 	        });
-	        detailedRow.setSectorPath(buckets.map(function (b) { return b.title; }));
+	        detailedRow.setSectorPath(buckets);
 	    };
 	    ;
 	    // TODO add tests
@@ -19951,7 +19961,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var newRow = new Row_1.SubtotalRow(buckets[k]);
 	                newRow.toggleCollapse(true);
 	                // set the sector path for the new SubtotalRow we just created the length of which determines its depth
-	                newRow.setSectorPath(buckets.slice(0, k + 1).map(function (b) { return b.title; }));
+	                newRow.setSectorPath(buckets.slice(0, k + 1));
 	                currentRow.addChild(newRow);
 	                currentRow = newRow;
 	            }
@@ -19966,6 +19976,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (title === undefined)
 	            return undefined;
 	        return {
+	            colTag: subtotalBy.colTag,
 	            title: subtotalBy.title ? subtotalBy.title + ": " + title : title,
 	            value: subtotalBy.format === ColumnLike_1.ColumnFormat.NUMBER ? parseFloat(title) : title
 	        };
