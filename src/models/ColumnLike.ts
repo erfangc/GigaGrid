@@ -54,6 +54,7 @@ export interface FilterBy extends ColumnLike {
  * - how shall we display its value? (could be different than the value it is sorted on)
  */
 export interface BucketInfo {
+    colTag:string
     title:string
     value:any
 }

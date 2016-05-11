@@ -47,7 +47,7 @@ export class TreeBuilder {
          * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
          * parent SubtotalRow (in other words, find the detailRow's "bucket") and append said detailRow to the parent
          */
-        const grandTotal = new SubtotalRow({title: "Grand Total", value: null});
+        const grandTotal = new SubtotalRow({colTag: null, title: "Grand Total", value: null});
         grandTotal.setSectorPath([]);
         data.forEach(datum => this.bucketDetailRow(subtotalBys, new DetailRow(datum), grandTotal));
         TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, true);
@@ -79,7 +79,7 @@ export class TreeBuilder {
                 subtotalRow.detailRows.push(detailedRow);
             } // FIXME if a detail row is not defined for all the columns we are subtotaling by, it is orphaned (i.e. not part of the tree at all), should we let it 'traverse' back and attach itself to the last subtotal row?
         });
-        detailedRow.setSectorPath(buckets.map(b=>b.title));
+        detailedRow.setSectorPath(buckets);
     };
 
     // TODO add tests
@@ -130,7 +130,7 @@ export class TreeBuilder {
                 const newRow = new SubtotalRow(buckets[k]);
                 newRow.toggleCollapse(true);
                 // set the sector path for the new SubtotalRow we just created the length of which determines its depth
-                newRow.setSectorPath(buckets.slice(0, k + 1).map(b=>b.title));
+                newRow.setSectorPath(buckets.slice(0, k + 1));
                 currentRow.addChild(newRow);
                 currentRow = newRow;
             }
@@ -145,6 +145,7 @@ export class TreeBuilder {
         if (title === undefined)
             return undefined;
         return {
+            colTag: subtotalBy.colTag,
             title: subtotalBy.title ? `${subtotalBy.title}: ${title}` : title,
             value: subtotalBy.format === ColumnFormat.NUMBER ? parseFloat(title) : title
         };

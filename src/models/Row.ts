@@ -1,22 +1,22 @@
 import {ColumnDef, BucketInfo} from "./ColumnLike";
 
 export interface Row {
-    data(): any
-    isDetail(): boolean
-    isHidden(): boolean
-    toggleHide(hide?:boolean): void
-    isSelected(): boolean
-    get(columnDef: ColumnDef):any
-    getByColTag(colTag: string):any
-    toggleSelect(select?:boolean): void
-    sectorPath(): string[]
+    data():any
+    isDetail():boolean
+    isHidden():boolean
+    toggleHide(hide?:boolean):void
+    isSelected():boolean
+    get(columnDef:ColumnDef):any
+    getByColTag(colTag:string):any
+    toggleSelect(select?:boolean):void
+    sectorPath():string[]
     setSectorPath(sp:string[])
 }
 
 export abstract class GenericRow implements Row {
 
     private _data:any;
-    private _sectorPath:string[];
+    private _sectorPath:BucketInfo[];
     private _isSelected:boolean = false;
     private _isHidden:boolean = false;
 
@@ -25,22 +25,22 @@ export abstract class GenericRow implements Row {
         this._sectorPath = [];
     }
 
-    get(columnDef: ColumnDef):any {
+    get(columnDef:ColumnDef):any {
         return this._data[columnDef.colTag];
     }
 
-    getByColTag(colTag: string):any {
+    getByColTag(colTag:string):any {
         return this._data[colTag];
     }
 
-    toggleSelect(select?:boolean): void {
+    toggleSelect(select?:boolean):void {
         if (typeof select !== "undefined")
-            this._isSelected =  select;
+            this._isSelected = select;
         else
             this._isSelected = !this._isSelected;
     }
 
-    isSelected(): boolean {
+    isSelected():boolean {
         return this._isSelected;
     }
 
@@ -55,11 +55,11 @@ export abstract class GenericRow implements Row {
             this._isHidden = !this._isHidden;
     }
 
-    sectorPath():string[] {
+    sectorPath():BucketInfo[] {
         return this._sectorPath;
     }
 
-    setSectorPath(sectorPath:string[]) {
+    setSectorPath(sectorPath:BucketInfo[]) {
         this._sectorPath = sectorPath;
     }
 
@@ -71,7 +71,7 @@ export abstract class GenericRow implements Row {
         this._data = data;
     }
 
-    abstract isDetail(): boolean;
+    abstract isDetail():boolean;
 
 }
 
@@ -91,7 +91,7 @@ export class SubtotalRow extends GenericRow {
 
     public detailRows:DetailRow[];
     private children:SubtotalRow[] = [];
-    private childrenByTitle:{ [title: string] : SubtotalRow; } = {};
+    private childrenByTitle:{ [title:string]:SubtotalRow; } = {};
     private _isCollapsed:boolean = false;
     public bucketInfo:BucketInfo;
 
@@ -117,7 +117,7 @@ export class SubtotalRow extends GenericRow {
         return -1;
     }
 
-    constructor(bucketInfo: BucketInfo) {
+    constructor(bucketInfo:BucketInfo) {
         super({});
         this.detailRows = [];
         this.bucketInfo = bucketInfo;
