@@ -80,6 +80,12 @@ export interface GigaProps extends React.Props<GigaGrid> {
     rowHeight?:string
 
     /**
+     * If the height of the table itself is less than the container as defined in bodyHeight, the table's height will
+     * be the size of the table itself
+     */
+    collapseHeight?:boolean
+
+    /**
      * EXPERIMENTAL - these props allow us to expand / select SubtotalRow on construction of the grid component
      */
     /**
@@ -160,7 +166,8 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         data: [],
         columnDefs: [],
         bodyHeight: "500px",
-        rowHeight: "25px"
+        rowHeight: "25px",
+        collapseHeight: false
     };
 
     constructor(props:GigaProps) {
@@ -209,9 +216,16 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         else
             columns = [state.columns];
 
-        const bodyStyle = {
-            height: this.props.bodyHeight,
-        };
+        var bodyStyle:any = {};
+
+        /**
+         * As noted in the collapseHeight property of the GigaProps interface, if collapseHeight is true, the table will
+         * collapse to the height of the table itself it is smaller than the container
+         */
+        if (this.props.collapseHeight)
+            bodyStyle.maxHeight = this.props.bodyHeight;
+        else
+            bodyStyle.height = this.props.bodyHeight;
 
         return (
             <div className="giga-grid">
