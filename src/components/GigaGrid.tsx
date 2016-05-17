@@ -280,9 +280,10 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         }).value();
     }
 
-    static horizontalScrollHandler() {
-        const scrollLeftAmount:number = $('.giga-grid-body-viewport').scrollLeft();
-        $('.giga-grid-header-container').scrollLeft(scrollLeftAmount);
+    horizontalScrollHandler() {
+        const node:Element = ReactDOM.findDOMNode<Element>(this);
+        const scrollLeftAmount:number = $(node).scrollLeft();
+        $(node).parent().find('.giga-grid-header-container').scrollLeft(scrollLeftAmount);
     }
 
     componentDidMount() {
@@ -298,13 +299,15 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         this.dispatchDisplayBoundChange();
         this.synchTableHeaderWidthToFirstRow();
 
-        // Bind scroll listener to move headers when data container is srcolled
-        $('.giga-grid-body-viewport').scroll(GigaGrid.horizontalScrollHandler)
+        // Bind scroll listener to move headers when data container is scrolled
+        const node:Element = ReactDOM.findDOMNode<Element>(this);
+        $(node).find('.giga-grid-body-viewport').scroll(this.horizontalScrollHandler);
     }
 
     componentWillUnmount() {
         // Unbind the scroll listener
-        $('.giga-grid-body-viewport').unbind('scroll', GigaGrid.horizontalScrollHandler);
+        const node:Element = ReactDOM.findDOMNode<Element>(this);
+        $(node).find('.giga-grid-body-viewport').unbind('scroll', this.horizontalScrollHandler);
         /*
          * unsubscribe to window.resize
          */
