@@ -137,9 +137,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            columns = ColumnLike_1.ColumnFactory.createColumnsFromGroupDefinition(this.props.columnGroups, state);
 	        else
 	            columns = [state.columns];
-	        var bodyStyle = {
-	            height: this.props.bodyHeight,
-	        };
+	        var bodyStyle = {};
+	        /**
+	         * As noted in the collapseHeight property of the GigaProps interface, if collapseHeight is true, the table will
+	         * collapse to the height of the table itself it is smaller than the container
+	         */
+	        if (this.props.collapseHeight)
+	            bodyStyle.maxHeight = this.props.bodyHeight;
+	        else
+	            bodyStyle.height = this.props.bodyHeight;
 	        return (React.createElement("div", {className: "giga-grid"}, this.renderSettingsPopover(), React.createElement("div", {className: "giga-grid-header-container"}, React.createElement("table", {className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns, tableHeaderClass: this.props.tableHeaderClass}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, onScroll: function () { return _this.dispatchDisplayBoundChange(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: state.rasterizedRows, columns: columns[columns.length - 1], displayStart: state.displayStart, displayEnd: state.displayEnd, rowHeight: this.props.rowHeight})))));
 	    };
 	    GigaGrid.prototype.componentWillReceiveProps = function (nextProps) {
@@ -177,9 +183,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            $th.innerWidth($td.innerWidth());
 	        }).value();
 	    };
-	    GigaGrid.horizontalScrollHandler = function () {
-	        var scrollLeftAmount = $('.giga-grid-body-viewport').scrollLeft();
-	        $('.giga-grid-header-container').scrollLeft(scrollLeftAmount);
+	    GigaGrid.prototype.horizontalScrollHandler = function () {
+	        var node = ReactDOM.findDOMNode(this);
+	        var scrollLeftAmount = $(node).scrollLeft();
+	        $(node).parent().find('.giga-grid-header-container').scrollLeft(scrollLeftAmount);
 	    };
 	    GigaGrid.prototype.componentDidMount = function () {
 	        /*
@@ -192,12 +199,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 	        this.dispatchDisplayBoundChange();
 	        this.synchTableHeaderWidthToFirstRow();
-	        // Bind scroll listener to move headers when data container is srcolled
-	        $('.giga-grid-body-viewport').scroll(GigaGrid.horizontalScrollHandler);
+	        // Bind scroll listener to move headers when data container is scrolled
+	        var node = ReactDOM.findDOMNode(this);
+	        $(node).find('.giga-grid-body-viewport').scroll(this.horizontalScrollHandler);
 	    };
 	    GigaGrid.prototype.componentWillUnmount = function () {
 	        // Unbind the scroll listener
-	        $('.giga-grid-body-viewport').unbind('scroll', GigaGrid.horizontalScrollHandler);
+	        var node = ReactDOM.findDOMNode(this);
+	        $(node).find('.giga-grid-body-viewport').unbind('scroll', this.horizontalScrollHandler);
 	        /*
 	         * unsubscribe to window.resize
 	         */
@@ -222,7 +231,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        data: [],
 	        columnDefs: [],
 	        bodyHeight: "500px",
-	        rowHeight: "25px"
+	        rowHeight: "25px",
+	        collapseHeight: false
 	    };
 	    return GigaGrid;
 	}(React.Component));
