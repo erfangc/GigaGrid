@@ -21,9 +21,9 @@ describe("TreeBuilder", ()=> {
 
         it("rows within the Tree should have sector path array populated", ()=> {
             expect(tree.getRoot().sectorPath()).toEqual([]);
-            expect(tree.getRoot().getChildByTitle("A").sectorPath()).toEqual(['A']);
-            expect(tree.getRoot().getChildByTitle("A").getChildByTitle("C").sectorPath()).toEqual(['A', 'C']);
-            expect(tree.getRoot().getChildByTitle("B").getChildByTitle("D").sectorPath()).toEqual(['B', 'D']);
+            expect(tree.getRoot().getChildByTitle("A").sectorPath()).toEqual([{colTag:'col1',title:'A',value:'A'}]);
+            expect(tree.getRoot().getChildByTitle("A").getChildByTitle("C").sectorPath()).toEqual([{colTag:'col1',title:'A',value:'A'}, {colTag:'col2',title:'C',value:'C'}]);
+            expect(tree.getRoot().getChildByTitle("B").getChildByTitle("D").sectorPath()).toEqual([{ colTag: 'col1', title: 'B', value: 'B' }, {colTag: 'col2', title: 'D', value: 'D' }]);
         });
 
         it("should take a few flat rows of data, a SubtotalBy object and turn it into a deep tree structure", () => {

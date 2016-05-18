@@ -3,6 +3,7 @@ import {SubtotalRow} from "../../src/models/Row";
 describe('SubtotalRow basic property test', ()=> {
 
     const subtotalRow = new SubtotalRow({
+        colTag: "Parent",
         title: "Parent",
         value: 100
     });
@@ -39,16 +40,19 @@ describe("SubtotalRow with 2 children", () => {
     beforeEach(()=> {
         childSubtotalRows = [
             new SubtotalRow({
+                colTag: "Child 1",
                 title: "Child 1",
                 value: "Child 1"
             }),
             new SubtotalRow({
+                colTag: "Child 2",
                 title: "Child 2",
                 value: "Child 2"
             })
         ];
 
         subtotalRow = new SubtotalRow({
+            colTag: "Parent",
             title: "Parent",
             value: 100
         });
@@ -63,6 +67,7 @@ describe("SubtotalRow with 2 children", () => {
 
     it("can add handle adding child with duplicate title", () => {
         subtotalRow.addChild(new SubtotalRow({
+            colTag: "Child 1",
             title: "Child 1",
             value: "Child 1"
         }));
@@ -71,6 +76,7 @@ describe("SubtotalRow with 2 children", () => {
 
     it("can add handle adding child", () => {
         subtotalRow.addChild(new SubtotalRow({
+            colTag: "Child 3",
             title: "Child 3",
             value: "Child 3"
         }));
@@ -80,6 +86,7 @@ describe("SubtotalRow with 2 children", () => {
     it("can remove a child with the same title", ()=> {
         expect(subtotalRow.getChildByTitle("Child 1")).toBeDefined();
         subtotalRow.removeChild(new SubtotalRow({
+            colTag: "Child 1",
             title: "Child 1",
             value: "Child 1"
         }));
