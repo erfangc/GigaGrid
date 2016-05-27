@@ -63,6 +63,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.SortDirection = ColumnLike_1.SortDirection;
 	var Cell_tsx_1 = __webpack_require__(45);
 	exports.DefaultCellRenderer = Cell_tsx_1.DefaultCellRenderer;
+	var SubtotalAggregator_1 = __webpack_require__(31);
+	exports.format = SubtotalAggregator_1.format;
 
 
 /***/ },
