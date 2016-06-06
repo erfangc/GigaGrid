@@ -46,7 +46,7 @@ describe("GigaRow Components", () => {
         ReactTestUtils.renderIntoDocument(
             <table>
                 <tbody>
-                <GigaRow ref={c=>component=c} row={row} rowHeight="25px" columns={columns} dispatcher={null}/>
+                <GigaRow ref={c=>component=c} row={row} rowHeight="25px" columns={columns}  dispatcher={null}/>
                 </tbody>
             </table>
         );

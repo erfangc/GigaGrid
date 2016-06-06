@@ -82,9 +82,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var GigaStore_1 = __webpack_require__(7);
 	var flux_1 = __webpack_require__(40);
 	var TableBody_1 = __webpack_require__(42);
-	var TableHeader_1 = __webpack_require__(46);
-	var SettingsPopover_1 = __webpack_require__(53);
-	var $ = __webpack_require__(57);
+	var TableHeader_1 = __webpack_require__(47);
+	var SettingsPopover_1 = __webpack_require__(54);
+	var $ = __webpack_require__(46);
 	/**
 	 * The root component of this React library. assembles raw data into `Row` objects which are then translated into their
 	 * virtual DOM representation
@@ -140,7 +140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var bodyStyle = {
 	            height: this.props.bodyHeight,
 	        };
-	        return (React.createElement("div", {className: "giga-grid"}, this.renderSettingsPopover(), React.createElement("div", {className: "giga-grid-header-container"}, React.createElement("table", {className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns, tableHeaderClass: this.props.tableHeaderClass}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, onScroll: function () { return _this.dispatchDisplayBoundChange(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: state.rasterizedRows, columns: columns[columns.length - 1], displayStart: state.displayStart, displayEnd: state.displayEnd, rowHeight: this.props.rowHeight})))));
+	        return (React.createElement("div", {className: "giga-grid"}, this.renderSettingsPopover(), React.createElement("div", {className: "giga-grid-header-container"}, React.createElement("table", {className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns, tableHeaderClass: this.props.tableHeaderClass}))), console.log(this.viewport), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, onScroll: function () { return _this.dispatchDisplayBoundChange(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: state.rasterizedRows, columns: columns[columns.length - 1], displayStart: state.displayStart, displayEnd: state.displayEnd, rowHeight: this.props.rowHeight, viewport: this.viewport, canvas: this.canvas})))));
 	    };
 	    GigaGrid.prototype.componentWillReceiveProps = function (nextProps) {
 	        var payload = {
@@ -15398,6 +15398,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    var type = typeof o;
 	    if (type === 'number') {
+	      if (o !== o || o === Infinity) {
+	        return 0;
+	      }
 	      var h = o | 0;
 	      if (h !== o) {
 	        h ^= o * 0xFFFFFFFF;
@@ -18736,21 +18739,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return entry ? entry[1] : notSetValue;
 	    },
 	
-	    findEntry: function(predicate, context, notSetValue) {
-	      var found = notSetValue;
-	      this.__iterate(function(v, k, c)  {
-	        if (predicate.call(context, v, k, c)) {
-	          found = [k, v];
-	          return false;
-	        }
-	      });
-	      return found;
-	    },
-	
-	    findLastEntry: function(predicate, context, notSetValue) {
-	      return this.toSeq().reverse().findEntry(predicate, context, notSetValue);
-	    },
-	
 	    forEach: function(sideEffect, context) {
 	      assertNotInfinite(this.size);
 	      return this.__iterate(context ? sideEffect.bind(context) : sideEffect);
@@ -18861,8 +18849,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this.filter(not(predicate), context);
 	    },
 	
+	    findEntry: function(predicate, context, notSetValue) {
+	      var found = notSetValue;
+	      this.__iterate(function(v, k, c)  {
+	        if (predicate.call(context, v, k, c)) {
+	          found = [k, v];
+	          return false;
+	        }
+	      });
+	      return found;
+	    },
+	
+	    findKey: function(predicate, context) {
+	      var entry = this.findEntry(predicate, context);
+	      return entry && entry[0];
+	    },
+	
 	    findLast: function(predicate, context, notSetValue) {
 	      return this.toKeyedSeq().reverse().find(predicate, context, notSetValue);
+	    },
+	
+	    findLastEntry: function(predicate, context, notSetValue) {
+	      return this.toKeyedSeq().reverse().findEntry(predicate, context, notSetValue);
+	    },
+	
+	    findLastKey: function(predicate, context) {
+	      return this.toKeyedSeq().reverse().findKey(predicate, context);
 	    },
 	
 	    first: function() {
@@ -18923,12 +18935,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return iter.isSubset(this);
 	    },
 	
+	    keyOf: function(searchValue) {
+	      return this.findKey(function(value ) {return is(value, searchValue)});
+	    },
+	
 	    keySeq: function() {
 	      return this.toSeq().map(keyMapper).toIndexedSeq();
 	    },
 	
 	    last: function() {
 	      return this.toSeq().reverse().first();
+	    },
+	
+	    lastKeyOf: function(searchValue) {
+	      return this.toKeyedSeq().reverse().keyOf(searchValue);
 	    },
 	
 	    max: function(comparator) {
@@ -19029,23 +19049,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return reify(this, flipFactory(this));
 	    },
 	
-	    findKey: function(predicate, context) {
-	      var entry = this.findEntry(predicate, context);
-	      return entry && entry[0];
-	    },
-	
-	    findLastKey: function(predicate, context) {
-	      return this.toSeq().reverse().findKey(predicate, context);
-	    },
-	
-	    keyOf: function(searchValue) {
-	      return this.findKey(function(value ) {return is(value, searchValue)});
-	    },
-	
-	    lastKeyOf: function(searchValue) {
-	      return this.findLastKey(function(value ) {return is(value, searchValue)});
-	    },
-	
 	    mapEntries: function(mapper, context) {var this$0 = this;
 	      var iterations = 0;
 	      return reify(this,
@@ -19094,12 +19097,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	
 	    indexOf: function(searchValue) {
-	      var key = this.toKeyedSeq().keyOf(searchValue);
+	      var key = this.keyOf(searchValue);
 	      return key === undefined ? -1 : key;
 	    },
 	
 	    lastIndexOf: function(searchValue) {
-	      var key = this.toKeyedSeq().reverse().keyOf(searchValue);
+	      var key = this.lastKeyOf(searchValue);
 	      return key === undefined ? -1 : key;
 	    },
 	
@@ -19134,8 +19137,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // ### More collection methods
 	
 	    findLastIndex: function(predicate, context) {
-	      var key = this.toKeyedSeq().findLastKey(predicate, context);
-	      return key === undefined ? -1 : key;
+	      var entry = this.findLastEntry(predicate, context);
+	      return entry ? entry[0] : -1;
 	    },
 	
 	    first: function() {
@@ -19174,6 +19177,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        interleaved.size = zipped.size * iterables.length;
 	      }
 	      return reify(this, interleaved);
+	    },
+	
+	    keySeq: function() {
+	      return Range(0, this.size);
 	    },
 	
 	    last: function() {
@@ -19261,7 +19268,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	
 	  function quoteString(value) {
-	    return typeof value === 'string' ? JSON.stringify(value) : value;
+	    return typeof value === 'string' ? JSON.stringify(value) : String(value);
 	  }
 	
 	  function defaultZipper() {
@@ -20570,9 +20577,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        function validateBounds() {
 	            return typeof start !== "undefined" && typeof end !== "undefined";
 	        }
+	        console.log(this.props.viewport);
 	        var rows = validateBounds() ? this.props.rows.slice(start, end + 1) : this.props.rows;
 	        return rows.map(function (row, i) {
-	            return (React.createElement(GigaRow_1.GigaRow, {key: i, columns: _this.props.columns, row: row, rowHeight: "" + rowHeight, dispatcher: _this.props.dispatcher}));
+	            return (React.createElement(GigaRow_1.GigaRow, {key: i, columns: _this.props.columns, row: row, rowHeight: "" + rowHeight, dispatcher: _this.props.dispatcher, viewport: _this.props.viewport, canvas: _this.props.canvas}));
 	        });
 	    };
 	    TableBody.prototype.render = function () {
@@ -20640,7 +20648,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var cells = props
 	            .columns
 	            .map(function (column, i) {
-	            return (React.createElement(Cell_1.Cell, {key: i, isFirstColumn: i === 0, column: column, rowHeight: _this.props.rowHeight, dispatcher: _this.props.dispatcher, row: _this.props.row}));
+	            return (React.createElement(Cell_1.Cell, {key: i, isFirstColumn: i === 0, column: column, rowHeight: _this.props.rowHeight, dispatcher: _this.props.dispatcher, row: _this.props.row, viewport: _this.props.viewport, canvas: _this.props.canvas}));
 	        });
 	        return React.createElement("tr", {className: cx, style: { height: this.props.rowHeight }, onClick: function (e) {
 	            e.preventDefault();
@@ -20725,6 +20733,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ColumnLike_1 = __webpack_require__(6);
 	var SubtotalAggregator_1 = __webpack_require__(31);
 	var GigaStore_1 = __webpack_require__(7);
+	var $ = __webpack_require__(46);
 	var Cell = (function (_super) {
 	    __extends(Cell, _super);
 	    function Cell(props) {
@@ -20754,7 +20763,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            subtotalRow: this.props.row
 	        };
 	        this.props.dispatcher.dispatch(action);
+	        //TODO : on ToggleCollapseAction call ChangeRowDisplayBoundsAction
+	        this.dispatchDisplayBoundChange();
 	    };
+	    //----------------------------------------------------------
+	    DefaultCellRenderer.prototype.dispatchDisplayBoundChange = function () {
+	        var $viewport = $(this.props.viewport);
+	        var $canvas = $(this.props.canvas);
+	        var action = {
+	            type: GigaStore_1.GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS,
+	            canvas: $canvas,
+	            viewport: $viewport,
+	            rowHeight: this.props.rowHeight
+	        };
+	        this.props.dispatcher.dispatch(action);
+	    };
+	    //----------------------------------------------------------
 	    DefaultCellRenderer.prototype.onClick = function () {
 	        var action = {
 	            type: GigaStore_1.GigaActionType.TOGGLE_CELL_SELECT,
@@ -20821,782 +20845,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 46 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var React = __webpack_require__(2);
-	var TableHeaderCell_1 = __webpack_require__(47);
-	var GigaGrid_1 = __webpack_require__(1);
-	/**
-	 * terminology: column groups are columns that can span multiple `leaf` columns and physically reside
-	 * on top of `leaf` columns
-	 *
-	 * `leaf` columns are the real columns that are associated with the cells in the table
-	 */
-	var TableHeader = (function (_super) {
-	    __extends(TableHeader, _super);
-	    function TableHeader(props) {
-	        _super.call(this, props);
-	    }
-	    TableHeader.prototype.render = function () {
-	        return (React.createElement("thead", null, this.renderHeaderRows()));
-	    };
-	    TableHeader.prototype.renderHeaderRows = function () {
-	        var trs = [];
-	        var i;
-	        for (i = 0; i < this.props.columns.length - 1; i++)
-	            trs.push(TableHeader.renderColumnGroups(this.props.columns[i], i));
-	        trs.push(this.renderLeafColumns(this.props.columns[i], i));
-	        return trs;
-	    };
-	    /**
-	     * TODO th with colSpan really screw up our ability to set width on columns
-	     */
-	    TableHeader.renderColumnGroups = function (columns, key) {
-	        var ths = columns.map(function (column, i) {
-	            return (React.createElement("th", {className: "column-group", key: i, colSpan: column.colSpan}, column.title));
-	        });
-	        return (React.createElement("tr", {className: "column-group-row", key: key}, ths));
-	    };
-	    TableHeader.prototype.renderLeafColumns = function (columns, key) {
-	        var _this = this;
-	        var ths = columns.map(function (column, i) {
-	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {column: column, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, tableHeaderClass: _this.props.tableHeaderClass, dispatcher: _this.props.dispatcher});
-	        });
-	        // add a placeholder to offset the scrollbar
-	        ths.push(React.createElement("th", {key: ths.length, style: { width: GigaGrid_1.getScrollBarWidth() + "px" }}));
-	        return (React.createElement("tr", {key: key}, ths));
-	    };
-	    return TableHeader;
-	}(React.Component));
-	exports.TableHeader = TableHeader;
-
-
-/***/ },
-/* 47 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(44);
-	var ColumnLike_1 = __webpack_require__(6);
-	var GigaStore_1 = __webpack_require__(7);
-	var _ = __webpack_require__(4);
-	var Toolbar_1 = __webpack_require__(48);
-	var TableHeaderCell = (function (_super) {
-	    __extends(TableHeaderCell, _super);
-	    function TableHeaderCell(props) {
-	        _super.call(this, props);
-	    }
-	    TableHeaderCell.prototype.renderSortIcon = function () {
-	        classNames();
-	        var direction = this.props.column.direction;
-	        if (direction != undefined) {
-	            var cx = classNames({
-	                "fa": true,
-	                "fa-sort-asc": direction === ColumnLike_1.SortDirection.ASC,
-	                "fa-sort-desc": direction === ColumnLike_1.SortDirection.DESC
-	            });
-	            return (React.createElement("span", null, ' ', React.createElement("i", {className: cx})));
-	        }
-	    };
-	    TableHeaderCell.prototype.render = function () {
-	        var _this = this;
-	        var column = this.props.column;
-	        var style = {
-	            overflow: "visible",
-	            position: "relative"
-	        };
-	        var componentClasses = {
-	            "text-align-right": column.format === ColumnLike_1.ColumnFormat.NUMBER,
-	            "text-align-left": column.format !== ColumnLike_1.ColumnFormat.NUMBER
-	        };
-	        if (this.props.tableHeaderClass)
-	            componentClasses["this.props.tableHeaderClass"] = true;
-	        else
-	            componentClasses["table-header"] = true;
-	        var cx = classNames(componentClasses);
-	        return (React.createElement("th", {style: style, onClick: function () {
-	            var direction = _this.props.column.direction;
-	            var sortBy = _.assign({}, _this.props.column, {
-	                direction: direction === ColumnLike_1.SortDirection.DESC ? ColumnLike_1.SortDirection.ASC : ColumnLike_1.SortDirection.DESC
-	            });
-	            var payload = {
-	                type: GigaStore_1.GigaActionType.NEW_SORT,
-	                sortBys: [sortBy]
-	            };
-	            _this.props.dispatcher.dispatch(payload);
-	        }, className: cx}, React.createElement("span", {className: "header-text"}, column.title || column.colTag), this.renderSortIcon(), this.renderToolbar()));
-	    };
-	    TableHeaderCell.prototype.renderToolbar = function () {
-	        if (this.props.isFirstColumn)
-	            return (React.createElement(Toolbar_1.ToolbarToggle, {dispatcher: this.props.dispatcher}));
-	        else
-	            return null;
-	    };
-	    return TableHeaderCell;
-	}(React.Component));
-	exports.TableHeaderCell = TableHeaderCell;
-
-
-/***/ },
-/* 48 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var React = __webpack_require__(2);
-	__webpack_require__(49);
-	var GigaStore_1 = __webpack_require__(7);
-	/**
-	 * The job of the toolbar is to dispatch actions to the flux reduce store. It is free to query the state of the grid
-	 * and its props
-	 */
-	var ToolbarToggle = (function (_super) {
-	    __extends(ToolbarToggle, _super);
-	    function ToolbarToggle() {
-	        _super.apply(this, arguments);
-	    }
-	    ToolbarToggle.prototype.dispatchAction = function (e) {
-	        e.stopPropagation();
-	        var action = {
-	            type: GigaStore_1.GigaActionType.TOGGLE_SETTINGS_POPOVER
-	        };
-	        this.props.dispatcher.dispatch(action);
-	    };
-	    ToolbarToggle.prototype.render = function () {
-	        var _this = this;
-	        return (React.createElement("span", {className: "giga-grid-toolbar"}, React.createElement("i", {className: "fa fa-cogs", onClick: function (e) { return _this.dispatchAction(e); }})));
-	    };
-	    return ToolbarToggle;
-	}(React.Component));
-	exports.ToolbarToggle = ToolbarToggle;
-
-
-/***/ },
-/* 49 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(50);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(52)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Toolbar.styl", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Toolbar.styl");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 50 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(51)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, ".giga-grid .giga-grid-toolbar {\n  padding-left: 5px;\n}\n.giga-grid-sortable {\n  border: 1px solid toolbar-border-color;\n  padding: 1em;\n}\n.giga-grid-flex-column {\n  float: left;\n  padding: 10px;\n}\n.giga-grid-flex-column.column-50 {\n  width: 50%;\n}\n.giga-grid-flex-column.column-100 {\n  width: 100%;\n}\ninput.giga-grid-text-input {\n  padding: 10px 10px 10px 5px;\n  border: none;\n  border-bottom: 2px solid #757575;\n}\n", ""]);
-	
-	// exports
-
-
-/***/ },
-/* 51 */
-/***/ function(module, exports) {
-
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	// css base code, injected by the css-loader
-	module.exports = function() {
-		var list = [];
-	
-		// return the list of modules as css string
-		list.toString = function toString() {
-			var result = [];
-			for(var i = 0; i < this.length; i++) {
-				var item = this[i];
-				if(item[2]) {
-					result.push("@media " + item[2] + "{" + item[1] + "}");
-				} else {
-					result.push(item[1]);
-				}
-			}
-			return result.join("");
-		};
-	
-		// import a list of modules into the list
-		list.i = function(modules, mediaQuery) {
-			if(typeof modules === "string")
-				modules = [[null, modules, ""]];
-			var alreadyImportedModules = {};
-			for(var i = 0; i < this.length; i++) {
-				var id = this[i][0];
-				if(typeof id === "number")
-					alreadyImportedModules[id] = true;
-			}
-			for(i = 0; i < modules.length; i++) {
-				var item = modules[i];
-				// skip already imported module
-				// this implementation is not 100% perfect for weird media query combinations
-				//  when a module is imported multiple times with different media queries.
-				//  I hope this will never occur (Hey this way we have smaller bundles)
-				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-					if(mediaQuery && !item[2]) {
-						item[2] = mediaQuery;
-					} else if(mediaQuery) {
-						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-					}
-					list.push(item);
-				}
-			}
-		};
-		return list;
-	};
-
-
-/***/ },
-/* 52 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	var stylesInDom = {},
-		memoize = function(fn) {
-			var memo;
-			return function () {
-				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
-				return memo;
-			};
-		},
-		isOldIE = memoize(function() {
-			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
-		}),
-		getHeadElement = memoize(function () {
-			return document.head || document.getElementsByTagName("head")[0];
-		}),
-		singletonElement = null,
-		singletonCounter = 0,
-		styleElementsInsertedAtTop = [];
-	
-	module.exports = function(list, options) {
-		if(false) {
-			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
-		}
-	
-		options = options || {};
-		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-		// tags it will allow on a page
-		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
-	
-		// By default, add <style> tags to the bottom of <head>.
-		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
-	
-		var styles = listToStyles(list);
-		addStylesToDom(styles, options);
-	
-		return function update(newList) {
-			var mayRemove = [];
-			for(var i = 0; i < styles.length; i++) {
-				var item = styles[i];
-				var domStyle = stylesInDom[item.id];
-				domStyle.refs--;
-				mayRemove.push(domStyle);
-			}
-			if(newList) {
-				var newStyles = listToStyles(newList);
-				addStylesToDom(newStyles, options);
-			}
-			for(var i = 0; i < mayRemove.length; i++) {
-				var domStyle = mayRemove[i];
-				if(domStyle.refs === 0) {
-					for(var j = 0; j < domStyle.parts.length; j++)
-						domStyle.parts[j]();
-					delete stylesInDom[domStyle.id];
-				}
-			}
-		};
-	}
-	
-	function addStylesToDom(styles, options) {
-		for(var i = 0; i < styles.length; i++) {
-			var item = styles[i];
-			var domStyle = stylesInDom[item.id];
-			if(domStyle) {
-				domStyle.refs++;
-				for(var j = 0; j < domStyle.parts.length; j++) {
-					domStyle.parts[j](item.parts[j]);
-				}
-				for(; j < item.parts.length; j++) {
-					domStyle.parts.push(addStyle(item.parts[j], options));
-				}
-			} else {
-				var parts = [];
-				for(var j = 0; j < item.parts.length; j++) {
-					parts.push(addStyle(item.parts[j], options));
-				}
-				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
-			}
-		}
-	}
-	
-	function listToStyles(list) {
-		var styles = [];
-		var newStyles = {};
-		for(var i = 0; i < list.length; i++) {
-			var item = list[i];
-			var id = item[0];
-			var css = item[1];
-			var media = item[2];
-			var sourceMap = item[3];
-			var part = {css: css, media: media, sourceMap: sourceMap};
-			if(!newStyles[id])
-				styles.push(newStyles[id] = {id: id, parts: [part]});
-			else
-				newStyles[id].parts.push(part);
-		}
-		return styles;
-	}
-	
-	function insertStyleElement(options, styleElement) {
-		var head = getHeadElement();
-		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
-		if (options.insertAt === "top") {
-			if(!lastStyleElementInsertedAtTop) {
-				head.insertBefore(styleElement, head.firstChild);
-			} else if(lastStyleElementInsertedAtTop.nextSibling) {
-				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
-			} else {
-				head.appendChild(styleElement);
-			}
-			styleElementsInsertedAtTop.push(styleElement);
-		} else if (options.insertAt === "bottom") {
-			head.appendChild(styleElement);
-		} else {
-			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
-		}
-	}
-	
-	function removeStyleElement(styleElement) {
-		styleElement.parentNode.removeChild(styleElement);
-		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
-		if(idx >= 0) {
-			styleElementsInsertedAtTop.splice(idx, 1);
-		}
-	}
-	
-	function createStyleElement(options) {
-		var styleElement = document.createElement("style");
-		styleElement.type = "text/css";
-		insertStyleElement(options, styleElement);
-		return styleElement;
-	}
-	
-	function createLinkElement(options) {
-		var linkElement = document.createElement("link");
-		linkElement.rel = "stylesheet";
-		insertStyleElement(options, linkElement);
-		return linkElement;
-	}
-	
-	function addStyle(obj, options) {
-		var styleElement, update, remove;
-	
-		if (options.singleton) {
-			var styleIndex = singletonCounter++;
-			styleElement = singletonElement || (singletonElement = createStyleElement(options));
-			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
-			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
-		} else if(obj.sourceMap &&
-			typeof URL === "function" &&
-			typeof URL.createObjectURL === "function" &&
-			typeof URL.revokeObjectURL === "function" &&
-			typeof Blob === "function" &&
-			typeof btoa === "function") {
-			styleElement = createLinkElement(options);
-			update = updateLink.bind(null, styleElement);
-			remove = function() {
-				removeStyleElement(styleElement);
-				if(styleElement.href)
-					URL.revokeObjectURL(styleElement.href);
-			};
-		} else {
-			styleElement = createStyleElement(options);
-			update = applyToTag.bind(null, styleElement);
-			remove = function() {
-				removeStyleElement(styleElement);
-			};
-		}
-	
-		update(obj);
-	
-		return function updateStyle(newObj) {
-			if(newObj) {
-				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
-					return;
-				update(obj = newObj);
-			} else {
-				remove();
-			}
-		};
-	}
-	
-	var replaceText = (function () {
-		var textStore = [];
-	
-		return function (index, replacement) {
-			textStore[index] = replacement;
-			return textStore.filter(Boolean).join('\n');
-		};
-	})();
-	
-	function applyToSingletonTag(styleElement, index, remove, obj) {
-		var css = remove ? "" : obj.css;
-	
-		if (styleElement.styleSheet) {
-			styleElement.styleSheet.cssText = replaceText(index, css);
-		} else {
-			var cssNode = document.createTextNode(css);
-			var childNodes = styleElement.childNodes;
-			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
-			if (childNodes.length) {
-				styleElement.insertBefore(cssNode, childNodes[index]);
-			} else {
-				styleElement.appendChild(cssNode);
-			}
-		}
-	}
-	
-	function applyToTag(styleElement, obj) {
-		var css = obj.css;
-		var media = obj.media;
-	
-		if(media) {
-			styleElement.setAttribute("media", media)
-		}
-	
-		if(styleElement.styleSheet) {
-			styleElement.styleSheet.cssText = css;
-		} else {
-			while(styleElement.firstChild) {
-				styleElement.removeChild(styleElement.firstChild);
-			}
-			styleElement.appendChild(document.createTextNode(css));
-		}
-	}
-	
-	function updateLink(linkElement, obj) {
-		var css = obj.css;
-		var sourceMap = obj.sourceMap;
-	
-		if(sourceMap) {
-			// http://stackoverflow.com/a/26603875
-			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
-		}
-	
-		var blob = new Blob([css], { type: "text/css" });
-	
-		var oldSrc = linkElement.href;
-	
-		linkElement.href = URL.createObjectURL(blob);
-	
-		if(oldSrc)
-			URL.revokeObjectURL(oldSrc);
-	}
-
-
-/***/ },
-/* 53 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var React = __webpack_require__(2);
-	var ColumnLike_1 = __webpack_require__(6);
-	var SortableItem_1 = __webpack_require__(54);
-	var _ = __webpack_require__(4);
-	var GigaStore_1 = __webpack_require__(7);
-	__webpack_require__(55);
-	var classNames = __webpack_require__(44);
-	var SettingsPopover = (function (_super) {
-	    __extends(SettingsPopover, _super);
-	    function SettingsPopover(props) {
-	        _super.call(this, props);
-	        var columns = _.clone(props.columns);
-	        var subtotalBys = _.clone(props.subtotalBys);
-	        var activeColumn = undefined;
-	        this.state = { columns: columns, subtotalBys: subtotalBys, activeColumn: activeColumn };
-	    }
-	    /**
-	     * move the src from the `from` list to after the dest column in the `to` list
-	     * @param from
-	     * @param to
-	     * @param src
-	     * @param dest
-	     */
-	    SettingsPopover.prototype.swapToAnotherListOfColumns = function (from, to, src, dest) {
-	        var item = from.splice(src.idx, 1)[0];
-	        to.splice(dest.idx + 1, 0, item);
-	    };
-	    /**
-	     * moves the src column to after the dest column within the same list
-	     * @param columns
-	     * @param src
-	     * @param dest
-	     */
-	    SettingsPopover.prototype.moveColumn = function (columns, src, dest) {
-	        var item = columns.splice(src.idx, 1)[0];
-	        // need a more reliable way to to determine destIdx, given that the same column could be repeated in the list
-	        var destIdx = _.findIndex(columns, function (c) { return c.colTag === dest.colTag; });
-	        columns.splice(destIdx + 1, 0, item);
-	    };
-	    /**
-	     * insert the column represented by the srcColTag to the column represented by the destColTag
-	     * @param src
-	     * @param dest
-	     */
-	    SettingsPopover.prototype.updateColumnPosition = function (src, dest) {
-	        if (src.type === dest.type)
-	            /**
-	             * move the src column to a different position within the same list of columns
-	             */
-	            this.moveColumn(this.state[src.type], src, dest);
-	        else
-	            /**
-	             * src is in a different list of column than dest, we need to transfer them
-	             */
-	            this.swapToAnotherListOfColumns(this.state[src.type], this.state[dest.type], src, dest);
-	        this.setState(_.assign({}, this.state, {
-	            columns: this.state.columns,
-	            subtotalBys: this.state.subtotalBys
-	        }));
-	    };
-	    SettingsPopover.prototype.commitColumnUpdates = function () {
-	        var payload = {
-	            type: GigaStore_1.GigaActionType.COLUMNS_UPDATE,
-	            columns: this.state.columns,
-	            subtotalBys: this.state.subtotalBys
-	        };
-	        this.props.onSubmit.call(undefined, payload);
-	    };
-	    SettingsPopover.prototype.renderSortable = function (type, columns) {
-	        var _this = this;
-	        var items = columns.map(function (c, i) {
-	            return React.createElement(SortableItem_1.SortableItem, {key: i, column: c, idx: i, type: type, onClick: (function (column) {
-	                this.setState(_.assign({}, this.state, { activeColumn: column }));
-	            }).bind(_this), onUpdate: function (src, dest) { return _this.updateColumnPosition(src, dest); }});
-	        });
-	        if (columns.length === 0) {
-	            return (
-	            /**
-	             * in the event the column is empty, we still want to handle drop events
-	             */
-	            React.createElement("ul", {className: "giga-grid-sortable", onDragOver: function (e) { return e.preventDefault(); }, onDrop: function (e) {
-	                var srcType = e.dataTransfer.getData('type');
-	                var src = {
-	                    type: srcType,
-	                    colTag: e.dataTransfer.getData('colTag'),
-	                    idx: parseInt(e.dataTransfer.getData('idx'))
-	                };
-	                var fromList = _this.state[srcType];
-	                var toList = _this.state[type];
-	                var dest = {
-	                    type: type,
-	                    colTag: null,
-	                    idx: 0
-	                };
-	                _this.swapToAnotherListOfColumns(fromList, toList, src, dest);
-	                _this.setState(_.assign({}, _this.state, {
-	                    columns: _this.state.columns,
-	                    subtotalBys: _this.state.subtotalBys
-	                }));
-	            }}, "Drop a Column Here to Subtotal By It"));
-	        }
-	        else
-	            return (React.createElement("ul", {className: "giga-grid-sortable"}, items));
-	    };
-	    SettingsPopover.prototype.render = function () {
-	        var _this = this;
-	        var activeColumn = this.state.activeColumn;
-	        var layoutControlClassDict = {
-	            "giga-grid-flex-column": true,
-	            "column-50": activeColumn ? true : false,
-	            "column-100": !activeColumn ? false : true
-	        };
-	        var layoutControlClassName = classNames(layoutControlClassDict);
-	        return (React.createElement("div", {className: "giga-grid-settings-pop-over", onClick: function (e) { return e.stopPropagation(); }}, React.createElement("h3", null, "Configure table columns"), React.createElement("div", {className: "row"}, React.createElement("div", {className: layoutControlClassName}, React.createElement("div", null, React.createElement("h5", null, "Columns"), this.renderSortable("columns", this.state.columns)), React.createElement("div", null, React.createElement("h5", null, "Subtotal By"), this.renderSortable("subtotalBys", this.state.subtotalBys)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.EXPAND_ALL }); }}, "Expand All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.COLLAPSE_ALL }); }}, "Collapse All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.CLEAR_SORT }); }}, "Clear Sort")), React.createElement("br", null), React.createElement("div", null)), this.renderColumnConfigurer(activeColumn)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", style: { float: "right" }, onClick: function (e) { return _this.props.onDismiss(); }}, "Close ", React.createElement("i", {className: "fa fa-times"})), React.createElement("span", {className: "giga-grid-button", style: { float: "right" }, onClick: function (e) { return _this.commitColumnUpdates(); }}, "Save ", React.createElement("i", {className: "fa fa-save"})))));
-	    };
-	    SettingsPopover.prototype.renderColumnConfigurer = function (column) {
-	        var _this = this;
-	        if (!column)
-	            return "";
-	        function onTitleChange(e) {
-	            e.preventDefault();
-	            column.title = e.target.value;
-	            this.setState(_.assign({}, this.state, { column: column }));
-	        }
-	        function onAggregationMethodChange(e) {
-	            e.preventDefault();
-	            //noinspection TypeScriptValidateTypes
-	            column.aggregationMethod = parseInt(e.target.value);
-	            this.setState(_.assign({}, this.state, { column: column }));
-	        }
-	        function onFormatChange(e) {
-	            e.preventDefault();
-	            //noinspection TypeScriptValidateTypes
-	            column.format = parseInt(e.target.value);
-	            this.setState(_.assign({}, this.state, { column: column }));
-	        }
-	        return (React.createElement("div", {className: "giga-grid-flex-column column-50"}, React.createElement("div", null, React.createElement("h5", {className: "inline-label"}, "Title"), React.createElement("span", {className: "giga-grid-button dismiss", onClick: function () { return _this.setState(_.assign({}, _this.state, { activeColumn: undefined })); }}, React.createElement("i", {className: "fa fa-chevron-left"}))), React.createElement("input", {type: "text", className: "giga-grid-text-input", placeholder: "Title", value: column.title, onChange: onTitleChange.bind(this)}), React.createElement("br", null), React.createElement("div", null, React.createElement("div", {className: "column-50"}, React.createElement("h5", null, "Aggregation Method"), React.createElement("select", {value: column.aggregationMethod, onChange: onAggregationMethodChange.bind(this)}, React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.SUM}, "Sum"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.COUNT}, "Count"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.COUNT_DISTINCT}, "Count Distinct"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.RANGE}, "Range"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.AVERAGE}, "Average"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE}, "Weighted Average"))), React.createElement("div", {className: "column-50"}, React.createElement("h5", null, "Format"), React.createElement("select", {value: column.format, onChange: onFormatChange.bind(this)}, React.createElement("option", {value: ColumnLike_1.ColumnFormat.CURRENCY}, "Currency"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.DATE}, "Date"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.NUMBER}, "Number"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.STRING}, "String"))))));
-	    };
-	    return SettingsPopover;
-	}(React.Component));
-	exports.SettingsPopover = SettingsPopover;
-
-
-/***/ },
-/* 54 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(44);
-	var SortableItem = (function (_super) {
-	    __extends(SortableItem, _super);
-	    function SortableItem(props) {
-	        _super.call(this, props);
-	        this.state = {
-	            isDraggingOver: false
-	        };
-	    }
-	    SortableItem.prototype.onDrop = function (e) {
-	        var src = {
-	            type: e.dataTransfer.getData('type'),
-	            colTag: e.dataTransfer.getData('colTag'),
-	            idx: parseInt(e.dataTransfer.getData('idx'))
-	        };
-	        var dest = {
-	            type: this.props.type,
-	            colTag: this.props.column.colTag,
-	            idx: this.props.idx
-	        };
-	        this.props.onUpdate(src, dest);
-	    };
-	    SortableItem.prototype.onDragStart = function (e) {
-	        e.dataTransfer.setData('colTag', this.props.column.colTag);
-	        e.dataTransfer.setData('type', this.props.type);
-	        e.dataTransfer.setData('idx', "" + this.props.idx);
-	    };
-	    SortableItem.prototype.onDragOver = function (e) {
-	        e.preventDefault();
-	        this.setState({
-	            isDraggingOver: true
-	        });
-	    };
-	    SortableItem.prototype.onDragLeave = function (e) {
-	        e.preventDefault();
-	        this.setState({
-	            isDraggingOver: false
-	        });
-	    };
-	    SortableItem.prototype.componentWillReceiveProps = function () {
-	        this.setState({
-	            isDraggingOver: false
-	        });
-	    };
-	    SortableItem.prototype.render = function () {
-	        var _this = this;
-	        var cx = classNames({
-	            dragging: this.state['isDraggingOver']
-	        });
-	        return (React.createElement("li", {className: cx, draggable: true, onClick: function () { return _this.props.onClick.call(undefined, _this.props.column); }, onDragStart: function (e) { return _this.onDragStart.call(_this, e); }, onDragOver: function (e) { return _this.onDragOver(e); }, onDragLeave: function (e) { return _this.onDragLeave(e); }, onDrop: function (e) { return _this.onDrop(e); }}, this.props.column.title || this.props.column.colTag));
-	    };
-	    return SortableItem;
-	}(React.Component));
-	exports.SortableItem = SortableItem;
-
-
-/***/ },
-/* 55 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(56);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(52)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./SettingsPopover.styl", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./SettingsPopover.styl");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 56 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(51)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, "span.giga-grid-button.dismiss {\n  float: right;\n}\nh5.inline-label {\n  display: inline;\n}\n.giga-grid .giga-grid-settings-pop-over {\n  border: 1px solid toolbar-border-color;\n  padding: 1em;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  position: absolute;\n  top: 20px;\n  z-index: 1;\n  background-color: #fff;\n  width: 660px;\n  min-height: 350px;\n}\n.giga-grid .giga-grid-settings-pop-over ul {\n  list-style: circle;\n}\n.giga-grid .giga-grid-settings-pop-over ul li {\n  display: inline-block;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  padding: 5px;\n  margin-right: 3px;\n  margin-bottom: 5px;\n}\n.giga-grid .giga-grid-settings-pop-over ul li:hover {\n  cursor: pointer;\n  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;\n  background-color: toolbar-border-color;\n}\n.giga-grid .giga-grid-settings-pop-over ul li.dragging {\n  border-right: 2px solid #ff4500;\n}\n", ""]);
-	
-	// exports
-
-
-/***/ },
-/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -31441,6 +30689,782 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	return jQuery;
 	}));
+
+
+/***/ },
+/* 47 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(2);
+	var TableHeaderCell_1 = __webpack_require__(48);
+	var GigaGrid_1 = __webpack_require__(1);
+	/**
+	 * terminology: column groups are columns that can span multiple `leaf` columns and physically reside
+	 * on top of `leaf` columns
+	 *
+	 * `leaf` columns are the real columns that are associated with the cells in the table
+	 */
+	var TableHeader = (function (_super) {
+	    __extends(TableHeader, _super);
+	    function TableHeader(props) {
+	        _super.call(this, props);
+	    }
+	    TableHeader.prototype.render = function () {
+	        return (React.createElement("thead", null, this.renderHeaderRows()));
+	    };
+	    TableHeader.prototype.renderHeaderRows = function () {
+	        var trs = [];
+	        var i;
+	        for (i = 0; i < this.props.columns.length - 1; i++)
+	            trs.push(TableHeader.renderColumnGroups(this.props.columns[i], i));
+	        trs.push(this.renderLeafColumns(this.props.columns[i], i));
+	        return trs;
+	    };
+	    /**
+	     * TODO th with colSpan really screw up our ability to set width on columns
+	     */
+	    TableHeader.renderColumnGroups = function (columns, key) {
+	        var ths = columns.map(function (column, i) {
+	            return (React.createElement("th", {className: "column-group", key: i, colSpan: column.colSpan}, column.title));
+	        });
+	        return (React.createElement("tr", {className: "column-group-row", key: key}, ths));
+	    };
+	    TableHeader.prototype.renderLeafColumns = function (columns, key) {
+	        var _this = this;
+	        var ths = columns.map(function (column, i) {
+	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {column: column, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, tableHeaderClass: _this.props.tableHeaderClass, dispatcher: _this.props.dispatcher});
+	        });
+	        // add a placeholder to offset the scrollbar
+	        ths.push(React.createElement("th", {key: ths.length, style: { width: GigaGrid_1.getScrollBarWidth() + "px" }}));
+	        return (React.createElement("tr", {key: key}, ths));
+	    };
+	    return TableHeader;
+	}(React.Component));
+	exports.TableHeader = TableHeader;
+
+
+/***/ },
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(2);
+	var classNames = __webpack_require__(44);
+	var ColumnLike_1 = __webpack_require__(6);
+	var GigaStore_1 = __webpack_require__(7);
+	var _ = __webpack_require__(4);
+	var Toolbar_1 = __webpack_require__(49);
+	var TableHeaderCell = (function (_super) {
+	    __extends(TableHeaderCell, _super);
+	    function TableHeaderCell(props) {
+	        _super.call(this, props);
+	    }
+	    TableHeaderCell.prototype.renderSortIcon = function () {
+	        classNames();
+	        var direction = this.props.column.direction;
+	        if (direction != undefined) {
+	            var cx = classNames({
+	                "fa": true,
+	                "fa-sort-asc": direction === ColumnLike_1.SortDirection.ASC,
+	                "fa-sort-desc": direction === ColumnLike_1.SortDirection.DESC
+	            });
+	            return (React.createElement("span", null, ' ', React.createElement("i", {className: cx})));
+	        }
+	    };
+	    TableHeaderCell.prototype.render = function () {
+	        var _this = this;
+	        var column = this.props.column;
+	        var style = {
+	            overflow: "visible",
+	            position: "relative"
+	        };
+	        var componentClasses = {
+	            "text-align-right": column.format === ColumnLike_1.ColumnFormat.NUMBER,
+	            "text-align-left": column.format !== ColumnLike_1.ColumnFormat.NUMBER
+	        };
+	        if (this.props.tableHeaderClass)
+	            componentClasses["this.props.tableHeaderClass"] = true;
+	        else
+	            componentClasses["table-header"] = true;
+	        var cx = classNames(componentClasses);
+	        return (React.createElement("th", {style: style, onClick: function () {
+	            var direction = _this.props.column.direction;
+	            var sortBy = _.assign({}, _this.props.column, {
+	                direction: direction === ColumnLike_1.SortDirection.DESC ? ColumnLike_1.SortDirection.ASC : ColumnLike_1.SortDirection.DESC
+	            });
+	            var payload = {
+	                type: GigaStore_1.GigaActionType.NEW_SORT,
+	                sortBys: [sortBy]
+	            };
+	            _this.props.dispatcher.dispatch(payload);
+	        }, className: cx}, React.createElement("span", {className: "header-text"}, column.title || column.colTag), this.renderSortIcon(), this.renderToolbar()));
+	    };
+	    TableHeaderCell.prototype.renderToolbar = function () {
+	        if (this.props.isFirstColumn)
+	            return (React.createElement(Toolbar_1.ToolbarToggle, {dispatcher: this.props.dispatcher}));
+	        else
+	            return null;
+	    };
+	    return TableHeaderCell;
+	}(React.Component));
+	exports.TableHeaderCell = TableHeaderCell;
+
+
+/***/ },
+/* 49 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(2);
+	__webpack_require__(50);
+	var GigaStore_1 = __webpack_require__(7);
+	/**
+	 * The job of the toolbar is to dispatch actions to the flux reduce store. It is free to query the state of the grid
+	 * and its props
+	 */
+	var ToolbarToggle = (function (_super) {
+	    __extends(ToolbarToggle, _super);
+	    function ToolbarToggle() {
+	        _super.apply(this, arguments);
+	    }
+	    ToolbarToggle.prototype.dispatchAction = function (e) {
+	        e.stopPropagation();
+	        var action = {
+	            type: GigaStore_1.GigaActionType.TOGGLE_SETTINGS_POPOVER
+	        };
+	        this.props.dispatcher.dispatch(action);
+	    };
+	    ToolbarToggle.prototype.render = function () {
+	        var _this = this;
+	        return (React.createElement("span", {className: "giga-grid-toolbar"}, React.createElement("i", {className: "fa fa-cogs", onClick: function (e) { return _this.dispatchAction(e); }})));
+	    };
+	    return ToolbarToggle;
+	}(React.Component));
+	exports.ToolbarToggle = ToolbarToggle;
+
+
+/***/ },
+/* 50 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(51);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(53)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Toolbar.styl", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Toolbar.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 51 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(52)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".giga-grid .giga-grid-toolbar {\n  padding-left: 5px;\n}\n.giga-grid-sortable {\n  border: 1px solid toolbar-border-color;\n  padding: 1em;\n}\n.giga-grid-flex-column {\n  float: left;\n  padding: 10px;\n}\n.giga-grid-flex-column.column-50 {\n  width: 50%;\n}\n.giga-grid-flex-column.column-100 {\n  width: 100%;\n}\ninput.giga-grid-text-input {\n  padding: 10px 10px 10px 5px;\n  border: none;\n  border-bottom: 2px solid #757575;\n}\n", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 52 */
+/***/ function(module, exports) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function() {
+		var list = [];
+	
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+	
+		// import a list of modules into the list
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for(var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
+			}
+			for(i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if(mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
+
+/***/ },
+/* 53 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	var stylesInDom = {},
+		memoize = function(fn) {
+			var memo;
+			return function () {
+				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+				return memo;
+			};
+		},
+		isOldIE = memoize(function() {
+			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		}),
+		getHeadElement = memoize(function () {
+			return document.head || document.getElementsByTagName("head")[0];
+		}),
+		singletonElement = null,
+		singletonCounter = 0,
+		styleElementsInsertedAtTop = [];
+	
+	module.exports = function(list, options) {
+		if(false) {
+			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+		}
+	
+		options = options || {};
+		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+		// tags it will allow on a page
+		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+	
+		// By default, add <style> tags to the bottom of <head>.
+		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+	
+		var styles = listToStyles(list);
+		addStylesToDom(styles, options);
+	
+		return function update(newList) {
+			var mayRemove = [];
+			for(var i = 0; i < styles.length; i++) {
+				var item = styles[i];
+				var domStyle = stylesInDom[item.id];
+				domStyle.refs--;
+				mayRemove.push(domStyle);
+			}
+			if(newList) {
+				var newStyles = listToStyles(newList);
+				addStylesToDom(newStyles, options);
+			}
+			for(var i = 0; i < mayRemove.length; i++) {
+				var domStyle = mayRemove[i];
+				if(domStyle.refs === 0) {
+					for(var j = 0; j < domStyle.parts.length; j++)
+						domStyle.parts[j]();
+					delete stylesInDom[domStyle.id];
+				}
+			}
+		};
+	}
+	
+	function addStylesToDom(styles, options) {
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			if(domStyle) {
+				domStyle.refs++;
+				for(var j = 0; j < domStyle.parts.length; j++) {
+					domStyle.parts[j](item.parts[j]);
+				}
+				for(; j < item.parts.length; j++) {
+					domStyle.parts.push(addStyle(item.parts[j], options));
+				}
+			} else {
+				var parts = [];
+				for(var j = 0; j < item.parts.length; j++) {
+					parts.push(addStyle(item.parts[j], options));
+				}
+				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+			}
+		}
+	}
+	
+	function listToStyles(list) {
+		var styles = [];
+		var newStyles = {};
+		for(var i = 0; i < list.length; i++) {
+			var item = list[i];
+			var id = item[0];
+			var css = item[1];
+			var media = item[2];
+			var sourceMap = item[3];
+			var part = {css: css, media: media, sourceMap: sourceMap};
+			if(!newStyles[id])
+				styles.push(newStyles[id] = {id: id, parts: [part]});
+			else
+				newStyles[id].parts.push(part);
+		}
+		return styles;
+	}
+	
+	function insertStyleElement(options, styleElement) {
+		var head = getHeadElement();
+		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+		if (options.insertAt === "top") {
+			if(!lastStyleElementInsertedAtTop) {
+				head.insertBefore(styleElement, head.firstChild);
+			} else if(lastStyleElementInsertedAtTop.nextSibling) {
+				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+			} else {
+				head.appendChild(styleElement);
+			}
+			styleElementsInsertedAtTop.push(styleElement);
+		} else if (options.insertAt === "bottom") {
+			head.appendChild(styleElement);
+		} else {
+			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+		}
+	}
+	
+	function removeStyleElement(styleElement) {
+		styleElement.parentNode.removeChild(styleElement);
+		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+		if(idx >= 0) {
+			styleElementsInsertedAtTop.splice(idx, 1);
+		}
+	}
+	
+	function createStyleElement(options) {
+		var styleElement = document.createElement("style");
+		styleElement.type = "text/css";
+		insertStyleElement(options, styleElement);
+		return styleElement;
+	}
+	
+	function createLinkElement(options) {
+		var linkElement = document.createElement("link");
+		linkElement.rel = "stylesheet";
+		insertStyleElement(options, linkElement);
+		return linkElement;
+	}
+	
+	function addStyle(obj, options) {
+		var styleElement, update, remove;
+	
+		if (options.singleton) {
+			var styleIndex = singletonCounter++;
+			styleElement = singletonElement || (singletonElement = createStyleElement(options));
+			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+		} else if(obj.sourceMap &&
+			typeof URL === "function" &&
+			typeof URL.createObjectURL === "function" &&
+			typeof URL.revokeObjectURL === "function" &&
+			typeof Blob === "function" &&
+			typeof btoa === "function") {
+			styleElement = createLinkElement(options);
+			update = updateLink.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+				if(styleElement.href)
+					URL.revokeObjectURL(styleElement.href);
+			};
+		} else {
+			styleElement = createStyleElement(options);
+			update = applyToTag.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+			};
+		}
+	
+		update(obj);
+	
+		return function updateStyle(newObj) {
+			if(newObj) {
+				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+					return;
+				update(obj = newObj);
+			} else {
+				remove();
+			}
+		};
+	}
+	
+	var replaceText = (function () {
+		var textStore = [];
+	
+		return function (index, replacement) {
+			textStore[index] = replacement;
+			return textStore.filter(Boolean).join('\n');
+		};
+	})();
+	
+	function applyToSingletonTag(styleElement, index, remove, obj) {
+		var css = remove ? "" : obj.css;
+	
+		if (styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = replaceText(index, css);
+		} else {
+			var cssNode = document.createTextNode(css);
+			var childNodes = styleElement.childNodes;
+			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+			if (childNodes.length) {
+				styleElement.insertBefore(cssNode, childNodes[index]);
+			} else {
+				styleElement.appendChild(cssNode);
+			}
+		}
+	}
+	
+	function applyToTag(styleElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+	
+		if(media) {
+			styleElement.setAttribute("media", media)
+		}
+	
+		if(styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = css;
+		} else {
+			while(styleElement.firstChild) {
+				styleElement.removeChild(styleElement.firstChild);
+			}
+			styleElement.appendChild(document.createTextNode(css));
+		}
+	}
+	
+	function updateLink(linkElement, obj) {
+		var css = obj.css;
+		var sourceMap = obj.sourceMap;
+	
+		if(sourceMap) {
+			// http://stackoverflow.com/a/26603875
+			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+		}
+	
+		var blob = new Blob([css], { type: "text/css" });
+	
+		var oldSrc = linkElement.href;
+	
+		linkElement.href = URL.createObjectURL(blob);
+	
+		if(oldSrc)
+			URL.revokeObjectURL(oldSrc);
+	}
+
+
+/***/ },
+/* 54 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(2);
+	var ColumnLike_1 = __webpack_require__(6);
+	var SortableItem_1 = __webpack_require__(55);
+	var _ = __webpack_require__(4);
+	var GigaStore_1 = __webpack_require__(7);
+	__webpack_require__(56);
+	var classNames = __webpack_require__(44);
+	var SettingsPopover = (function (_super) {
+	    __extends(SettingsPopover, _super);
+	    function SettingsPopover(props) {
+	        _super.call(this, props);
+	        var columns = _.clone(props.columns);
+	        var subtotalBys = _.clone(props.subtotalBys);
+	        var activeColumn = undefined;
+	        this.state = { columns: columns, subtotalBys: subtotalBys, activeColumn: activeColumn };
+	    }
+	    /**
+	     * move the src from the `from` list to after the dest column in the `to` list
+	     * @param from
+	     * @param to
+	     * @param src
+	     * @param dest
+	     */
+	    SettingsPopover.prototype.swapToAnotherListOfColumns = function (from, to, src, dest) {
+	        var item = from.splice(src.idx, 1)[0];
+	        to.splice(dest.idx + 1, 0, item);
+	    };
+	    /**
+	     * moves the src column to after the dest column within the same list
+	     * @param columns
+	     * @param src
+	     * @param dest
+	     */
+	    SettingsPopover.prototype.moveColumn = function (columns, src, dest) {
+	        var item = columns.splice(src.idx, 1)[0];
+	        // need a more reliable way to to determine destIdx, given that the same column could be repeated in the list
+	        var destIdx = _.findIndex(columns, function (c) { return c.colTag === dest.colTag; });
+	        columns.splice(destIdx + 1, 0, item);
+	    };
+	    /**
+	     * insert the column represented by the srcColTag to the column represented by the destColTag
+	     * @param src
+	     * @param dest
+	     */
+	    SettingsPopover.prototype.updateColumnPosition = function (src, dest) {
+	        if (src.type === dest.type)
+	            /**
+	             * move the src column to a different position within the same list of columns
+	             */
+	            this.moveColumn(this.state[src.type], src, dest);
+	        else
+	            /**
+	             * src is in a different list of column than dest, we need to transfer them
+	             */
+	            this.swapToAnotherListOfColumns(this.state[src.type], this.state[dest.type], src, dest);
+	        this.setState(_.assign({}, this.state, {
+	            columns: this.state.columns,
+	            subtotalBys: this.state.subtotalBys
+	        }));
+	    };
+	    SettingsPopover.prototype.commitColumnUpdates = function () {
+	        var payload = {
+	            type: GigaStore_1.GigaActionType.COLUMNS_UPDATE,
+	            columns: this.state.columns,
+	            subtotalBys: this.state.subtotalBys
+	        };
+	        this.props.onSubmit.call(undefined, payload);
+	    };
+	    SettingsPopover.prototype.renderSortable = function (type, columns) {
+	        var _this = this;
+	        var items = columns.map(function (c, i) {
+	            return React.createElement(SortableItem_1.SortableItem, {key: i, column: c, idx: i, type: type, onClick: (function (column) {
+	                this.setState(_.assign({}, this.state, { activeColumn: column }));
+	            }).bind(_this), onUpdate: function (src, dest) { return _this.updateColumnPosition(src, dest); }});
+	        });
+	        if (columns.length === 0) {
+	            return (
+	            /**
+	             * in the event the column is empty, we still want to handle drop events
+	             */
+	            React.createElement("ul", {className: "giga-grid-sortable", onDragOver: function (e) { return e.preventDefault(); }, onDrop: function (e) {
+	                var srcType = e.dataTransfer.getData('type');
+	                var src = {
+	                    type: srcType,
+	                    colTag: e.dataTransfer.getData('colTag'),
+	                    idx: parseInt(e.dataTransfer.getData('idx'))
+	                };
+	                var fromList = _this.state[srcType];
+	                var toList = _this.state[type];
+	                var dest = {
+	                    type: type,
+	                    colTag: null,
+	                    idx: 0
+	                };
+	                _this.swapToAnotherListOfColumns(fromList, toList, src, dest);
+	                _this.setState(_.assign({}, _this.state, {
+	                    columns: _this.state.columns,
+	                    subtotalBys: _this.state.subtotalBys
+	                }));
+	            }}, "Drop a Column Here to Subtotal By It"));
+	        }
+	        else
+	            return (React.createElement("ul", {className: "giga-grid-sortable"}, items));
+	    };
+	    SettingsPopover.prototype.render = function () {
+	        var _this = this;
+	        var activeColumn = this.state.activeColumn;
+	        var layoutControlClassDict = {
+	            "giga-grid-flex-column": true,
+	            "column-50": activeColumn ? true : false,
+	            "column-100": !activeColumn ? false : true
+	        };
+	        var layoutControlClassName = classNames(layoutControlClassDict);
+	        return (React.createElement("div", {className: "giga-grid-settings-pop-over", onClick: function (e) { return e.stopPropagation(); }}, React.createElement("h3", null, "Configure table columns"), React.createElement("div", {className: "row"}, React.createElement("div", {className: layoutControlClassName}, React.createElement("div", null, React.createElement("h5", null, "Columns"), this.renderSortable("columns", this.state.columns)), React.createElement("div", null, React.createElement("h5", null, "Subtotal By"), this.renderSortable("subtotalBys", this.state.subtotalBys)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.EXPAND_ALL }); }}, "Expand All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.COLLAPSE_ALL }); }}, "Collapse All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.CLEAR_SORT }); }}, "Clear Sort")), React.createElement("br", null), React.createElement("div", null)), this.renderColumnConfigurer(activeColumn)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", style: { float: "right" }, onClick: function (e) { return _this.props.onDismiss(); }}, "Close ", React.createElement("i", {className: "fa fa-times"})), React.createElement("span", {className: "giga-grid-button", style: { float: "right" }, onClick: function (e) { return _this.commitColumnUpdates(); }}, "Save ", React.createElement("i", {className: "fa fa-save"})))));
+	    };
+	    SettingsPopover.prototype.renderColumnConfigurer = function (column) {
+	        var _this = this;
+	        if (!column)
+	            return "";
+	        function onTitleChange(e) {
+	            e.preventDefault();
+	            column.title = e.target.value;
+	            this.setState(_.assign({}, this.state, { column: column }));
+	        }
+	        function onAggregationMethodChange(e) {
+	            e.preventDefault();
+	            //noinspection TypeScriptValidateTypes
+	            column.aggregationMethod = parseInt(e.target.value);
+	            this.setState(_.assign({}, this.state, { column: column }));
+	        }
+	        function onFormatChange(e) {
+	            e.preventDefault();
+	            //noinspection TypeScriptValidateTypes
+	            column.format = parseInt(e.target.value);
+	            this.setState(_.assign({}, this.state, { column: column }));
+	        }
+	        return (React.createElement("div", {className: "giga-grid-flex-column column-50"}, React.createElement("div", null, React.createElement("h5", {className: "inline-label"}, "Title"), React.createElement("span", {className: "giga-grid-button dismiss", onClick: function () { return _this.setState(_.assign({}, _this.state, { activeColumn: undefined })); }}, React.createElement("i", {className: "fa fa-chevron-left"}))), React.createElement("input", {type: "text", className: "giga-grid-text-input", placeholder: "Title", value: column.title, onChange: onTitleChange.bind(this)}), React.createElement("br", null), React.createElement("div", null, React.createElement("div", {className: "column-50"}, React.createElement("h5", null, "Aggregation Method"), React.createElement("select", {value: column.aggregationMethod, onChange: onAggregationMethodChange.bind(this)}, React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.SUM}, "Sum"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.COUNT}, "Count"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.COUNT_DISTINCT}, "Count Distinct"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.RANGE}, "Range"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.AVERAGE}, "Average"), React.createElement("option", {type: "radio", value: ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE}, "Weighted Average"))), React.createElement("div", {className: "column-50"}, React.createElement("h5", null, "Format"), React.createElement("select", {value: column.format, onChange: onFormatChange.bind(this)}, React.createElement("option", {value: ColumnLike_1.ColumnFormat.CURRENCY}, "Currency"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.DATE}, "Date"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.NUMBER}, "Number"), React.createElement("option", {value: ColumnLike_1.ColumnFormat.STRING}, "String"))))));
+	    };
+	    return SettingsPopover;
+	}(React.Component));
+	exports.SettingsPopover = SettingsPopover;
+
+
+/***/ },
+/* 55 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(2);
+	var classNames = __webpack_require__(44);
+	var SortableItem = (function (_super) {
+	    __extends(SortableItem, _super);
+	    function SortableItem(props) {
+	        _super.call(this, props);
+	        this.state = {
+	            isDraggingOver: false
+	        };
+	    }
+	    SortableItem.prototype.onDrop = function (e) {
+	        var src = {
+	            type: e.dataTransfer.getData('type'),
+	            colTag: e.dataTransfer.getData('colTag'),
+	            idx: parseInt(e.dataTransfer.getData('idx'))
+	        };
+	        var dest = {
+	            type: this.props.type,
+	            colTag: this.props.column.colTag,
+	            idx: this.props.idx
+	        };
+	        this.props.onUpdate(src, dest);
+	    };
+	    SortableItem.prototype.onDragStart = function (e) {
+	        e.dataTransfer.setData('colTag', this.props.column.colTag);
+	        e.dataTransfer.setData('type', this.props.type);
+	        e.dataTransfer.setData('idx', "" + this.props.idx);
+	    };
+	    SortableItem.prototype.onDragOver = function (e) {
+	        e.preventDefault();
+	        this.setState({
+	            isDraggingOver: true
+	        });
+	    };
+	    SortableItem.prototype.onDragLeave = function (e) {
+	        e.preventDefault();
+	        this.setState({
+	            isDraggingOver: false
+	        });
+	    };
+	    SortableItem.prototype.componentWillReceiveProps = function () {
+	        this.setState({
+	            isDraggingOver: false
+	        });
+	    };
+	    SortableItem.prototype.render = function () {
+	        var _this = this;
+	        var cx = classNames({
+	            dragging: this.state['isDraggingOver']
+	        });
+	        return (React.createElement("li", {className: cx, draggable: true, onClick: function () { return _this.props.onClick.call(undefined, _this.props.column); }, onDragStart: function (e) { return _this.onDragStart.call(_this, e); }, onDragOver: function (e) { return _this.onDragOver(e); }, onDragLeave: function (e) { return _this.onDragLeave(e); }, onDrop: function (e) { return _this.onDrop(e); }}, this.props.column.title || this.props.column.colTag));
+	    };
+	    return SortableItem;
+	}(React.Component));
+	exports.SortableItem = SortableItem;
+
+
+/***/ },
+/* 56 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(57);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(53)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./SettingsPopover.styl", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./SettingsPopover.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 57 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(52)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "span.giga-grid-button.dismiss {\n  float: right;\n}\nh5.inline-label {\n  display: inline;\n}\n.giga-grid .giga-grid-settings-pop-over {\n  border: 1px solid toolbar-border-color;\n  padding: 1em;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  position: absolute;\n  top: 20px;\n  z-index: 1;\n  background-color: #fff;\n  width: 660px;\n  min-height: 350px;\n}\n.giga-grid .giga-grid-settings-pop-over ul {\n  list-style: circle;\n}\n.giga-grid .giga-grid-settings-pop-over ul li {\n  display: inline-block;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  padding: 5px;\n  margin-right: 3px;\n  margin-bottom: 5px;\n}\n.giga-grid .giga-grid-settings-pop-over ul li:hover {\n  cursor: pointer;\n  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;\n  background-color: toolbar-border-color;\n}\n.giga-grid .giga-grid-settings-pop-over ul li.dragging {\n  border-right: 2px solid #ff4500;\n}\n", ""]);
+	
+	// exports
 
 
 /***/ }
