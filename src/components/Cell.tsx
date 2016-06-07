@@ -47,7 +47,7 @@ export class DefaultCellRenderer {
         e.stopPropagation(); // we don't want toggle collapse to also trigger a row / cell clicked event
 
         const gridProps = this.props.gridProps;
-        if (gridProps) {
+        if (gridProps && gridProps.useServerStore) {
             if (gridProps.fetchRowsActionCreator)
                 gridProps.fetchRowsActionCreator(this.props.row, this.props.dispatcher);
             else

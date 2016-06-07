@@ -63,6 +63,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.SortDirection = ColumnLike_1.SortDirection;
 	var Cell_tsx_1 = __webpack_require__(46);
 	exports.DefaultCellRenderer = Cell_tsx_1.DefaultCellRenderer;
+	var GigaStore_1 = __webpack_require__(7);
+	exports.GigaActionType = GigaStore_1.GigaActionType;
 	var SubtotalAggregator_1 = __webpack_require__(31);
 	exports.format = SubtotalAggregator_1.format;
 
@@ -21002,7 +21004,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        e.preventDefault();
 	        e.stopPropagation(); // we don't want toggle collapse to also trigger a row / cell clicked event
 	        var gridProps = this.props.gridProps;
-	        if (gridProps) {
+	        if (gridProps && gridProps.useServerStore) {
 	            if (gridProps.fetchRowsActionCreator)
 	                gridProps.fetchRowsActionCreator(this.props.row, this.props.dispatcher);
 	            else
