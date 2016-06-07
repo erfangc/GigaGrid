@@ -23,13 +23,13 @@ function getAJAX(sectorPath:BucketInfo[],
 
     const fullRequest = {
         filter: [],
-        date: "20160603",
-        client: "DEFAULT",
+        date: "20160331",
+        client: "100k",
         payload: payload
     };
 
     return {
-        url: "http://localhost:59171/analysis/fetch-rows",
+        url: "http://nyclabbxg8wp.na.blkint.com:59171/analysis/fetch-rows",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
