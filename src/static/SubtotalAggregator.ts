@@ -60,7 +60,8 @@ function range(detailRows:DetailRow[], column:Column):string {
 export function format(value:any, fmtInstruction:FormatInstruction):any {
     if (!fmtInstruction)
         return value;
-
+    if(fmtInstruction && value === '')
+        return null;
     function addCommas(nStr) {
         nStr += '';
         var x = nStr.split('.');
@@ -82,7 +83,6 @@ export function format(value:any, fmtInstruction:FormatInstruction):any {
         result = addCommas(result);
     if (fmtInstruction.showAsPercent && !isNaN(result))
         result = `${result}%`;
-
     return result;
 }
 
