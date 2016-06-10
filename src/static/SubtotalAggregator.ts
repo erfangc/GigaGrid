@@ -60,8 +60,6 @@ function range(detailRows:DetailRow[], column:Column):string {
 export function format(value:any, fmtInstruction:FormatInstruction):any {
     if (!fmtInstruction)
         return value;
-    if(fmtInstruction && value === '')
-        return null;
     function addCommas(nStr) {
         nStr += '';
         var x = nStr.split('.');
