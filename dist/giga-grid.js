@@ -201,6 +201,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 	        this.dispatchDisplayBoundChange();
 	        this.synchTableHeaderWidthToFirstRow();
+	        this.expandTable();
 	        // Bind scroll listener to move headers when data container is scrolled
 	        var node = ReactDOM.findDOMNode(this);
 	        $(node).find('.giga-grid-body-viewport').scroll(this.horizontalScrollHandler);
@@ -226,6 +227,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        this.dispatcher.dispatch(action);
 	    };
+	    GigaGrid.prototype.expandTable = function () {
+	        debugger;
+	        if (this.props.expandedTable) {
+	            this.dispatcher.dispatch({
+	                type: GigaStore_1.GigaActionType.EXPAND_ALL
+	            });
+	        }
+	    };
 	    GigaGrid.defaultProps = {
 	        initialSubtotalBys: [],
 	        initialSortBys: [],
@@ -234,7 +243,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        columnDefs: [],
 	        bodyHeight: "500px",
 	        rowHeight: "25px",
-	        collapseHeight: false
+	        collapseHeight: false,
+	        expandedTable: false
 	    };
 	    return GigaGrid;
 	}(React.Component));
@@ -19757,6 +19767,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function format(value, fmtInstruction) {
 	    if (!fmtInstruction)
 	        return value;
+	    if (fmtInstruction && value === '')
+	        return null;
 	    function addCommas(nStr) {
 	        nStr += '';
 	        var x = nStr.split('.');
