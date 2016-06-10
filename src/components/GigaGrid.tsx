@@ -345,7 +345,6 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         this.dispatcher.dispatch(action);
     }
     private expandTable(){
-        debugger;
         if(this.props.expandedTable){
             this.dispatcher.dispatch({
                 type: GigaActionType.EXPAND_ALL

@@ -228,7 +228,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.dispatcher.dispatch(action);
 	    };
 	    GigaGrid.prototype.expandTable = function () {
-	        debugger;
 	        if (this.props.expandedTable) {
 	            this.dispatcher.dispatch({
 	                type: GigaStore_1.GigaActionType.EXPAND_ALL
@@ -19767,7 +19766,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function format(value, fmtInstruction) {
 	    if (!fmtInstruction)
 	        return value;
-	    if (fmtInstruction && value === '')
+	    if (value === '')
 	        return null;
 	    function addCommas(nStr) {
 	        nStr += '';
