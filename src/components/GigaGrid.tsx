@@ -101,6 +101,8 @@ export interface GigaProps extends React.Props<GigaGrid> {
      * custom classes
      */
     tableHeaderClass?:string
+
+    expandedTable?:boolean
 }
 
 export interface GridSubcomponentProps<T> extends React.Props<T> {
@@ -126,7 +128,7 @@ export interface GigaState {
     subtotalBys:Column[]
     sortBys:Column[]
     filterBys:FilterBy[]
-
+    expandedTable:boolean
     /*
      the displayable view of the data in `tree`
      */
@@ -167,7 +169,8 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         columnDefs: [],
         bodyHeight: "500px",
         rowHeight: "25px",
-        collapseHeight: false
+        collapseHeight: false,
+        expandedTable: false
     };
 
     constructor(props:GigaProps) {
@@ -312,6 +315,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
          */
         this.dispatchDisplayBoundChange();
         this.synchTableHeaderWidthToFirstRow();
+        this.expandTable();
 
         // Bind scroll listener to move headers when data container is scrolled
         const node:Element = ReactDOM.findDOMNode<Element>(this);
@@ -339,6 +343,15 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             rowHeight: this.props.rowHeight
         };
         this.dispatcher.dispatch(action);
+    }
+
+    private expandTable(){
+        debugger;
+        if(this.props.expandedTable){
+            this.dispatcher.dispatch({
+                type: GigaActionType.EXPAND_ALL
+            });
+        }
     }
 
 }
