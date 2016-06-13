@@ -228,7 +228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.dispatcher.dispatch(action);
 	    };
 	    GigaGrid.prototype.expandTable = function () {
-	        if (this.props.expandedTable) {
+	        if (this.props.expandTable) {
 	            this.dispatcher.dispatch({
 	                type: GigaStore_1.GigaActionType.EXPAND_ALL
 	            });
@@ -243,7 +243,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        bodyHeight: "500px",
 	        rowHeight: "25px",
 	        collapseHeight: false,
-	        expandedTable: false
+	        expandTable: false
 	    };
 	    return GigaGrid;
 	}(React.Component));
@@ -304,10 +304,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {number}
 	 */
 	function computeCanvasWidth($canvas, rootNodeWidth) {
-	    var canvasWidth = $canvas.innerWidth();
-	    if (rootNodeWidth > canvasWidth)
-	        canvasWidth = rootNodeWidth - getScrollBarWidth();
-	    return canvasWidth;
+	    return rootNodeWidth - getScrollBarWidth();
 	}
 
 
