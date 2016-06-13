@@ -101,7 +101,7 @@ export interface GigaProps extends React.Props<GigaGrid> {
      * custom classes
      */
     tableHeaderClass?:string
-    expandedTable?:boolean
+    expandTable?:boolean
 
 }
 
@@ -128,7 +128,7 @@ export interface GigaState {
     subtotalBys:Column[]
     sortBys:Column[]
     filterBys:FilterBy[]
-    expandedTable:boolean
+    expandTable:boolean
     /*
      the displayable view of the data in `tree`
      */
@@ -170,7 +170,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         bodyHeight: "500px",
         rowHeight: "25px",
         collapseHeight: false,
-        expandedTable: false
+        expandTable: false
     };
 
     constructor(props:GigaProps) {
@@ -345,7 +345,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         this.dispatcher.dispatch(action);
     }
     private expandTable(){
-        if(this.props.expandedTable){
+        if(this.props.expandTable){
             this.dispatcher.dispatch({
                 type: GigaActionType.EXPAND_ALL
             });
@@ -418,8 +418,5 @@ function findParentWidth(node:Element) {
  * @returns {number}
  */
 function computeCanvasWidth($canvas:JQuery, rootNodeWidth:number) {
-    var canvasWidth = $canvas.innerWidth();
-    if (rootNodeWidth > canvasWidth)
-        canvasWidth = rootNodeWidth - getScrollBarWidth();
-    return canvasWidth;
+    return rootNodeWidth - getScrollBarWidth();
 }
