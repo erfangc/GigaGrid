@@ -56,6 +56,7 @@ export class TableHeader extends React.Component<TableHeaderProps,any> {
                                     isFirstColumn={i===0}
                                     isLastColumn={i===columns.length-1}
                                     tableHeaderClass={this.props.tableHeaderClass}
+                                    gridProps={this.props.gridProps}
                                     dispatcher={this.props.dispatcher}/>
         });
         // add a placeholder to offset the scrollbar

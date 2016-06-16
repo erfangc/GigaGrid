@@ -157,7 +157,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            bodyStyle.maxHeight = this.props.bodyHeight;
 	        else
 	            bodyStyle.height = this.props.bodyHeight;
-	        return (React.createElement("div", {className: "giga-grid"}, this.renderSettingsPopover(), React.createElement("div", {className: "giga-grid-header-container"}, React.createElement("table", {className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns, tableHeaderClass: this.props.tableHeaderClass}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, onScroll: function () { return _this.dispatchDisplayBoundChange(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: state.rasterizedRows, columns: columns[columns.length - 1], displayStart: state.displayStart, displayEnd: state.displayEnd, rowHeight: this.props.rowHeight, gridProps: this.props})))));
+	        return (React.createElement("div", {className: "giga-grid"}, this.renderSettingsPopover(), React.createElement("div", {className: "giga-grid-header-container"}, React.createElement("table", {className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns, tableHeaderClass: this.props.tableHeaderClass, gridProps: this.props}))), React.createElement("div", {ref: function (c) { return _this.viewport = c; }, onScroll: function () { return _this.dispatchDisplayBoundChange(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return _this.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: state.rasterizedRows, columns: columns[columns.length - 1], displayStart: state.displayStart, displayEnd: state.displayEnd, rowHeight: this.props.rowHeight, gridProps: this.props})))));
 	    };
 	    GigaGrid.prototype.componentWillReceiveProps = function (nextProps) {
 	        var payload = {
@@ -20192,6 +20192,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var utils_1 = __webpack_require__(8);
 	var GigaStore_1 = __webpack_require__(7);
+	var InitializeReducer_1 = __webpack_require__(28);
 	var TreeRasterizer_1 = __webpack_require__(27);
 	var SelectReducers_1 = __webpack_require__(35);
 	var SortReducers_1 = __webpack_require__(36);
@@ -20199,6 +20200,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var TreeBuilder_1 = __webpack_require__(32);
 	var Row_1 = __webpack_require__(33);
 	var RowCollapseReducers_1 = __webpack_require__(39);
+	var SortFactory_1 = __webpack_require__(29);
 	/**
 	 * Initial state reducer for Server store
 	 * will not use client side aggregation or pre-sorting etc ... won't even read the `data` prop
@@ -20206,13 +20208,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {{rasterizedRows: Row[], displayStart: number, columns: any, displayEnd: number, subtotalBys: Column[], sortBys: Array, filterBys: (T|Array), tree: Tree, showSettingsPopover: boolean}}
 	 */
 	function initialStateReducer(action) {
-	    var _a = action.props, initialData = _a.initialData, columnDefs = _a.columnDefs, initialSubtotalBys = _a.initialSubtotalBys, initialFilterBys = _a.initialFilterBys;
+	    var _a = action.props, initialData = _a.initialData, columnDefs = _a.columnDefs, initialSortBys = _a.initialSortBys, initialSubtotalBys = _a.initialSubtotalBys, initialFilterBys = _a.initialFilterBys;
 	    /**
 	     * turn ColumnDefs into "Columns" which are decorated with behaviors
 	     */
 	    var columns = columnDefs.map(function (columnDef) {
 	        return _.assign({}, columnDef, {});
 	    });
+	    /**
+	     * create sortBys from columns (any properties passed via initialSortBys will override the same property in the corresponding Column object
+	     */
+	    var columnsWithSort = InitializeReducer_1.decorateColumnsWithSort(columns, initialSortBys);
+	    var sortBys = InitializeReducer_1.decorateInitialSortBys(initialSortBys, columnsWithSort);
 	    /**
 	     * create subtotalBys from columns (any properties passed in via initialSubtotalBys will override the same property on the corresponding Column object
 	     */
@@ -20222,14 +20229,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	    // create a simple shallow tree based on the initial data
 	    var tree = TreeBuilder_1.TreeBuilder.buildShallowTree(initialData);
+	    SortFactory_1.SortFactory.sortTree(tree, sortBys, columnsWithSort[0]);
 	    var rasterizedRows = TreeRasterizer_1.TreeRasterizer.rasterize(tree);
 	    return {
 	        rasterizedRows: rasterizedRows,
 	        displayStart: 0,
-	        columns: columns,
+	        columns: columnsWithSort,
 	        displayEnd: Math.min(rasterizedRows.length - 1, GigaStore_1.PROGRESSIVE_RENDERING_THRESHOLD),
 	        subtotalBys: subtotalBys,
-	        sortBys: [],
+	        sortBys: sortBys,
 	        filterBys: _.cloneDeep(initialFilterBys) || [],
 	        tree: tree,
 	        showSettingsPopover: false
@@ -20278,6 +20286,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    parentRow_1.children = [];
 	                    dataToSubtotalRows(rows).forEach(function (row) { return parentRow_1.addChild(row); });
 	                }
+	                SortFactory_1.SortFactory.sortRows(parentRow_1, state.sortBys, state.columns[0]);
 	                newState = _.clone(state); // force update
 	                break;
 	            case GigaStore_1.GigaActionType.COLLAPSE_ROW:
@@ -21129,7 +21138,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    TableHeader.prototype.renderLeafColumns = function (columns, key) {
 	        var _this = this;
 	        var ths = columns.map(function (column, i) {
-	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {column: column, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, tableHeaderClass: _this.props.tableHeaderClass, dispatcher: _this.props.dispatcher});
+	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {column: column, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, tableHeaderClass: _this.props.tableHeaderClass, gridProps: _this.props.gridProps, dispatcher: _this.props.dispatcher});
 	        });
 	        // add a placeholder to offset the scrollbar
 	        ths.push(React.createElement("th", {key: ths.length, style: { width: GigaGrid_1.getScrollBarWidth() + "px" }}));
@@ -21202,7 +21211,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }, className: cx}, React.createElement("span", {className: "header-text"}, column.title || column.colTag), this.renderSortIcon(), this.renderToolbar()));
 	    };
 	    TableHeaderCell.prototype.renderToolbar = function () {
-	        if (this.props.isFirstColumn)
+	        if (this.props.isFirstColumn && !this.props.gridProps.disableConfiguration)
 	            return (React.createElement(Toolbar_1.ToolbarToggle, {dispatcher: this.props.dispatcher}));
 	        else
 	            return null;

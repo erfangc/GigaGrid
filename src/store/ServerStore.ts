@@ -2,7 +2,7 @@ import {ReduceStore} from "flux/utils";
 import {Dispatcher} from "flux";
 import {GigaState, GigaProps} from "../components/GigaGrid";
 import {GigaStore, GigaActionType, GigaAction, PROGRESSIVE_RENDERING_THRESHOLD} from "./GigaStore";
-import {InitializeAction} from "./reducers/InitializeReducer";
+import {InitializeAction, decorateInitialSortBys, decorateColumnsWithSort} from "./reducers/InitializeReducer";
 import {TreeRasterizer} from "../static/TreeRasterizer";
 import {
     ToggleCellSelectAction,
@@ -16,6 +16,7 @@ import {Column, BucketInfo} from "../models/ColumnLike";
 import {TreeBuilder} from "../static/TreeBuilder";
 import {Row, SubtotalRow, DetailRow} from "../models/Row";
 import {ToggleCollapseAction, toggleCollapseReducer} from "./reducers/RowCollapseReducers";
+import {SortFactory} from "../static/SortFactory";
 
 /**
  * Initial state reducer for Server store
@@ -27,6 +28,7 @@ function initialStateReducer(action:InitializeAction):GigaState {
     const {
         initialData,
         columnDefs,
+        initialSortBys,
         initialSubtotalBys,
         initialFilterBys,
     } = action.props;
@@ -36,6 +38,11 @@ function initialStateReducer(action:InitializeAction):GigaState {
     const columns = columnDefs.map(columnDef=> {
         return _.assign<{},Column>({}, columnDef, {});
     });
+    /**
+     * create sortBys from columns (any properties passed via initialSortBys will override the same property in the corresponding Column object
+     */
+    const columnsWithSort:Column[] = decorateColumnsWithSort(columns, initialSortBys);
+    const sortBys = decorateInitialSortBys(initialSortBys, columnsWithSort);
 
     /**
      * create subtotalBys from columns (any properties passed in via initialSubtotalBys will override the same property on the corresponding Column object
@@ -47,16 +54,17 @@ function initialStateReducer(action:InitializeAction):GigaState {
 
     // create a simple shallow tree based on the initial data
     const tree = TreeBuilder.buildShallowTree(initialData);
+    SortFactory.sortTree(tree, sortBys, columnsWithSort[0]);
 
     const rasterizedRows:Row[] = TreeRasterizer.rasterize(tree);
 
     return {
         rasterizedRows: rasterizedRows,
         displayStart: 0,
-        columns: columns,
+        columns: columnsWithSort,
         displayEnd: Math.min(rasterizedRows.length - 1, PROGRESSIVE_RENDERING_THRESHOLD),
         subtotalBys: subtotalBys,
-        sortBys: [],
+        sortBys: sortBys,
         filterBys: _.cloneDeep(initialFilterBys) || [],
         tree: tree,
         showSettingsPopover: false
@@ -111,6 +119,7 @@ export class ServerStore extends ReduceStore<GigaState> {
                     parentRow.children = [];
                     dataToSubtotalRows(rows).forEach(row=>parentRow.addChild(row));
                 }
+                SortFactory.sortRows(parentRow, state.sortBys, state.columns[0]);
                 newState = _.clone(state); // force update
                 break;
             case GigaActionType.COLLAPSE_ROW:
@@ -173,9 +182,9 @@ export class ServerStore extends ReduceStore<GigaState> {
 }
 
 export interface ServerSubtotalRow {
-    data: any
-    bucketInfo: BucketInfo
-    sectorPath: BucketInfo[]
+    data:any
+    bucketInfo:BucketInfo
+    sectorPath:BucketInfo[]
 }
 
 /**

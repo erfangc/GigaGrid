@@ -104,7 +104,7 @@ export interface GigaProps extends React.Props<GigaGrid> {
      * sector paths to mark as "selected"
      */
     initiallySelectedSubtotalRows?:string[][]
-
+    disableConfiguration?:boolean
     /**
      * custom classes
      */
@@ -139,7 +139,7 @@ export interface GigaState {
     subtotalBys:Column[]
     sortBys:Column[]
     filterBys:FilterBy[]
-    expandTable:boolean
+    expandTable?:boolean // TODO saumya - please revert this - didn't catch it in the code review but this is not a necessary state
     /*
      the displayable view of the data in `tree`
      */
@@ -255,7 +255,9 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                     <table className="header-table">
                         <TableHeader dispatcher={this.dispatcher} 
                                      columns={columns} 
-                                     tableHeaderClass={this.props.tableHeaderClass} />
+                                     tableHeaderClass={this.props.tableHeaderClass}
+                                     gridProps={this.props}
+                        />
                     </table>
                 </div>
                 <div ref={c=>this.viewport=c}
