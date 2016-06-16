@@ -19,6 +19,7 @@ describe("TableHeader", ()=> {
             <table>
                 <TableHeader ref={c=>component=c}
                              columns={columns}
+                             gridProps={{}}
                              dispatcher={null}/>
             </table>
         );

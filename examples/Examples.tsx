@@ -29,7 +29,7 @@ function getAJAX(sectorPath:BucketInfo[],
     };
 
     return {
-        url: "http://nyclabbxg8wp.na.blkint.com:59171/analysis/fetch-rows",
+        url: "http://localhost:59171/analysis/fetch-rows",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -136,6 +136,7 @@ export class Examples extends React.Component<{}, ExampleState> {
                           columnDefs={Examples.columnDefs()}
                           initialSubtotalBys={Examples.initialSubtotalBys()}
                           useServerStore={true}
+                          disableConfiguration={true}
                           fetchRowsActionCreator={fetchRowsActionCreator}/>);
 
     }

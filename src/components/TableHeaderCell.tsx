@@ -87,7 +87,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
     }
 
     renderToolbar() {
-        if (this.props.isFirstColumn)
+        if (this.props.isFirstColumn && !this.props.gridProps.disableConfiguration)
             return (<ToolbarToggle dispatcher={this.props.dispatcher}/>);
         else
             return null;
