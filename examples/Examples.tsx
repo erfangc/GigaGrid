@@ -1,71 +1,150 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {GigaGrid} from "../index";
-import UKBudget from "./data/UKBudget";
-import {GigaProps, GigaState} from "../src/components/GigaGrid";
-import {Tabs, Tab} from "react-bootstrap";
-import {Row} from "../src/models/Row";
-import {SortDirection} from "../src/models/ColumnLike";
+import {ColumnDef, BucketInfo} from "../src/models/ColumnLike";
 import "../styles/theme/Default.styl";
+import {Row, SubtotalRow} from "../src/models/Row";
+import {Dispatcher} from "flux";
+import {GigaAction, GigaActionType} from "../src/store/GigaStore";
+import {ServerSubtotalRow} from "../src/store/ServerStore";
+import $ = require('jquery');
 
-interface ExamplesProps extends React.Props<Examples> {
-    ukBudget:GigaProps
+// helper
+function getAJAX(sectorPath:BucketInfo[],
+                 select:ColumnDef[],
+                 groupBy:ColumnDef,
+                 onSuccess:(any)=>any) {
+
+    const payload = {
+        select: select,
+        groupBy: groupBy,
+        sectorPath: sectorPath
+    };
+
+    const fullRequest = {
+        filter: [],
+        date: "20160603",
+        client: "DEFAULT",
+        payload: payload
+    };
+
+    return {
+        url: "http://localhost:59171/analysis/fetch-rows",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(fullRequest),
+        type: 'POST',
+        success: onSuccess
+    }
+
 }
 
 interface ExampleState {
-    activeTabKey:number
+    initialData:ServerSubtotalRow[]
 }
 
-export class Examples extends React.Component<ExamplesProps, ExampleState> {
+export class Examples extends React.Component<{}, ExampleState> {
 
-    constructor(props:ExamplesProps) {
-        super(props);
-        this.state = {
-            activeTabKey: 0
-        }
+    static initialSubtotalBys() {
+        return [
+            {colTag: "metadata.business_unit", title: "Business Unit"},
+            {colTag: "metadata.risk_profile", title: "Risk Profile"},
+            {colTag: "metadata.office", title: "Office"},
+        ];
     }
 
-    private handleTabSelect(idx) {
-        // trigger resize on click so the table headers adjust
-        this.setState({
-            activeTabKey: idx
-        });
+    static columnDefs() {
+        return [
+            {colTag: "accountID", title: "Account ID"},
+            {colTag: "metadata.advisor_id", title: "Advisor", aggregationMethod: "COUNT"},
+            {colTag: "risk.accountRisk", title: "Account Risk", aggregationMethod: "AVERAGE", formatInstruction: {roundTo: 2}},
+            {colTag: "risk.benchRisk", title: "Benchmark Risk", aggregationMethod: "AVERAGE", formatInstruction: {roundTo: 2}}
+        ];
+    }
+
+    constructor(props:{}) {
+        super(props);
+        this.state = {
+            initialData: []
+        };
+        $.ajax(getAJAX(
+            [],
+            Examples.columnDefs(),
+            Examples.initialSubtotalBys()[0], (resp) => {
+                this.setState({
+                    initialData: resp.rows
+                });
+            }));
     }
 
     render() {
         return (
             <div>
-                <div className="container">
-                    <br/>
-                    <Tabs activeKey={this.state.activeTabKey} onSelect={idx=>this.handleTabSelect(idx)}
-                          animation={false}>
-                        <Tab eventKey={0} title="Basic Example">
-                            <br/>
-                            {this.renderBasicExample()}
-                        </Tab>
-                    </Tabs>
+                <div>
+                    {this.renderBasicExample()}
                 </div>
             </div>
         );
     }
 
     private renderBasicExample() {
-        return (<GigaGrid
-            onRowClick={(row:Row, state:GigaState)=>{
-                row; state;
-                debugger;
-                return true;
-            }}
-            initialSortBys={[{"colTag":"WOther", direction: SortDirection.DESC}]}
-            {...this.props.ukBudget}
-        />);
+
+        const columnDefs = Examples.columnDefs();
+        const initialSubtotalBys = Examples.initialSubtotalBys();
+
+        function fetchRowsActionCreator(row:Row, dispatch:Dispatcher<GigaAction>) {
+            // TODO figure out how to create a server requests from the variables available in this scope
+            if ((row as SubtotalRow).getNumChildren() > 0 || (row as SubtotalRow).detailRows.length > 0) {
+                dispatch.dispatch({
+                    type: GigaActionType.TOGGLE_ROW_COLLAPSE,
+                    subtotalRow: row
+                });
+            } else {
+                // load more data (this will result in a spinner)
+                dispatch.dispatch({
+                    type: GigaActionType.LOADING_MORE_DATA,
+                    parentRow: row
+                });
+                // simulate more data with a time out
+                var groupBy = null;
+                // when the current row's SP is the same depth as subtotalBys then we must request detailed rows, otherwise request groupBy
+                // as the column at the same index as the depth of subtotalBys
+                const sp = row.sectorPath();
+                if (sp.length < initialSubtotalBys.length)
+                    groupBy = initialSubtotalBys[sp.length];
+
+                const ajaxRequest = getAJAX(sp, columnDefs, groupBy, (resp) => {
+                    dispatch.dispatch({
+                        type: GigaActionType.GOT_MORE_DATA,
+                        isDetail: resp.detail,
+                        rows: resp.rows,
+                        parentRow: row
+                    });
+                });
+                $.ajax(ajaxRequest);
+            }
+        }
+
+        const {initialData} = this.state;
+        if (initialData.length == 0) {
+            return <i className="fa fa-spinner fa-spin"/>;
+        } else
+            return (
+                <GigaGrid initialData={initialData}
+                          columnDefs={Examples.columnDefs()}
+                          initialSubtotalBys={Examples.initialSubtotalBys()}
+                          useServerStore={true}
+                          fetchRowsActionCreator={fetchRowsActionCreator}/>);
+
     }
 
 }
 
 function main() {
     // App Entry point
-    ReactDOM.render(<Examples ukBudget={UKBudget}/>, document.getElementById("app"));
+    ReactDOM.render(<Examples />, document.getElementById("app"));
 }
 
 main();

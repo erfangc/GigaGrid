@@ -38,6 +38,7 @@ export class GigaRow extends React.Component<GigaRowProps, any> {
                               column={column}
                               rowHeight={this.props.rowHeight}
                               dispatcher={this.props.dispatcher}
+                              gridProps={this.props.gridProps}
                               row={this.props.row}/>)
             });
         return <tr className={cx} style={{height: this.props.rowHeight}} onClick={(e:SyntheticEvent)=>{

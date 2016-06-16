@@ -113,13 +113,15 @@ export class GigaStore extends ReduceStore<GigaState> {
         return newState;
     }
 
-    private static shouldTriggerRasterization(action:GigaAction) {
+    static shouldTriggerRasterization(action:GigaAction) {
         return [
                 GigaActionType.CLEAR_SORT,
                 GigaActionType.NEW_SORT,
                 GigaActionType.TOGGLE_ROW_COLLAPSE,
                 GigaActionType.COLLAPSE_ALL,
                 GigaActionType.EXPAND_ALL,
+                GigaActionType.COLLAPSE_ROW,
+                GigaActionType.GOT_MORE_DATA,
                 GigaActionType.COLUMNS_UPDATE
             ].indexOf(action.type) !== -1;
     }
@@ -136,6 +138,9 @@ export enum GigaActionType {
     TOGGLE_ROW_COLLAPSE,
     COLLAPSE_ALL,
     EXPAND_ALL,
+    GOT_MORE_DATA,
+    LOADING_MORE_DATA,
+    COLLAPSE_ROW,
     TOGGLE_ROW_SELECT,
     TOGGLE_CELL_SELECT,
     CHANGE_ROW_DISPLAY_BOUNDS,

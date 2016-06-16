@@ -1,8 +1,24 @@
 import {SubtotalRow, DetailRow} from "../models/Row";
 import * as _ from "lodash";
 import {Column, ColumnFormat, BucketInfo} from "../models/ColumnLike";
+import {ServerSubtotalRow, dataToSubtotalRows} from "../store/ServerStore";
 
 export class TreeBuilder {
+
+    /**
+     * create a shallow tree (with only 1 level - and assume it represents the results of the top most layer subtotal logic
+     * @param rows
+     * @param subtotalBys
+     * @returns {Tree}
+     */
+    public static buildShallowTree(rows:ServerSubtotalRow[]): Tree {
+        const grandTotal = new SubtotalRow({colTag: null, title: "Grand Total", value: null});
+        grandTotal.setSectorPath([]);
+        dataToSubtotalRows(rows).forEach(row=>{
+            grandTotal.addChild(row);
+        });
+        return new Tree(grandTotal);
+    }
 
     /**
      * traverse the tree and find nodes that has identical sector path, set toggleCollapse to false
