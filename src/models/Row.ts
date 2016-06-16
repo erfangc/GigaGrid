@@ -9,7 +9,7 @@ export interface Row {
     get(columnDef:ColumnDef):any
     getByColTag(colTag:string):any
     toggleSelect(select?:boolean):void
-    sectorPath():string[]
+    sectorPath():BucketInfo[]
     setSectorPath(sp:string[])
 }
 
@@ -87,13 +87,30 @@ export class DetailRow extends GenericRow {
 
 }
 
+/**
+ * creating a subtotal row has the following ingredients
+ *  - bucketInfo
+ *  - sectorPath
+ *  - data
+ *  - optional: children
+ *  - optional: detailRows
+ */
 export class SubtotalRow extends GenericRow {
 
     public detailRows:DetailRow[];
+    private _isLoading:boolean = false;
     private children:SubtotalRow[] = [];
     private childrenByTitle:{ [title:string]:SubtotalRow; } = {};
     private _isCollapsed:boolean = false;
     public bucketInfo:BucketInfo;
+
+    isLoading():boolean {
+        return this._isLoading;
+    }
+    
+    setIsLoading(state:boolean) {
+        this._isLoading = state;
+    }
 
     toggleCollapse(state?:boolean) {
         if (state != undefined)

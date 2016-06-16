@@ -340,6 +340,7 @@ export class TestUtils {
 
     static getSimpleSubtotalRow():SubtotalRow {
         const subtotalRow:SubtotalRow = new SubtotalRow({
+            colTag: "col",
             title: "Value",
             value: 1001
         });

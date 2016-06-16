@@ -42,18 +42,26 @@ export class DefaultCellRenderer {
         this.props = props;
     }
 
-    private onCollapseToggle(e:SyntheticEvent) {
+    onCollapseToggle(e:SyntheticEvent) {
         e.preventDefault();
         e.stopPropagation(); // we don't want toggle collapse to also trigger a row / cell clicked event
 
-        const action:ToggleCollapseAction = {
-            type: GigaActionType.TOGGLE_ROW_COLLAPSE,
-            subtotalRow: this.props.row as SubtotalRow
-        };
-        this.props.dispatcher.dispatch(action);
+        const gridProps = this.props.gridProps;
+        if (gridProps) {
+            if (gridProps.fetchRowsActionCreator)
+                gridProps.fetchRowsActionCreator(this.props.row, this.props.dispatcher);
+            else
+                throw "error: server store in use yet fetchRowsActionCreator not defined on GigaGrid props";
+        } else {
+            const action:ToggleCollapseAction = {
+                type: GigaActionType.TOGGLE_ROW_COLLAPSE,
+                subtotalRow: this.props.row as SubtotalRow
+            };
+            this.props.dispatcher.dispatch(action);
+        }
     }
 
-    private onClick() {
+    onClick() {
         var action = {
             type: GigaActionType.TOGGLE_CELL_SELECT,
             row: this.props.row,
@@ -62,7 +70,7 @@ export class DefaultCellRenderer {
         this.props.dispatcher.dispatch(action);
     }
 
-    private calculateStyle() {
+    calculateStyle() {
         return {
             width: this.props.column.width,
             height: this.props.rowHeight,
@@ -70,8 +78,7 @@ export class DefaultCellRenderer {
         };
     }
 
-    private renderCellWithCollapseToggle(row:SubtotalRow):JSX.Element {
-
+    renderCellWithCollapseToggle(row:SubtotalRow):JSX.Element {
         const cx = classNames({
             "fa": true,
             "fa-plus-square-o": row.isCollapsed(),
@@ -82,12 +89,13 @@ export class DefaultCellRenderer {
                 <span>
                     <i className={cx} onClick={e=>this.onCollapseToggle(e)}/>&nbsp;
                     {row.bucketInfo.title || ""}
+                    {row.isLoading() ? [" ",<i className="fa fa-spinner fa-spin"/>] : null}
                 </span>
             </td>
         );
     }
 
-    private renderNormalCell(row:Row, column:Column):JSX.Element {
+    renderNormalCell(row:Row, column:Column):JSX.Element {
         var renderedCellContent:JSX.Element|string|number = format(row.get(column), column.formatInstruction) || "";
         if (!row.isDetail()
             && (column.aggregationMethod === AggregationMethod.COUNT || column.aggregationMethod === AggregationMethod.COUNT_DISTINCT))
