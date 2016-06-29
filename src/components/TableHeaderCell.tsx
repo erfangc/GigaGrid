@@ -40,26 +40,30 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
     render() {
         const column = this.props.column;
 
-        const style = {
-            overflow: "visible",
-            position: "relative"
-        };
+        if(_.isFunction(column.headerTemplateCreator)){
+            return column.headerTemplateCreator(column);
+        }
+        else{
+            const style = {
+                overflow: "visible",
+                position: "relative"
+            };
 
-        const componentClasses:ClassDictionary = {
-            "text-align-right": column.format === ColumnFormat.NUMBER,
-            "text-align-left": column.format !== ColumnFormat.NUMBER
-        };
+            const componentClasses:ClassDictionary = {
+                "text-align-right": column.format === ColumnFormat.NUMBER,
+                "text-align-left": column.format !== ColumnFormat.NUMBER
+            };
 
-        if (this.props.tableHeaderClass)
-            componentClasses["this.props.tableHeaderClass"] = true;
-        else
-            componentClasses["table-header"] = true;
+            if (this.props.tableHeaderClass)
+                componentClasses["this.props.tableHeaderClass"] = true;
+            else
+                componentClasses["table-header"] = true;
 
-        const cx = classNames(componentClasses);
+            const cx = classNames(componentClasses);
 
-        return (
-            <th style={style}
-                onClick={()=>{
+            return (
+                <th style={style}
+                    onClick={()=>{
                     const {direction} = this.props.column;
                     const sortBy: Column = _.assign<{},Column>({},this.props.column, {
                         direction: direction === SortDirection.DESC ? SortDirection.ASC : SortDirection.DESC
@@ -70,14 +74,16 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
                     };
                     this.props.dispatcher.dispatch(payload);
                 }}
-                className={cx}>
-                <span className="header-text">
-                    {column.title || column.colTag}
-                </span>
-                {this.renderSortIcon()}
-                {this.renderToolbar()}
-            </th>
-        );
+                    className={cx}>
+                    <span className="header-text">
+                        {column.title || column.colTag}
+                    </span>
+                    {this.renderSortIcon()}
+                    {this.renderToolbar()}
+                </th>
+            );
+        }
+
     }
 
     renderToolbar() {

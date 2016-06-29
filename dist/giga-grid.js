@@ -19528,7 +19528,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var TreeBuilder_1 = __webpack_require__(32);
 	var ColumnLike_1 = __webpack_require__(6);
 	function default_1(action) {
-	    var _a = action.props, data = _a.data, columnDefs = _a.columnDefs, columnGroups = _a.columnGroups, initialSubtotalBys = _a.initialSubtotalBys, initialSortBys = _a.initialSortBys, initialFilterBys = _a.initialFilterBys, initiallyExpandedSubtotalRows = _a.initiallyExpandedSubtotalRows, initiallySelectedSubtotalRows = _a.initiallySelectedSubtotalRows;
+	    var _a = action.props, data = _a.data, columnDefs = _a.columnDefs, columnGroups = _a.columnGroups, initialSubtotalBys = _a.initialSubtotalBys, initialSortBys = _a.initialSortBys, initialFilterBys = _a.initialFilterBys, initiallyExpandedSubtotalRows = _a.initiallyExpandedSubtotalRows, initiallySelectedSubtotalRows = _a.initiallySelectedSubtotalRows, expandTable = _a.expandTable;
 	    /**
 	     * turn ColumnDefs into "Columns" which are decorated with behaviors
 	     */
@@ -19574,7 +19574,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        sortBys: sortBys,
 	        filterBys: _.cloneDeep(initialFilterBys) || [],
 	        tree: tree,
-	        showSettingsPopover: false
+	        showSettingsPopover: false,
+	        expandTable: expandTable
 	    };
 	}
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -20944,30 +20945,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	    TableHeaderCell.prototype.render = function () {
 	        var _this = this;
 	        var column = this.props.column;
-	        var style = {
-	            overflow: "visible",
-	            position: "relative"
-	        };
-	        var componentClasses = {
-	            "text-align-right": column.format === ColumnLike_1.ColumnFormat.NUMBER,
-	            "text-align-left": column.format !== ColumnLike_1.ColumnFormat.NUMBER
-	        };
-	        if (this.props.tableHeaderClass)
-	            componentClasses["this.props.tableHeaderClass"] = true;
-	        else
-	            componentClasses["table-header"] = true;
-	        var cx = classNames(componentClasses);
-	        return (React.createElement("th", {style: style, onClick: function () {
-	            var direction = _this.props.column.direction;
-	            var sortBy = _.assign({}, _this.props.column, {
-	                direction: direction === ColumnLike_1.SortDirection.DESC ? ColumnLike_1.SortDirection.ASC : ColumnLike_1.SortDirection.DESC
-	            });
-	            var payload = {
-	                type: GigaStore_1.GigaActionType.NEW_SORT,
-	                sortBys: [sortBy]
+	        if (_.isFunction(column.headerTemplateCreator)) {
+	            return column.headerTemplateCreator(column);
+	        }
+	        else {
+	            var style = {
+	                overflow: "visible",
+	                position: "relative"
 	            };
-	            _this.props.dispatcher.dispatch(payload);
-	        }, className: cx}, React.createElement("span", {className: "header-text"}, column.title || column.colTag), this.renderSortIcon(), this.renderToolbar()));
+	            var componentClasses = {
+	                "text-align-right": column.format === ColumnLike_1.ColumnFormat.NUMBER,
+	                "text-align-left": column.format !== ColumnLike_1.ColumnFormat.NUMBER
+	            };
+	            if (this.props.tableHeaderClass)
+	                componentClasses["this.props.tableHeaderClass"] = true;
+	            else
+	                componentClasses["table-header"] = true;
+	            var cx = classNames(componentClasses);
+	            return (React.createElement("th", {style: style, onClick: function () {
+	                var direction = _this.props.column.direction;
+	                var sortBy = _.assign({}, _this.props.column, {
+	                    direction: direction === ColumnLike_1.SortDirection.DESC ? ColumnLike_1.SortDirection.ASC : ColumnLike_1.SortDirection.DESC
+	                });
+	                var payload = {
+	                    type: GigaStore_1.GigaActionType.NEW_SORT,
+	                    sortBys: [sortBy]
+	                };
+	                _this.props.dispatcher.dispatch(payload);
+	            }, className: cx}, React.createElement("span", {className: "header-text"}, column.title || column.colTag), this.renderSortIcon(), this.renderToolbar()));
+	        }
 	    };
 	    TableHeaderCell.prototype.renderToolbar = function () {
 	        if (this.props.isFirstColumn)
