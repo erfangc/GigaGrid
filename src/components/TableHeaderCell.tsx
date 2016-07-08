@@ -12,6 +12,7 @@ export interface TableHeaderProps extends GridSubcomponentProps<TableHeaderCell>
     tableHeaderClass?:string
     isFirstColumn?:boolean
     isLastColumn?:boolean
+    columnNumber:number
 }
 
 export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
@@ -40,8 +41,27 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
     render() {
         const column = this.props.column;
 
+        const componentClasses:ClassDictionary = {
+            "text-align-right": column.format === ColumnFormat.NUMBER,
+            "text-align-left": column.format !== ColumnFormat.NUMBER
+        };
+
+        if (this.props.tableHeaderClass)
+            componentClasses[`${this.props.tableHeaderClass}`] = true;
+        else
+            componentClasses["table-header"] = true;
+
+        componentClasses[`giga-grid-column-${this.props.columnNumber}`] = true;
+        const cx = classNames(componentClasses);
+
         if(_.isFunction(column.headerTemplateCreator)){
-            return column.headerTemplateCreator(column);
+            return (
+                <div className={cx}>
+                    <span className="content header-text">
+                        {column.headerTemplateCreator(column)}
+                    </span>
+                </div>
+            );
         }
         else{
             const style = {
@@ -49,38 +69,26 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
                 position: "relative"
             };
 
-            const componentClasses:ClassDictionary = {
-                "text-align-right": column.format === ColumnFormat.NUMBER,
-                "text-align-left": column.format !== ColumnFormat.NUMBER
-            };
-
-            if (this.props.tableHeaderClass)
-                componentClasses["this.props.tableHeaderClass"] = true;
-            else
-                componentClasses["table-header"] = true;
-
-            const cx = classNames(componentClasses);
-
             return (
-                <th style={style}
+                <div style={style}
                     onClick={()=>{
-                    const {direction} = this.props.column;
-                    const sortBy: Column = _.assign<{},Column>({},this.props.column, {
-                        direction: direction === SortDirection.DESC ? SortDirection.ASC : SortDirection.DESC
-                    });
-                    const payload: SortUpdateAction = {
-                        type: GigaActionType.NEW_SORT,
-                        sortBys: [sortBy]
-                    };
-                    this.props.dispatcher.dispatch(payload);
-                }}
+                        const {direction} = this.props.column;
+                        const sortBy: Column = _.assign<{},Column>({},this.props.column, {
+                            direction: direction === SortDirection.DESC ? SortDirection.ASC : SortDirection.DESC
+                        });
+                        const payload: SortUpdateAction = {
+                            type: GigaActionType.NEW_SORT,
+                            sortBys: [sortBy]
+                        };
+                        this.props.dispatcher.dispatch(payload);
+                    }}
                     className={cx}>
-                    <span className="header-text">
+                    <span className="content header-text">
                         {column.title || column.colTag}
                     </span>
                     {this.renderSortIcon()}
                     {this.renderToolbar()}
-                </th>
+                </div>
             );
         }
 

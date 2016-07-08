@@ -120,7 +120,7 @@ export class TreeBuilder {
             if (shouldCollapse) {
                 _toggleCollapse(child, shouldCollapse);
             } else { // expand all
-                if (child.getChildren().length || child.sectorPath().length === 1)
+                if (child.getChildren().length || child.sectorPath().length === 1 ||child.detailRows.length)
                     _toggleCollapse(child, shouldCollapse);
             }
         });

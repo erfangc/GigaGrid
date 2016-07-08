@@ -6,7 +6,7 @@ import {GigaProps, GigaState} from "../src/components/GigaGrid";
 import {Tabs, Tab} from "react-bootstrap";
 import {Row} from "../src/models/Row";
 import {SortDirection} from "../src/models/ColumnLike";
-import "../styles/theme/Default.styl";
+import "../styles/theme/Retro.styl";
 
 interface ExamplesProps extends React.Props<Examples> {
     ukBudget:GigaProps
@@ -51,7 +51,6 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
     }
 
     private renderBasicExample(additionalUserButtons) {
-        console.log(UKBudget);
         var additionalUserButtons = additionalUserButtons.map(this.callCustomFunction.bind(this));
         return (<GigaGrid
             onRowClick={(row:Row, state:GigaState)=>{

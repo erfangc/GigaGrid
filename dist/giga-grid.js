@@ -61,7 +61,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.AggregationMethod = ColumnLike_1.AggregationMethod;
 	exports.ColumnFormat = ColumnLike_1.ColumnFormat;
 	exports.SortDirection = ColumnLike_1.SortDirection;
-	var Cell_tsx_1 = __webpack_require__(59);
+	var Cell_tsx_1 = __webpack_require__(63);
 	exports.DefaultCellRenderer = Cell_tsx_1.DefaultCellRenderer;
 	var GigaStore_1 = __webpack_require__(7);
 	exports.GigaActionType = GigaStore_1.GigaActionType;
@@ -85,9 +85,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ColumnLike_1 = __webpack_require__(6);
 	var GigaStore_1 = __webpack_require__(7);
 	var flux_1 = __webpack_require__(42);
-	var TableBody_1 = __webpack_require__(44);
-	var TableHeader_1 = __webpack_require__(48);
-	var SettingsPopover_1 = __webpack_require__(55);
+	var FrozenTableBody_1 = __webpack_require__(44);
+	var ScrollableTableBody_1 = __webpack_require__(50);
+	var TableHeader_1 = __webpack_require__(52);
+	var SettingsPopover_1 = __webpack_require__(59);
 	var ServerStore_1 = __webpack_require__(34);
 	var $ = __webpack_require__(36);
 	/**
@@ -157,7 +158,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	            bodyStyle.maxHeight = this.props.bodyHeight;
 	        else
 	            bodyStyle.height = this.props.bodyHeight;
-	        return (React.createElement("div", {className: "giga-grid"}, this.renderSettingsPopover(), React.createElement("div", {className: "giga-grid-header-container"}, React.createElement("table", {className: "header-table"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns, tableHeaderClass: this.props.tableHeaderClass, gridProps: this.props}))), React.createElement("div", {ref: function (c) { return state.viewport = c; }, onScroll: function () { return _this.dispatchDisplayBoundChange(); }, className: "giga-grid-body-viewport", style: bodyStyle}, React.createElement("table", {ref: function (c) { return state.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(TableBody_1.TableBody, {dispatcher: this.dispatcher, rows: state.rasterizedRows, columns: columns[columns.length - 1], displayStart: state.displayStart, displayEnd: state.displayEnd, rowHeight: this.props.rowHeight, gridProps: this.props})))));
+	        /**
+	         * We need to figure out what columns go in which sub table depending on how many static left headers there are
+	         */
+	        var allCols = columns[columns.length - 1];
+	        var leftCols, rightCols;
+	        // Static headers experience a latency issue in internet explorer.  Let's not enable it for now
+	        if (isNaN(this.props.staticLeftHeaders) || isInternetExplorer()) {
+	            leftCols = [];
+	            rightCols = allCols;
+	        }
+	        else if (allCols.length > this.props.staticLeftHeaders) {
+	            leftCols = _.take(allCols, this.props.staticLeftHeaders);
+	            rightCols = _.takeRight(allCols, allCols.length - this.props.staticLeftHeaders);
+	        }
+	        else
+	            throw "Please declare a staticLeftHeaders prop which is less than the number of columns in the table.";
+	        return (React.createElement("div", {className: "giga-grid giga-grid-" + this.state.gridID}, this.renderSettingsPopover(), React.createElement("div", {className: "giga-grid-header-container"}, React.createElement(TableHeader_1.TableHeader, {dispatcher: this.dispatcher, columns: columns, tableHeaderClass: this.props.tableHeaderClass, staticLeftHeaders: this.props.staticLeftHeaders, gridProps: this.props})), React.createElement("div", {ref: function (c) { return state.viewport = c; }, onScroll: function () { return _this.dispatchDisplayBoundChange(); }, className: "giga-grid-body-viewport", style: bodyStyle}, leftCols.length == 0 ? "" :
+	            React.createElement("div", {className: "giga-grid-left-headers-container"}, React.createElement("div", {className: "giga-grid-body-canvas"}, React.createElement(FrozenTableBody_1.FrozenTableBody, {dispatcher: this.dispatcher, rows: state.rasterizedRows, columns: leftCols, displayStart: state.displayStart, displayEnd: state.displayEnd, rowHeight: this.props.rowHeight, gridProps: this.props}))), React.createElement("div", {className: "giga-grid-right-data-container"}, React.createElement("div", {ref: function (c) { return state.canvas = c; }, className: "giga-grid-body-canvas"}, React.createElement(ScrollableTableBody_1.ScrollableTableBody, {dispatcher: this.dispatcher, rows: state.rasterizedRows, columns: rightCols, displayStart: state.displayStart, displayEnd: state.displayEnd, rowHeight: this.props.rowHeight, gridProps: this.props}))))));
 	    };
 	    GigaGrid.prototype.componentWillReceiveProps = function (nextProps) {
 	        var payload = {
@@ -171,60 +189,155 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * on component update, we use jquery to align table headers
 	     * this is the "give up" solution, implemented in 0.1.7
 	     */
-	    GigaGrid.prototype.componentDidUpdate = function () {
-	        this.synchTableHeaderWidthToFirstRow();
+	    GigaGrid.prototype.componentDidUpdate = function (prevProps, prevState) {
+	        if (this.state.rasterizedRows.length !== prevState.rasterizedRows.length ||
+	            this.state.displayStart !== prevState.displayStart ||
+	            this.state.filterBys !== prevState.filterBys ||
+	            this.state.sortBys !== prevState.sortBys ||
+	            this.state.subtotalBys !== prevState.subtotalBys)
+	            this.synchTableHeaderWidthToFirstRow();
 	    };
 	    /**
 	     * yes this is still a thing!
 	     */
 	    GigaGrid.prototype.synchTableHeaderWidthToFirstRow = function () {
 	        var node = ReactDOM.findDOMNode(this);
-	        var $canvas = $(node).find("table.giga-grid-body-canvas");
-	        /*
-	         * EXPERIMENTAL, traverse parent DOM nodes until we find one whose width is not zero
+	        /**
+	         * To improve performance, we use our own dynamic stylesheet for giga-grid.  jQuery is slow, so by adding
+	         * a class to each cell, labeled with each column number, we are able to simply change the dimensions of a cell
+	         * dynamically by changing the styling directly in the stylesheet, instead of at the element level.
 	         */
-	        var rootNodeWidth = findParentWidth(node);
-	        var canvasWidth = computeCanvasWidth($canvas, rootNodeWidth);
-	        $canvas.innerWidth(canvasWidth);
-	        $(node).find("table.header-table").innerWidth(canvasWidth);
-	        var $tableHeaders = $(node).find("th.table-header");
-	        var $firstRowInBody = $(node).find("tbody tr.placeholder-false:first td");
-	        _.chain($tableHeaders).zip($firstRowInBody).each(function (pair) {
-	            var $th = $(pair[0]);
-	            var $td = $(pair[1]);
-	            $th.innerWidth($td.innerWidth());
-	        }).value();
+	        var widths = [];
+	        // Gets with of .content in a cell, or 80, whichever is greater
+	        function getWidthForDataCell(elem) {
+	            var leftPadding = +($(elem).css("padding-left").replace(/[^\d.-]/g, ''));
+	            var rightPadding = +($(elem).css("padding-right").replace(/[^\d.-]/g, ''));
+	            // 80 px is the min width of cell
+	            return Math.max($(elem).find(".content").innerWidth() + leftPadding + rightPadding, 80);
+	        }
+	        // This function alligns header cells and their underlying data cells
+	        function allignColumns($headerContainers, $rows) {
+	            _.forEach($headerContainers, function (header, index) {
+	                var headerWidth = getWidthForDataCell(header);
+	                // Get all data cells underlying this column
+	                var $dataElems = $rows.find(".content-container:nth-of-type(" + (index + 1) + ")");
+	                // Get all widths of underlying data cells, and find the largest
+	                var dataWidths = _.map($dataElems, function (elem) { return getWidthForDataCell(elem); });
+	                var columnWidth = Math.max.apply(null, dataWidths.concat(headerWidth)) + 10; // Adding 10 for padding
+	                widths.push(columnWidth);
+	            });
+	        }
+	        // Get jQuery objects for four "quadrant" containers
+	        var $leftHeaderContainers = $(node).find(".left-static-headers .table-header");
+	        var $rightHeaderContainers = $(node).find(".right-scrolling-headers .table-header:not(.blank-header-cell)");
+	        var $leftHeaderRows = $(node).find(".giga-grid-left-headers-container .giga-grid-row");
+	        var $dataRows = $(node).find(".giga-grid-right-data-container .giga-grid-row");
+	        // Set max height of row containers so scroll bars show up
+	        $(node).find(".giga-grid-left-headers-container").css("max-height", $(node).find(".giga-grid-body-viewport").innerHeight());
+	        $(node).find(".giga-grid-right-data-container").css("max-height", $(node).find(".giga-grid-body-viewport").innerHeight());
+	        allignColumns($leftHeaderContainers, $leftHeaderRows);
+	        allignColumns($rightHeaderContainers, $dataRows);
+	        var gigaGridWidth = $(node).innerWidth();
+	        var sumOfHeaderWidths = widths.reduce(function (sum, memo) { return sum + memo; }, 0);
+	        // If the table doesn't fit the width of the container, make them fit it
+	        if (gigaGridWidth * .98 > sumOfHeaderWidths) {
+	            var $allHeaderContainers = $(node).find(".table-header:not(.blank-header-cell)");
+	            var $blankCell = $(node).find(".table-header.blank-header-cell");
+	            var expandAllHeadersBy_1 = (gigaGridWidth - sumOfHeaderWidths - $blankCell.innerWidth()) / $allHeaderContainers.length;
+	            widths = widths.map(function (w) { return w + expandAllHeadersBy_1; });
+	        }
+	        var oldSheetNode = $("head > style#giga-grid-style-" + this.state.gridID);
+	        var sheet = _.findWhere(document.styleSheets, { ownerNode: oldSheetNode }) || this.createGigaGridStyleSheet();
+	        for (var i = 0; i < $leftHeaderContainers.length + $rightHeaderContainers.length; ++i) {
+	            var selectorText = ".giga-grid-" + this.state.gridID + " .giga-grid-column-" + i;
+	            var cssText = "width: " + widths[i] + "px !important;";
+	            var oldRule = _.findWhere(sheet, { selectorText: selectorText });
+	            if (oldRule)
+	                sheet.deleteRule(sheet.rules.indexOf(oldRule));
+	            if (!oldRule || oldRule.style.cssText !== cssText)
+	                sheet.insertRule(selectorText + " { " + cssText + " }", 0);
+	        }
+	        var $leftHeadersDataContainer = $(node).find(".giga-grid-left-headers-container");
+	        var $bodyViewport = $(node).find(".giga-grid-body-viewport");
+	        //setting max-width of sticky data and headers as 75% of the body-viewport width
+	        $leftHeadersDataContainer.css("max-width", 0.75 * $bodyViewport.innerWidth());
+	        $(node).find(".left-static-headers").css("max-width", 0.75 * $bodyViewport.innerWidth());
+	        // After we're done with all this, make sure the data container and respective headers has max-width matching the container minus the left-headers
+	        $(node).find(".giga-grid-right-data-container").css("max-width", $(node).innerWidth() - $leftHeadersDataContainer.innerWidth());
+	        $(node).find(".right-scrolling-headers").css("max-width", $(node).innerWidth() - $leftHeadersDataContainer.innerWidth());
 	    };
-	    GigaGrid.prototype.horizontalScrollHandler = function () {
+	    /**
+	     * Creates a new stylesheet for this grid
+	     * @returns {CSSStyleSheet}
+	     */
+	    GigaGrid.prototype.createGigaGridStyleSheet = function () {
+	        var style = document.createElement("style");
+	        style.setAttribute("id", "giga-grid-style-" + this.state.gridID);
+	        document.head.appendChild(style);
+	        return style.sheet;
+	    };
+	    GigaGrid.prototype.scrollHandler = function (e) {
+	        e.preventDefault();
 	        var node = ReactDOM.findDOMNode(this);
-	        var scrollLeftAmount = $(node).scrollLeft();
-	        $(node).parent().find('.giga-grid-header-container').scrollLeft(scrollLeftAmount);
+	        var dataContainer = $(node).parent().find('.giga-grid-right-data-container');
+	        var scrollLeftAmount = dataContainer.scrollLeft();
+	        var scrollTopAmount = dataContainer.scrollTop();
+	        $(node).parent().find('.giga-grid-left-headers-container').scrollTop(scrollTopAmount);
+	        $(node).parent().parent().find('.right-scrolling-headers').scrollTop(scrollTopAmount);
+	        $(node).parent().parent().find('.right-scrolling-headers').scrollLeft(scrollLeftAmount);
+	    };
+	    /**
+	     * A wheely important function.  You can't scroll normally in the left-headers area, but a user would expect the
+	     * table to scroll if he or she uses the mousewheel.  So we have to listen for this event.
+	     */
+	    GigaGrid.prototype.wheelScrollHandler = function (e) {
+	        e.preventDefault();
+	        // This covers all browsers, see https://www.sitepoint.com/html5-javascript-mouse-wheel/
+	        var amountToScroll = -Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))) * 53;
+	        debugger;
+	        var node = ReactDOM.findDOMNode(this);
+	        var dataContainer = $(node).parent().find('.giga-grid-right-data-container');
+	        var scrollTopAmount = dataContainer.scrollTop();
+	        $(node).parent().find('.giga-grid-left-headers-container').scrollTop(scrollTopAmount + amountToScroll);
+	        $(node).parent().parent().find('.giga-grid-right-data-container').scrollTop(scrollTopAmount + amountToScroll);
 	    };
 	    GigaGrid.prototype.componentDidMount = function () {
 	        /*
-	         * subscribe to window.resize
+	         * subscribe to window event listeners
 	         */
-	        if (typeof window !== "undefined")
+	        if (typeof window !== "undefined") {
 	            window.addEventListener('resize', this.synchTableHeaderWidthToFirstRow.bind(this));
+	            // Bind scroll listener to move headers when data container is scrolled
+	            var node = ReactDOM.findDOMNode(this);
+	            var leftPanel = $(node).find('.giga-grid-left-headers-container').get(0);
+	            var rightPanel = $(node).find('.giga-grid-right-data-container').get(0);
+	            rightPanel && rightPanel.addEventListener('scroll', this.scrollHandler);
+	            rightPanel && rightPanel.addEventListener('mousewheel', this.wheelScrollHandler);
+	            leftPanel && leftPanel.addEventListener('mousewheel', this.wheelScrollHandler);
+	            leftPanel && leftPanel.addEventListener('MozMousePixelScroll', this.wheelScrollHandler);
+	        }
 	        /*
 	         re-compute displayStart && displayEnd
 	         */
 	        this.dispatchDisplayBoundChange();
 	        this.synchTableHeaderWidthToFirstRow();
 	        this.expandTable();
-	        // Bind scroll listener to move headers when data container is scrolled
-	        var node = ReactDOM.findDOMNode(this);
-	        $(node).find('.giga-grid-body-viewport').scroll(this.horizontalScrollHandler);
 	    };
 	    GigaGrid.prototype.componentWillUnmount = function () {
-	        // Unbind the scroll listener
-	        var node = ReactDOM.findDOMNode(this);
-	        $(node).find('.giga-grid-body-viewport').unbind('scroll', this.horizontalScrollHandler);
 	        /*
-	         * unsubscribe to window.resize
+	         * unsubscribe to window event listeners
 	         */
-	        if (typeof window !== "undefined")
+	        if (typeof window !== "undefined") {
 	            window.removeEventListener('resize', this.synchTableHeaderWidthToFirstRow);
+	            // Unbind the scroll listener
+	            var node = ReactDOM.findDOMNode(this);
+	            $(node).find('.giga-grid-right-data-container').unbind('scroll', this.scrollHandler);
+	            var leftPanel = $(node).find('.giga-grid-left-headers-container').get(0);
+	            var rightPanel = $(node).find('.giga-grid-right-data-container').get(0);
+	            rightPanel && rightPanel.addEventListener('scroll', this.scrollHandler);
+	            leftPanel && leftPanel.removeEventListener('mousewheel', this.wheelScrollHandler);
+	            leftPanel && leftPanel.removeEventListener('MozMousePixelScroll', this.wheelScrollHandler);
+	        }
 	    };
 	    GigaGrid.prototype.dispatchDisplayBoundChange = function () {
 	        var state = this.store.getState();
@@ -291,33 +404,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    if (scrollBarWidth === null)
 	        scrollBarWidth = computeScrollBarWidth();
-	    return scrollBarWidth;
+	    return scrollBarWidth + 5;
 	}
 	exports.getScrollBarWidth = getScrollBarWidth;
 	/**
-	 * traverse the node until a viable parent with a non-zero width is found
-	 * stops until the node run out of parent (i.e. reaches the <html/> element
-	 * @param node
-	 * @returns {number}
+	 * Find out if a user is using internet explorer
+	 * @returns {boolean}
 	 */
-	function findParentWidth(node) {
-	    var rootNodeWidth = $(node).innerWidth();
-	    var $parent = $(node).parent();
-	    while ($parent && rootNodeWidth === 0) {
-	        rootNodeWidth = $parent.innerWidth();
-	        $parent = $parent.parent();
-	    }
-	    return rootNodeWidth;
+	function isInternetExplorer() {
+	    var ua = window.navigator.userAgent;
+	    var msie = ua.indexOf("MSIE ");
+	    return (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)); // If Internet Explorer, return version number
 	}
-	/**
-	 * Computes the canvas (table)'s width given the root node of the grid's width
-	 * @param $canvas
-	 * @param rootNodeWidth
-	 * @returns {number}
-	 */
-	function computeCanvasWidth($canvas, rootNodeWidth) {
-	    return rootNodeWidth - getScrollBarWidth();
-	}
+	exports.isInternetExplorer = isInternetExplorer;
 	//# sourceMappingURL=GigaGrid.js.map
 
 /***/ },
@@ -12787,7 +12886,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 define the # of rows necessary to trigger progressive rendering
 	 below which all row display bound change events are ignored
 	 */
-	exports.PROGRESSIVE_RENDERING_THRESHOLD = 100;
+	exports.PROGRESSIVE_RENDERING_THRESHOLD = 20;
 	/**
 	 * state store for the table, relevant states and stored here. the only way to mutate these states are by sending GigaAction(s) through the Dispatcher given to the store at construction
 	 * there are no way to direct set the state. The GigaGrid controller-view React Component draws its state updates from this store. Updates are automatically triggered for every state mutation through
@@ -19602,6 +19701,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (sortBys)
 	        tree = SortFactory_1.SortFactory.sortTree(tree, sortBys, columns[0]);
 	    var rasterizedRows = TreeRasterizer_1.TreeRasterizer.rasterize(tree);
+	    var gridID = parseInt(_.uniqueId());
 	    return {
 	        rasterizedRows: rasterizedRows,
 	        displayStart: 0,
@@ -19615,7 +19715,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        viewport: undefined,
 	        canvas: undefined,
 	        expandTable: expandTable,
-	        additionalUserButtons: additionalUserButtons
+	        additionalUserButtons: additionalUserButtons,
+	        gridID: gridID
 	    };
 	}
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -20252,7 +20353,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {{rasterizedRows: Row[], displayStart: number, columns: any, displayEnd: number, subtotalBys: Column[], sortBys: Array, filterBys: (T|Array), tree: Tree, showSettingsPopover: boolean}}
 	 */
 	function initialStateReducer(action) {
-	    var _a = action.props, initialData = _a.initialData, columnDefs = _a.columnDefs, initialSortBys = _a.initialSortBys, initialSubtotalBys = _a.initialSubtotalBys, initialFilterBys = _a.initialFilterBys;
+	    var _a = action.props, initialData = _a.initialData, columnDefs = _a.columnDefs, initialSortBys = _a.initialSortBys, initialSubtotalBys = _a.initialSubtotalBys, initialFilterBys = _a.initialFilterBys, expandTable = _a.expandTable, additionalUserButtons = _a.additionalUserButtons;
 	    /**
 	     * turn ColumnDefs into "Columns" which are decorated with behaviors
 	     */
@@ -20275,6 +20376,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var tree = TreeBuilder_1.TreeBuilder.buildShallowTree(initialData);
 	    SortFactory_1.SortFactory.sortTree(tree, sortBys, columnsWithSort[0]);
 	    var rasterizedRows = TreeRasterizer_1.TreeRasterizer.rasterize(tree);
+	    var gridID = parseInt(_.uniqueId());
 	    return {
 	        rasterizedRows: rasterizedRows,
 	        displayStart: 0,
@@ -20284,7 +20386,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        sortBys: sortBys,
 	        filterBys: _.cloneDeep(initialFilterBys) || [],
 	        tree: tree,
-	        showSettingsPopover: false
+	        showSettingsPopover: false,
+	        viewport: undefined,
+	        canvas: undefined,
+	        expandTable: expandTable,
+	        additionalUserButtons: additionalUserButtons,
+	        gridID: gridID
 	    };
 	}
 	var ServerStore = (function (_super) {
@@ -20428,19 +20535,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 35 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	var $ = __webpack_require__(36);
 	var ScrollCalculator = (function () {
 	    function ScrollCalculator() {
 	    }
 	    ScrollCalculator.computeDisplayBoundaries = function (rowHeight, viewport, canvas) {
-	        var viewportOffset = viewport.offset().top;
-	        var canvasOffset = canvas.offset().top;
-	        var progress = viewportOffset - canvasOffset;
-	        var displayStart = Math.floor(progress / parseInt(rowHeight));
-	        var tableHeight = viewport[0].style.maxHeight ? viewport[0].style.maxHeight : viewport[0].style.height ? viewport[0].style.height : "";
-	        var displayEnd = displayStart + Math.ceil(parseInt(tableHeight) / parseInt(rowHeight));
+	        var displayStart = 0, displayEnd = 20;
+	        if (viewport.offset() && canvas.offset()) {
+	            var viewportOffset = viewport.offset().top;
+	            var canvasOffset = canvas.offset().top;
+	            var progress = viewportOffset - canvasOffset;
+	            var displayStart = Math.floor(progress / parseInt(rowHeight));
+	            var tableHeight = viewport[0].style.maxHeight ? parseInt(viewport[0].style.maxHeight) : $(viewport[0]).height();
+	            displayEnd = displayStart + Math.ceil(tableHeight / parseInt(rowHeight));
+	        }
 	        return {
 	            displayStart: displayStart,
 	            displayEnd: displayEnd
@@ -30692,59 +30803,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var GigaRow_1 = __webpack_require__(45);
-	var GigaStore_1 = __webpack_require__(7);
-	var TableBody = (function (_super) {
-	    __extends(TableBody, _super);
-	    function TableBody(props) {
-	        _super.call(this, props);
+	var FrozenGigaRow_1 = __webpack_require__(45);
+	var TableBody_1 = __webpack_require__(49);
+	var FrozenTableBody = (function (_super) {
+	    __extends(FrozenTableBody, _super);
+	    function FrozenTableBody() {
+	        _super.apply(this, arguments);
 	    }
-	    TableBody.prototype.isProgressiveRenderingEnabled = function () {
-	        return (this.props.rows.length > GigaStore_1.PROGRESSIVE_RENDERING_THRESHOLD
-	            && typeof this.props.displayStart !== "undefined"
-	            && typeof this.props.displayEnd !== "undefined"
-	            && typeof this.props.rowHeight !== this.props.rowHeight);
+	    FrozenTableBody.prototype.mapRowsInBody = function (rowHeight, row, i) {
+	        return (React.createElement(FrozenGigaRow_1.FrozenGigaRow, {key: i, columns: this.props.columns, row: row, rowHeight: "" + rowHeight, dispatcher: this.props.dispatcher, staticLeftHeaders: true, gridProps: this.props.gridProps}));
 	    };
-	    TableBody.prototype.renderRows = function (rowHeight, start, end) {
-	        var _this = this;
-	        function validateBounds() {
-	            return typeof start !== "undefined" && typeof end !== "undefined";
-	        }
-	        var rows = validateBounds() ? this.props.rows.slice(start, end + 1) : this.props.rows;
-	        return rows.map(function (row, i) {
-	            return (React.createElement(GigaRow_1.GigaRow, {key: i, columns: _this.props.columns, row: row, rowHeight: "" + rowHeight, gridProps: _this.props.gridProps, dispatcher: _this.props.dispatcher}));
-	        });
-	    };
-	    TableBody.prototype.render = function () {
-	        if (this.isProgressiveRenderingEnabled()) {
-	            /*
-	             we only render from displayStart -> displayEnd in rows
-	             we compute the theoretical height of elements between 0 -> displayStart
-	             and the theoretical height of elements between displayEnd -> rows.length
-	             and create a placeholder for each quantity
-	
-	             this allow us to preserve the total height of contents in tbody without actually rendering every row
-	             */
-	            var rows = this.renderRows(parseInt(this.props.rowHeight), this.props.displayStart, this.props.displayEnd);
-	            var placeholderHeights = this.calculatePlaceholderHeight();
-	            return (React.createElement("tbody", null, React.createElement("tr", {style: { height: placeholderHeights.upperPlaceholderHeight + "px" }, className: "placeholder"}), rows, React.createElement("tr", {style: { height: placeholderHeights.lowerPlaceholderHeight + "px" }, className: "placeholder"})));
-	        }
-	        else {
-	            var rows = this.renderRows(parseInt(this.props.rowHeight));
-	            return (React.createElement("tbody", null, rows));
-	        }
-	    };
-	    TableBody.prototype.calculatePlaceholderHeight = function () {
-	        var rowHeight = parseInt(this.props.rowHeight);
-	        return {
-	            upperPlaceholderHeight: Math.max(this.props.displayStart * rowHeight, 0),
-	            lowerPlaceholderHeight: Math.max((this.props.rows.length - this.props.displayEnd) * rowHeight, 0)
-	        };
-	    };
-	    return TableBody;
-	}(React.Component));
-	exports.TableBody = TableBody;
-	//# sourceMappingURL=TableBody.js.map
+	    return FrozenTableBody;
+	}(TableBody_1.TableBody));
+	exports.FrozenTableBody = FrozenTableBody;
+	//# sourceMappingURL=FrozenTableBody.js.map
 
 /***/ },
 /* 45 */
@@ -30757,9 +30829,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(46);
+	var GigaRow_1 = __webpack_require__(46);
+	var Cell_1 = __webpack_require__(48);
+	var FrozenGigaRow = (function (_super) {
+	    __extends(FrozenGigaRow, _super);
+	    function FrozenGigaRow() {
+	        _super.apply(this, arguments);
+	    }
+	    FrozenGigaRow.prototype.mapColumnToCell = function (column, i) {
+	        return (React.createElement(Cell_1.Cell, {key: i, isFirstColumn: i === 0, column: column, columnNumber: i, rowHeight: this.props.rowHeight, dispatcher: this.props.dispatcher, gridProps: this.props.gridProps, row: this.props.row}));
+	    };
+	    return FrozenGigaRow;
+	}(GigaRow_1.GigaRow));
+	exports.FrozenGigaRow = FrozenGigaRow;
+	//# sourceMappingURL=FrozenGigaRow.js.map
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(2);
+	var classNames = __webpack_require__(47);
 	var GigaStore_1 = __webpack_require__(7);
-	var Cell_1 = __webpack_require__(47);
 	var GigaRow = (function (_super) {
 	    __extends(GigaRow, _super);
 	    function GigaRow(props) {
@@ -30770,6 +30867,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var props = this.props;
 	        var subtotalLvlClassName = "subtotal-row-" + (props.row.sectorPath().length - 1);
 	        var rowClassNames = {
+	            "giga-grid-row": true,
 	            "placeholder-false": true,
 	            "subtotal-row": !props.row.isDetail(),
 	            "detail-row": props.row.isDetail(),
@@ -30779,10 +30877,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var cx = classNames(rowClassNames);
 	        var cells = props
 	            .columns
-	            .map(function (column, i) {
-	            return (React.createElement(Cell_1.Cell, {key: i, isFirstColumn: i === 0, column: column, rowHeight: _this.props.rowHeight, dispatcher: _this.props.dispatcher, gridProps: _this.props.gridProps, row: _this.props.row}));
-	        });
-	        return React.createElement("tr", {className: cx, style: { height: this.props.rowHeight }, onClick: function (e) {
+	            .map(this.mapColumnToCell.bind(this));
+	        return React.createElement("div", {className: cx, style: { height: this.props.rowHeight }, onClick: function (e) {
 	            e.preventDefault();
 	            var action = {
 	                type: GigaStore_1.GigaActionType.TOGGLE_ROW_SELECT,
@@ -30791,13 +30887,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _this.props.dispatcher.dispatch(action);
 	        }}, cells);
 	    };
+	    GigaRow.prototype.mapColumnToCell = function (column, i) {
+	        throw "Must extend GigaRow, cannot use is as a component directly!";
+	    };
 	    return GigaRow;
 	}(React.Component));
 	exports.GigaRow = GigaRow;
 	//# sourceMappingURL=GigaRow.js.map
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -30851,7 +30950,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -30861,7 +30960,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(46);
+	var classNames = __webpack_require__(47);
 	var ColumnLike_1 = __webpack_require__(6);
 	var SubtotalAggregator_1 = __webpack_require__(31);
 	var GigaStore_1 = __webpack_require__(7);
@@ -30874,8 +30973,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var props = this.props;
 	        var row = props.row;
 	        var column = props.column;
-	        if (_.isFunction(column.cellTemplateCreator))
-	            return column.cellTemplateCreator(row, column, props);
+	        if (_.isFunction(column.cellTemplateCreator)) {
+	            return (React.createElement("div", {className: "content-container giga-grid-column-" + props.columnNumber}, React.createElement("span", {className: "content"}, column.cellTemplateCreator(row, column, props))));
+	        }
 	        else
 	            return new DefaultCellRenderer(props).render();
 	    };
@@ -30926,7 +31026,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "fa-plus-square-o": row.isCollapsed(),
 	            "fa-minus-square-o": !row.isCollapsed()
 	        });
-	        return (React.createElement("td", {style: this.calculateStyle(), onClick: function (e) { return _this.onClick(); }}, React.createElement("span", null, React.createElement("i", {className: cx, onClick: function (e) { return _this.onCollapseToggle(e); }}), " ", row.bucketInfo.title || "", row.isLoading() ? [" ", React.createElement("i", {className: "fa fa-spinner fa-spin"})] : null)));
+	        return (React.createElement("div", {className: "content-container giga-grid-column-" + this.props.columnNumber, style: this.calculateStyle(), onClick: function (e) { return _this.onClick(); }}, React.createElement("span", {className: "content group-by-cell"}, React.createElement("i", {className: cx, onClick: function (e) { return _this.onCollapseToggle(e); }}), " ", row.bucketInfo.title || "", row.isLoading() ? [" ", React.createElement("i", {className: "fa fa-spinner fa-spin"})] : null)));
 	    };
 	    DefaultCellRenderer.prototype.renderNormalCell = function (row, column) {
 	        var _this = this;
@@ -30934,7 +31034,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!row.isDetail()
 	            && (column.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT || column.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT_DISTINCT))
 	            renderedCellContent = "[" + renderedCellContent + "]";
-	        return (React.createElement("td", {className: DefaultCellRenderer.calculateTextAlignment(row, column), onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, renderedCellContent));
+	        return (React.createElement("div", {className: "content-container giga-grid-column-" + this.props.columnNumber + " " + DefaultCellRenderer.calculateTextAlignment(row, column), onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, React.createElement("span", {className: "content"}, renderedCellContent || "\u00A0")));
 	    };
 	    DefaultCellRenderer.calculateTextAlignment = function (row, column) {
 	        var value = row.get(column);
@@ -30969,7 +31069,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=Cell.js.map
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -30979,7 +31079,124 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var TableHeaderCell_1 = __webpack_require__(49);
+	var GigaStore_1 = __webpack_require__(7);
+	var TableBody = (function (_super) {
+	    __extends(TableBody, _super);
+	    function TableBody(props) {
+	        _super.call(this, props);
+	    }
+	    TableBody.prototype.isProgressiveRenderingEnabled = function () {
+	        return (this.props.rows.length > GigaStore_1.PROGRESSIVE_RENDERING_THRESHOLD
+	            && typeof this.props.displayStart !== "undefined"
+	            && typeof this.props.displayEnd !== "undefined"
+	            && typeof this.props.rowHeight !== this.props.rowHeight);
+	    };
+	    TableBody.prototype.renderRows = function (rowHeight, start, end) {
+	        var _this = this;
+	        var rows = validateBounds(start, end) ? this.props.rows.slice(start, end + 1) : this.props.rows;
+	        return rows.map(function (row, i) { return _this.mapRowsInBody(rowHeight, row, i); });
+	    };
+	    TableBody.prototype.mapRowsInBody = function (rowHeight, row, i) {
+	        throw "Must extend TableBody, cannot use is as a component directly!";
+	    };
+	    TableBody.prototype.render = function () {
+	        if (this.isProgressiveRenderingEnabled()) {
+	            /*
+	             we only render from displayStart -> displayEnd in rows
+	             we compute the theoretical height of elements between 0 -> displayStart
+	             and the theoretical height of elements between displayEnd -> rows.length
+	             and create a placeholder for each quantity
+	
+	             this allows us to preserve the total height of contents in table without actually rendering every row
+	             */
+	            var rows = this.renderRows(parseInt(this.props.rowHeight), this.props.displayStart, this.props.displayEnd);
+	            var placeholderHeights = this.calculatePlaceholderHeight();
+	            return (React.createElement("div", null, React.createElement("div", {style: { height: placeholderHeights.upperPlaceholderHeight + "px" }, className: "placeholder"}), rows, React.createElement("div", {style: { height: placeholderHeights.lowerPlaceholderHeight + "px" }, className: "placeholder"})));
+	        }
+	        else {
+	            var rows = this.renderRows(parseInt(this.props.rowHeight));
+	            return (React.createElement("div", null, rows));
+	        }
+	    };
+	    TableBody.prototype.calculatePlaceholderHeight = function () {
+	        var rowHeight = parseInt(this.props.rowHeight);
+	        return {
+	            upperPlaceholderHeight: Math.max(this.props.displayStart * rowHeight, 0),
+	            lowerPlaceholderHeight: Math.max((this.props.rows.length - this.props.displayEnd) * rowHeight, 0)
+	        };
+	    };
+	    return TableBody;
+	}(React.Component));
+	exports.TableBody = TableBody;
+	function validateBounds(start, end) {
+	    return typeof start !== "undefined" && typeof end !== "undefined";
+	}
+	//# sourceMappingURL=TableBody.js.map
+
+/***/ },
+/* 50 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(2);
+	var TableBody_1 = __webpack_require__(49);
+	var ScrollableGigaRow_1 = __webpack_require__(51);
+	var ScrollableTableBody = (function (_super) {
+	    __extends(ScrollableTableBody, _super);
+	    function ScrollableTableBody() {
+	        _super.apply(this, arguments);
+	    }
+	    ScrollableTableBody.prototype.mapRowsInBody = function (rowHeight, row, i) {
+	        return (React.createElement(ScrollableGigaRow_1.ScrollableGigaRow, {key: i, columns: this.props.columns, row: row, rowHeight: "" + rowHeight, dispatcher: this.props.dispatcher, scrollableRightData: true, gridProps: this.props.gridProps}));
+	    };
+	    return ScrollableTableBody;
+	}(TableBody_1.TableBody));
+	exports.ScrollableTableBody = ScrollableTableBody;
+	//# sourceMappingURL=ScrollableTableBody.js.map
+
+/***/ },
+/* 51 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(2);
+	var GigaRow_1 = __webpack_require__(46);
+	var Cell_1 = __webpack_require__(48);
+	var ScrollableGigaRow = (function (_super) {
+	    __extends(ScrollableGigaRow, _super);
+	    function ScrollableGigaRow() {
+	        _super.apply(this, arguments);
+	    }
+	    ScrollableGigaRow.prototype.mapColumnToCell = function (column, i) {
+	        return (React.createElement(Cell_1.Cell, {key: i, isFirstColumn: i == 0 && !this.props.gridProps.staticLeftHeaders, column: column, columnNumber: i + (this.props.gridProps.staticLeftHeaders || 0), rowHeight: this.props.rowHeight, dispatcher: this.props.dispatcher, gridProps: this.props.gridProps, row: this.props.row}));
+	    };
+	    return ScrollableGigaRow;
+	}(GigaRow_1.GigaRow));
+	exports.ScrollableGigaRow = ScrollableGigaRow;
+	//# sourceMappingURL=ScrollableGigaRow.js.map
+
+/***/ },
+/* 52 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(2);
+	var TableHeaderCell_1 = __webpack_require__(53);
 	var GigaGrid_1 = __webpack_require__(1);
 	/**
 	 * terminology: column groups are columns that can span multiple `leaf` columns and physically reside
@@ -30993,7 +31210,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _super.call(this, props);
 	    }
 	    TableHeader.prototype.render = function () {
-	        return (React.createElement("thead", null, this.renderHeaderRows()));
+	        return (React.createElement("div", {className: "header-table"}, this.renderHeaderRows()));
 	    };
 	    TableHeader.prototype.renderHeaderRows = function () {
 	        var trs = [];
@@ -31003,23 +31220,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	        trs.push(this.renderLeafColumns(this.props.columns[i], i));
 	        return trs;
 	    };
-	    /**
-	     * TODO th with colSpan really screw up our ability to set width on columns
-	     */
 	    TableHeader.renderColumnGroups = function (columns, key) {
 	        var ths = columns.map(function (column, i) {
-	            return (React.createElement("th", {className: "column-group", key: i, colSpan: column.colSpan}, column.title));
+	            var style = {
+	                width: column.colSpan + "px"
+	            };
+	            return (React.createElement("div", {className: "column-group", key: i, style: style}, React.createElement("span", {className: "content header-text"}, column.title)));
 	        });
-	        return (React.createElement("tr", {className: "column-group-row", key: key}, ths));
+	        return (React.createElement("div", {className: "column-group-row", key: key}, ths));
 	    };
 	    TableHeader.prototype.renderLeafColumns = function (columns, key) {
 	        var _this = this;
 	        var ths = columns.map(function (column, i) {
-	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {column: column, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, tableHeaderClass: _this.props.tableHeaderClass, gridProps: _this.props.gridProps, dispatcher: _this.props.dispatcher});
+	            return React.createElement(TableHeaderCell_1.TableHeaderCell, {column: column, key: i, isFirstColumn: i === 0, isLastColumn: i === columns.length - 1, columnNumber: i, tableHeaderClass: _this.props.tableHeaderClass, gridProps: _this.props.gridProps, dispatcher: _this.props.dispatcher});
 	        });
 	        // add a placeholder to offset the scrollbar
-	        ths.push(React.createElement("th", {key: ths.length, style: { width: GigaGrid_1.getScrollBarWidth() + "px" }}));
-	        return (React.createElement("tr", {key: key}, ths));
+	        ths.push(React.createElement("div", {className: "blank-header-cell text-align-right table-header", key: ths.length, style: { minWidth: '0', width: GigaGrid_1.getScrollBarWidth() + "px" }}, " "));
+	        if (this.props.staticLeftHeaders > 0) {
+	            var leftHeaders = ths.slice(0, this.props.staticLeftHeaders);
+	            var rightScrollingHeaders = ths.slice(this.props.staticLeftHeaders);
+	            return (React.createElement("div", {key: key}, React.createElement("div", {className: "left-static-headers"}, leftHeaders), React.createElement("div", {className: "right-scrolling-headers"}, rightScrollingHeaders)));
+	        }
+	        else
+	            return (React.createElement("div", {className: "right-scrolling-headers", key: key}, ths));
 	    };
 	    return TableHeader;
 	}(React.Component));
@@ -31027,7 +31250,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=TableHeader.js.map
 
 /***/ },
-/* 49 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31037,11 +31260,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(46);
+	var classNames = __webpack_require__(47);
 	var ColumnLike_1 = __webpack_require__(6);
 	var GigaStore_1 = __webpack_require__(7);
 	var _ = __webpack_require__(4);
-	var Toolbar_1 = __webpack_require__(50);
+	var Toolbar_1 = __webpack_require__(54);
 	var TableHeaderCell = (function (_super) {
 	    __extends(TableHeaderCell, _super);
 	    function TableHeaderCell(props) {
@@ -31062,24 +31285,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	    TableHeaderCell.prototype.render = function () {
 	        var _this = this;
 	        var column = this.props.column;
+	        var componentClasses = {
+	            "text-align-right": column.format === ColumnLike_1.ColumnFormat.NUMBER,
+	            "text-align-left": column.format !== ColumnLike_1.ColumnFormat.NUMBER
+	        };
+	        if (this.props.tableHeaderClass)
+	            componentClasses[("" + this.props.tableHeaderClass)] = true;
+	        else
+	            componentClasses["table-header"] = true;
+	        componentClasses[("giga-grid-column-" + this.props.columnNumber)] = true;
+	        var cx = classNames(componentClasses);
 	        if (_.isFunction(column.headerTemplateCreator)) {
-	            return column.headerTemplateCreator(column);
+	            return (React.createElement("div", {className: cx}, React.createElement("span", {className: "content header-text"}, column.headerTemplateCreator(column))));
 	        }
 	        else {
 	            var style = {
 	                overflow: "visible",
 	                position: "relative"
 	            };
-	            var componentClasses = {
-	                "text-align-right": column.format === ColumnLike_1.ColumnFormat.NUMBER,
-	                "text-align-left": column.format !== ColumnLike_1.ColumnFormat.NUMBER
-	            };
-	            if (this.props.tableHeaderClass)
-	                componentClasses["this.props.tableHeaderClass"] = true;
-	            else
-	                componentClasses["table-header"] = true;
-	            var cx = classNames(componentClasses);
-	            return (React.createElement("th", {style: style, onClick: function () {
+	            return (React.createElement("div", {style: style, onClick: function () {
 	                var direction = _this.props.column.direction;
 	                var sortBy = _.assign({}, _this.props.column, {
 	                    direction: direction === ColumnLike_1.SortDirection.DESC ? ColumnLike_1.SortDirection.ASC : ColumnLike_1.SortDirection.DESC
@@ -31089,7 +31313,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    sortBys: [sortBy]
 	                };
 	                _this.props.dispatcher.dispatch(payload);
-	            }, className: cx}, React.createElement("span", {className: "header-text"}, column.title || column.colTag), this.renderSortIcon(), this.renderToolbar()));
+	            }, className: cx}, React.createElement("span", {className: "content header-text"}, column.title || column.colTag), this.renderSortIcon(), this.renderToolbar()));
 	        }
 	    };
 	    TableHeaderCell.prototype.renderToolbar = function () {
@@ -31104,7 +31328,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=TableHeaderCell.js.map
 
 /***/ },
-/* 50 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31114,7 +31338,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	__webpack_require__(51);
+	__webpack_require__(55);
 	var GigaStore_1 = __webpack_require__(7);
 	/**
 	 * The job of the toolbar is to dispatch actions to the flux reduce store. It is free to query the state of the grid
@@ -31142,16 +31366,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=Toolbar.js.map
 
 /***/ },
-/* 51 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(52);
+	var content = __webpack_require__(56);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(54)(content, {});
+	var update = __webpack_require__(58)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -31168,10 +31392,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 52 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(53)();
+	exports = module.exports = __webpack_require__(57)();
 	// imports
 	
 	
@@ -31182,7 +31406,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 53 */
+/* 57 */
 /***/ function(module, exports) {
 
 	/*
@@ -31238,7 +31462,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 54 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -31490,7 +31714,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 55 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31501,11 +31725,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	var React = __webpack_require__(2);
 	var ColumnLike_1 = __webpack_require__(6);
-	var SortableItem_1 = __webpack_require__(56);
+	var SortableItem_1 = __webpack_require__(60);
 	var _ = __webpack_require__(4);
 	var GigaStore_1 = __webpack_require__(7);
-	__webpack_require__(57);
-	var classNames = __webpack_require__(46);
+	__webpack_require__(61);
+	var classNames = __webpack_require__(47);
 	var SettingsPopover = (function (_super) {
 	    __extends(SettingsPopover, _super);
 	    function SettingsPopover(props) {
@@ -31649,7 +31873,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=SettingsPopover.js.map
 
 /***/ },
-/* 56 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31659,7 +31883,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(46);
+	var classNames = __webpack_require__(47);
 	var SortableItem = (function (_super) {
 	    __extends(SortableItem, _super);
 	    function SortableItem(props) {
@@ -31716,16 +31940,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=SortableItem.js.map
 
 /***/ },
-/* 57 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(58);
+	var content = __webpack_require__(62);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(54)(content, {});
+	var update = __webpack_require__(58)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -31742,10 +31966,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 58 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(53)();
+	exports = module.exports = __webpack_require__(57)();
 	// imports
 	
 	
@@ -31756,7 +31980,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 59 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31766,7 +31990,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(2);
-	var classNames = __webpack_require__(46);
+	var classNames = __webpack_require__(47);
 	var ColumnLike_1 = __webpack_require__(6);
 	var SubtotalAggregator_1 = __webpack_require__(31);
 	var GigaStore_1 = __webpack_require__(7);
@@ -31779,8 +32003,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var props = this.props;
 	        var row = props.row;
 	        var column = props.column;
-	        if (_.isFunction(column.cellTemplateCreator))
-	            return column.cellTemplateCreator(row, column, props);
+	        if (_.isFunction(column.cellTemplateCreator)) {
+	            return (React.createElement("div", {className: "content-container giga-grid-column-" + props.columnNumber}, React.createElement("span", {className: "content"}, column.cellTemplateCreator(row, column, props))));
+	        }
 	        else
 	            return new DefaultCellRenderer(props).render();
 	    };
@@ -31831,7 +32056,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "fa-plus-square-o": row.isCollapsed(),
 	            "fa-minus-square-o": !row.isCollapsed()
 	        });
-	        return (React.createElement("td", {style: this.calculateStyle(), onClick: function (e) { return _this.onClick(); }}, React.createElement("span", null, React.createElement("i", {className: cx, onClick: function (e) { return _this.onCollapseToggle(e); }}), " ", row.bucketInfo.title || "", row.isLoading() ? [" ", React.createElement("i", {className: "fa fa-spinner fa-spin"})] : null)));
+	        return (React.createElement("div", {className: "content-container giga-grid-column-" + this.props.columnNumber, style: this.calculateStyle(), onClick: function (e) { return _this.onClick(); }}, React.createElement("span", {className: "content group-by-cell"}, React.createElement("i", {className: cx, onClick: function (e) { return _this.onCollapseToggle(e); }}), " ", row.bucketInfo.title || "", row.isLoading() ? [" ", React.createElement("i", {className: "fa fa-spinner fa-spin"})] : null)));
 	    };
 	    DefaultCellRenderer.prototype.renderNormalCell = function (row, column) {
 	        var _this = this;
@@ -31839,7 +32064,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!row.isDetail()
 	            && (column.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT || column.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT_DISTINCT))
 	            renderedCellContent = "[" + renderedCellContent + "]";
-	        return (React.createElement("td", {className: DefaultCellRenderer.calculateTextAlignment(row, column), onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, renderedCellContent));
+	        return (React.createElement("div", {className: "content-container giga-grid-column-" + this.props.columnNumber + " " + DefaultCellRenderer.calculateTextAlignment(row, column), onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, React.createElement("span", {className: "content"}, renderedCellContent || "\u00A0")));
 	    };
 	    DefaultCellRenderer.calculateTextAlignment = function (row, column) {
 	        var value = row.get(column);

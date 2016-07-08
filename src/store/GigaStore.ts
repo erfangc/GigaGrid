@@ -26,7 +26,7 @@ import {columnUpdateReducer, ColumnUpdateAction} from "./reducers/ColumnUpdateRe
  define the # of rows necessary to trigger progressive rendering
  below which all row display bound change events are ignored
  */
-export const PROGRESSIVE_RENDERING_THRESHOLD:number = 100;
+export const PROGRESSIVE_RENDERING_THRESHOLD:number = 20;
 
 /**
  * state store for the table, relevant states and stored here. the only way to mutate these states are by sending GigaAction(s) through the Dispatcher given to the store at construction

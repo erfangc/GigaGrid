@@ -297,6 +297,12 @@ class PeopleTestData implements TestDataFactory {
     detailRows():Row[] {
         return TreeBuilder.buildTree(this.rawData()).getRoot().detailRows;
     }
+
+    gridProps():any{
+        return {
+            staticLeftHeaders: 1
+        }
+    }
 }
 
 export class TestUtils {

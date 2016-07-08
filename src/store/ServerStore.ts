@@ -33,6 +33,8 @@ function initialStateReducer(action:InitializeAction):GigaState {
         initialSortBys,
         initialSubtotalBys,
         initialFilterBys,
+        expandTable,
+        additionalUserButtons
     } = action.props;
     /**
      * turn ColumnDefs into "Columns" which are decorated with behaviors
@@ -60,6 +62,8 @@ function initialStateReducer(action:InitializeAction):GigaState {
 
     const rasterizedRows:Row[] = TreeRasterizer.rasterize(tree);
 
+    const gridID:number = parseInt(_.uniqueId());
+
     return {
         rasterizedRows: rasterizedRows,
         displayStart: 0,
@@ -69,7 +73,12 @@ function initialStateReducer(action:InitializeAction):GigaState {
         sortBys: sortBys,
         filterBys: _.cloneDeep(initialFilterBys) || [],
         tree: tree,
-        showSettingsPopover: false
+        showSettingsPopover: false,
+        viewport:undefined,
+        canvas:undefined,
+        expandTable,
+        additionalUserButtons,
+        gridID
     }
 }
 

@@ -10,31 +10,24 @@ div.giga-grid
     &:hover
       background-color toolbar-border-color
 
-  tr.selected
+  div.selected
     background-color selected-color
 
-  tr.subtotal-row.selected
+  div.subtotal-row.selected
     background-color subtotal-selected-color
 
-  tr th
+  div.table-header
     background-color: main-color
     color header-text-color
-    border-left: 1px solid cell-border-color
     border-right 1px solid cell-border-color
     border-bottom 1px solid cell-border-color
 
-  tr td
-    border 1px solid cell-border-color
+  div.content-container
+    border-right: 1px solid cell-border-color;
+    border-bottom: 1px solid cell-border-color;
 
-  tr td i:hover
+  div i:hover
     color cell-border-color
 
-  tr.subtotal-row
+  div.subtotal-row-0 .content-container
     background-color subtotal-color
-
-  tbody tr:hover
-    background-color selected-color
-
-  tr.subtotal-row:hover
-    background-color subtotal-selected-color
-
