@@ -12225,7 +12225,7 @@
     "TotExp": 60,
     "Income": 140,
     "Age": 28,
-    "Children": 1
+    "Children": 10000000000000000
   },
   {
     "WFood": 0.4924,
@@ -12253,8 +12253,7 @@
   },
   {
     "WFood": 0.2773,
-    "WFuel": 0.063,
-    "WCloth": 0.1868,
+    "WFuel": 1234,
     "WAlc": 0,
     "WTrans": 0.1168,
     "WOther": 0.3561,

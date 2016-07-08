@@ -1,16 +1,16 @@
 import * as React from 'react';
-import {Column} from "../models/ColumnLike";
-import {Row} from "../models/Row";
-import {GigaRow} from "./GigaRow";
-import {PROGRESSIVE_RENDERING_THRESHOLD} from "../store/GigaStore";
-import {GridSubcomponentProps} from "./GigaGrid";
+import {Column} from "../../models/ColumnLike";
+import {Row} from "../../models/Row";
+import {GigaRow} from "../GigaRow/GigaRow";
+import {PROGRESSIVE_RENDERING_THRESHOLD} from "../../store/GigaStore";
+import {GridSubcomponentProps} from "../GigaGrid";
 
 export interface TableBodyProps extends GridSubcomponentProps<TableBody> {
-    rows: Row[]
-    columns: Column[]
-    displayStart?: number
-    displayEnd?: number
-    rowHeight?: string
+    rows: Row[];
+    columns: Column[];
+    displayStart?: number;
+    displayEnd?: number;
+    rowHeight?: string;
 }
 
 export class TableBody extends React.Component<TableBodyProps,any> {
@@ -28,24 +28,16 @@ export class TableBody extends React.Component<TableBodyProps,any> {
         );
     }
 
-    private renderRows(rowHeight: number, start?:number, end?:number) {
-        function validateBounds() {
-            return typeof start !== "undefined" && typeof end !== "undefined";
-        }
+    renderRows(rowHeight: number, start?:number, end?:number):GigaRow[] {
+        const rows = validateBounds(start, end) ? this.props.rows.slice(start, end + 1) : this.props.rows;
+        return rows.map((row:Row, i:number) => this.mapRowsInBody(rowHeight, row, i));
+    }
 
-        const rows = validateBounds() ? this.props.rows.slice(start, end + 1) : this.props.rows;
-        return rows.map((row:Row, i:number) => {
-            return (<GigaRow key={i}
-                             columns={this.props.columns}
-                             row={row}
-                             rowHeight={`${rowHeight}`}
-                             dispatcher={this.props.dispatcher}
-                    />);
-        });
+    mapRowsInBody(rowHeight:number, row:Row, i:number){
+        throw "Must extend TableBody, cannot use is as a component directly!";
     }
 
     render() {
-
         if (this.isProgressiveRenderingEnabled()) {
 
             /*
@@ -54,25 +46,24 @@ export class TableBody extends React.Component<TableBodyProps,any> {
              and the theoretical height of elements between displayEnd -> rows.length
              and create a placeholder for each quantity
 
-             this allow us to preserve the total height of contents in tbody without actually rendering every row
+             this allows us to preserve the total height of contents in table without actually rendering every row
              */
             const rows = this.renderRows(parseInt(this.props.rowHeight), this.props.displayStart, this.props.displayEnd);
             const placeholderHeights = this.calculatePlaceholderHeight();
-
             return (
-                <tbody>
-                    <tr style={{height: placeholderHeights.upperPlaceholderHeight + "px"}} className="placeholder"/>
+                <div>
+                    <div style={{height: placeholderHeights.upperPlaceholderHeight + "px"}} className="placeholder"></div>
                     {rows}
-                    <tr style={{height: placeholderHeights.lowerPlaceholderHeight + "px"}} className="placeholder"/>
-                </tbody>
+                    <div style={{height: placeholderHeights.lowerPlaceholderHeight + "px"}} className="placeholder"></div>
+                </div>
             );
 
         } else {
             const rows = this.renderRows(parseInt(this.props.rowHeight));
             return (
-                <tbody>
+                <div>
                     {rows}
-                </tbody>
+                </div>
             );
         }
     }
@@ -84,4 +75,8 @@ export class TableBody extends React.Component<TableBodyProps,any> {
             lowerPlaceholderHeight: Math.max((this.props.rows.length - this.props.displayEnd) * rowHeight, 0)
         };
     }
+}
+
+function validateBounds(start:number, end:number):boolean {
+    return typeof start !== "undefined" && typeof end !== "undefined";
 }

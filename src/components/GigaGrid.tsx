@@ -6,7 +6,8 @@ import {Row} from "../models/Row";
 import {Tree} from "../static/TreeBuilder";
 import {GigaStore, GigaAction, GigaActionType} from "../store/GigaStore";
 import {Dispatcher} from "flux";
-import {TableBody} from "./TableBody";
+import {FrozenTableBody} from "./TableBody/FrozenTableBody";
+import {ScrollableTableBody} from "./TableBody/ScrollableTableBody";
 import {TableHeader} from "./TableHeader";
 import {SettingsPopover} from "./toolbar/SettingsPopover";
 import {InitializeAction} from "../store/reducers/InitializeReducer";
@@ -110,6 +111,7 @@ export interface GigaProps extends React.Props<GigaGrid> {
      */
     tableHeaderClass?:string
     expandTable?:boolean
+    staticLeftHeaders?:number
     additionalUserButtons?:AdditionalButton[]
 
 }
@@ -140,12 +142,12 @@ export interface AdditionalButton{
  */
 export interface GigaState {
 
+    gridID?:number
     tree:Tree
     columns:Column[]
     subtotalBys:Column[]
     sortBys:Column[]
     filterBys:FilterBy[]
-    expandTable?:boolean // TODO saumya - please revert this - didn't catch it in the code review but this is not a necessary state
     /*
      the displayable view of the data in `tree`
      */
@@ -211,6 +213,11 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         });
     }
 
+    refs: {
+        [key: string]: (Element);
+        stepInput: (HTMLInputElement);
+    };
+
     submitColumnConfigChange(action:GigaAction) {
         this.dispatcher.dispatch(action);
     }
@@ -258,32 +265,65 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         else
             bodyStyle.height = this.props.bodyHeight;
 
+
+        /**
+         * We need to figure out what columns go in which sub table depending on how many static left headers there are
+         */
+        const allCols = columns[columns.length-1];
+        let leftCols, rightCols;
+        // Static headers experience a latency issue in internet explorer.  Let's not enable it for now
+        if( isNaN(this.props.staticLeftHeaders) || isInternetExplorer() ){
+            leftCols = [];
+            rightCols = allCols;
+        }
+        else if( allCols.length > this.props.staticLeftHeaders ){
+            leftCols = _.take(allCols, this.props.staticLeftHeaders);
+            rightCols = _.takeRight(allCols, allCols.length - this.props.staticLeftHeaders);
+        }
+        else
+            throw "Please declare a staticLeftHeaders prop which is less than the number of columns in the table.";
+
         return (
-            <div className="giga-grid">
+            <div className={`giga-grid giga-grid-${this.state.gridID}`}>
                 {this.renderSettingsPopover()}
                 <div className="giga-grid-header-container">
-                    <table className="header-table">
-                        <TableHeader dispatcher={this.dispatcher} 
-                                     columns={columns} 
-                                     tableHeaderClass={this.props.tableHeaderClass}
-                                     gridProps={this.props}
-                        />
-                    </table>
+                    <TableHeader dispatcher={this.dispatcher}
+                                 columns={columns} 
+                                 tableHeaderClass={this.props.tableHeaderClass}
+                                 staticLeftHeaders={this.props.staticLeftHeaders}
+                                 gridProps={this.props}/>
                 </div>
                 <div ref={c=>state.viewport=c}
                      onScroll={()=>this.dispatchDisplayBoundChange()}
                      className="giga-grid-body-viewport"
                      style={bodyStyle}>
-                    <table ref={c=>state.canvas=c} className="giga-grid-body-canvas">
-                        <TableBody dispatcher={this.dispatcher}
-                                   rows={state.rasterizedRows}
-                                   columns={columns[columns.length-1]}
-                                   displayStart={state.displayStart}
-                                   displayEnd={state.displayEnd}
-                                   rowHeight={this.props.rowHeight}
-                                   gridProps={this.props}
-                        />
-                    </table>
+                    {
+                        leftCols.length == 0 ? "" :
+                        <div className="giga-grid-left-headers-container">
+                            <div className="giga-grid-body-canvas">
+                                <FrozenTableBody dispatcher={this.dispatcher}
+                                                 rows={state.rasterizedRows}
+                                                 columns={leftCols}
+                                                 displayStart={state.displayStart}
+                                                 displayEnd={state.displayEnd}
+                                                 rowHeight={this.props.rowHeight}
+                                                 gridProps={this.props}
+                                />
+                            </div>
+                        </div>
+                    }
+                    <div className="giga-grid-right-data-container">
+                        <div ref={c=>state.canvas=c} className="giga-grid-body-canvas">
+                            <ScrollableTableBody dispatcher={this.dispatcher}
+                                                 rows={state.rasterizedRows}
+                                                 columns={rightCols}
+                                                 displayStart={state.displayStart}
+                                                 displayEnd={state.displayEnd}
+                                                 rowHeight={this.props.rowHeight}
+                                                 gridProps={this.props}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>);
     }
@@ -301,8 +341,13 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
      * on component update, we use jquery to align table headers
      * this is the "give up" solution, implemented in 0.1.7
      */
-    componentDidUpdate() {
-        this.synchTableHeaderWidthToFirstRow();
+    componentDidUpdate(prevProps, prevState) {
+        if( this.state.rasterizedRows.length !== prevState.rasterizedRows.length ||
+            this.state.displayStart !== prevState.displayStart ||
+            this.state.filterBys !== prevState.filterBys ||
+            this.state.sortBys !== prevState.sortBys ||
+            this.state.subtotalBys !== prevState.subtotalBys)
+                this.synchTableHeaderWidthToFirstRow();
     }
 
     /**
@@ -310,37 +355,148 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
      */
     synchTableHeaderWidthToFirstRow() {
         const node:Element = ReactDOM.findDOMNode<Element>(this);
-        const $canvas = $(node).find("table.giga-grid-body-canvas");
-        /*
-         * EXPERIMENTAL, traverse parent DOM nodes until we find one whose width is not zero
+
+        /**
+         * To improve performance, we use our own dynamic stylesheet for giga-grid.  jQuery is slow, so by adding
+         * a class to each cell, labeled with each column number, we are able to simply change the dimensions of a cell
+         * dynamically by changing the styling directly in the stylesheet, instead of at the element level.
          */
-        const rootNodeWidth = findParentWidth(node);
+        var widths = [];
 
-        const canvasWidth = computeCanvasWidth($canvas, rootNodeWidth);
-        $canvas.innerWidth(canvasWidth);
-        $(node).find("table.header-table").innerWidth(canvasWidth);
+        // Gets with of .content in a cell, or 80, whichever is greater
+        function getWidthForDataCell(elem):number{
+            const leftPadding:number = +($(elem).css("padding-left").replace(/[^\d.-]/g, ''));
+            const rightPadding:number = +($(elem).css("padding-right").replace(/[^\d.-]/g, ''));
 
-        const $tableHeaders = $(node).find("th.table-header");
-        const $firstRowInBody = $(node).find("tbody tr.placeholder-false:first td");
-        _.chain($tableHeaders).zip($firstRowInBody).each((pair)=> {
-            const $th = $(pair[0]);
-            const $td = $(pair[1]);
-            $th.innerWidth($td.innerWidth());
-        }).value();
+            // 80 px is the min width of cell
+            return Math.max($(elem).find(".content").innerWidth() + leftPadding + rightPadding, 80);
+        }
+
+        // This function alligns header cells and their underlying data cells
+        function allignColumns($headerContainers, $rows){
+            _.forEach($headerContainers, (header, index:number) => {
+                const headerWidth:number = getWidthForDataCell(header);
+
+                // Get all data cells underlying this column
+                const $dataElems = $rows.find(`.content-container:nth-of-type(${index+1})`);
+
+                // Get all widths of underlying data cells, and find the largest
+                const dataWidths:number[] = _.map($dataElems, (elem):number => getWidthForDataCell(elem) );
+                const columnWidth:number = Math.max.apply(null, dataWidths.concat(headerWidth)) + 10; // Adding 10 for padding
+                widths.push(columnWidth);
+            });
+        }
+
+        // Get jQuery objects for four "quadrant" containers
+        const $leftHeaderContainers = $(node).find(".left-static-headers .table-header");
+        const $rightHeaderContainers = $(node).find(".right-scrolling-headers .table-header:not(.blank-header-cell)");
+        const $leftHeaderRows = $(node).find(".giga-grid-left-headers-container .giga-grid-row");
+        const $dataRows = $(node).find(".giga-grid-right-data-container .giga-grid-row");
+
+        // Set max height of row containers so scroll bars show up
+        $(node).find(".giga-grid-left-headers-container").css("max-height", $(node).find(".giga-grid-body-viewport").innerHeight());
+        $(node).find(".giga-grid-right-data-container").css("max-height", $(node).find(".giga-grid-body-viewport").innerHeight());
+
+        allignColumns($leftHeaderContainers, $leftHeaderRows);
+        allignColumns($rightHeaderContainers, $dataRows);
+
+        const gigaGridWidth:number = $(node).innerWidth();
+
+        const sumOfHeaderWidths:number = widths.reduce((sum, memo) => sum + memo, 0);
+
+        // If the table doesn't fit the width of the container, make them fit it
+        if( gigaGridWidth*.98 > sumOfHeaderWidths){
+            const $allHeaderContainers = $(node).find(".table-header:not(.blank-header-cell)");
+            const $blankCell = $(node).find(".table-header.blank-header-cell");
+            const expandAllHeadersBy:number = (gigaGridWidth - sumOfHeaderWidths - $blankCell.innerWidth()) / $allHeaderContainers.length;
+            widths = widths.map((w) => w + expandAllHeadersBy);
+        }
+
+        const oldSheetNode = $(`head > style#giga-grid-style-${this.state.gridID}`);
+        const sheet = _.findWhere(document.styleSheets, {ownerNode: oldSheetNode}) || this.createGigaGridStyleSheet();
+
+        for( var i = 0; i< $leftHeaderContainers.length + $rightHeaderContainers.length; ++i ){
+            const selectorText = `.giga-grid-${this.state.gridID} .giga-grid-column-${i}`;
+            const cssText =  `width: ${widths[i]}px !important;`;
+            const oldRule = _.findWhere(sheet, {selectorText});
+            if( oldRule )
+                sheet.deleteRule(sheet.rules.indexOf(oldRule));
+
+            if( !oldRule || oldRule.style.cssText !== cssText )
+                sheet.insertRule(`${selectorText} { ${cssText} }`, 0);
+        }
+
+
+        var $leftHeadersDataContainer = $(node).find(".giga-grid-left-headers-container");
+        var $bodyViewport = $(node).find(".giga-grid-body-viewport");
+        //setting max-width of sticky data and headers as 75% of the body-viewport width
+        $leftHeadersDataContainer.css("max-width", 0.75 * $bodyViewport.innerWidth());
+        $(node).find(".left-static-headers").css("max-width", 0.75 * $bodyViewport.innerWidth());
+
+        // After we're done with all this, make sure the data container and respective headers has max-width matching the container minus the left-headers
+        $(node).find(".giga-grid-right-data-container").css("max-width", $(node).innerWidth() - $leftHeadersDataContainer.innerWidth());
+        $(node).find(".right-scrolling-headers").css("max-width", $(node).innerWidth() - $leftHeadersDataContainer.innerWidth());
+
     }
 
-    horizontalScrollHandler() {
+    /**
+     * Creates a new stylesheet for this grid
+     * @returns {CSSStyleSheet}
+     */
+    private createGigaGridStyleSheet():CSSStyleSheet {
+        var style = document.createElement("style");
+        style.setAttribute("id", `giga-grid-style-${this.state.gridID}`);
+        document.head.appendChild(style);
+        return style.sheet;
+    }
+
+    scrollHandler(e) {
+        e.preventDefault();
         const node:Element = ReactDOM.findDOMNode<Element>(this);
-        const scrollLeftAmount:number = $(node).scrollLeft();
-        $(node).parent().find('.giga-grid-header-container').scrollLeft(scrollLeftAmount);
+        const dataContainer = $(node).parent().find('.giga-grid-right-data-container');
+
+        const scrollLeftAmount:number = dataContainer.scrollLeft();
+        const scrollTopAmount:number = dataContainer.scrollTop();
+
+        $(node).parent().find('.giga-grid-left-headers-container').scrollTop(scrollTopAmount);
+        $(node).parent().parent().find('.right-scrolling-headers').scrollTop(scrollTopAmount);
+        $(node).parent().parent().find('.right-scrolling-headers').scrollLeft(scrollLeftAmount);
+    }
+
+    /**
+     * A wheely important function.  You can't scroll normally in the left-headers area, but a user would expect the
+     * table to scroll if he or she uses the mousewheel.  So we have to listen for this event.
+     */
+    wheelScrollHandler(e){
+        e.preventDefault();
+        // This covers all browsers, see https://www.sitepoint.com/html5-javascript-mouse-wheel/
+        const amountToScroll:number =  -Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))) * 53;
+        debugger;
+
+        const node:Element = ReactDOM.findDOMNode<Element>(this);
+        const dataContainer = $(node).parent().find('.giga-grid-right-data-container');
+        const scrollTopAmount:number = dataContainer.scrollTop();
+
+        $(node).parent().find('.giga-grid-left-headers-container').scrollTop(scrollTopAmount + amountToScroll);
+        $(node).parent().parent().find('.giga-grid-right-data-container').scrollTop(scrollTopAmount + amountToScroll);
     }
 
     componentDidMount() {
         /*
-         * subscribe to window.resize
+         * subscribe to window event listeners
          */
-        if (typeof window !== "undefined")
+        if (typeof window !== "undefined") {
             window.addEventListener('resize', this.synchTableHeaderWidthToFirstRow.bind(this));
+
+            // Bind scroll listener to move headers when data container is scrolled
+            const node:Element = ReactDOM.findDOMNode<Element>(this);
+            const leftPanel:Element = $(node).find('.giga-grid-left-headers-container').get(0);
+            const rightPanel:Element = $(node).find('.giga-grid-right-data-container').get(0);
+            rightPanel && rightPanel.addEventListener('scroll', this.scrollHandler);
+            rightPanel && rightPanel.addEventListener('mousewheel', this.wheelScrollHandler);
+            leftPanel && leftPanel.addEventListener('mousewheel', this.wheelScrollHandler);
+            leftPanel && leftPanel.addEventListener('MozMousePixelScroll', this.wheelScrollHandler);
+        }
 
         /*
          re-compute displayStart && displayEnd
@@ -348,21 +504,24 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         this.dispatchDisplayBoundChange();
         this.synchTableHeaderWidthToFirstRow();
         this.expandTable();
-
-        // Bind scroll listener to move headers when data container is scrolled
-        const node:Element = ReactDOM.findDOMNode<Element>(this);
-        $(node).find('.giga-grid-body-viewport').scroll(this.horizontalScrollHandler);
     }
 
     componentWillUnmount() {
-        // Unbind the scroll listener
-        const node:Element = ReactDOM.findDOMNode<Element>(this);
-        $(node).find('.giga-grid-body-viewport').unbind('scroll', this.horizontalScrollHandler);
         /*
-         * unsubscribe to window.resize
+         * unsubscribe to window event listeners
          */
-        if (typeof window !== "undefined")
+        if (typeof window !== "undefined") {
             window.removeEventListener('resize', this.synchTableHeaderWidthToFirstRow);
+
+            // Unbind the scroll listener
+            const node:Element = ReactDOM.findDOMNode<Element>(this);
+            $(node).find('.giga-grid-right-data-container').unbind('scroll', this.scrollHandler);
+            const leftPanel:Element = $(node).find('.giga-grid-left-headers-container').get(0);
+            const rightPanel:Element = $(node).find('.giga-grid-right-data-container').get(0);
+            rightPanel && rightPanel.addEventListener('scroll', this.scrollHandler);
+            leftPanel && leftPanel.removeEventListener('mousewheel', this.wheelScrollHandler);
+            leftPanel && leftPanel.removeEventListener('MozMousePixelScroll', this.wheelScrollHandler);
+        }
     }
 
     private dispatchDisplayBoundChange() {
@@ -424,32 +583,17 @@ export function getScrollBarWidth() {
     if (scrollBarWidth === null)
         scrollBarWidth = computeScrollBarWidth();
 
-    return scrollBarWidth;
+    return scrollBarWidth + 5;
 
 }
 
 /**
- * traverse the node until a viable parent with a non-zero width is found
- * stops until the node run out of parent (i.e. reaches the <html/> element
- * @param node
- * @returns {number}
+ * Find out if a user is using internet explorer
+ * @returns {boolean}
  */
-function findParentWidth(node:Element) {
-    var rootNodeWidth = $(node).innerWidth();
-    var $parent = $(node).parent();
-    while ($parent && rootNodeWidth === 0) {
-        rootNodeWidth = $parent.innerWidth();
-        $parent = $parent.parent();
-    }
-    return rootNodeWidth;
-}
+export function isInternetExplorer() {
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
 
-/**
- * Computes the canvas (table)'s width given the root node of the grid's width
- * @param $canvas
- * @param rootNodeWidth
- * @returns {number}
- */
-function computeCanvasWidth($canvas:JQuery, rootNodeWidth:number) {
-    return rootNodeWidth - getScrollBarWidth();
+    return (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))  // If Internet Explorer, return version number
 }

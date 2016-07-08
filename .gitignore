@@ -4,3 +4,4 @@ test/**/*.js
 .idea
 node_modules
 target/
+npm-debug.log

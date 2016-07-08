@@ -90,6 +90,8 @@ export default function (action:InitializeAction):GigaState {
 
     const rasterizedRows:Row[] = TreeRasterizer.rasterize(tree);
 
+    const gridID:number = parseInt(_.uniqueId());
+
     return {
         rasterizedRows: rasterizedRows,
         displayStart: 0,
@@ -103,7 +105,8 @@ export default function (action:InitializeAction):GigaState {
         viewport:undefined,
         canvas:undefined,
         expandTable,
-        additionalUserButtons
+        additionalUserButtons,
+        gridID
     }
 
 }

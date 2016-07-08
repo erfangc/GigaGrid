@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactTestUtils from 'react-addons-test-utils';
 import {TestUtils} from "../TestUtils";
 import {TreeRasterizer} from "../../src/static/TreeRasterizer";
-import {TableBody} from "../../src/components/TableBody";
+import {ScrollableTableBody} from "../../src/components/TableBody/ScrollableTableBody";
 
 describe("TableBody", ()=> {
 
@@ -10,12 +10,13 @@ describe("TableBody", ()=> {
         const data = TestUtils.newPeopleTestData();
         var component;
         ReactTestUtils.renderIntoDocument(
-            <table>
-                <TableBody ref={c=>component=c} dispatcher={null}
+            <div>
+                <ScrollableTableBody ref={c=>component=c} dispatcher={null}
                            rows={data.detailRows()}
-                           columns={data.columns()}/>
-            </table>);
-        const trs = ReactTestUtils.scryRenderedDOMComponentsWithTag(component, "tr");
+                           columns={data.columns()}
+                           gridProps={data.gridProps()}/>
+            </div>);
+        const trs = ReactTestUtils.scryRenderedDOMComponentsWithClass(component, "giga-grid-row");
         expect(trs.length).toBe(10);
     });
 
@@ -24,13 +25,14 @@ describe("TableBody", ()=> {
         const rows = TreeRasterizer.rasterize(data.tree());
         var component;
         ReactTestUtils.renderIntoDocument(
-            <table>
-                <TableBody ref={c=>component=c} dispatcher={null}
+            <div>
+                <ScrollableTableBody ref={c=>component=c} dispatcher={null}
                            rows={rows}
-                           columns={data.columns()}/>
-            </table>
+                           columns={data.columns()}
+                           gridProps={data.gridProps()}/>
+            </div>
         );
-        const trs = ReactTestUtils.scryRenderedDOMComponentsWithTag(component, "tr");
+        const trs = ReactTestUtils.scryRenderedDOMComponentsWithClass(component, "giga-grid-row");
         expect(trs.length).toBe(2); // collapsed by default
         // TODO add test case for expanding
     });

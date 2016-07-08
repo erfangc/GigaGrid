@@ -20,19 +20,15 @@ describe("Cell", ()=> {
         columns = TestUtils.getSimpleColumns();
     });
 
-    it("renders a td", ()=> {
+    it("renders a Cell", ()=> {
         ReactTestUtils.renderIntoDocument<Cell>(
-            <table>
-                <tbody>
-                    <tr>
-                        <Cell ref={c=>component=c} rowHeight={""} isFirstColumn={true} dispatcher={dispatcher}
-                              column={columns[2]}
-                              row={row}/>
-                    </tr>
-                </tbody>
-            </table>
+            <div>
+                <Cell ref={c=>component=c} rowHeight={""} isFirstColumn={true} dispatcher={dispatcher}
+                      column={columns[2]}
+                      row={row}/>
+            </div>
         );
-        const textContent = ReactTestUtils.scryRenderedDOMComponentsWithTag(component, "td")[0].textContent;
+        const textContent = ReactTestUtils.scryRenderedDOMComponentsWithClass(component, "content")[0].textContent;
         expect(textContent).toBe("R2D2");
     });
 
@@ -42,32 +38,28 @@ describe("Cell", ()=> {
 
         colDef.cellTemplateCreator = (row:Row, column:Column, props:CellProps):JSX.Element => {
             return (
-                <td>
+                <div>
                     <span style={{"color": "green"}}>Hello World</span>
-                </td>
+                </div>
             )
         };
 
         ReactTestUtils.renderIntoDocument<Cell>(
-            <table>
-                <tbody>
-                    <tr>
-                        <Cell ref={c=>component=c}
-                              isFirstColumn={false}
-                              rowHeight={""}
-                              dispatcher={dispatcher}
-                              column={colDef}
-                              row={row}/>
-                    </tr>
-                </tbody>
-            </table>
+            <div>
+                <Cell ref={c=>component=c}
+                      isFirstColumn={false}
+                      rowHeight={""}
+                      dispatcher={dispatcher}
+                      column={colDef}
+                      row={row}/>
+            </div>
         );
 
         const spans = ReactTestUtils.scryRenderedDOMComponentsWithTag(component, "span");
 
-        expect(spans.length).toBe(1);
-        expect(spans[0].textContent).toBe("Hello World");
-        expect($(spans[0]).css("color")).toBe("green");
+        expect(spans.length).toBe(2);
+        expect(spans[1].textContent).toBe("Hello World");
+        expect($(spans[1]).css("color")).toBe("green");
 
     });
 
@@ -76,40 +68,32 @@ describe("Cell", ()=> {
         const colDef = columns[0];
 
         ReactTestUtils.renderIntoDocument(
-            <table>
-                <tbody>
-                    <tr>
-                        <Cell ref={c=>component=c}
-                              rowHeight={""}
-                              isFirstColumn={true}
-                              dispatcher={dispatcher}
-                              column={colDef}
-                              row={row}/>
-                    </tr>
-                </tbody>
-            </table>
+            <div>
+                <Cell ref={c=>component=c}
+                      rowHeight={""}
+                      isFirstColumn={true}
+                      dispatcher={dispatcher}
+                      column={colDef}
+                      row={row}/>
+            </div>
         );
-        expect($(ReactTestUtils.findRenderedDOMComponentWithTag(component,"td")).css("padding-left")).toBe("75px");
+        expect($(ReactTestUtils.findRenderedDOMComponentWithClass(component,"content-container")).css("padding-left")).toBe("75px");
     });
 
     it("can render a +/- for the first cell of a subtotal row", ()=> {
         const subtotalRow = TestUtils.getSimpleSubtotalRow();
         const colDef = columns[0];
         ReactTestUtils.renderIntoDocument(
-            <table>
-                <tbody>
-                    <tr>
-                        <Cell ref={c=>component=c}
-                              rowHeight={""}
-                              isFirstColumn={true}
-                              dispatcher={dispatcher}
-                              column={colDef}
-                              row={subtotalRow}/>
-                    </tr>
-                </tbody>
-            </table>
+            <div>
+                <Cell ref={c=>component=c}
+                      rowHeight={""}
+                      isFirstColumn={true}
+                      dispatcher={dispatcher}
+                      column={colDef}
+                      row={subtotalRow}/>
+            </div>
         );
-        expect($(ReactTestUtils.findRenderedDOMComponentWithTag(component,"td")).find("i.fa").length).toBe(1);
+        expect($(ReactTestUtils.findRenderedDOMComponentWithClass(component,"content-container")).find("i.fa").length).toBe(1);
     });
 
 });

@@ -10,32 +10,50 @@ div.giga-grid
     cursor pointer
     hover-transition()
 
-  table
-    border-collapse collapse
+  div.giga-grid-header-container
     font-size 11px
+    height 20px
 
-  table.header-table
-    table-layout fixed
+  div.giga-grid-left-headers-container, div.giga-grid-right-data-container
+    float left
+    overflow-x scroll
+    overflow-y hidden
 
   div.giga-grid-body-viewport
-    overflow scroll
+    overflow hidden
     display inline-block // this allow the viewport to be as wide as the canva
     max-width 100%
 
+  div.giga-grid-right-data-container
+    overflow scroll
+
   div.giga-grid-header-container
     max-width 100%
+    white-space nowrap
     overflow hidden
 
-  tr td, tr th
+  div.table-header
     box-sizing border-box
     padding 2px 5px
-    min-width 8em
+    min-width 80px
+    display inline-block
 
-  th:last-child, td:last-child
+  div.left-static-headers
+    display inline-block
+    overflow-x hidden
+
+  div.right-scrolling-headers
+    display inline-block
+    overflow hidden
+
+  div.table-header:last-child, div.content:last-child
     padding-right 10px
 
-  th:first-child, td:first-child
+  div.table-header:first-child, div.content:first-child
     padding-left 10px
+
+  div.table-header:first-of-type
+    padding-right 20px!important // Need room for gear icon
 
   tr th
     font-weight normal
@@ -57,3 +75,17 @@ div.giga-grid
 
   .text-align-left
     text-align left
+
+  div.content-container
+    display inline-block
+
+  div.giga-grid-row
+    white-space nowrap
+
+  span.group-by-cell
+    white-space nowrap
+
+  .content-container
+    box-sizing border-box
+    padding 4px 5px
+    height 100%

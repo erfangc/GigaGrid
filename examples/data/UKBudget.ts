@@ -5,14 +5,6 @@ import {GigaProps} from "../../src/components/GigaGrid";
 var json = require("./UKBudget.json");
 
 const columnDefs:ColumnDef[] = [
-    {colTag: "Age", title: "Age"},
-    {
-        colTag: "Children",
-        title: "No. of Children",
-        format: ColumnFormat.NUMBER,
-        aggregationMethod: AggregationMethod.COUNT
-        // weightBy: "Income"
-    },
     {
         colTag: "WFood",
         title: "Food",
@@ -59,19 +51,12 @@ const columnDefs:ColumnDef[] = [
         colTag: "TotExp",
         title: "Total Expense",
         format: ColumnFormat.NUMBER,
-        aggregationMethod: AggregationMethod.COUNT,
-        formatInstruction: {roundTo: 0}
-    },
-    {
-        colTag: "Income",
-        title: "Income",
-        format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
         formatInstruction: {roundTo: 0}
     }
 ];
 
-const initialSubtotalBys:Column[] = [{colTag: "Age"}, {colTag: "Children"}, {colTag: "Income"}];
+const initialSubtotalBys:Column[] = [{colTag: "Age", title: "Age"}, {colTag: "Children", title: "Children"}, {colTag: "Income", title: "Income"}];
 
 const props:GigaProps = {
     columnDefs: columnDefs,

@@ -2,6 +2,7 @@ import {ServerStore} from "../../src/store/ServerStore";
 import {Dispatcher} from "flux";
 import {GigaAction, GigaActionType} from "../../src/store/GigaStore";
 import {SubtotalRow} from "../../src/models/Row";
+import * as $ from 'jquery';
 /**
  * ServerStore
  * TODO make the test better and utilize common functions

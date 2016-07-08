@@ -10,15 +10,16 @@ lighten-background(lvl)
   background-color lighten(selected-color , (lvl * 10)%)
 
 div.giga-grid
-  table.giga-grid-body-canvas
-    tr
-      &.subtotal-row
-        for lvl in (1..10)
-          &.subtotal-row-{lvl}
+  div.giga-grid-body-canvas
+    .subtotal-row
+      for lvl in (1..10)
+        &.subtotal-row-{lvl}
+          .content-container
             lighten-background(lvl)
-      &.subtotal-row:hover
-        background-color subtotal-selected-color
-      &.detail-row
-        background-color #fff
-        &:nth-of-type(even)
+    .detail-row
+      &:nth-of-type(odd)
+        .content-container
+          background-color #fff
+      &:nth-of-type(even)
+        .content-container
           background-color #f1f1f1

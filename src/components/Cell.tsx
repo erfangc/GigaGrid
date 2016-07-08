@@ -15,6 +15,7 @@ export interface CellProps extends GridSubcomponentProps<Cell> {
     column:Column
     rowHeight:string
     isFirstColumn?:boolean
+    columnNumber:number
 }
 
 
@@ -28,8 +29,15 @@ export class Cell extends React.Component<CellProps,any> {
         const props = this.props;
         const row = props.row;
         const column = props.column;
-        if (_.isFunction(column.cellTemplateCreator))
-            return column.cellTemplateCreator(row, column, props);
+        if (_.isFunction(column.cellTemplateCreator)) {
+            return (
+                <div className={`content-container giga-grid-column-${props.columnNumber}`}>
+                    <span className="content">
+                        {column.cellTemplateCreator(row, column, props)}
+                    </span>
+                </div>
+            );
+        }
         else
             return new DefaultCellRenderer(props).render();
     }
@@ -79,12 +87,12 @@ export class DefaultCellRenderer {
             "fa-minus-square-o": !row.isCollapsed()
         });
         return (
-            <td style={this.calculateStyle()} onClick={e=>this.onClick()}>
-                <span>
+            <div className={`content-container giga-grid-column-${this.props.columnNumber}`} style={this.calculateStyle()} onClick={e=>this.onClick()}>
+                <span className="content group-by-cell">
                     <i className={cx} onClick={e=>this.onCollapseToggle(e)}/>&nbsp;
                     {row.bucketInfo.title || ""}
                 </span>
-            </td>
+            </div>
         );
     }
 
@@ -94,11 +102,13 @@ export class DefaultCellRenderer {
             && (column.aggregationMethod === AggregationMethod.COUNT || column.aggregationMethod === AggregationMethod.COUNT_DISTINCT))
             renderedCellContent = `[${renderedCellContent}]`;
         return (
-            <td className={DefaultCellRenderer.calculateTextAlignment(row, column)}
+            <div className={`content-container giga-grid-column-${this.props.columnNumber} ${DefaultCellRenderer.calculateTextAlignment(row, column)}`}
                 onClick={e=>this.onClick()}
                 style={this.calculateStyle()}>
-                {renderedCellContent}
-            </td>
+                <span className="content">
+                    {renderedCellContent}
+                </span>
+            </div>
         );
     }
 
