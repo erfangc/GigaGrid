@@ -20,12 +20,12 @@ function extractSubtotalCellValue(subtotalRow:SubtotalRow, sortBy:Column, firstC
     // sorting on a text-align-rightally summarized column
     if (firstColumn && firstColumn.colTag === sortBy.colTag)
         return subtotalRow.bucketInfo.value;
-    if ([AggregationMethod.COUNT,
-            AggregationMethod.COUNT_DISTINCT,
-            AggregationMethod.WEIGHTED_AVERAGE,
-            AggregationMethod.AVERAGE,
-            AggregationMethod.SUM].indexOf(sortBy.aggregationMethod) !== -1)
-        return parseFloat(subtotalRow.get(sortBy));
+
+    if (sortBy.format === ColumnFormat.NUMBER) {
+        // Remove all non numbers from string (except dot)
+        const value = subtotalRow.get(sortBy).toString().replace(/[^\d.-]/g, '');
+        return parseFloat(value);
+    }
     // sorting on a ordinary column
     else
         return subtotalRow.get(sortBy);

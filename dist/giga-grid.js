@@ -165,6 +165,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            props: nextProps
 	        };
 	        this.dispatcher.dispatch(payload);
+	        this.expandTable();
 	    };
 	    /**
 	     * on component update, we use jquery to align table headers
@@ -210,6 +211,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 	        this.dispatchDisplayBoundChange();
 	        this.synchTableHeaderWidthToFirstRow();
+	        this.expandTable();
 	        // Bind scroll listener to move headers when data container is scrolled
 	        var node = ReactDOM.findDOMNode(this);
 	        $(node).find('.giga-grid-body-viewport').scroll(this.horizontalScrollHandler);
@@ -235,6 +237,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        this.dispatcher.dispatch(action);
 	    };
+	    GigaGrid.prototype.expandTable = function () {
+	        if (this.props.expandTable) {
+	            this.dispatcher.dispatch({
+	                type: GigaStore_1.GigaActionType.EXPAND_ALL
+	            });
+	        }
+	    };
 	    GigaGrid.defaultProps = {
 	        initialSubtotalBys: [],
 	        initialSortBys: [],
@@ -243,7 +252,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        columnDefs: [],
 	        bodyHeight: "500px",
 	        rowHeight: "25px",
-	        collapseHeight: false
+	        collapseHeight: false,
+	        expandTable: false
 	    };
 	    return GigaGrid;
 	}(React.Component));
@@ -304,10 +314,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {number}
 	 */
 	function computeCanvasWidth($canvas, rootNodeWidth) {
-	    var canvasWidth = $canvas.innerWidth();
-	    if (rootNodeWidth > canvasWidth)
-	        canvasWidth = rootNodeWidth - getScrollBarWidth();
-	    return canvasWidth;
+	    return rootNodeWidth - getScrollBarWidth();
 	}
 
 
@@ -19535,8 +19542,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	var SubtotalAggregator_1 = __webpack_require__(31);
 	var TreeBuilder_1 = __webpack_require__(32);
 	var ColumnLike_1 = __webpack_require__(6);
+	/**
+	 * decorate any sortBy(s) with properties that might exist on the column - properties defined in sortBys override those
+	 * defined in the column definition
+	 * @param initialSortBys
+	 * @param columnsWithSort
+	 * @returns {Column[]}
+	 */
+	function decorateInitialSortBys(initialSortBys, columnsWithSort) {
+	    return (initialSortBys || []).map(function (sortBy) {
+	        var column = _.find(columnsWithSort, function (column) { return column.colTag === sortBy.colTag; });
+	        return _.assign({}, column, sortBy);
+	    });
+	}
+	exports.decorateInitialSortBys = decorateInitialSortBys;
+	/**
+	 * for every column, add the direction property if it is part of a initialSortBy
+	 * @param columns
+	 * @param initialSortBys
+	 * @returns {any}
+	 */
+	function decorateColumnsWithSort(columns, initialSortBys) {
+	    return columns.map(function (column) {
+	        var sortBy = _.find((initialSortBys || []), function (s) { return s.colTag == column.colTag; });
+	        if (sortBy)
+	            return _.assign({}, column, {
+	                direction: sortBy.direction || ColumnLike_1.SortDirection.DESC
+	            });
+	        else
+	            return column;
+	    });
+	}
+	exports.decorateColumnsWithSort = decorateColumnsWithSort;
 	function default_1(action) {
-	    var _a = action.props, data = _a.data, columnDefs = _a.columnDefs, columnGroups = _a.columnGroups, initialSubtotalBys = _a.initialSubtotalBys, initialSortBys = _a.initialSortBys, initialFilterBys = _a.initialFilterBys, initiallyExpandedSubtotalRows = _a.initiallyExpandedSubtotalRows, initiallySelectedSubtotalRows = _a.initiallySelectedSubtotalRows;
+	    var _a = action.props, data = _a.data, columnDefs = _a.columnDefs, columnGroups = _a.columnGroups, initialSubtotalBys = _a.initialSubtotalBys, initialSortBys = _a.initialSortBys, initialFilterBys = _a.initialFilterBys, initiallyExpandedSubtotalRows = _a.initiallyExpandedSubtotalRows, initiallySelectedSubtotalRows = _a.initiallySelectedSubtotalRows, expandTable = _a.expandTable;
 	    /**
 	     * turn ColumnDefs into "Columns" which are decorated with behaviors
 	     */
@@ -19553,20 +19592,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * create sortBys from columns (any properties passed via initialSortBys will override the same property in the corresponding Column object
 	     */
-	    // FIXME we have a state sync issue, columns have "directions", but so does sortBys, the code below is a temp fix
-	    var columnsWithSort = columns.map(function (column) {
-	        var sortBy = _.find((initialSortBys || []), function (s) { return s.colTag == column.colTag; });
-	        if (sortBy)
-	            return _.assign({}, column, {
-	                direction: sortBy.direction || ColumnLike_1.SortDirection.DESC
-	            });
-	        else
-	            return column;
-	    });
-	    var sortBys = (initialSortBys || []).map(function (sortBy) {
-	        var column = _.find(columnsWithSort, function (column) { return column.colTag === sortBy.colTag; });
-	        return _.assign({}, column, sortBy);
-	    });
+	    var columnsWithSort = decorateColumnsWithSort(columns, initialSortBys);
+	    var sortBys = decorateInitialSortBys(initialSortBys, columnsWithSort);
 	    var filteredColumns = _.filter(columnsWithSort, function (column) { return subtotalBys.map(function (subtotalBy) { return subtotalBy.colTag; }).indexOf(column.colTag) === -1; });
 	    var tree = TreeBuilder_1.TreeBuilder.buildTree(data, subtotalBys, initiallyExpandedSubtotalRows, initiallySelectedSubtotalRows);
 	    SubtotalAggregator_1.SubtotalAggregator.aggregateTree(tree, columns);
@@ -19582,7 +19609,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        sortBys: sortBys,
 	        filterBys: _.cloneDeep(initialFilterBys) || [],
 	        tree: tree,
-	        showSettingsPopover: false
+	        showSettingsPopover: false,
+	        expandTable: expandTable
 	    };
 	}
 	Object.defineProperty(exports, "__esModule", { value: true });
@@ -19610,6 +19638,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var sortFn = SortFactory.createCompositeSorter(sortBys, firstColumn);
 	        SortFactory.recursivelyExecuteSort(tree.getRoot(), sortFn);
 	        return tree;
+	    };
+	    /**
+	     * sort the given rows
+	     * @param rows
+	     */
+	    SortFactory.sortRows = function (row, sortBys, firstColumn) {
+	        var sortFn = SortFactory.createCompositeSorter(sortBys, firstColumn);
+	        SortFactory.recursivelyExecuteSort(row, sortFn);
 	    };
 	    SortFactory.recursivelyExecuteSort = function (rootRow, fn) {
 	        if (rootRow.getNumChildren() !== 0) {
@@ -19699,12 +19735,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // sorting on a text-align-rightally summarized column
 	    if (firstColumn && firstColumn.colTag === sortBy.colTag)
 	        return subtotalRow.bucketInfo.value;
-	    if ([ColumnLike_1.AggregationMethod.COUNT,
-	        ColumnLike_1.AggregationMethod.COUNT_DISTINCT,
-	        ColumnLike_1.AggregationMethod.WEIGHTED_AVERAGE,
-	        ColumnLike_1.AggregationMethod.AVERAGE,
-	        ColumnLike_1.AggregationMethod.SUM].indexOf(sortBy.aggregationMethod) !== -1)
-	        return parseFloat(subtotalRow.get(sortBy));
+	    if (sortBy.format === ColumnLike_1.ColumnFormat.NUMBER) {
+	        // Remove all non numbers from string (except dot)
+	        var value = subtotalRow.get(sortBy).toString().replace(/[^\d.-]/g, '');
+	        return parseFloat(value);
+	    }
 	    else
 	        return subtotalRow.get(sortBy);
 	}
@@ -19771,6 +19806,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function format(value, fmtInstruction) {
 	    if (!fmtInstruction)
 	        return value;
+	    if (value === '')
+	        return null;
 	    function addCommas(nStr) {
 	        nStr += '';
 	        var x = nStr.split('.');
@@ -21185,30 +21222,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	    TableHeaderCell.prototype.render = function () {
 	        var _this = this;
 	        var column = this.props.column;
-	        var style = {
-	            overflow: "visible",
-	            position: "relative"
-	        };
-	        var componentClasses = {
-	            "text-align-right": column.format === ColumnLike_1.ColumnFormat.NUMBER,
-	            "text-align-left": column.format !== ColumnLike_1.ColumnFormat.NUMBER
-	        };
-	        if (this.props.tableHeaderClass)
-	            componentClasses["this.props.tableHeaderClass"] = true;
-	        else
-	            componentClasses["table-header"] = true;
-	        var cx = classNames(componentClasses);
-	        return (React.createElement("th", {style: style, onClick: function () {
-	            var direction = _this.props.column.direction;
-	            var sortBy = _.assign({}, _this.props.column, {
-	                direction: direction === ColumnLike_1.SortDirection.DESC ? ColumnLike_1.SortDirection.ASC : ColumnLike_1.SortDirection.DESC
-	            });
-	            var payload = {
-	                type: GigaStore_1.GigaActionType.NEW_SORT,
-	                sortBys: [sortBy]
+	        if (_.isFunction(column.headerTemplateCreator)) {
+	            return column.headerTemplateCreator(column);
+	        }
+	        else {
+	            var style = {
+	                overflow: "visible",
+	                position: "relative"
 	            };
-	            _this.props.dispatcher.dispatch(payload);
-	        }, className: cx}, React.createElement("span", {className: "header-text"}, column.title || column.colTag), this.renderSortIcon(), this.renderToolbar()));
+	            var componentClasses = {
+	                "text-align-right": column.format === ColumnLike_1.ColumnFormat.NUMBER,
+	                "text-align-left": column.format !== ColumnLike_1.ColumnFormat.NUMBER
+	            };
+	            if (this.props.tableHeaderClass)
+	                componentClasses["this.props.tableHeaderClass"] = true;
+	            else
+	                componentClasses["table-header"] = true;
+	            var cx = classNames(componentClasses);
+	            return (React.createElement("th", {style: style, onClick: function () {
+	                var direction = _this.props.column.direction;
+	                var sortBy = _.assign({}, _this.props.column, {
+	                    direction: direction === ColumnLike_1.SortDirection.DESC ? ColumnLike_1.SortDirection.ASC : ColumnLike_1.SortDirection.DESC
+	                });
+	                var payload = {
+	                    type: GigaStore_1.GigaActionType.NEW_SORT,
+	                    sortBys: [sortBy]
+	                };
+	                _this.props.dispatcher.dispatch(payload);
+	            }, className: cx}, React.createElement("span", {className: "header-text"}, column.title || column.colTag), this.renderSortIcon(), this.renderToolbar()));
+	        }
 	    };
 	    TableHeaderCell.prototype.renderToolbar = function () {
 	        if (this.props.isFirstColumn && !this.props.gridProps.disableConfiguration)
@@ -21872,7 +21914,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	 * jQuery JavaScript Library v2.2.3
+	 * jQuery JavaScript Library v2.2.4
 	 * http://jquery.com/
 	 *
 	 * Includes Sizzle.js
@@ -21882,7 +21924,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Released under the MIT license
 	 * http://jquery.org/license
 	 *
-	 * Date: 2016-04-05T19:26Z
+	 * Date: 2016-05-20T17:23Z
 	 */
 	
 	(function( global, factory ) {
@@ -21938,7 +21980,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var
-		version = "2.2.3",
+		version = "2.2.4",
 	
 		// Define a local copy of jQuery
 		jQuery = function( selector, context ) {
@@ -26879,13 +26921,14 @@ return /******/ (function(modules) { // webpackBootstrap
 		isDefaultPrevented: returnFalse,
 		isPropagationStopped: returnFalse,
 		isImmediatePropagationStopped: returnFalse,
+		isSimulated: false,
 	
 		preventDefault: function() {
 			var e = this.originalEvent;
 	
 			this.isDefaultPrevented = returnTrue;
 	
-			if ( e ) {
+			if ( e && !this.isSimulated ) {
 				e.preventDefault();
 			}
 		},
@@ -26894,7 +26937,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 			this.isPropagationStopped = returnTrue;
 	
-			if ( e ) {
+			if ( e && !this.isSimulated ) {
 				e.stopPropagation();
 			}
 		},
@@ -26903,7 +26946,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 			this.isImmediatePropagationStopped = returnTrue;
 	
-			if ( e ) {
+			if ( e && !this.isSimulated ) {
 				e.stopImmediatePropagation();
 			}
 	
@@ -27833,19 +27876,6 @@ return /******/ (function(modules) { // webpackBootstrap
 			val = name === "width" ? elem.offsetWidth : elem.offsetHeight,
 			styles = getStyles( elem ),
 			isBorderBox = jQuery.css( elem, "boxSizing", false, styles ) === "border-box";
-	
-		// Support: IE11 only
-		// In IE 11 fullscreen elements inside of an iframe have
-		// 100x too small dimensions (gh-1764).
-		if ( document.msFullscreenElement && window.top !== window ) {
-	
-			// Support: IE11 only
-			// Running getBoundingClientRect on a disconnected node
-			// in IE throws an error.
-			if ( elem.getClientRects().length ) {
-				val = Math.round( elem.getBoundingClientRect()[ name ] * 100 );
-			}
-		}
 	
 		// Some non-html elements return undefined for offsetWidth, so check for null/undefined
 		// svg - https://bugzilla.mozilla.org/show_bug.cgi?id=649285
@@ -29737,6 +29767,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		},
 	
 		// Piggyback on a donor event to simulate a different one
+		// Used only for `focus(in | out)` events
 		simulate: function( type, elem, event ) {
 			var e = jQuery.extend(
 				new jQuery.Event(),
@@ -29744,27 +29775,10 @@ return /******/ (function(modules) { // webpackBootstrap
 				{
 					type: type,
 					isSimulated: true
-	
-					// Previously, `originalEvent: {}` was set here, so stopPropagation call
-					// would not be triggered on donor event, since in our own
-					// jQuery.event.stopPropagation function we had a check for existence of
-					// originalEvent.stopPropagation method, so, consequently it would be a noop.
-					//
-					// But now, this "simulate" function is used only for events
-					// for which stopPropagation() is noop, so there is no need for that anymore.
-					//
-					// For the 1.x branch though, guard for "click" and "submit"
-					// events is still used, but was moved to jQuery.event.stopPropagation function
-					// because `originalEvent` should point to the original event for the constancy
-					// with other events and for more focused logic
 				}
 			);
 	
 			jQuery.event.trigger( e, null, elem );
-	
-			if ( e.isDefaultPrevented() ) {
-				event.preventDefault();
-			}
 		}
 	
 	} );

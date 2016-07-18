@@ -59,7 +59,7 @@ const columnDefs:ColumnDef[] = [
         colTag: "TotExp",
         title: "Total Expense",
         format: ColumnFormat.NUMBER,
-        aggregationMethod: AggregationMethod.AVERAGE,
+        aggregationMethod: AggregationMethod.COUNT,
         formatInstruction: {roundTo: 0}
     },
     {

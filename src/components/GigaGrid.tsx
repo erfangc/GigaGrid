@@ -284,6 +284,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             props: nextProps
         };
         this.dispatcher.dispatch(payload);
+        this.expandTable();
     }
 
     /**
