@@ -5,6 +5,7 @@ import {TreeRasterizer} from "../../src/static/TreeRasterizer";
 import {TableBody} from "../../src/components/TableBody";
 
 describe("TableBody", ()=> {
+
     it("consists of many rows", ()=> {
         const data = TestUtils.newPeopleTestData();
         var component;
