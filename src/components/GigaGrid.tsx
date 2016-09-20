@@ -4,19 +4,17 @@ import * as _ from "lodash";
 import {ColumnDef, Column, FilterBy, ColumnFactory, ColumnGroupDef} from "../models/ColumnLike";
 import {Row} from "../models/Row";
 import {Tree} from "../static/TreeBuilder";
-import {
-    GigaStore,
-    GigaAction,
-    GigaActionType,
-} from "../store/GigaStore";
+import {GigaStore, GigaAction, GigaActionType} from "../store/GigaStore";
 import {Dispatcher} from "flux";
 import {TableBody} from "./TableBody";
 import {TableHeader} from "./TableHeader";
 import {SettingsPopover} from "./toolbar/SettingsPopover";
-import $ = require('jquery');
-import ReactElement = __React.ReactElement;
 import {InitializeAction} from "../store/reducers/InitializeReducer";
 import {ChangeRowDisplayBoundsAction} from "../store/reducers/ChangeRowDisplayBoundsReducer";
+import {ReduceStore} from "flux/utils";
+import {ServerStore, ServerSubtotalRow} from "../store/ServerStore";
+import $ = require('jquery');
+import ReactElement = __React.ReactElement;
 
 /**
  * Interface that describe the shape of the `Props` that `GigaGrid` accepts from the user
@@ -89,6 +87,16 @@ export interface GigaProps extends React.Props<GigaGrid> {
      * EXPERIMENTAL - these props allow us to expand / select SubtotalRow on construction of the grid component
      */
     /**
+     * create a ServerStore instead of GigaStore, this will drastically change the grid works
+     * expand / collapse async action creators must also be provided
+     */
+    useServerStore?: boolean
+    // required if useServerStore = true, otherwise clicking on "expand will have no effect"
+    // this callback is responsible for firing actions that will inform the store more data has been received
+    fetchRowsActionCreator?: (row: Row, dispatch: Dispatcher<GigaAction>) => any
+    initialData?: ServerSubtotalRow[]
+
+    /**
      * sector paths to expand by default
      */
     initiallyExpandedSubtotalRows?:string[][]
@@ -96,15 +104,21 @@ export interface GigaProps extends React.Props<GigaGrid> {
      * sector paths to mark as "selected"
      */
     initiallySelectedSubtotalRows?:string[][]
-
+    disableConfiguration?:boolean
     /**
      * custom classes
      */
     tableHeaderClass?:string
+    expandTable?:boolean
+    additionalUserButtons?:any[]
+
 }
 
 export interface GridSubcomponentProps<T> extends React.Props<T> {
     dispatcher: Dispatcher<GigaAction>;
+    // idk if this is a good idea - but sub components often need to refer to things like callbacks - really annoying to pass them at each level
+    // making them optional so tests' don't complain as much
+    gridProps?: GigaProps
 }
 
 /**
@@ -126,7 +140,7 @@ export interface GigaState {
     subtotalBys:Column[]
     sortBys:Column[]
     filterBys:FilterBy[]
-
+    expandTable?:boolean // TODO saumya - please revert this - didn't catch it in the code review but this is not a necessary state
     /*
      the displayable view of the data in `tree`
      */
@@ -134,6 +148,7 @@ export interface GigaState {
     displayStart:number
     displayEnd:number
     showSettingsPopover:boolean
+    additionalUserButtons:any[]
 
      canvas:HTMLElement;
      viewport:HTMLElement;
@@ -156,7 +171,7 @@ export interface GigaState {
 
 export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
-    private store:GigaStore;
+    private store: ReduceStore<GigaState>;
     private dispatcher:Dispatcher<GigaAction>;
 
     static defaultProps:GigaProps = {
@@ -167,13 +182,22 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         columnDefs: [],
         bodyHeight: "500px",
         rowHeight: "25px",
-        collapseHeight: false
+        collapseHeight: false,
+        expandTable: false,
+        additionalUserButtons: []
     };
+
+    private static createStore(props:GigaProps, dispatcher: Dispatcher<GigaAction>) :ReduceStore<GigaState> {
+        if (props.useServerStore)
+            return new ServerStore(dispatcher, props);
+        else
+            return new GigaStore(dispatcher, props);
+    }
 
     constructor(props:GigaProps) {
         super(props);
         this.dispatcher = new Dispatcher<GigaAction>();
-        this.store = new GigaStore(this.dispatcher, props);
+        this.store = GigaGrid.createStore(props, this.dispatcher);
         this.state = this.store.getState();
         // do not call setState again, this is the only place! otherwise you are violating the principles of Flux
         // not that would be wrong but it would break the 1 way data flow and make keeping track of mutation difficult
@@ -201,7 +225,9 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                         subtotalBys={state.subtotalBys}
                         columns={state.columns}
                         onSubmit={(action:GigaAction) => this.submitColumnConfigChange(action)}
-                        onDismiss={()=>this.toggleSettingsPopover()}/>
+                        onDismiss={()=>this.toggleSettingsPopover()}
+                        additionalUserButtons={state.additionalUserButtons}
+                    />
                 </div>);
         else
             return null;
@@ -234,7 +260,9 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                     <table className="header-table">
                         <TableHeader dispatcher={this.dispatcher} 
                                      columns={columns} 
-                                     tableHeaderClass={this.props.tableHeaderClass} />
+                                     tableHeaderClass={this.props.tableHeaderClass}
+                                     gridProps={this.props}
+                        />
                     </table>
                 </div>
                 <div ref={c=>state.viewport=c}
@@ -248,6 +276,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                                    displayStart={state.displayStart}
                                    displayEnd={state.displayEnd}
                                    rowHeight={this.props.rowHeight}
+                                   gridProps={this.props}
                         />
                     </table>
                 </div>
@@ -260,6 +289,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             props: nextProps
         };
         this.dispatcher.dispatch(payload);
+        this.expandTable();
     }
 
     /**
@@ -312,6 +342,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
          */
         this.dispatchDisplayBoundChange();
         this.synchTableHeaderWidthToFirstRow();
+        this.expandTable();
 
         // Bind scroll listener to move headers when data container is scrolled
         const node:Element = ReactDOM.findDOMNode<Element>(this);
@@ -340,6 +371,13 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             rowHeight: this.props.rowHeight
         };
         this.dispatcher.dispatch(action);
+    }
+    private expandTable(){
+        if(this.props.expandTable){
+            this.dispatcher.dispatch({
+                type: GigaActionType.EXPAND_ALL
+            });
+        }
     }
 
 }
@@ -408,8 +446,5 @@ function findParentWidth(node:Element) {
  * @returns {number}
  */
 function computeCanvasWidth($canvas:JQuery, rootNodeWidth:number) {
-    var canvasWidth = $canvas.innerWidth();
-    if (rootNodeWidth > canvasWidth)
-        canvasWidth = rootNodeWidth - getScrollBarWidth();
-    return canvasWidth;
+    return rootNodeWidth - getScrollBarWidth();
 }
