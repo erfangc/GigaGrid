@@ -15,6 +15,7 @@ export interface SettingsPopoverProps {
     columns:Column[]
     onSubmit:(action:GigaAction)=>any
     onDismiss:()=>any
+    additionalUserButtons:any[]
 }
 
 interface SettingsPopoverState {
@@ -182,6 +183,7 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
                           onClick={()=>this.props.onSubmit.call(undefined,{type:GigaActionType.CLEAR_SORT})}>Clear Sort</span>
                         </div>
                         <br/>
+                        {this.renderAdditionalUserButtons()}
                         <div>
                         </div>
                     </div>
@@ -200,6 +202,18 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
                 </div>
             </div>
         );
+    }
+
+    private renderAdditionalUserButtons(){
+        var additionalUserButtons = this.props.additionalUserButtons;
+        return (
+        <div>
+        {additionalUserButtons.map(function(additionalUserButton) {
+            return <span className="giga-grid-button" key={additionalUserButton.name}
+                              onClick={()=>additionalUserButton.customCallback()}>{additionalUserButton.name}</span>
+        })}
+        </div>
+    );
     }
 
     private renderColumnConfigurer(column?:Column):JSX.Element | string {

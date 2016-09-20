@@ -33,6 +33,7 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
     }
 
     render() {
+        var additionalUserButtons = [{name: 'Export Grid'}];
         return (
             <div>
                 <div className="container">
@@ -41,7 +42,7 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
                           animation={false}>
                         <Tab eventKey={0} title="Basic Example">
                             <br/>
-                            {this.renderBasicExample()}
+                            {this.renderBasicExample(additionalUserButtons)}
                         </Tab>
                     </Tabs>
                 </div>
@@ -49,18 +50,33 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
         );
     }
 
-    private renderBasicExample() {
+    private renderBasicExample(additionalUserButtons) {
+        console.log(UKBudget);
+        var additionalUserButtons = additionalUserButtons.map(this.callCustomFunction.bind(this));
         return (<GigaGrid
             onRowClick={(row:Row, state:GigaState)=>{
                 row; state;
-                debugger;
                 return true;
             }}
-            initialSortBys={[{"colTag":"WOther", direction: SortDirection.DESC}]}
-            {...this.props.ukBudget}
+            additionalUserButtons={additionalUserButtons}
+            initialSortBys={[
+                {colTag:"Age", direction: SortDirection.ASC, customSortFn: function(a,b){ return a - b },},
+                {colTag:"Children", direction: SortDirection.ASC, customSortFn: function(a,b){ return b - a }},
+                {colTag:"Income", direction: SortDirection.ASC, customSortFn: function(a,b){ return b - a }}
+            ]}
+            staticLeftHeaders={1}
+            {...UKBudget}
         />);
     }
 
+    private callCustomFunction(additionalUserButton){
+        additionalUserButton.customCallback = () => {this.customCallback()};
+       return additionalUserButton;
+    }
+
+    private customCallback() {
+        console.log('Export grid');
+    }
 }
 
 function main() {

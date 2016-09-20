@@ -61,7 +61,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.AggregationMethod = ColumnLike_1.AggregationMethod;
 	exports.ColumnFormat = ColumnLike_1.ColumnFormat;
 	exports.SortDirection = ColumnLike_1.SortDirection;
-	var Cell_tsx_1 = __webpack_require__(47);
+	var Cell_tsx_1 = __webpack_require__(59);
 	exports.DefaultCellRenderer = Cell_tsx_1.DefaultCellRenderer;
 	var GigaStore_1 = __webpack_require__(7);
 	exports.GigaActionType = GigaStore_1.GigaActionType;
@@ -136,7 +136,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _this = this;
 	        var state = this.store.getState();
 	        if (state.showSettingsPopover)
-	            return (React.createElement("div", null, React.createElement(SettingsPopover_1.SettingsPopover, {subtotalBys: state.subtotalBys, columns: state.columns, onSubmit: function (action) { return _this.submitColumnConfigChange(action); }, onDismiss: function () { return _this.toggleSettingsPopover(); }})));
+	            return (React.createElement("div", null, React.createElement(SettingsPopover_1.SettingsPopover, {subtotalBys: state.subtotalBys, columns: state.columns, onSubmit: function (action) { return _this.submitColumnConfigChange(action); }, onDismiss: function () { return _this.toggleSettingsPopover(); }, additionalUserButtons: state.additionalUserButtons})));
 	        else
 	            return null;
 	    };
@@ -254,7 +254,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        bodyHeight: "500px",
 	        rowHeight: "25px",
 	        collapseHeight: false,
-	        expandTable: false
+	        expandTable: false,
+	        additionalUserButtons: []
 	    };
 	    return GigaGrid;
 	}(React.Component));
@@ -317,7 +318,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function computeCanvasWidth($canvas, rootNodeWidth) {
 	    return rootNodeWidth - getScrollBarWidth();
 	}
-
+	//# sourceMappingURL=GigaGrid.js.map
 
 /***/ },
 /* 2 */
@@ -12760,7 +12761,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return ColumnFactory;
 	}());
 	exports.ColumnFactory = ColumnFactory;
-
+	//# sourceMappingURL=ColumnLike.js.map
 
 /***/ },
 /* 7 */
@@ -12897,7 +12898,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GigaActionType[GigaActionType["COLUMNS_UPDATE"] = 13] = "COLUMNS_UPDATE";
 	})(exports.GigaActionType || (exports.GigaActionType = {}));
 	var GigaActionType = exports.GigaActionType;
-
+	//# sourceMappingURL=GigaStore.js.map
 
 /***/ },
 /* 8 */
@@ -13115,6 +13116,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var queueIndex = -1;
 	
 	function cleanUpNextTick() {
+	    if (!draining || !currentQueue) {
+	        return;
+	    }
 	    draining = false;
 	    if (currentQueue.length) {
 	        queue = currentQueue.concat(queue);
@@ -19527,7 +19531,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return TreeRasterizer;
 	}());
 	exports.TreeRasterizer = TreeRasterizer;
-
+	//# sourceMappingURL=TreeRasterizer.js.map
 
 /***/ },
 /* 28 */
@@ -19573,7 +19577,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	exports.decorateColumnsWithSort = decorateColumnsWithSort;
 	function default_1(action) {
-	    var _a = action.props, data = _a.data, columnDefs = _a.columnDefs, columnGroups = _a.columnGroups, initialSubtotalBys = _a.initialSubtotalBys, initialSortBys = _a.initialSortBys, initialFilterBys = _a.initialFilterBys, initiallyExpandedSubtotalRows = _a.initiallyExpandedSubtotalRows, initiallySelectedSubtotalRows = _a.initiallySelectedSubtotalRows, expandTable = _a.expandTable;
+	    var _a = action.props, data = _a.data, columnDefs = _a.columnDefs, columnGroups = _a.columnGroups, initialSubtotalBys = _a.initialSubtotalBys, initialSortBys = _a.initialSortBys, initialFilterBys = _a.initialFilterBys, initiallyExpandedSubtotalRows = _a.initiallyExpandedSubtotalRows, initiallySelectedSubtotalRows = _a.initiallySelectedSubtotalRows, expandTable = _a.expandTable, additionalUserButtons = _a.additionalUserButtons;
 	    /**
 	     * turn ColumnDefs into "Columns" which are decorated with behaviors
 	     */
@@ -19610,12 +19614,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        showSettingsPopover: false,
 	        viewport: undefined,
 	        canvas: undefined,
-	        expandTable: expandTable
+	        expandTable: expandTable,
+	        additionalUserButtons: additionalUserButtons
 	    };
 	}
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = default_1;
-
+	//# sourceMappingURL=InitializeReducer.js.map
 
 /***/ },
 /* 29 */
@@ -19708,7 +19713,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return SortFactory;
 	}());
 	exports.SortFactory = SortFactory;
-
+	//# sourceMappingURL=SortFactory.js.map
 
 /***/ },
 /* 30 */
@@ -19750,7 +19755,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    else
 	        return cellValue;
 	}
-
+	//# sourceMappingURL=SortFactoryHelpers.js.map
 
 /***/ },
 /* 31 */
@@ -19893,7 +19898,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return SubtotalAggregator;
 	}());
 	exports.SubtotalAggregator = SubtotalAggregator;
-
+	//# sourceMappingURL=SubtotalAggregator.js.map
 
 /***/ },
 /* 32 */
@@ -20072,7 +20077,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return Tree;
 	}());
 	exports.Tree = Tree;
-
+	//# sourceMappingURL=TreeBuilder.js.map
 
 /***/ },
 /* 33 */
@@ -20215,7 +20220,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return SubtotalRow;
 	}(GenericRow));
 	exports.SubtotalRow = SubtotalRow;
-
+	//# sourceMappingURL=Row.js.map
 
 /***/ },
 /* 34 */
@@ -20419,7 +20424,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	}
 	exports.dataToSubtotalRows = dataToSubtotalRows;
-
+	//# sourceMappingURL=ServerStore.js.map
 
 /***/ },
 /* 35 */
@@ -20444,14 +20449,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return ScrollCalculator;
 	}());
 	exports.ScrollCalculator = ScrollCalculator;
-
+	//# sourceMappingURL=ScrollCalculator.js.map
 
 /***/ },
 /* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	 * jQuery JavaScript Library v2.2.3
+	 * jQuery JavaScript Library v2.2.4
 	 * http://jquery.com/
 	 *
 	 * Includes Sizzle.js
@@ -20461,7 +20466,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Released under the MIT license
 	 * http://jquery.org/license
 	 *
-	 * Date: 2016-04-05T19:26Z
+	 * Date: 2016-05-20T17:23Z
 	 */
 	
 	(function( global, factory ) {
@@ -20517,7 +20522,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	var
-		version = "2.2.3",
+		version = "2.2.4",
 	
 		// Define a local copy of jQuery
 		jQuery = function( selector, context ) {
@@ -25458,13 +25463,14 @@ return /******/ (function(modules) { // webpackBootstrap
 		isDefaultPrevented: returnFalse,
 		isPropagationStopped: returnFalse,
 		isImmediatePropagationStopped: returnFalse,
+		isSimulated: false,
 	
 		preventDefault: function() {
 			var e = this.originalEvent;
 	
 			this.isDefaultPrevented = returnTrue;
 	
-			if ( e ) {
+			if ( e && !this.isSimulated ) {
 				e.preventDefault();
 			}
 		},
@@ -25473,7 +25479,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 			this.isPropagationStopped = returnTrue;
 	
-			if ( e ) {
+			if ( e && !this.isSimulated ) {
 				e.stopPropagation();
 			}
 		},
@@ -25482,7 +25488,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 			this.isImmediatePropagationStopped = returnTrue;
 	
-			if ( e ) {
+			if ( e && !this.isSimulated ) {
 				e.stopImmediatePropagation();
 			}
 	
@@ -26412,19 +26418,6 @@ return /******/ (function(modules) { // webpackBootstrap
 			val = name === "width" ? elem.offsetWidth : elem.offsetHeight,
 			styles = getStyles( elem ),
 			isBorderBox = jQuery.css( elem, "boxSizing", false, styles ) === "border-box";
-	
-		// Support: IE11 only
-		// In IE 11 fullscreen elements inside of an iframe have
-		// 100x too small dimensions (gh-1764).
-		if ( document.msFullscreenElement && window.top !== window ) {
-	
-			// Support: IE11 only
-			// Running getBoundingClientRect on a disconnected node
-			// in IE throws an error.
-			if ( elem.getClientRects().length ) {
-				val = Math.round( elem.getBoundingClientRect()[ name ] * 100 );
-			}
-		}
 	
 		// Some non-html elements return undefined for offsetWidth, so check for null/undefined
 		// svg - https://bugzilla.mozilla.org/show_bug.cgi?id=649285
@@ -28316,6 +28309,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		},
 	
 		// Piggyback on a donor event to simulate a different one
+		// Used only for `focus(in | out)` events
 		simulate: function( type, elem, event ) {
 			var e = jQuery.extend(
 				new jQuery.Event(),
@@ -28323,27 +28317,10 @@ return /******/ (function(modules) { // webpackBootstrap
 				{
 					type: type,
 					isSimulated: true
-	
-					// Previously, `originalEvent: {}` was set here, so stopPropagation call
-					// would not be triggered on donor event, since in our own
-					// jQuery.event.stopPropagation function we had a check for existence of
-					// originalEvent.stopPropagation method, so, consequently it would be a noop.
-					//
-					// But now, this "simulate" function is used only for events
-					// for which stopPropagation() is noop, so there is no need for that anymore.
-					//
-					// For the 1.x branch though, guard for "click" and "submit"
-					// events is still used, but was moved to jQuery.event.stopPropagation function
-					// because `originalEvent` should point to the original event for the constancy
-					// with other events and for more focused logic
 				}
 			);
 	
 			jQuery.event.trigger( e, null, elem );
-	
-			if ( e.isDefaultPrevented() ) {
-				event.preventDefault();
-			}
 		}
 	
 	} );
@@ -30341,7 +30318,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        children.forEach(function (child) { return recursivelyDeselect(child); });
 	    }
 	}
-
+	//# sourceMappingURL=SelectReducers.js.map
 
 /***/ },
 /* 38 */
@@ -30379,7 +30356,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return newState;
 	}
 	exports.cleartSortReducer = cleartSortReducer;
-
+	//# sourceMappingURL=SortReducers.js.map
 
 /***/ },
 /* 39 */
@@ -30395,7 +30372,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return newState;
 	}
 	exports.changeDisplayBoundsReducer = changeDisplayBoundsReducer;
-
+	//# sourceMappingURL=ChangeRowDisplayBoundsReducer.js.map
 
 /***/ },
 /* 40 */
@@ -30425,7 +30402,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return newState;
 	}
 	exports.toggleCollapseReducer = toggleCollapseReducer;
-
+	//# sourceMappingURL=RowCollapseReducers.js.map
 
 /***/ },
 /* 41 */
@@ -30449,7 +30426,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _.assign({}, state, newColumnStates);
 	}
 	exports.columnUpdateReducer = columnUpdateReducer;
-
+	//# sourceMappingURL=ColumnUpdateReducer.js.map
 
 /***/ },
 /* 42 */
@@ -30767,7 +30744,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return TableBody;
 	}(React.Component));
 	exports.TableBody = TableBody;
-
+	//# sourceMappingURL=TableBody.js.map
 
 /***/ },
 /* 45 */
@@ -30817,7 +30794,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return GigaRow;
 	}(React.Component));
 	exports.GigaRow = GigaRow;
-
+	//# sourceMappingURL=GigaRow.js.map
 
 /***/ },
 /* 46 */
@@ -30989,7 +30966,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return DefaultCellRenderer;
 	}());
 	exports.DefaultCellRenderer = DefaultCellRenderer;
-
+	//# sourceMappingURL=Cell.js.map
 
 /***/ },
 /* 48 */
@@ -31047,7 +31024,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return TableHeader;
 	}(React.Component));
 	exports.TableHeader = TableHeader;
-
+	//# sourceMappingURL=TableHeader.js.map
 
 /***/ },
 /* 49 */
@@ -31124,7 +31101,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return TableHeaderCell;
 	}(React.Component));
 	exports.TableHeaderCell = TableHeaderCell;
-
+	//# sourceMappingURL=TableHeaderCell.js.map
 
 /***/ },
 /* 50 */
@@ -31162,7 +31139,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return ToolbarToggle;
 	}(React.Component));
 	exports.ToolbarToggle = ToolbarToggle;
-
+	//# sourceMappingURL=Toolbar.js.map
 
 /***/ },
 /* 51 */
@@ -31635,7 +31612,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "column-100": !activeColumn ? false : true
 	        };
 	        var layoutControlClassName = classNames(layoutControlClassDict);
-	        return (React.createElement("div", {className: "giga-grid-settings-pop-over", onClick: function (e) { return e.stopPropagation(); }}, React.createElement("h3", null, "Configure table columns"), React.createElement("div", {className: "row"}, React.createElement("div", {className: layoutControlClassName}, React.createElement("div", null, React.createElement("h5", null, "Columns"), this.renderSortable("columns", this.state.columns)), React.createElement("div", null, React.createElement("h5", null, "Subtotal By"), this.renderSortable("subtotalBys", this.state.subtotalBys)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.EXPAND_ALL }); }}, "Expand All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.COLLAPSE_ALL }); }}, "Collapse All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.CLEAR_SORT }); }}, "Clear Sort")), React.createElement("br", null), React.createElement("div", null)), this.renderColumnConfigurer(activeColumn)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", style: { float: "right" }, onClick: function (e) { return _this.props.onDismiss(); }}, "Close ", React.createElement("i", {className: "fa fa-times"})), React.createElement("span", {className: "giga-grid-button", style: { float: "right" }, onClick: function (e) { return _this.commitColumnUpdates(); }}, "Save ", React.createElement("i", {className: "fa fa-save"})))));
+	        return (React.createElement("div", {className: "giga-grid-settings-pop-over", onClick: function (e) { return e.stopPropagation(); }}, React.createElement("h3", null, "Configure table columns"), React.createElement("div", {className: "row"}, React.createElement("div", {className: layoutControlClassName}, React.createElement("div", null, React.createElement("h5", null, "Columns"), this.renderSortable("columns", this.state.columns)), React.createElement("div", null, React.createElement("h5", null, "Subtotal By"), this.renderSortable("subtotalBys", this.state.subtotalBys)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.EXPAND_ALL }); }}, "Expand All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.COLLAPSE_ALL }); }}, "Collapse All"), " ", React.createElement("span", {className: "giga-grid-button", onClick: function () { return _this.props.onSubmit.call(undefined, { type: GigaStore_1.GigaActionType.CLEAR_SORT }); }}, "Clear Sort")), React.createElement("br", null), this.renderAdditionalUserButtons(), React.createElement("div", null)), this.renderColumnConfigurer(activeColumn)), React.createElement("div", null, React.createElement("span", {className: "giga-grid-button", style: { float: "right" }, onClick: function (e) { return _this.props.onDismiss(); }}, "Close ", React.createElement("i", {className: "fa fa-times"})), React.createElement("span", {className: "giga-grid-button", style: { float: "right" }, onClick: function (e) { return _this.commitColumnUpdates(); }}, "Save ", React.createElement("i", {className: "fa fa-save"})))));
+	    };
+	    SettingsPopover.prototype.renderAdditionalUserButtons = function () {
+	        var additionalUserButtons = this.props.additionalUserButtons;
+	        return (React.createElement("div", null, additionalUserButtons.map(function (additionalUserButton) {
+	            return React.createElement("span", {className: "giga-grid-button", key: additionalUserButton.name, onClick: function () { return additionalUserButton.customCallback(); }}, additionalUserButton.name);
+	        })));
 	    };
 	    SettingsPopover.prototype.renderColumnConfigurer = function (column) {
 	        var _this = this;
@@ -31663,7 +31646,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return SettingsPopover;
 	}(React.Component));
 	exports.SettingsPopover = SettingsPopover;
-
+	//# sourceMappingURL=SettingsPopover.js.map
 
 /***/ },
 /* 56 */
@@ -31730,7 +31713,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return SortableItem;
 	}(React.Component));
 	exports.SortableItem = SortableItem;
-
+	//# sourceMappingURL=SortableItem.js.map
 
 /***/ },
 /* 57 */
@@ -31770,6 +31753,124 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.push([module.id, "span.giga-grid-button.dismiss {\n  float: right;\n}\nh5.inline-label {\n  display: inline;\n}\n.giga-grid .giga-grid-settings-pop-over {\n  border: 1px solid toolbar-border-color;\n  padding: 1em;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  position: absolute;\n  top: 20px;\n  z-index: 1;\n  background-color: #fff;\n  width: 660px;\n  min-height: 350px;\n}\n.giga-grid .giga-grid-settings-pop-over ul {\n  list-style: circle;\n}\n.giga-grid .giga-grid-settings-pop-over ul li {\n  display: inline-block;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\n  padding: 5px;\n  margin-right: 3px;\n  margin-bottom: 5px;\n}\n.giga-grid .giga-grid-settings-pop-over ul li:hover {\n  cursor: pointer;\n  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;\n  background-color: toolbar-border-color;\n}\n.giga-grid .giga-grid-settings-pop-over ul li.dragging {\n  border-right: 2px solid #ff4500;\n}\n", ""]);
 	
 	// exports
+
+
+/***/ },
+/* 59 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(2);
+	var classNames = __webpack_require__(46);
+	var ColumnLike_1 = __webpack_require__(6);
+	var SubtotalAggregator_1 = __webpack_require__(31);
+	var GigaStore_1 = __webpack_require__(7);
+	var Cell = (function (_super) {
+	    __extends(Cell, _super);
+	    function Cell(props) {
+	        _super.call(this, props);
+	    }
+	    Cell.prototype.render = function () {
+	        var props = this.props;
+	        var row = props.row;
+	        var column = props.column;
+	        if (_.isFunction(column.cellTemplateCreator))
+	            return column.cellTemplateCreator(row, column, props);
+	        else
+	            return new DefaultCellRenderer(props).render();
+	    };
+	    return Cell;
+	}(React.Component));
+	exports.Cell = Cell;
+	var DefaultCellRenderer = (function () {
+	    function DefaultCellRenderer(props) {
+	        this.props = props;
+	    }
+	    DefaultCellRenderer.prototype.onCollapseToggle = function (e) {
+	        e.preventDefault();
+	        e.stopPropagation(); // we don't want toggle collapse to also trigger a row / cell clicked event
+	        var gridProps = this.props.gridProps;
+	        if (gridProps && gridProps.useServerStore) {
+	            if (gridProps.fetchRowsActionCreator)
+	                gridProps.fetchRowsActionCreator(this.props.row, this.props.dispatcher);
+	            else
+	                throw "error: server store in use yet fetchRowsActionCreator not defined on GigaGrid props";
+	        }
+	        else {
+	            var action = {
+	                type: GigaStore_1.GigaActionType.TOGGLE_ROW_COLLAPSE,
+	                subtotalRow: this.props.row
+	            };
+	            this.props.dispatcher.dispatch(action);
+	        }
+	    };
+	    DefaultCellRenderer.prototype.onClick = function () {
+	        var action = {
+	            type: GigaStore_1.GigaActionType.TOGGLE_CELL_SELECT,
+	            row: this.props.row,
+	            column: this.props.column
+	        };
+	        this.props.dispatcher.dispatch(action);
+	    };
+	    DefaultCellRenderer.prototype.calculateStyle = function () {
+	        return {
+	            width: this.props.column.width,
+	            height: this.props.rowHeight,
+	            paddingLeft: this.props.isFirstColumn ? DefaultCellRenderer.calculateFirstColumnIdentation(this.props.row) : undefined
+	        };
+	    };
+	    DefaultCellRenderer.prototype.renderCellWithCollapseToggle = function (row) {
+	        var _this = this;
+	        var cx = classNames({
+	            "fa": true,
+	            "fa-plus-square-o": row.isCollapsed(),
+	            "fa-minus-square-o": !row.isCollapsed()
+	        });
+	        return (React.createElement("td", {style: this.calculateStyle(), onClick: function (e) { return _this.onClick(); }}, React.createElement("span", null, React.createElement("i", {className: cx, onClick: function (e) { return _this.onCollapseToggle(e); }}), " ", row.bucketInfo.title || "", row.isLoading() ? [" ", React.createElement("i", {className: "fa fa-spinner fa-spin"})] : null)));
+	    };
+	    DefaultCellRenderer.prototype.renderNormalCell = function (row, column) {
+	        var _this = this;
+	        var renderedCellContent = SubtotalAggregator_1.format(row.get(column), column.formatInstruction) || "";
+	        if (!row.isDetail()
+	            && (column.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT || column.aggregationMethod === ColumnLike_1.AggregationMethod.COUNT_DISTINCT))
+	            renderedCellContent = "[" + renderedCellContent + "]";
+	        return (React.createElement("td", {className: DefaultCellRenderer.calculateTextAlignment(row, column), onClick: function (e) { return _this.onClick(); }, style: this.calculateStyle()}, renderedCellContent));
+	    };
+	    DefaultCellRenderer.calculateTextAlignment = function (row, column) {
+	        var value = row.get(column);
+	        if (column.formatInstruction && column.formatInstruction.textAlign)
+	            return "text-align-" + column.formatInstruction.textAlign;
+	        else if (isNaN(value))
+	            return "text-align-left";
+	        else
+	            return "text-align-right";
+	    };
+	    DefaultCellRenderer.calculateFirstColumnIdentation = function (row) {
+	        /*
+	         handle when there are no subtotal rows
+	         */
+	        if ((row.sectorPath() || []).length === 0)
+	            return "10px";
+	        else {
+	            var identLevel = (row.sectorPath() || []).length;
+	            return ((row.isDetail() && identLevel !== 0 ? identLevel + 1 : identLevel) * 25) + 'px';
+	        }
+	    };
+	    DefaultCellRenderer.prototype.render = function () {
+	        var _a = this.props, isFirstColumn = _a.isFirstColumn, row = _a.row, column = _a.column;
+	        if (isFirstColumn && !row.isDetail())
+	            return this.renderCellWithCollapseToggle(row);
+	        else
+	            return this.renderNormalCell(row, column);
+	    };
+	    return DefaultCellRenderer;
+	}());
+	exports.DefaultCellRenderer = DefaultCellRenderer;
 
 
 /***/ }
