@@ -110,7 +110,7 @@ export interface GigaProps extends React.Props<GigaGrid> {
      */
     tableHeaderClass?:string
     expandTable?:boolean
-    additionalUserButtons?:any[]
+    additionalUserButtons?:AdditionalButton[]
 
 }
 
@@ -119,6 +119,11 @@ export interface GridSubcomponentProps<T> extends React.Props<T> {
     // idk if this is a good idea - but sub components often need to refer to things like callbacks - really annoying to pass them at each level
     // making them optional so tests' don't complain as much
     gridProps?: GigaProps
+}
+
+export interface AdditionalButton{
+    name: string
+    customCallback: ()=>any
 }
 
 /**
@@ -148,7 +153,7 @@ export interface GigaState {
     displayStart:number
     displayEnd:number
     showSettingsPopover:boolean
-    additionalUserButtons:any[]
+    additionalUserButtons:AdditionalButton[]
 
      canvas:HTMLElement;
      viewport:HTMLElement;
