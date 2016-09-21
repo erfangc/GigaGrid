@@ -9,13 +9,14 @@ import DragEvent = __React.DragEvent;
 import Props = __React.Props;
 import SyntheticEvent = __React.SyntheticEvent;
 import {ColumnUpdateAction} from "../../store/reducers/ColumnUpdateReducer";
+import {AdditionalButton} from "../GigaGrid";
 
 export interface SettingsPopoverProps {
     subtotalBys:Column[]
     columns:Column[]
     onSubmit:(action:GigaAction)=>any
     onDismiss:()=>any
-    additionalUserButtons:any[]
+    additionalUserButtons:AdditionalButton[]
 }
 
 interface SettingsPopoverState {
