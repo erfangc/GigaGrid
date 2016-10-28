@@ -4,7 +4,7 @@ import {FrozenGigaRow} from "../GigaRow/FrozenGigaRow";
 import {TableBody} from "./TableBody";
 
 export class FrozenTableBody extends TableBody {
-    mapRowsInBody(rowHeight:number, row:Row, i:number){
+    mapRowsInBody(rowHeight:number, row:Row, i:number):JSX.Element{
         return (<FrozenGigaRow key={i}
                                columns={this.props.columns}
                                row={row}

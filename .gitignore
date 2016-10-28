@@ -1,6 +1,12 @@
 examples/bundle.*
 src/**/*.js
+src/**/*.js.map
 test/**/*.js
+test/**/*.js.map
+examples/**/*.js
+examples/**/*.js.map
+index.js
+index.js.map
 .idea
 node_modules
 target/

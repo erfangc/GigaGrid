@@ -1,7 +1,6 @@
-import * as React from 'react';
+import * as React from "react";
 import {Column} from "../../models/ColumnLike";
 import {Row} from "../../models/Row";
-import {GigaRow} from "../GigaRow/GigaRow";
 import {PROGRESSIVE_RENDERING_THRESHOLD} from "../../store/GigaStore";
 import {GridSubcomponentProps} from "../GigaGrid";
 
@@ -28,12 +27,12 @@ export class TableBody extends React.Component<TableBodyProps,any> {
         );
     }
 
-    renderRows(rowHeight: number, start?:number, end?:number):GigaRow[] {
+    renderRows(rowHeight: number, start?:number, end?:number):JSX.Element[] {
         const rows = validateBounds(start, end) ? this.props.rows.slice(start, end + 1) : this.props.rows;
         return rows.map((row:Row, i:number) => this.mapRowsInBody(rowHeight, row, i));
     }
 
-    mapRowsInBody(rowHeight:number, row:Row, i:number){
+    mapRowsInBody(rowHeight:number, row:Row, i:number):JSX.Element {
         throw "Must extend TableBody, cannot use is as a component directly!";
     }
 
