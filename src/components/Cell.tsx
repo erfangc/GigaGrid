@@ -5,9 +5,8 @@ import {Row, SubtotalRow} from "../models/Row";
 import {format} from "../static/SubtotalAggregator";
 import {GigaActionType} from "../store/GigaStore";
 import {GridSubcomponentProps} from "./GigaGrid";
-import SyntheticEvent = __React.SyntheticEvent;
 import {ToggleCollapseAction} from "../store/reducers/RowCollapseReducers";
-import {ChangeRowDisplayBoundsAction} from "../store/reducers/ChangeRowDisplayBoundsReducer";
+import SyntheticEvent = __React.SyntheticEvent;
 import $ = require('jquery');
 
 export interface CellProps extends GridSubcomponentProps<Cell> {

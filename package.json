@@ -1,5 +1,5 @@
 {
-  "name": "@blk/giga-grid",
+  "name": "giga-grid",
   "version": "0.6.0",
   "description": "Massively performant, multi-layered React.js table widget Written in TypeScript",
   "main": "dist/giga-grid.js",
@@ -54,7 +54,7 @@
     "react-bootstrap": "^0.28.3",
     "style-loader": "^0.13.0",
     "stylus": "^0.53.0",
-    "stylus-loader": "^1.5.1",
+    "stylus-loader": "^1.6.1",
     "ts-loader": "^0.8.1",
     "typescript": "^1.7.5",
     "url-loader": "^0.5.7",

@@ -59,9 +59,9 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
             }}
             additionalUserButtons={additionalUserButtons}
             initialSortBys={[
-                {colTag:"Age", direction: SortDirection.ASC, customSortFn: function(a,b){ return a - b },},
-                {colTag:"Children", direction: SortDirection.ASC, customSortFn: function(a,b){ return b - a }},
-                {colTag:"Income", direction: SortDirection.ASC, customSortFn: function(a,b){ return b - a }}
+                {colTag:"Age", direction: SortDirection.ASC},
+                {colTag:"Children", direction: SortDirection.ASC},
+                {colTag:"Income", direction: SortDirection.ASC}
             ]}
             staticLeftHeaders={1}
             {...UKBudget}

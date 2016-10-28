@@ -27,23 +27,23 @@ export interface GigaProps extends React.Props<GigaGrid> {
      * Initial set of SubtotalBy declarations, default to `[]`. If set, the grid will initialize
      * with the specified subtotals
      */
-    initialSubtotalBys?:ColumnDef[]
+    initialSubtotalBys?: ColumnDef[]
 
     /**
      * Initial set of SortBy declarations, default to `[]`. If set, the grid will initialize
      * with the specified sorting order
      */
-    initialSortBys?:Column[]
+    initialSortBys?: Column[]
 
-    initialFilterBys?:FilterBy[]
+    initialFilterBys?: FilterBy[]
 
     /**
      * Callback that fires when a row is clicked, return `false` in the passed callback function to suppress
      * default behavior (highlights the row)
      * @param row the `Row` object associated with the row the user clicked on
      */
-    onRowClick?:(row:Row, state:GigaState)=>boolean
-    enableMultiRowSelect?:boolean
+    onRowClick?: (row: Row, state: GigaState)=>boolean
+    enableMultiRowSelect?: boolean
 
     /**
      * Callback that fires when a cell is clicked, return `false` in the passed callback function to suppress
@@ -62,27 +62,27 @@ export interface GigaProps extends React.Props<GigaGrid> {
      * @param row
      * @param columnDef
      */
-    onCellClick?:(row:Row, columnDef:Column)=>boolean
+    onCellClick?: (row: Row, columnDef: Column)=>boolean
 
     /**
      * array of object literals representing the raw un-subtotaled data
      */
-    data:any[]
+    data: any[]
 
     /**
      * array of [ColumnDef](_models_columnlike_.columndef.html) which defines the data type, header title
      * and other metadata about each column in `data`
      */
-    columnDefs:ColumnDef[]
-    columnGroups?:ColumnGroupDef[]
-    bodyHeight?:string
-    rowHeight?:string
+    columnDefs: ColumnDef[]
+    columnGroups?: ColumnGroupDef[]
+    bodyHeight?: string
+    rowHeight?: string
 
     /**
      * If the height of the table itself is less than the container as defined in bodyHeight, the table's height will
      * be the size of the table itself
      */
-    collapseHeight?:boolean
+    collapseHeight?: boolean
 
     /**
      * EXPERIMENTAL - these props allow us to expand / select SubtotalRow on construction of the grid component
@@ -100,19 +100,19 @@ export interface GigaProps extends React.Props<GigaGrid> {
     /**
      * sector paths to expand by default
      */
-    initiallyExpandedSubtotalRows?:string[][]
+    initiallyExpandedSubtotalRows?: string[][]
     /**
      * sector paths to mark as "selected"
      */
-    initiallySelectedSubtotalRows?:string[][]
-    disableConfiguration?:boolean
+    initiallySelectedSubtotalRows?: string[][]
+    disableConfiguration?: boolean
     /**
      * custom classes
      */
-    tableHeaderClass?:string
-    expandTable?:boolean
-    staticLeftHeaders?:number
-    additionalUserButtons?:AdditionalButton[]
+    tableHeaderClass?: string
+    expandTable?: boolean
+    staticLeftHeaders?: number
+    additionalUserButtons?: AdditionalButton[]
 
 }
 
@@ -123,7 +123,7 @@ export interface GridSubcomponentProps<T> extends React.Props<T> {
     gridProps?: GigaProps
 }
 
-export interface AdditionalButton{
+export interface AdditionalButton {
     name: string
     customCallback: ()=>any
 }
@@ -142,23 +142,24 @@ export interface AdditionalButton{
  */
 export interface GigaState {
 
-    gridID?:number
-    tree:Tree
-    columns:Column[]
-    subtotalBys:Column[]
-    sortBys:Column[]
-    filterBys:FilterBy[]
+    gridID?: number
+    tree: Tree
+    columns: Column[]
+    subtotalBys: Column[]
+    sortBys: Column[]
+    filterBys: FilterBy[]
     /*
      the displayable view of the data in `tree`
      */
-    rasterizedRows:Row[]
-    displayStart:number
-    displayEnd:number
-    showSettingsPopover:boolean
-    additionalUserButtons:AdditionalButton[]
+    rasterizedRows: Row[]
+    displayStart: number
+    displayEnd: number
+    showSettingsPopover: boolean
+    additionalUserButtons: AdditionalButton[]
+    expandTable: boolean
 
-     canvas:HTMLElement;
-     viewport:HTMLElement;
+    canvas: HTMLElement;
+    viewport: HTMLElement;
 }
 
 /**
@@ -179,9 +180,9 @@ export interface GigaState {
 export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
     private store: ReduceStore<GigaState>;
-    private dispatcher:Dispatcher<GigaAction>;
+    private dispatcher: Dispatcher<GigaAction>;
 
-    static defaultProps:GigaProps = {
+    static defaultProps: GigaProps = {
         initialSubtotalBys: [],
         initialSortBys: [],
         initialFilterBys: [],
@@ -194,14 +195,14 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         additionalUserButtons: []
     };
 
-    private static createStore(props:GigaProps, dispatcher: Dispatcher<GigaAction>) :ReduceStore<GigaState> {
+    private static createStore(props: GigaProps, dispatcher: Dispatcher<GigaAction>): ReduceStore<GigaState> {
         if (props.useServerStore)
             return new ServerStore(dispatcher, props);
         else
             return new GigaStore(dispatcher, props);
     }
 
-    constructor(props:GigaProps) {
+    constructor(props: GigaProps) {
         super(props);
         this.dispatcher = new Dispatcher<GigaAction>();
         this.store = GigaGrid.createStore(props, this.dispatcher);
@@ -218,7 +219,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         stepInput: (HTMLInputElement);
     };
 
-    submitColumnConfigChange(action:GigaAction) {
+    submitColumnConfigChange(action: GigaAction) {
         this.dispatcher.dispatch(action);
     }
 
@@ -247,14 +248,14 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
     render() {
 
-        var columns:Column[][];
+        var columns: Column[][];
         const state = this.store.getState();
         if (this.props.columnGroups)
             columns = ColumnFactory.createColumnsFromGroupDefinition(this.props.columnGroups, state);
         else
             columns = [state.columns];
 
-        var bodyStyle:any = {};
+        var bodyStyle: any = {};
 
         /**
          * As noted in the collapseHeight property of the GigaProps interface, if collapseHeight is true, the table will
@@ -269,14 +270,14 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         /**
          * We need to figure out what columns go in which sub table depending on how many static left headers there are
          */
-        const allCols = columns[columns.length-1];
+        const allCols = columns[columns.length - 1];
         let leftCols, rightCols;
         // Static headers experience a latency issue in internet explorer.  Let's not enable it for now
-        if( isNaN(this.props.staticLeftHeaders) || isInternetExplorer() ){
+        if (isNaN(this.props.staticLeftHeaders) || isInternetExplorer()) {
             leftCols = [];
             rightCols = allCols;
         }
-        else if( allCols.length > this.props.staticLeftHeaders ){
+        else if (allCols.length > this.props.staticLeftHeaders) {
             leftCols = _.take(allCols, this.props.staticLeftHeaders);
             rightCols = _.takeRight(allCols, allCols.length - this.props.staticLeftHeaders);
         }
@@ -288,7 +289,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                 {this.renderSettingsPopover()}
                 <div className="giga-grid-header-container">
                     <TableHeader dispatcher={this.dispatcher}
-                                 columns={columns} 
+                                 columns={columns}
                                  tableHeaderClass={this.props.tableHeaderClass}
                                  staticLeftHeaders={this.props.staticLeftHeaders}
                                  gridProps={this.props}/>
@@ -299,18 +300,18 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
                      style={bodyStyle}>
                     {
                         leftCols.length == 0 ? "" :
-                        <div className="giga-grid-left-headers-container">
-                            <div className="giga-grid-body-canvas">
-                                <FrozenTableBody dispatcher={this.dispatcher}
-                                                 rows={state.rasterizedRows}
-                                                 columns={leftCols}
-                                                 displayStart={state.displayStart}
-                                                 displayEnd={state.displayEnd}
-                                                 rowHeight={this.props.rowHeight}
-                                                 gridProps={this.props}
-                                />
+                            <div className="giga-grid-left-headers-container">
+                                <div className="giga-grid-body-canvas">
+                                    <FrozenTableBody dispatcher={this.dispatcher}
+                                                     rows={state.rasterizedRows}
+                                                     columns={leftCols}
+                                                     displayStart={state.displayStart}
+                                                     displayEnd={state.displayEnd}
+                                                     rowHeight={this.props.rowHeight}
+                                                     gridProps={this.props}
+                                    />
+                                </div>
                             </div>
-                        </div>
                     }
                     <div className="giga-grid-right-data-container">
                         <div ref={c=>state.canvas=c} className="giga-grid-body-canvas">
@@ -328,8 +329,8 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             </div>);
     }
 
-    componentWillReceiveProps(nextProps:GigaProps) {
-        var payload:InitializeAction = {
+    componentWillReceiveProps(nextProps: GigaProps) {
+        var payload: InitializeAction = {
             type: GigaActionType.INITIALIZE,
             props: nextProps
         };
@@ -342,19 +343,19 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
      * this is the "give up" solution, implemented in 0.1.7
      */
     componentDidUpdate(prevProps, prevState) {
-        if( this.state.rasterizedRows.length !== prevState.rasterizedRows.length ||
+        if (this.state.rasterizedRows.length !== prevState.rasterizedRows.length ||
             this.state.displayStart !== prevState.displayStart ||
             this.state.filterBys !== prevState.filterBys ||
             this.state.sortBys !== prevState.sortBys ||
             this.state.subtotalBys !== prevState.subtotalBys)
-                this.synchTableHeaderWidthToFirstRow();
+            this.synchTableHeaderWidthToFirstRow();
     }
 
     /**
      * yes this is still a thing!
      */
     synchTableHeaderWidthToFirstRow() {
-        const node:Element = ReactDOM.findDOMNode<Element>(this);
+        const node: Element = ReactDOM.findDOMNode<Element>(this);
 
         /**
          * To improve performance, we use our own dynamic stylesheet for giga-grid.  jQuery is slow, so by adding
@@ -364,25 +365,25 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         var widths = [];
 
         // Gets with of .content in a cell, or 80, whichever is greater
-        function getWidthForDataCell(elem):number{
-            const leftPadding:number = +($(elem).css("padding-left").replace(/[^\d.-]/g, ''));
-            const rightPadding:number = +($(elem).css("padding-right").replace(/[^\d.-]/g, ''));
+        function getWidthForDataCell(elem): number {
+            const leftPadding: number = +($(elem).css("padding-left").replace(/[^\d.-]/g, ''));
+            const rightPadding: number = +($(elem).css("padding-right").replace(/[^\d.-]/g, ''));
 
             // 80 px is the min width of cell
             return Math.max($(elem).find(".content").innerWidth() + leftPadding + rightPadding, 80);
         }
 
         // This function alligns header cells and their underlying data cells
-        function allignColumns($headerContainers, $rows){
-            _.forEach($headerContainers, (header, index:number) => {
-                const headerWidth:number = getWidthForDataCell(header);
+        function allignColumns($headerContainers, $rows) {
+            _.forEach($headerContainers, (header, index: number) => {
+                const headerWidth: number = getWidthForDataCell(header);
 
                 // Get all data cells underlying this column
-                const $dataElems = $rows.find(`.content-container:nth-of-type(${index+1})`);
+                const $dataElems = $rows.find(`.content-container:nth-of-type(${index + 1})`);
 
                 // Get all widths of underlying data cells, and find the largest
-                const dataWidths:number[] = _.map($dataElems, (elem):number => getWidthForDataCell(elem) );
-                const columnWidth:number = Math.max.apply(null, dataWidths.concat(headerWidth)) + 10; // Adding 10 for padding
+                const dataWidths: number[] = _.map($dataElems, (elem): number => getWidthForDataCell(elem));
+                const columnWidth: number = Math.max.apply(null, dataWidths.concat(headerWidth)) + 10; // Adding 10 for padding
                 widths.push(columnWidth);
             });
         }
@@ -400,29 +401,29 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         allignColumns($leftHeaderContainers, $leftHeaderRows);
         allignColumns($rightHeaderContainers, $dataRows);
 
-        const gigaGridWidth:number = $(node).innerWidth();
+        const gigaGridWidth: number = $(node).innerWidth();
 
-        const sumOfHeaderWidths:number = widths.reduce((sum, memo) => sum + memo, 0);
+        const sumOfHeaderWidths: number = widths.reduce((sum, memo) => sum + memo, 0);
 
         // If the table doesn't fit the width of the container, make them fit it
-        if( gigaGridWidth*.98 > sumOfHeaderWidths){
+        if (gigaGridWidth * .98 > sumOfHeaderWidths) {
             const $allHeaderContainers = $(node).find(".table-header:not(.blank-header-cell)");
             const $blankCell = $(node).find(".table-header.blank-header-cell");
-            const expandAllHeadersBy:number = (gigaGridWidth - sumOfHeaderWidths - $blankCell.innerWidth()) / $allHeaderContainers.length;
+            const expandAllHeadersBy: number = (gigaGridWidth - sumOfHeaderWidths - $blankCell.innerWidth()) / $allHeaderContainers.length;
             widths = widths.map((w) => w + expandAllHeadersBy);
         }
 
         const oldSheetNode = $(`head > style#giga-grid-style-${this.state.gridID}`);
         const sheet = _.findWhere(document.styleSheets, {ownerNode: oldSheetNode}) || this.createGigaGridStyleSheet();
 
-        for( var i = 0; i< $leftHeaderContainers.length + $rightHeaderContainers.length; ++i ){
+        for (var i = 0; i < $leftHeaderContainers.length + $rightHeaderContainers.length; ++i) {
             const selectorText = `.giga-grid-${this.state.gridID} .giga-grid-column-${i}`;
-            const cssText =  `width: ${widths[i]}px !important;`;
+            const cssText = `width: ${widths[i]}px !important;`;
             const oldRule = _.findWhere(sheet, {selectorText});
-            if( oldRule )
+            if (oldRule)
                 sheet.deleteRule(sheet.rules.indexOf(oldRule));
 
-            if( !oldRule || oldRule.style.cssText !== cssText )
+            if (!oldRule || oldRule.style.cssText !== cssText)
                 sheet.insertRule(`${selectorText} { ${cssText} }`, 0);
         }
 
@@ -443,7 +444,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
      * Creates a new stylesheet for this grid
      * @returns {CSSStyleSheet}
      */
-    private createGigaGridStyleSheet():CSSStyleSheet {
+    private createGigaGridStyleSheet(): CSSStyleSheet {
         var style = document.createElement("style");
         style.setAttribute("id", `giga-grid-style-${this.state.gridID}`);
         document.head.appendChild(style);
@@ -452,11 +453,11 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
     scrollHandler(e) {
         e.preventDefault();
-        const node:Element = ReactDOM.findDOMNode<Element>(this);
+        const node: Element = ReactDOM.findDOMNode<Element>(this);
         const dataContainer = $(node).parent().find('.giga-grid-right-data-container');
 
-        const scrollLeftAmount:number = dataContainer.scrollLeft();
-        const scrollTopAmount:number = dataContainer.scrollTop();
+        const scrollLeftAmount: number = dataContainer.scrollLeft();
+        const scrollTopAmount: number = dataContainer.scrollTop();
 
         $(node).parent().find('.giga-grid-left-headers-container').scrollTop(scrollTopAmount);
         $(node).parent().parent().find('.right-scrolling-headers').scrollTop(scrollTopAmount);
@@ -467,15 +468,15 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
      * A wheely important function.  You can't scroll normally in the left-headers area, but a user would expect the
      * table to scroll if he or she uses the mousewheel.  So we have to listen for this event.
      */
-    wheelScrollHandler(e){
+    wheelScrollHandler(e) {
         e.preventDefault();
         // This covers all browsers, see https://www.sitepoint.com/html5-javascript-mouse-wheel/
-        const amountToScroll:number =  -Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))) * 53;
+        const amountToScroll: number = -Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))) * 53;
         debugger;
 
-        const node:Element = ReactDOM.findDOMNode<Element>(this);
+        const node: Element = ReactDOM.findDOMNode<Element>(this);
         const dataContainer = $(node).parent().find('.giga-grid-right-data-container');
-        const scrollTopAmount:number = dataContainer.scrollTop();
+        const scrollTopAmount: number = dataContainer.scrollTop();
 
         $(node).parent().find('.giga-grid-left-headers-container').scrollTop(scrollTopAmount + amountToScroll);
         $(node).parent().parent().find('.giga-grid-right-data-container').scrollTop(scrollTopAmount + amountToScroll);
@@ -489,9 +490,9 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             window.addEventListener('resize', this.synchTableHeaderWidthToFirstRow.bind(this));
 
             // Bind scroll listener to move headers when data container is scrolled
-            const node:Element = ReactDOM.findDOMNode<Element>(this);
-            const leftPanel:Element = $(node).find('.giga-grid-left-headers-container').get(0);
-            const rightPanel:Element = $(node).find('.giga-grid-right-data-container').get(0);
+            const node: Element = ReactDOM.findDOMNode<Element>(this);
+            const leftPanel: Element = $(node).find('.giga-grid-left-headers-container').get(0);
+            const rightPanel: Element = $(node).find('.giga-grid-right-data-container').get(0);
             rightPanel && rightPanel.addEventListener('scroll', this.scrollHandler);
             rightPanel && rightPanel.addEventListener('mousewheel', this.wheelScrollHandler);
             leftPanel && leftPanel.addEventListener('mousewheel', this.wheelScrollHandler);
@@ -514,10 +515,10 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
             window.removeEventListener('resize', this.synchTableHeaderWidthToFirstRow);
 
             // Unbind the scroll listener
-            const node:Element = ReactDOM.findDOMNode<Element>(this);
+            const node: Element = ReactDOM.findDOMNode<Element>(this);
             $(node).find('.giga-grid-right-data-container').unbind('scroll', this.scrollHandler);
-            const leftPanel:Element = $(node).find('.giga-grid-left-headers-container').get(0);
-            const rightPanel:Element = $(node).find('.giga-grid-right-data-container').get(0);
+            const leftPanel: Element = $(node).find('.giga-grid-left-headers-container').get(0);
+            const rightPanel: Element = $(node).find('.giga-grid-right-data-container').get(0);
             rightPanel && rightPanel.addEventListener('scroll', this.scrollHandler);
             leftPanel && leftPanel.removeEventListener('mousewheel', this.wheelScrollHandler);
             leftPanel && leftPanel.removeEventListener('MozMousePixelScroll', this.wheelScrollHandler);
@@ -528,7 +529,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         const state = this.store.getState();
         const $viewport = $(state.viewport);
         const $canvas = $(state.canvas);
-        const action:ChangeRowDisplayBoundsAction = {
+        const action: ChangeRowDisplayBoundsAction = {
             type: GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS,
             canvas: $canvas,
             viewport: $viewport,
@@ -536,8 +537,9 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         };
         this.dispatcher.dispatch(action);
     }
-    private expandTable(){
-        if(this.props.expandTable){
+
+    private expandTable() {
+        if (this.props.expandTable) {
             this.dispatcher.dispatch({
                 type: GigaActionType.EXPAND_ALL
             });
