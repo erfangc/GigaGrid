@@ -11,3 +11,6 @@ index.js.map
 node_modules
 target/
 npm-debug.log
+throwaway.js
+throwaway.js.map
+dist/

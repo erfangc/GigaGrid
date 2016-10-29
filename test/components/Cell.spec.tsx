@@ -36,7 +36,7 @@ describe("Cell", ()=> {
 
         const colDef = columns[2];
 
-        colDef.cellTemplateCreator = (row:Row, column:Column, props:CellProps):JSX.Element => {
+        colDef.cellTemplateCreator = (row:Row, column:Column, props:CellProps<DetailRow>):JSX.Element => {
             return (
                 <div>
                     <span style={{"color": "green"}}>Hello World</span>

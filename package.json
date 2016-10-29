@@ -6,7 +6,8 @@
   "scripts": {
     "start": "concurrently \"webpack --config webpack.examples.js --watch\" \"live-server\"",
     "build": "webpack --config webpack.production.js",
-    "test": "karma start karma2.conf.js --single-run"
+    "test": "karma start karma2.conf.js --single-run",
+    "test:chrome": "karma start karma2.conf.js --single-run --browsers Chrome"
   },
   "repository": {
     "type": "git",

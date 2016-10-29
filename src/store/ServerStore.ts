@@ -2,7 +2,6 @@ import {ReduceStore} from "flux/utils";
 import {Dispatcher} from "flux";
 import {GigaState, GigaProps} from "../components/GigaGrid";
 import {ScrollCalculator} from "../static/ScrollCalculator";
-import $ = require('jquery');
 import {GigaStore, GigaActionType, GigaAction, PROGRESSIVE_RENDERING_THRESHOLD} from "./GigaStore";
 import {InitializeAction, decorateInitialSortBys, decorateColumnsWithSort} from "./reducers/InitializeReducer";
 import {TreeRasterizer} from "../static/TreeRasterizer";
@@ -19,6 +18,7 @@ import {TreeBuilder} from "../static/TreeBuilder";
 import {Row, SubtotalRow, DetailRow} from "../models/Row";
 import {ToggleCollapseAction, toggleCollapseReducer} from "./reducers/RowCollapseReducers";
 import {SortFactory} from "../static/SortFactory";
+import $ = require('jquery');
 
 /**
  * Initial state reducer for Server store
@@ -106,6 +106,7 @@ export class ServerStore extends ReduceStore<GigaState> {
 
     reduce(state:GigaState,
            action:GigaAction):GigaState {
+        let boundaries;
         switch (action.type) {
             /**
              * server only action handlers
@@ -114,9 +115,9 @@ export class ServerStore extends ReduceStore<GigaState> {
                 let row = (action as LoadingMoreDataAction).parentRow;
                 row.setIsLoading(true);
                 newState = _.clone(state);
-                const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, $(state.viewport), $(state.canvas));
-                newState.displayStart = displayStart;
-                newState.displayEnd = displayEnd;
+                boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, $(state.viewport), $(state.canvas));
+                newState.displayStart = boundaries.displayStart;
+                newState.displayEnd = boundaries.displayEnd;
                 break;
             case GigaActionType.GOT_MORE_DATA:
                 const myAction = action as GotMoreDataAction;
@@ -133,11 +134,10 @@ export class ServerStore extends ReduceStore<GigaState> {
                     parentRow.children = [];
                     dataToSubtotalRows(rows).forEach(row=>parentRow.addChild(row));
                 }
-                SortFactory.sortRows(parentRow, state.sortBys, state.columns[0]);
                 newState = _.clone(state); // force update
-                const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, $(state.viewport), $(state.canvas));
-                newState.displayStart = displayStart;
-                newState.displayEnd = displayEnd;
+                boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, $(state.viewport), $(state.canvas));
+                newState.displayStart = boundaries.displayStart;
+                newState.displayEnd = boundaries.displayEnd;
                 break;
             case GigaActionType.COLLAPSE_ROW:
                 break;

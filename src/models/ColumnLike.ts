@@ -1,4 +1,4 @@
-import {Row} from "./Row";
+import {Row, GenericRow} from "./Row";
 import {GigaState} from "../components/GigaGrid";
 import * as _ from "lodash";
 import {CellProps} from "../components/Cell";
@@ -12,10 +12,10 @@ export enum ColumnFormat {
 }
 
 export interface ColumnLike {
-    colTag:string
-    title?:string
-    format?:ColumnFormat
-    aggregationMethod?:AggregationMethod
+    colTag: string
+    title?: string
+    format?: ColumnFormat
+    aggregationMethod?: AggregationMethod
 }
 
 export enum SortDirection {
@@ -23,29 +23,29 @@ export enum SortDirection {
 }
 
 export interface FormatInstruction {
-    textAlign?:"left"|"right"
-    showAsPercent?:boolean
-    roundTo?:number
-    multiplier?:number
-    separator?:boolean
+    textAlign?: "left"|"right"
+    showAsPercent?: boolean
+    roundTo?: number
+    multiplier?: number
+    separator?: boolean
 }
 
 export interface ColumnDef extends ColumnLike {
-    width?:string
-    weightBy?:string
-    formatInstruction?:FormatInstruction
-    cellTemplateCreator?:(row:Row, column:Column, props: CellProps)=>JSX.Element
-    headerTemplateCreator?:(column:Column)=>JSX.Element
+    width?: string
+    weightBy?: string
+    formatInstruction?: FormatInstruction
+    cellTemplateCreator?: <T extends GenericRow>(row: T, column: Column, props: CellProps<T>) => JSX.Element
+    headerTemplateCreator?: (column: Column) => JSX.Element
 }
 
 export interface Column extends ColumnDef {
-    direction?:SortDirection
-    customSortFn?:(a:Row, b:Row)=>number
-    colSpan?:number
+    direction?: SortDirection
+    customSortFn?: (a: Row, b: Row)=>number
+    colSpan?: number
 }
 
 export interface FilterBy extends ColumnLike {
-    predicate:(a:any)=>boolean
+    predicate: (a: any)=>boolean
 }
 
 /**
@@ -55,14 +55,14 @@ export interface FilterBy extends ColumnLike {
  * - how shall we display its value? (could be different than the value it is sorted on)
  */
 export interface BucketInfo {
-    colTag:string
-    title:string
-    value:any
+    colTag: string
+    title: string
+    value: any
 }
 
 export interface ColumnGroupDef {
-    title:string
-    columns:string[] // colTags
+    title: string
+    columns: string[] // colTags
 }
 
 export class ColumnFactory {
@@ -73,12 +73,12 @@ export class ColumnFactory {
      * @param state
      * @returns {Column[][]}
      */
-    static createColumnsFromGroupDefinition(columnGroupDefs:ColumnGroupDef[], state:GigaState):Column[][] {
+    static createColumnsFromGroupDefinition(columnGroupDefs: ColumnGroupDef[], state: GigaState): Column[][] {
 
         const columns = state.columns;
-        const columnMap = _.chain(columns).map((column:Column)=>column.colTag).object(columns).value();
-        const nestedColumns:Column[][] = [[], []];
-        _.forEach(columnGroupDefs, (groupDef:ColumnGroupDef, i:number)=> {
+        const columnMap = _.chain(columns).map((column: Column)=>column.colTag).object(columns).value();
+        const nestedColumns: Column[][] = [[], []];
+        _.forEach(columnGroupDefs, (groupDef: ColumnGroupDef, i: number)=> {
             nestedColumns[0].push({
                 colTag: `column_group_${i + 1}`,
                 title: groupDef.title,

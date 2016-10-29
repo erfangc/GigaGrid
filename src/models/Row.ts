@@ -10,7 +10,7 @@ export interface Row {
     getByColTag(colTag:string):any
     toggleSelect(select?:boolean):void
     sectorPath():BucketInfo[]
-    setSectorPath(sp:string[])
+    setSectorPath(sp:BucketInfo[])
 }
 
 export abstract class GenericRow implements Row {
@@ -99,10 +99,14 @@ export class SubtotalRow extends GenericRow {
 
     public detailRows:DetailRow[];
     private _isLoading:boolean = false;
-    private children:SubtotalRow[] = [];
+    private _children:SubtotalRow[] = [];
     private childrenByTitle:{ [title:string]:SubtotalRow; } = {};
     private _isCollapsed:boolean = false;
     public bucketInfo:BucketInfo;
+
+    set children(value: SubtotalRow[]) {
+        this._children = value;
+    }
 
     isLoading():boolean {
         return this._isLoading;
@@ -128,8 +132,8 @@ export class SubtotalRow extends GenericRow {
     }
 
     private findIndex(child:SubtotalRow) {
-        for (var i = 0; i < this.children.length; i++)
-            if (this.children[i].bucketInfo.title === child.bucketInfo.title)
+        for (var i = 0; i < this._children.length; i++)
+            if (this._children[i].bucketInfo.title === child.bucketInfo.title)
                 return i;
         return -1;
     }
@@ -143,14 +147,14 @@ export class SubtotalRow extends GenericRow {
     addChild(child:SubtotalRow) {
         // if already exist, pop it from the children array
         this.removeChild(child);
-        this.children.push(child);
+        this._children.push(child);
         this.childrenByTitle[child.bucketInfo.title] = child;
     }
 
     removeChild(child:SubtotalRow) {
         if (this.childrenByTitle[child.bucketInfo.title] != undefined) {
             const idx = this.findIndex(child);
-            this.children.splice(idx, 1);
+            this._children.splice(idx, 1);
             this.childrenByTitle[child.bucketInfo.title] = undefined;
         }
     }
@@ -160,15 +164,15 @@ export class SubtotalRow extends GenericRow {
     }
 
     getNumChildren():number {
-        return this.children.length;
+        return this._children.length;
     }
 
     getChildren():SubtotalRow[] {
-        return this.children;
+        return this._children;
     }
 
     getChildAtIndex(idx:number):SubtotalRow {
-        return this.children[idx];
+        return this._children[idx];
     }
 
     hasChildWithTitle(title:string):boolean {
