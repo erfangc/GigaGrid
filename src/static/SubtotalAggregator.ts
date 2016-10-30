@@ -1,16 +1,13 @@
-import {Column} from "../models/ColumnLike";
-import {SubtotalRow} from "../models/Row";
-import {DetailRow} from "../models/Row";
-import {AggregationMethod} from "../models/ColumnLike";
+import {Column, AggregationMethod, FormatInstruction} from "../models/ColumnLike";
+import {Row} from "../models/Row";
 import {Tree} from "./TreeBuilder";
 import * as _ from "lodash";
-import {FormatInstruction} from "../models/ColumnLike";
 
-function straightSum(detailRows:DetailRow[], column:Column):number {
+function straightSum(detailRows: Row[], column: Column): number {
     return _.sum(detailRows.map(r=>r.getByColTag(column.colTag)));
 }
 
-function weightedAverage(detailRows:DetailRow[], column:Column):number {
+function weightedAverage(detailRows: Row[], column: Column): number {
     var denom = 0.0;
     var sumproduct = 0.0;
     for (let i = 0; i < detailRows.length; i++) {
@@ -21,17 +18,17 @@ function weightedAverage(detailRows:DetailRow[], column:Column):number {
         return sumproduct / denom;
 }
 
-function average(detailRows:DetailRow[], column:Column):number {
+function average(detailRows: Row[], column: Column): number {
     if (detailRows.length === 0)
         return 0;
     return straightSum(detailRows, column) / detailRows.length;
 }
 
-function count(detailRows:DetailRow[]):number {
+function count(detailRows: Row[]): number {
     return detailRows.length;
 }
 
-function countOrDistinct(detailRows:DetailRow[], column:Column):any {
+function countOrDistinct(detailRows: Row[], column: Column): any {
     const distinctCount = countDistinct(detailRows, column);
     const c = count(detailRows);
     if (distinctCount !== 1)
@@ -40,12 +37,12 @@ function countOrDistinct(detailRows:DetailRow[], column:Column):any {
         return detailRows[0].getByColTag(column.colTag);
 }
 
-function countDistinct(detailRows:DetailRow[], column:Column):number {
-    return _.chain(detailRows).map((r:DetailRow)=>r.getByColTag(column.colTag)).sortBy().uniq(true).value().length;
+function countDistinct(detailRows: Row[], column: Column): number {
+    return _.chain(detailRows).map((r: Row)=>r.getByColTag(column.colTag)).sortBy().uniq(true).value().length;
 }
 
-function range(detailRows:DetailRow[], column:Column):string {
-    const val = detailRows.map((r:DetailRow)=>r.getByColTag(column.colTag));
+function range(detailRows: Row[], column: Column): string {
+    const val = detailRows.map((r: Row)=>r.getByColTag(column.colTag));
     return `${_.min(val)} - ${_.max(val)}`;
 }
 
@@ -57,10 +54,10 @@ function range(detailRows:DetailRow[], column:Column):string {
  * @param fmtInstruction
  * @returns {any}
  */
-export function format(value:any, fmtInstruction:FormatInstruction):any {
+export function format(value: any, fmtInstruction: FormatInstruction): any {
     if (!fmtInstruction)
         return value;
-    if(fmtInstruction && value === '')
+    if (fmtInstruction && value === '')
         return null;
     function addCommas(nStr) {
         nStr += '';
@@ -92,7 +89,7 @@ export function format(value:any, fmtInstruction:FormatInstruction):any {
  */
 export class SubtotalAggregator {
 
-    static aggregateTree(tree:Tree, columns:Column[]):void {
+    static aggregateTree(tree: Tree, columns: Column[]): void {
         SubtotalAggregator.aggregateSubtotalRow(tree.getRoot(), columns);
         SubtotalAggregator.aggregateChildren(tree.getRoot(), columns);
     }
@@ -102,17 +99,17 @@ export class SubtotalAggregator {
      * @param subtotalRow
      * @param columns
      */
-    private static aggregateChildren(subtotalRow:SubtotalRow, columns:Column[]) {
-        subtotalRow.getChildren().forEach(childRow=> {
+    private static aggregateChildren(subtotalRow: Row, columns: Column[]) {
+        subtotalRow.children.forEach(childRow=> {
             SubtotalAggregator.aggregateSubtotalRow(childRow, columns);
-            if (childRow.getChildren().length > 0)
+            if (childRow.children.length > 0)
                 SubtotalAggregator.aggregateChildren(childRow, columns);
         });
     }
 
-    static aggregate(detailRows:DetailRow[], columns:Column[]):any {
-        const aggregated:any = {};
-        columns.forEach((column:Column) => {
+    static aggregate(detailRows: Row[], columns: Column[]): any {
+        const aggregated: any = {};
+        columns.forEach((column: Column) => {
             var value;
             switch (column.aggregationMethod) {
                 case AggregationMethod.AVERAGE:
@@ -145,7 +142,7 @@ export class SubtotalAggregator {
         return aggregated;
     }
 
-    static aggregateSubtotalRow(subtotalRow:SubtotalRow, column:Column[]):void {
-        subtotalRow.setData(SubtotalAggregator.aggregate(subtotalRow.detailRows, column));
+    static aggregateSubtotalRow(subtotalRow: Row, column: Column[]): void {
+        subtotalRow.data = SubtotalAggregator.aggregate(subtotalRow.detailRows, column);
     }
 }

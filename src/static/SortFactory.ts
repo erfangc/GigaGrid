@@ -1,5 +1,5 @@
 import {Tree} from "./TreeBuilder";
-import {Row, SubtotalRow} from "../models/Row";
+import {Row} from "../models/Row";
 import {Column, SortDirection} from "../models/ColumnLike";
 import {extractCellValue} from "./SortFactoryHelpers";
 
@@ -10,6 +10,7 @@ export class SortFactory {
      * handles recursive sorting of subtotal rows
      * @param tree
      * @param sortBys
+     * @param firstColumn
      * @returns {Tree}
      */
     public static sortTree(tree:Tree, sortBys:Column[], firstColumn?: Column):Tree {
@@ -18,10 +19,10 @@ export class SortFactory {
         return tree;
     }
 
-    private static recursivelyExecuteSort(rootRow:SubtotalRow, fn:(a:Row, b:Row)=>number):void {
+    private static recursivelyExecuteSort(rootRow:Row, fn:(a:Row, b:Row)=>number):void {
         if (rootRow.getNumChildren() !== 0) {
-            rootRow.getChildren().sort(fn);
-            rootRow.getChildren().forEach((child)=> {
+            rootRow.children.sort(fn);
+            rootRow.children.forEach((child)=> {
                 SortFactory.recursivelyExecuteSort(child, fn);
             })
         } else
@@ -31,7 +32,7 @@ export class SortFactory {
     private static createCompositeSorter(sortBys:Column[], firstColumn?:Column):(a:Row, b:Row)=>number {
 
         if (!sortBys || sortBys.length === 0)
-            return function (a:Row, b:Row):number {
+            return function ():number {
                 return 0;
             };
 

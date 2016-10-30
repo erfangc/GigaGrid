@@ -1,4 +1,4 @@
-import {ColumnDef, Column, ColumnFactory, ColumnGroupDef} from "../../src/models/ColumnLike";
+import {Column, ColumnFactory, ColumnGroupDef} from "../../src/models/ColumnLike";
 import {GigaState} from "../../src/components/GigaGrid";
 import {TestUtils} from "../TestUtils";
 
@@ -9,8 +9,7 @@ describe("ColumnCreator", ()=> {
     it("create 2-dimensional array of columns from a sequence of ColumnGroupDef", ()=> {
 
         const columnGroupDefs:ColumnGroupDef[] = TestUtils.getMockColumnGroupDefs();
-        const columnDefs:ColumnDef[] = TestUtils.getMockColumnDefs();
-        simpleState.columns = columnDefs;
+        simpleState.columns = TestUtils.getMockColumnDefs();
 
         const nestedColumns:Column[][] = ColumnFactory.createColumnsFromGroupDefinition(columnGroupDefs, simpleState);
 

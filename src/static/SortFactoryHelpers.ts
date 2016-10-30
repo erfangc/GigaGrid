@@ -1,5 +1,5 @@
-import {Row, SubtotalRow, DetailRow} from "../models/Row";
-import {Column, ColumnFormat, AggregationMethod} from "../models/ColumnLike";
+import {Row} from "../models/Row";
+import {Column, ColumnFormat} from "../models/ColumnLike";
 
 /**
  * Figure out what value should we sort on. The data in our table can contain Subtotal and Detail rows
@@ -9,13 +9,13 @@ import {Column, ColumnFormat, AggregationMethod} from "../models/ColumnLike";
  * @returns {any}
  */
 export function extractCellValue(row:Row, sortBy:Column, firstColumn?:Column) {
-    if (row.isDetail())
-        return extractDetailCellValue(row as DetailRow, sortBy);
+    if (row.isDetailRow())
+        return extractDetailCellValue(row, sortBy);
     else
-        return extractSubtotalCellValue(row as SubtotalRow, sortBy, firstColumn);
+        return extractSubtotalCellValue(row, sortBy, firstColumn);
 }
 
-function extractSubtotalCellValue(subtotalRow:SubtotalRow, sortBy:Column, firstColumn?:Column) {
+function extractSubtotalCellValue(subtotalRow: Row, sortBy:Column, firstColumn?:Column) {
     // sorting on the 1st Column
     // sorting on a text-align-rightally summarized column
     if (firstColumn && firstColumn.colTag === sortBy.colTag)
@@ -31,7 +31,7 @@ function extractSubtotalCellValue(subtotalRow:SubtotalRow, sortBy:Column, firstC
         return subtotalRow.get(sortBy);
 }
 
-function extractDetailCellValue(row:DetailRow, sortBy:Column) {
+function extractDetailCellValue(row, sortBy:Column) {
     const cellValue = row.get(sortBy);
     if (sortBy.format === ColumnFormat.NUMBER)
         return parseFloat(cellValue);

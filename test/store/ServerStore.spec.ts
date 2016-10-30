@@ -1,7 +1,6 @@
 import {ServerStore} from "../../src/store/ServerStore";
 import {Dispatcher} from "flux";
 import {GigaAction, GigaActionType} from "../../src/store/GigaStore";
-import {SubtotalRow} from "../../src/models/Row";
 /**
  * ServerStore
  * TODO make the test better and utilize common functions
@@ -15,12 +14,14 @@ describe("ServerStore", () => {
         {
             data: {"c1": "v1", "c2": 0.0},
             bucketInfo: {colTag: "g1", title: "t1", value: "v1"},
-            sectorPath: [{colTag: "g1", title: "t1", value: "v1"}]
+            sectorPath: [{colTag: "g1", title: "t1", value: "v1"}],
+            isSubtotal: true
         },
         {
             data: {"c1": "vv1", "c2": 0.5},
             bucketInfo: {colTag: "g1", title: "t2", value: "v2"},
-            sectorPath: [{colTag: "g1", title: "t2", value: "v2"}]
+            sectorPath: [{colTag: "g1", title: "t2", value: "v2"}],
+            isSubtotal: true
         }
     ];
 
@@ -31,7 +32,7 @@ describe("ServerStore", () => {
 
     it("can correctly deduce the initial state when initialData is given", ()=> {
         const dispatcher:Dispatcher<GigaAction> = new Dispatcher();
-        const store:ServerStore = new ServerStore(dispatcher, {
+        const store  = new ServerStore(dispatcher, {
             data: [], initialData: initialData, columnDefs: columnDefs
         });
         dispatcher.dispatch({
@@ -39,7 +40,7 @@ describe("ServerStore", () => {
         });
         const state = store.getState();
         expect(state.rasterizedRows.length).toBe(2);
-        expect(state.rasterizedRows[0].isDetail()).toBe(false);
+        expect(state.rasterizedRows[0].isDetailRow()).toBe(false);
     });
 
     it("will mark a row as isLoading", () => {
@@ -52,12 +53,13 @@ describe("ServerStore", () => {
             type: GigaActionType.INITIALIZE
         });
         const testRow = store.getState().rasterizedRows[0];
-        expect((testRow as SubtotalRow).isLoading()).toBe(false);
-        dispatcher.dispatch({
+        expect(testRow.loading).toBe(false);
+        let action = {
             type: GigaActionType.LOADING_MORE_DATA,
             parentRow: testRow
-        });
-        expect((testRow as SubtotalRow).isLoading()).toBe(true);
+        };
+        dispatcher.dispatch(action);
+        expect(testRow.loading).toBe(true);
     });
 
 });

@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as ReactTestUtils from 'react-addons-test-utils';
+import * as React from "react";
+import * as ReactTestUtils from "react-addons-test-utils";
 import {TestUtils} from "../TestUtils";
 import {TreeRasterizer} from "../../src/static/TreeRasterizer";
 import {FrozenTableBody} from "../../src/components/TableBody/FrozenTableBody";

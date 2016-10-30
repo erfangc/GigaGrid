@@ -1,3 +1,5 @@
+///<reference path="../../typings/tsd.d.ts"/>
+
 import $ = require('jquery');
 
 export interface DisplayBoundaries {

@@ -3,8 +3,7 @@
     "target": "es5",
     "module": "commonjs",
     "sourceMap": true,
-    "jsx": "react",
-    "outFile": "throwaway.js"
+    "jsx": "react"
   },
   "exclude": [
     "node_modules",

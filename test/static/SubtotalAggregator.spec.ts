@@ -1,4 +1,4 @@
-import {DetailRow, SubtotalRow} from "../../src/models/Row";
+import {Row} from "../../src/models/Row";
 import {ColumnDef, ColumnFormat, AggregationMethod} from "../../src/models/ColumnLike";
 import {SubtotalAggregator} from "../../src/static/SubtotalAggregator";
 import {Tree, TreeBuilder} from "../../src/static/TreeBuilder";
@@ -6,17 +6,19 @@ import {TestUtils} from "../TestUtils";
 
 describe("SubtotalAggregator", () => {
 
-    const subtotalRow = new SubtotalRow({
+    const subtotalRow = new Row();
+    subtotalRow.bucketInfo = {
         title: "Parent",
-        value: "Parent"
-    });
-    subtotalRow.detailRows = [
-        new DetailRow({"col1": "A", "col2": "C", "data": 1}),
-        new DetailRow({"col1": "A", "col2": "C", "data": 1}),
-        new DetailRow({"col1": "A", "col2": "C", "data": 1}),
-        new DetailRow({"col1": "A", "col2": "C", "data": 1}),
-        new DetailRow({"col1": "A", "col2": "C", "data": 1})
-    ];
+        value: "Parent",
+        colTag: "Parent"
+    };
+    subtotalRow.detailRows =
+        [1,2,3,4,5].map(() => {
+            let row = new Row();
+            row.data = {"col1": "A", "col2": "C", "data": 1};
+            return row;
+        })
+    ;
     const straightSumColumnDef:ColumnDef = {
         colTag: "data",
         title: "",
@@ -47,8 +49,8 @@ describe("SubtotalAggregator", () => {
     describe("provide function that accept SubtotalRow with detailRows, column definitions and populate the detailRows' `data` member", ()=> {
         it("should perform straight sum aggregation", ()=> {
             SubtotalAggregator.aggregateSubtotalRow(subtotalRow, [straightSumColumnDef]);
-            expect(subtotalRow.data()).not.toEqual({});
-            expect(subtotalRow.data()[straightSumColumnDef.colTag]).toBe(5);
+            expect(subtotalRow.data).not.toEqual({});
+            expect(subtotalRow.data[straightSumColumnDef.colTag]).toBe(5);
         });
     });
 
@@ -72,7 +74,7 @@ describe("SubtotalAggregator", () => {
         SubtotalAggregator.aggregateTree(tree, [straightSumColumnDef]);
 
         it("should have aggregated the grandTotal or root node", () => {
-            expect(tree.getRoot().data()[straightSumColumnDef.colTag]).toBe(7);
+            expect(tree.getRoot().data[straightSumColumnDef.colTag]).toBe(7);
         });
 
         it("should have aggregated the child SubtotalRow", ()=> {

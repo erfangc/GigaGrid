@@ -9,7 +9,7 @@ describe("TreeBuilder", ()=> {
     it("still functions when an empty SubtotalBy array is passed in", ()=> {
         const data:any[] = TestUtils.getSimpleRawData();
         const tree:Tree = TreeBuilder.buildTree(data, []);
-        expect(tree.getRoot().getChildren().length).toBe(0);
+        expect(tree.getRoot().children.length).toBe(0);
         expect(tree.getRoot().detailRows.length).toBe(5);
     });
 
@@ -20,10 +20,10 @@ describe("TreeBuilder", ()=> {
         const tree:Tree = TreeBuilder.buildTree(data, subtotalBy);
 
         it("rows within the Tree should have sector path array populated", ()=> {
-            expect(tree.getRoot().sectorPath()).toEqual([]);
-            expect(tree.getRoot().getChildByTitle("A").sectorPath()).toEqual([{colTag:'col1',title:'A',value:'A'}]);
-            expect(tree.getRoot().getChildByTitle("A").getChildByTitle("C").sectorPath()).toEqual([{colTag:'col1',title:'A',value:'A'}, {colTag:'col2',title:'C',value:'C'}]);
-            expect(tree.getRoot().getChildByTitle("B").getChildByTitle("D").sectorPath()).toEqual([{ colTag: 'col1', title: 'B', value: 'B' }, {colTag: 'col2', title: 'D', value: 'D' }]);
+            expect(tree.getRoot().sectorPath).toEqual([]);
+            expect(tree.getRoot().getChildByTitle("A").sectorPath).toEqual([{colTag:'col1',title:'A',value:'A'}]);
+            expect(tree.getRoot().getChildByTitle("A").getChildByTitle("C").sectorPath).toEqual([{colTag:'col1',title:'A',value:'A'}, {colTag:'col2',title:'C',value:'C'}]);
+            expect(tree.getRoot().getChildByTitle("B").getChildByTitle("D").sectorPath).toEqual([{ colTag: 'col1', title: 'B', value: 'B' }, {colTag: 'col2', title: 'D', value: 'D' }]);
         });
 
         it("should take a few flat rows of data, a SubtotalBy object and turn it into a deep tree structure", () => {

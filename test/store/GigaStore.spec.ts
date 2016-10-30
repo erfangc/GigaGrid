@@ -30,7 +30,7 @@ describe("GigaStore", ()=> {
         expect(initialState.subtotalBys).toEqual([]);
         const state = store.getState();
         // expect(state).toEqual(initialState); // TODO this is failing due to deep comparison I believe
-        expect(state.tree.getRoot().getChildren().length).toBe(0);
+        expect(state.tree.getRoot().children.length).toBe(0);
         expect(state.tree.getRoot().detailRows.length).toBe(10);
     });
 

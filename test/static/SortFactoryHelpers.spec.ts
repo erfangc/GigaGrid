@@ -1,12 +1,12 @@
 import {TestUtils} from "../TestUtils";
-import {DetailRow, SubtotalRow} from "../../src/models/Row";
+import {Row} from "../../src/models/Row";
 import {ColumnDef} from "../../src/models/ColumnLike";
 import {extractCellValue} from "../../src/static/SortFactoryHelpers";
 describe("SortFactoryHelper.extractCellValue()", ()=> {
     
-    const detailRow:DetailRow = TestUtils.getDetailRow();
+    const detailRow:Row = TestUtils.getDetailRow();
     const columnDefs:ColumnDef[] = TestUtils.getSimpleColumns();
-    const subtotalRow:SubtotalRow = TestUtils.getSimpleSubtotalRow();
+    const subtotalRow:Row = TestUtils.getSimpleSubtotalRow();
     
     it("should extract a number detail row", ()=> {
         const val = extractCellValue(detailRow, columnDefs[0]);

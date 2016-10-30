@@ -14,3 +14,4 @@ npm-debug.log
 throwaway.js
 throwaway.js.map
 dist/
+build/

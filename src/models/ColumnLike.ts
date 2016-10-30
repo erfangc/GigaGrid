@@ -1,4 +1,4 @@
-import {Row, GenericRow} from "./Row";
+import {Row} from "./Row";
 import {GigaState} from "../components/GigaGrid";
 import * as _ from "lodash";
 import {CellProps} from "../components/Cell";
@@ -34,7 +34,7 @@ export interface ColumnDef extends ColumnLike {
     width?: string
     weightBy?: string
     formatInstruction?: FormatInstruction
-    cellTemplateCreator?: <T extends GenericRow>(row: T, column: Column, props: CellProps<T>) => JSX.Element
+    cellTemplateCreator?: (row: Row, column: Column, props: CellProps) => JSX.Element
     headerTemplateCreator?: (column: Column) => JSX.Element
 }
 

@@ -1,4 +1,4 @@
-import {DetailRow, SubtotalRow, Row} from "../src/models/Row";
+import {Row} from "../src/models/Row";
 import {ColumnDef, ColumnFormat, AggregationMethod, Column, ColumnGroupDef} from "../src/models/ColumnLike";
 import {TreeBuilder, Tree} from "../src/static/TreeBuilder";
 import {GigaState} from "../src/components/GigaGrid";
@@ -327,35 +327,33 @@ export class TestUtils {
         ];
     }
 
-    static getDetailRowWithMissingData():DetailRow {
-        return new DetailRow({
-            "numCol1": 7,
-            "textCol1": "R2D2",
-            "textCol2": "City Wok"
-        });
-    }
-
-    static getDetailRow():DetailRow {
-        return new DetailRow({
+    static getDetailRow():Row {
+        let row = new Row();
+        row.data = {
             "numCol1": 7,
             "numCol2": 42,
             "textCol1": "R2D2",
             "textCol2": "City Wok"
-        });
+        };
+        return row;
     }
 
-    static getSimpleSubtotalRow():SubtotalRow {
-        const subtotalRow:SubtotalRow = new SubtotalRow({
+    static getSimpleSubtotalRow():Row {
+        const subtotalRow = new Row();
+        subtotalRow.bucketInfo = {
             colTag: "col",
             title: "Value",
             value: 1001
-        });
-        subtotalRow.setData({
+        };
+        subtotalRow.data = {
             "numCol1": 2187,
             "numCol2": 117,
             "textCol1": "BB8",
             "textCol2": "This is Sparta!"
-        });
+        };
+        subtotalRow.children = [
+            TestUtils.getDetailRow()
+        ];
         return subtotalRow;
     }
 

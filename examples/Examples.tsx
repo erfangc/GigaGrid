@@ -9,16 +9,16 @@ import {SortDirection} from "../src/models/ColumnLike";
 import "../styles/theme/Retro.styl";
 
 interface ExamplesProps extends React.Props<Examples> {
-    ukBudget:GigaProps
+    ukBudget: GigaProps
 }
 
 interface ExampleState {
-    activeTabKey:number
+    activeTabKey: number
 }
 
 export class Examples extends React.Component<ExamplesProps, ExampleState> {
 
-    constructor(props:ExamplesProps) {
+    constructor(props: ExamplesProps) {
         super(props);
         this.state = {
             activeTabKey: 0
@@ -54,7 +54,8 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
         var additionalUserButtons = additionalUserButtons.map(this.callCustomFunction.bind(this));
         return (<GigaGrid
             onRowClick={(row:Row, state:GigaState)=>{
-                row; state;
+               console.log(row);
+               console.log(state);
                 return true;
             }}
             additionalUserButtons={additionalUserButtons}
@@ -68,9 +69,11 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
         />);
     }
 
-    private callCustomFunction(additionalUserButton){
-        additionalUserButton.customCallback = () => {this.customCallback()};
-       return additionalUserButton;
+    private callCustomFunction(additionalUserButton) {
+        additionalUserButton.customCallback = () => {
+            this.customCallback()
+        };
+        return additionalUserButton;
     }
 
     private customCallback() {

@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as classNames from "classnames";
-import {Row, GenericRow} from "../../models/Row";
+import {Row} from "../../models/Row";
 import {Column} from "../../models/ColumnLike";
 import {GigaActionType} from "../../store/GigaStore";
 import SyntheticEvent = __React.SyntheticEvent;
@@ -15,26 +15,25 @@ export interface GigaRowProps extends GridSubcomponentProps<GigaRow> {
     gridProps: GigaProps
 }
 
-export class GigaRow extends React.Component<GigaRowProps, any> {
+export abstract class GigaRow extends React.Component<GigaRowProps, any> {
 
     constructor(props:GigaRowProps) {
         super(props);
     }
 
     render() {
-        const props = this.props;
-        const subtotalLvlClassName = `subtotal-row-${(props.row as GenericRow).sectorPath().length - 1}`;
+        const {row, columns} = this.props;
+        const subtotalLvlClassName = `subtotal-row-${row.sectorPath.length - 1}`;
         const rowClassNames:ClassDictionary = {
             "giga-grid-row": true,
             "placeholder-false": true,
-            "subtotal-row": !props.row.isDetail(),
-            "detail-row": props.row.isDetail(),
-            "selected": props.row.isSelected(),
+            "subtotal-row": !row.isDetailRow(),
+            "detail-row": row.isDetailRow(),
+            "selected": row.selected,
         };
-        rowClassNames[subtotalLvlClassName] = props.row.isDetail() ? false : true;
+        rowClassNames[subtotalLvlClassName] = row.isDetailRow() ? false : true;
         const cx = classNames(rowClassNames);
-        const cells = props
-            .columns
+        const cells = columns
             .map(this.mapColumnToCell.bind(this));
         return <div className={cx} style={{height: this.props.rowHeight}} onClick={(e:SyntheticEvent)=>{
             e.preventDefault();
@@ -46,7 +45,5 @@ export class GigaRow extends React.Component<GigaRowProps, any> {
         }}>{cells}</div>
     }
 
-    mapColumnToCell(column:Column, i:number){
-        throw "Must extend GigaRow, cannot use is as a component directly!";
-    }
+    abstract mapColumnToCell(column: Column, i: number)
 }

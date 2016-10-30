@@ -4,7 +4,7 @@
 import {GigaState,GigaProps} from "../../components/GigaGrid";
 import {GigaAction} from "../GigaStore";
 import {TreeBuilder} from "../../static/TreeBuilder";
-import {SubtotalRow} from "../../models/Row";
+import {Row} from "../../models/Row";
 import {ScrollCalculator} from "../../static/ScrollCalculator";
 import $ = require('jquery');
 export function expandAllReducer(state:GigaState):GigaState {
@@ -28,7 +28,7 @@ export function toggleCollapseReducer(state:GigaState, action:ToggleCollapseActi
 }
 
 export interface ToggleCollapseAction extends GigaAction {
-    subtotalRow:SubtotalRow
+    subtotalRow:Row
 }
 
 

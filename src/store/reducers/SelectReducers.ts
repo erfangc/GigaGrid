@@ -1,6 +1,6 @@
 import {GigaState, GigaProps} from "../../components/GigaGrid";
 import {GigaAction} from "../GigaStore";
-import {Row, SubtotalRow} from "../../models/Row";
+import {Row} from "../../models/Row";
 import {Column} from "../../models/ColumnLike";
 
 export function cellSelectReducer(state:GigaState, action:ToggleCellSelectAction, props: GigaProps):GigaState {
@@ -24,9 +24,9 @@ export function rowSelectReducer(state:GigaState, action:ToggleRowSelectAction, 
         else {
             // de-select every other row unless enableMultiRowSelect is turned on
             if (!props.enableMultiRowSelect) {
-                const toggleTo = !action.row.isSelected();
+                const toggleTo = !action.row.selected;
                 recursivelyDeselect(state.tree.getRoot());
-                action.row.toggleSelect(toggleTo);
+                action.row.selected = toggleTo;
             } else
                 action.row.toggleSelect();
             return _.clone(state);
@@ -38,10 +38,9 @@ export function rowSelectReducer(state:GigaState, action:ToggleRowSelectAction, 
 
 // define a function
 function recursivelyDeselect(row:Row) {
-    row.toggleSelect(false);
-    if (!row.isDetail()) {
-        const subtotalRow = (row as SubtotalRow);
-        const children:Row[] = subtotalRow.getChildren().length === 0 ? subtotalRow.detailRows : subtotalRow.getChildren();
+    row.selected = false;
+    if (!row.isDetailRow()) {
+        const children:Row[] = row.children.length === 0 ? row.detailRows : row.children;
         children.forEach(child=>recursivelyDeselect(child));
     }
 }

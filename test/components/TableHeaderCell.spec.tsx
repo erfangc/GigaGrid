@@ -23,7 +23,9 @@ describe("clicking on a header cell should sort by that header", ()=> {
                 <TableHeaderCell column={{colTag: "foo", format: ColumnFormat.STRING}} ref={c=>component=c}
                                  dispatcher={dispatcher}
                                  isFirstColumn={false}
-                                 isLastColumn={false}/>
+                                 isLastColumn={false}
+                                 columnNumber={1}
+                />
             </div>
         );
 
@@ -43,7 +45,9 @@ describe("clicking on a header cell should sort by that header", ()=> {
                                  ref={c=>component=c}
                                  dispatcher={dispatcher}
                                  isFirstColumn={false}
-                                 isLastColumn={false}/>
+                                 isLastColumn={false}
+                                 columnNumber={1}
+                />
             </div>
         );
         ReactTestUtils.Simulate.click(ReactTestUtils.findRenderedDOMComponentWithClass(component, "table-header"));
@@ -61,7 +65,9 @@ describe("clicking on a header cell should sort by that header", ()=> {
                                  ref={c=>component=c}
                                  dispatcher={dispatcher}
                                  isFirstColumn={false}
-                                 isLastColumn={false}/>
+                                 isLastColumn={false}
+                                 columnNumber={1}
+                />
             </div>
         );
         ReactTestUtils.Simulate.click(ReactTestUtils.findRenderedDOMComponentWithClass(component, "table-header"));

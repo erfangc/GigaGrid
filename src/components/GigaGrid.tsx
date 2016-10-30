@@ -155,8 +155,8 @@ export interface GigaState {
     displayStart: number
     displayEnd: number
     showSettingsPopover: boolean
-    additionalUserButtons: AdditionalButton[]
-    expandTable: boolean
+    additionalUserButtons?: AdditionalButton[]
+    expandTable?: boolean
 
     canvas: HTMLElement;
     viewport: HTMLElement;
@@ -472,8 +472,6 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         e.preventDefault();
         // This covers all browsers, see https://www.sitepoint.com/html5-javascript-mouse-wheel/
         const amountToScroll: number = -Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))) * 53;
-        debugger;
-
         const node: Element = ReactDOM.findDOMNode<Element>(this);
         const dataContainer = $(node).parent().find('.giga-grid-right-data-container');
         const scrollTopAmount: number = dataContainer.scrollTop();

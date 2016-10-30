@@ -1,4 +1,4 @@
-import {SubtotalRow, DetailRow} from "../models/Row";
+import {Row} from "../models/Row";
 import * as _ from "lodash";
 import {Column, ColumnFormat, BucketInfo} from "../models/ColumnLike";
 import {ServerSubtotalRow, dataToSubtotalRows} from "../store/ServerStore";
@@ -8,13 +8,15 @@ export class TreeBuilder {
     /**
      * create a shallow tree (with only 1 level - and assume it represents the results of the top most layer subtotal logic
      * @param rows
-     * @param subtotalBys
      * @returns {Tree}
      */
-    public static buildShallowTree(rows:ServerSubtotalRow[]): Tree {
-        const grandTotal = new SubtotalRow({colTag: null, title: "Grand Total", value: null});
-        grandTotal.setSectorPath([]);
-        dataToSubtotalRows(rows).forEach(row=>{
+    public static buildShallowTree(rows: ServerSubtotalRow[]): Tree {
+        var rootBucket: BucketInfo = {colTag: null, title: "Grand Total", value: null};
+        const grandTotal = new Row();
+        grandTotal.bucketInfo = rootBucket;
+        grandTotal.sectorPath = [];
+        grandTotal.collapsed = false;
+        dataToSubtotalRows(rows).forEach(row=> {
             grandTotal.addChild(row);
         });
         return new Tree(grandTotal);
@@ -26,16 +28,16 @@ export class TreeBuilder {
      * @param node
      * @param initiallyExpandedSubtotalRows
      */
-    private static selectivelyExpand(node:SubtotalRow, initiallyExpandedSubtotalRows:string[][]) {
+    private static selectivelyExpand(node: Row, initiallyExpandedSubtotalRows: string[][]) {
 
         initiallyExpandedSubtotalRows.forEach((sp)=> {
             for (let i = 1; i <= sp.length; i++)
-                if (_.isEqual(node.sectorPath(), sp.slice(0, i)))
-                    node.toggleCollapse(false);
+                if (_.isEqual(node.sectorPath, sp.slice(0, i)))
+                    node.collapsed = false;
         });
 
         if (node.getNumChildren() != 0)
-            node.getChildren().forEach((child)=>TreeBuilder.selectivelyExpand(child, initiallyExpandedSubtotalRows))
+            node.children.forEach((child)=>TreeBuilder.selectivelyExpand(child, initiallyExpandedSubtotalRows))
     }
 
     /**
@@ -44,32 +46,39 @@ export class TreeBuilder {
      * @param node
      * @param initiallySelectedSubtotalRows
      */
-    private static selectivelySelect(node:SubtotalRow, initiallySelectedSubtotalRows:string[][]) {
+    private static selectivelySelect(node: Row, initiallySelectedSubtotalRows: string[][]) {
         initiallySelectedSubtotalRows.forEach((sp)=> {
-            if (_.isEqual(node.sectorPath(), sp))
-                node.toggleSelect(true);
+            if (_.isEqual(node.sectorPath, sp))
+                node.selected = true;
         });
         if (node.getNumChildren() != 0)
-            node.getChildren().forEach((child)=>TreeBuilder.selectivelySelect(child, initiallySelectedSubtotalRows))
+            node.children.forEach((child)=>TreeBuilder.selectivelySelect(child, initiallySelectedSubtotalRows))
     }
 
-    static buildTree(data:any[],
-                     subtotalBys:Column[] = [],
-                     initiallyExpandedSubtotalRows?:string[][],
-                     initiallySelectedSubtotalRows?:string[][]):Tree {
+    static buildTree(data: any[],
+                     subtotalBys: Column[] = [],
+                     initiallyExpandedSubtotalRows?: string[][],
+                     initiallySelectedSubtotalRows?: string[][]): Tree {
         /*
          * the way we create a Tree is as follows
-         * since each detailRow in data can only belong to ONE SubtotalRow and each SubtotalRow can have only 1 parent
+         * since each detailRow in data can only belong to ONE Row and each Row can have only 1 parent
          * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
-         * parent SubtotalRow (in other words, find the detailRow's "bucket") and append said detailRow to the parent
+         * parent Row (in other words, find the detailRow's "bucket") and append said detailRow to the parent
          */
-        const grandTotal = new SubtotalRow({colTag: null, title: "Grand Total", value: null});
-        grandTotal.setSectorPath([]);
-        data.forEach(datum => this.bucketDetailRow(subtotalBys, new DetailRow(datum), grandTotal));
+        var rootBucketInfo = {colTag: null, title: "Grand Total", value: null};
+        const grandTotal = new Row();
+        grandTotal.bucketInfo = rootBucketInfo;
+        grandTotal.sectorPath = [];
+        grandTotal.collapsed = false;
+        data.forEach(datum => {
+            let detailedRow = new Row();
+            detailedRow.data = datum;
+            this.bucketDetailRow(subtotalBys, detailedRow, grandTotal)
+        });
         TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, true);
 
         /**
-         * EXPERIMENTAL - these props allow us to expand / select SubtotalRow on construction of the grid component
+         * EXPERIMENTAL - these props allow us to expand / select Row on construction of the grid component
          */
         if (initiallyExpandedSubtotalRows)
             TreeBuilder.selectivelyExpand(grandTotal, initiallyExpandedSubtotalRows);
@@ -79,49 +88,49 @@ export class TreeBuilder {
         return new Tree(grandTotal);
     }
 
-    private static bucketDetailRow(subtotalBys:Column[], detailedRow:DetailRow, grandTotal:SubtotalRow):void {
+    private static bucketDetailRow(subtotalBys: Column[], detailedRow: Row, grandTotal: Row): void {
         /*
-         * to traverse the grandTotal and find the detailRow's immediate parent SubtotalRow
+         * to traverse the grandTotal and find the detailRow's immediate parent Row
          * we store the detailRow's sector names in an ordered array
          */
-        const buckets:BucketInfo[] = []; // temporary array of strings to keep track subtotal titles names in sequence
+        const buckets: BucketInfo[] = []; // temporary array of strings to keep track subtotal titles names in sequence
         grandTotal.detailRows.push(detailedRow);
         subtotalBys.forEach(subtotalBy => {
             // the subtotal title
-            const bucket:BucketInfo = TreeBuilder.resolveSubtotalBucket(subtotalBy, detailedRow);
+            const bucket: BucketInfo = TreeBuilder.resolveSubtotalBucket(subtotalBy, detailedRow);
             if (bucket !== undefined) {
                 buckets.push(bucket);
                 const subtotalRow = TreeBuilder.traverseOrCreate(grandTotal, buckets);
                 subtotalRow.detailRows.push(detailedRow);
             } // FIXME if a detail row is not defined for all the columns we are subtotaling by, it is orphaned (i.e. not part of the tree at all), should we let it 'traverse' back and attach itself to the last subtotal row?
         });
-        detailedRow.setSectorPath(buckets);
+        detailedRow.sectorPath = buckets;
     };
 
     // TODO add tests
     /**
-     * recurisvely collapse the given node
+     * recursively collapse the given node
      * @param node
      * @param shouldCollapse
      */
-    public static recursivelyToggleChildrenCollapse(node:SubtotalRow, shouldCollapse:boolean = true) {
+    public static recursivelyToggleChildrenCollapse(node: Row, shouldCollapse: boolean = true) {
         /**
          *
-         * @param node
+         * @param row
          * @param shouldCollapse
          * @private
          */
-        function _toggleCollapse(node, shouldCollapse) {
-            node.toggleCollapse(shouldCollapse);
-            TreeBuilder.recursivelyToggleChildrenCollapse(node, shouldCollapse);
+        function toggleCollapse(row: Row, shouldCollapse) {
+            row.collapsed = shouldCollapse;
+            TreeBuilder.recursivelyToggleChildrenCollapse(row, shouldCollapse);
         }
 
-        node.getChildren().forEach((child)=> {
+        node.children.forEach((child)=> {
             if (shouldCollapse) {
-                _toggleCollapse(child, shouldCollapse);
+                toggleCollapse(child, shouldCollapse);
             } else { // expand all
-                if (child.getChildren().length || child.sectorPath().length === 1 ||child.detailRows.length)
-                    _toggleCollapse(child, shouldCollapse);
+                if (child.children.length || child.sectorPath.length === 1 || child.detailRows.length)
+                    toggleCollapse(child, shouldCollapse);
             }
         });
     }
@@ -130,11 +139,11 @@ export class TreeBuilder {
      *
      * @param grandTotal
      * @param buckets
-     * @returns {SubtotalRow}
+     * @returns {Row}
      */
-    private static traverseOrCreate(grandTotal:SubtotalRow, buckets:BucketInfo[]):SubtotalRow {
-        // traverse to the correct SubtotalRow
-        var currentRow:SubtotalRow = grandTotal;
+    private static traverseOrCreate(grandTotal: Row, buckets: BucketInfo[]): Row {
+        // traverse to the correct Row
+        var currentRow: Row = grandTotal;
         for (let k = 0; k < buckets.length; k++) {
             // update the current subtotal row
             const title = buckets[k].title;
@@ -142,11 +151,11 @@ export class TreeBuilder {
                 currentRow = currentRow.getChildByTitle(title);
             else {
                 // create a new sector if it is not already available
-                // SubtotalRow are created with a `title` and a `firstCellValue` property, firstCellValue is used to determine the row's sort order
-                const newRow = new SubtotalRow(buckets[k]);
-                newRow.toggleCollapse(true);
-                // set the sector path for the new SubtotalRow we just created the length of which determines its depth
-                newRow.setSectorPath(buckets.slice(0, k + 1));
+                // Row are created with a `title` and a `firstCellValue` property, firstCellValue is used to determine the row's sort order
+                let newRow = new Row();
+                newRow.bucketInfo = buckets[k];
+                // set the sector path for the new Row we just created the length of which determines its depth
+                newRow.sectorPath = buckets.slice(0, k + 1);
                 currentRow.addChild(newRow);
                 currentRow = newRow;
             }
@@ -154,8 +163,8 @@ export class TreeBuilder {
         return currentRow;
     };
 
-    private static resolveSubtotalBucket(subtotalBy:Column, detailedRow:DetailRow):BucketInfo {
-        // FIXME this is the naive implementation, cannot handle text-align-rightal bands
+    private static resolveSubtotalBucket(subtotalBy: Column, detailedRow: Row): BucketInfo {
+        // FIXME this is the naive implementation, cannot handle text-align-right bands
         const title = detailedRow.get(subtotalBy);
         // if the given column is not defined in the data, return undefined, this will
         if (title === undefined)
@@ -171,13 +180,13 @@ export class TreeBuilder {
 
 export class Tree {
 
-    private root:SubtotalRow;
+    private root: Row;
 
-    constructor(root:SubtotalRow) {
+    constructor(root: Row) {
         this.root = root;
     }
 
-    getRoot():SubtotalRow {
+    getRoot(): Row {
         return this.root;
     }
 
