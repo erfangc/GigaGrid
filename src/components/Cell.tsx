@@ -17,20 +17,38 @@ export interface CellProps extends GridComponentProps<Cell> {
     columnNumber: number
 }
 
-
+/**
+ * Cell is the base class for constructing a single cell in the table
+ * by default, if the cell being rendered is the first cell of a subtotal row,
+ * we will render a cell with a +/- button to facilitate expand/collapse of rows
+ * otherwise we will render a normal cell with text content
+ *
+ * Users who wants to provide custom rendering should extend this class and leverage many of its protected methods as
+ * building blocks for rendering a cell or revert to default behavior as conditions dictate
+ */
 export class Cell extends React.Component<CellProps, any> {
 
     constructor(props) {
         super(props);
     }
 
+    render() {
+        const {row, isFirstColumn} = this.props;
+        if (!row.isDetailRow() && isFirstColumn) {
+            return this.renderCellWithCollapseExpandButton();
+        } else {
+            return this.renderCellWithoutCollapseExpandButton();
+        }
+    }
+
     protected onSelect() {
+        let {row, column, dispatcher} = this.props;
         let action = {
             type: GigaActionType.TOGGLE_CELL_SELECT,
-            row: this.props.row,
-            column: this.props.column
+            row: row,
+            column: column
         };
-        this.props.dispatcher.dispatch(action);
+        dispatcher.dispatch(action);
     }
 
     protected calculateStyle() {
@@ -38,106 +56,76 @@ export class Cell extends React.Component<CellProps, any> {
         return {
             width: column.width,
             height: rowHeight,
-            paddingLeft: isFirstColumn ? Cell.calculateFirstColumnIdentation(this.props.row) : undefined
+            paddingLeft: isFirstColumn ? this.calculateFirstColumnIdentation() : undefined
         };
     }
 
-    protected static calculateFirstColumnIdentation(row: Row): string {
+    protected calculateFirstColumnIdentation(): string {
+        let {row} = this.props;
         /*
          handle when there are no subtotal rows
          */
-        if (row.sectorPath.length === 0)
+        if (row.sectorPath.length === 0) {
             return "10px";
-        else {
+        } else {
             const identLevel = row.sectorPath.length;
             return ((row.isDetailRow() && identLevel !== 0 ? identLevel + 1 : identLevel ) * 25) + 'px';
         }
     }
 
-    protected static calculateTextAlignment(row: Row, column: Column): string {
-        const value = row.get(column);
-        if (column.formatInstruction && column.formatInstruction.textAlign)
-            return `text-align-${column.formatInstruction.textAlign}`;
-        else if (isNaN(value))
-            return `text-align-left`;
-        else
-            return `text-align-right`;
-    }
-
-    render() {
-        const props = this.props;
-        const row = props.row;
-        const column = props.column;
-        if (_.isFunction(column.cellTemplateCreator)) {
-            return (
-                <div className={`content-container giga-grid-column-${props.columnNumber}`}>
-                    <span className="content">
-                        {column.cellTemplateCreator(row, column, props)}
-                    </span>
-                </div>
-            );
-        }
-        else
-            return this.renderDefault();
-    }
-
-    private renderDefault() {
-        const {row, isFirstColumn} = this.props;
-        if (!row.isDetailRow() && isFirstColumn)
-            return this.renderCellWithCollapseExpandButton();
-        else
-            return this.renderDetailCell();
-    }
-
-    renderDetailCell(): any|JSX.Element {
-
+    protected renderCellWithoutCollapseExpandButton(): JSX.Element {
         let {row, column} = this.props;
         let renderedCellContent: JSX.Element|string|number = format(row.get(column), column.formatInstruction) || "";
-
         if (!row.isDetailRow()
             && (column.aggregationMethod === AggregationMethod.COUNT || column.aggregationMethod === AggregationMethod.COUNT_DISTINCT))
             renderedCellContent = `[${renderedCellContent}]`;
-
         return (
-            <div
-                className={`content-container giga-grid-column-${this.props.columnNumber} ${Cell.calculateTextAlignment(row, column)}`}
-                onClick={e=>this.onSelect()} style={this.calculateStyle()}
-            >
+            this.renderContentContainerWithElement(
                 <span className="content">
                     {renderedCellContent}
                 </span>
-            </div>
+            )
         );
     }
 
-    renderCellWithCollapseExpandButton(): any|JSX.Element {
+    protected renderCellWithCollapseExpandButton(): JSX.Element {
         let row = this.props.row;
-        const cx = classNames({
+        let cx = classNames({
             "fa": true,
             "fa-plus-square-o": row.collapsed,
             "fa-minus-square-o": !row.collapsed
         });
         return (
-            <div className={`content-container giga-grid-column-${this.props.columnNumber}`}
-                 style={this.calculateStyle()} onClick={e=>this.onSelect()}>
+            this.renderContentContainerWithElement(
                 <span className="content group-by-cell">
                     <i className={cx} onClick={(e: MouseEvent)=>this.onCollapseToggle(e)}/>&nbsp;
                     {row.bucketInfo.title || ""}
                 </span>
+            )
+        );
+    }
+
+    protected renderContentContainerWithElement(elm: JSX.Element): JSX.Element {
+        let {columnNumber} = this.props;
+        return (
+            <div className={`content-container giga-grid-column-${columnNumber}`}
+                 style={this.calculateStyle()}
+                 onClick={e=>this.onSelect()}
+            >
+                {elm}
             </div>
         );
     }
 
-    private onCollapseToggle(e: MouseEvent) {
+    protected onCollapseToggle(e: MouseEvent) {
         e.preventDefault();
         e.stopPropagation(); // we don't want toggle collapse to also trigger a row / cell clicked event
-
+        let {row, dispatcher} = this.props;
         const action: ToggleCollapseAction = {
             type: GigaActionType.TOGGLE_ROW_COLLAPSE,
-            subtotalRow: this.props.row
+            subtotalRow: row
         };
-        this.props.dispatcher.dispatch(action);
+        dispatcher.dispatch(action);
     }
-
 
 }
