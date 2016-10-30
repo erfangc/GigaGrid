@@ -4,11 +4,10 @@ import {GigaAction} from "../../src/store/GigaStore";
 import {Row} from "../../src/models/Row";
 import {TestUtils} from "../TestUtils";
 import {Column} from "../../src/models/ColumnLike";
-import {Cell, CellProps} from "../../src/components/Cell";
+import {Cell} from "../../src/components/Cell";
 import * as $ from "jquery";
 import {Dispatcher} from "flux";
 
-// TODO re-do!
 describe("Cell", ()=> {
 
     var dispatcher:Dispatcher<GigaAction>;
@@ -25,7 +24,7 @@ describe("Cell", ()=> {
         ReactTestUtils.renderIntoDocument<Cell>(
             <div>
                 <Cell ref={c=>component=c}
-                      rowHeight={""}
+                      rowHeight={"25x"}
                       isFirstColumn={true}
                       dispatcher={dispatcher}
                       column={columns[2]}
@@ -34,54 +33,21 @@ describe("Cell", ()=> {
                 />
             </div>
         );
-        const textContent = ReactTestUtils.scryRenderedDOMComponentsWithClass(component, "content")[0].textContent;
+        let textContent = ReactTestUtils.scryRenderedDOMComponentsWithClass(component, "content")[0].textContent;
         expect(textContent).toBe("R2D2");
-    });
-
-    it("can handle custom cell content", ()=> {
-
-        const colDef = columns[2];
-
-        colDef.cellTemplateCreator = (row:Row, column:Column, props: CellProps):JSX.Element => {
-            return (
-                <div>
-                    <span style={{"color": "green"}}>Hello World</span>
-                </div>
-            )
-        };
-
-        ReactTestUtils.renderIntoDocument<Cell>(
-            <div>
-                <Cell ref={c=>component=c}
-                      isFirstColumn={false}
-                      rowHeight={""}
-                      dispatcher={dispatcher}
-                      column={colDef}
-                      columnNumber={1}
-                      row={row}
-                />
-            </div>
-        );
-
-        const spans = ReactTestUtils.scryRenderedDOMComponentsWithTag(component, "span");
-
-        expect(spans.length).toBe(2);
-        expect(spans[1].textContent).toBe("Hello World");
-        expect($(spans[1]).css("color")).toBe("green");
-
     });
 
     it("can deduce the correct identation for 1st rows in a subtotaled tree", ()=> {
         row.sectorPath = [{colTag: "Level 1", title: "Level 1", value: "Level 1"}, {colTag: "Level 2", title: "Level 2", value: "Level 2"}];
-        const colDef = columns[0];
+        let column = columns[0];
 
         ReactTestUtils.renderIntoDocument(
             <div>
                 <Cell ref={c=>component=c}
-                      rowHeight={""}
+                      rowHeight={"25x"}
                       isFirstColumn={true}
                       dispatcher={dispatcher}
-                      column={colDef}
+                      column={column}
                       columnNumber={1}
                       row={row}
                 />
@@ -91,15 +57,15 @@ describe("Cell", ()=> {
     });
 
     it("can render a +/- for the first cell of a subtotal row", ()=> {
-        const subtotalRow = TestUtils.getSimpleSubtotalRow();
-        const colDef = columns[0];
+        let subtotalRow = TestUtils.getSimpleSubtotalRow();
+        let column = columns[0];
         ReactTestUtils.renderIntoDocument(
             <div>
                 <Cell ref={c=>component=c}
-                      rowHeight={""}
+                      rowHeight={"25x"}
                       isFirstColumn={true}
                       dispatcher={dispatcher}
-                      column={colDef}
+                      column={column}
                       columnNumber={1}
                       row={subtotalRow}/>
             </div>
