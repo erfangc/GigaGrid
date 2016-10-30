@@ -20,6 +20,7 @@ import ReactElement = __React.ReactElement;
 /**
  * Interface that describe the shape of the `Props` that `GigaGrid` accepts from the user
  * the bare minimum are: `data` and `columnDefs`
+ * This is the Public API for GigaGrid by definition
  */
 export interface GigaProps extends React.Props<GigaGrid> {
 
@@ -116,7 +117,7 @@ export interface GigaProps extends React.Props<GigaGrid> {
 
 }
 
-export interface GridSubcomponentProps<T> extends React.Props<T> {
+export interface GridComponentProps<T> extends React.Props<T> {
     dispatcher: Dispatcher<GigaAction>;
     // idk if this is a good idea - but sub components often need to refer to things like callbacks - really annoying to pass them at each level
     // making them optional so tests' don't complain as much
@@ -414,14 +415,14 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         }
 
         const oldSheetNode = $(`head > style#giga-grid-style-${this.state.gridID}`);
-        const sheet = _.findWhere(document.styleSheets, {ownerNode: oldSheetNode}) || this.createGigaGridStyleSheet();
+        const sheet = (_.findWhere<{}, StyleSheet>(document.styleSheets, {ownerNode: oldSheetNode}) || this.createGigaGridStyleSheet()) as CSSStyleSheet;
 
         for (var i = 0; i < $leftHeaderContainers.length + $rightHeaderContainers.length; ++i) {
             const selectorText = `.giga-grid-${this.state.gridID} .giga-grid-column-${i}`;
             const cssText = `width: ${widths[i]}px !important;`;
-            const oldRule = _.findWhere(sheet, {selectorText});
+            const oldRule: CSSPageRule = _.findWhere<{},CSSRule>(sheet.cssRules, {selectorText}) as CSSPageRule;
             if (oldRule)
-                sheet.deleteRule(sheet.rules.indexOf(oldRule));
+                sheet.deleteRule((sheet.rules as any).indexOf(oldRule));
 
             if (!oldRule || oldRule.style.cssText !== cssText)
                 sheet.insertRule(`${selectorText} { ${cssText} }`, 0);
@@ -444,7 +445,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
      * Creates a new stylesheet for this grid
      * @returns {CSSStyleSheet}
      */
-    private createGigaGridStyleSheet(): CSSStyleSheet {
+    private createGigaGridStyleSheet(): StyleSheet {
         var style = document.createElement("style");
         style.setAttribute("id", `giga-grid-style-${this.state.gridID}`);
         document.head.appendChild(style);

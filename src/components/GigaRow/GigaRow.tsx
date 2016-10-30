@@ -4,9 +4,9 @@ import {Row} from "../../models/Row";
 import {Column} from "../../models/ColumnLike";
 import {GigaActionType} from "../../store/GigaStore";
 import SyntheticEvent = __React.SyntheticEvent;
-import {GridSubcomponentProps, GigaProps} from "../GigaGrid";
+import {GridComponentProps, GigaProps} from "../GigaGrid";
 
-export interface GigaRowProps extends GridSubcomponentProps<GigaRow> {
+export interface GigaRowProps extends GridComponentProps<GigaRow> {
     row:Row;
     rowHeight: string;
     columns:Column[];

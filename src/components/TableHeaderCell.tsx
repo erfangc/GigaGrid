@@ -1,13 +1,13 @@
 import * as React from "react";
 import * as classNames from "classnames";
 import {Column, ColumnFormat, SortDirection} from "../models/ColumnLike";
-import {GridSubcomponentProps} from "./GigaGrid";
+import {GridComponentProps} from "./GigaGrid";
 import {GigaActionType} from "../store/GigaStore";
 import * as _ from "lodash";
 import {ToolbarToggle} from "./toolbar/Toolbar";
 import {SortUpdateAction} from "../store/reducers/SortReducers";
 
-export interface TableHeaderProps extends GridSubcomponentProps<TableHeaderCell> {
+export interface TableHeaderProps extends GridComponentProps<TableHeaderCell> {
     column:Column
     tableHeaderClass?:string
     isFirstColumn?:boolean

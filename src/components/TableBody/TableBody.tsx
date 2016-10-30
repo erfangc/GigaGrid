@@ -2,9 +2,9 @@ import * as React from "react";
 import {Column} from "../../models/ColumnLike";
 import {Row} from "../../models/Row";
 import {PROGRESSIVE_RENDERING_THRESHOLD} from "../../store/GigaStore";
-import {GridSubcomponentProps} from "../GigaGrid";
+import {GridComponentProps} from "../GigaGrid";
 
-export interface TableBodyProps extends GridSubcomponentProps<TableBody> {
+export interface TableBodyProps extends GridComponentProps<TableBody> {
     rows: Row[];
     columns: Column[];
     displayStart?: number;

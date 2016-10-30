@@ -1,10 +1,10 @@
 import * as React from "react";
 import {Column} from "../../src/models/ColumnLike";
 import {TableHeaderCell} from "./TableHeaderCell";
-import {GridSubcomponentProps, getScrollBarWidth} from "./GigaGrid";
+import {GridComponentProps, getScrollBarWidth} from "./GigaGrid";
 import Dispatcher = Flux.Dispatcher;
 
-export interface TableHeaderProps extends GridSubcomponentProps<TableHeader> {
+export interface TableHeaderProps extends GridComponentProps<TableHeader> {
     tableHeaderClass?:string
     columns:Column[][]
     staticLeftHeaders:number

@@ -3,13 +3,13 @@ import * as classNames from "classnames";
 import {Column, AggregationMethod} from "../models/ColumnLike";
 import {Row} from "../models/Row";
 import {GigaActionType} from "../store/GigaStore";
-import {GridSubcomponentProps} from "./GigaGrid";
+import {GridComponentProps} from "./GigaGrid";
 import {format} from "../static/SubtotalAggregator";
 import {ToggleCollapseAction} from "../store/reducers/RowCollapseReducers";
 import SyntheticEvent = __React.SyntheticEvent;
 import $ = require('jquery');
 
-export interface CellProps extends GridSubcomponentProps<Cell> {
+export interface CellProps extends GridComponentProps<Cell> {
     row: Row
     column: Column
     rowHeight: string
