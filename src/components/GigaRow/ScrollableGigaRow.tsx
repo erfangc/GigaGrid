@@ -1,17 +1,20 @@
 import * as React from "react";
 import {GigaRow} from "./GigaRow";
 import {Column} from "../../models/ColumnLike";
-import {Cell} from "../Cell";
+import {CellProps} from "../Cell";
 
 export class ScrollableGigaRow extends GigaRow {
-    mapColumnToCell(column:Column, i:number){
-        return (<Cell key={i}
-                      isFirstColumn={i == 0 && !this.props.gridProps.staticLeftHeaders}
-                      column={column}
-                      columnNumber={i + (this.props.gridProps.staticLeftHeaders || 0)}
-                      rowHeight={this.props.rowHeight}
-                      dispatcher={this.props.dispatcher}
-                      gridProps={this.props.gridProps}
-                      row={this.props.row}/>)
+    getCellProps(column: Column, i: number): CellProps {
+        let {gridProps, rowHeight, dispatcher, row} = this.props;
+        return {
+            key: i,
+            isFirstColumn: i == 0 && !gridProps.staticLeftHeaders,
+            column: column,
+            columnNumber: i + (gridProps.staticLeftHeaders || 0),
+            rowHeight: rowHeight,
+            dispatcher: dispatcher,
+            gridProps: gridProps,
+            row: row
+        }
     }
 }
