@@ -21,6 +21,11 @@ export abstract class GigaRow extends React.Component<GigaRowProps, any> {
         super(props);
     }
 
+    protected generateCellKey(column: Column): string {
+        let {row} = this.props;
+        return `colTag:${column.colTag}.loading:${row.loading}`;
+    }
+
     render() {
         let {row, rowHeight, columns} = this.props;
         let subtotalLvlClassName = `subtotal-row-${row.sectorPath.length - 1}`;
@@ -58,16 +63,12 @@ export abstract class GigaRow extends React.Component<GigaRowProps, any> {
      * renders a cell given the cell's props
      */
     protected static renderCell(props: CellProps): JSX.Element {
-        let {row, column} = props;
+        let {column} = props;
         // if the user provided us with a cellTemplateCreator function, we will use that function to render the cell
         if (column.cellTemplateCreator) {
-            return column.cellTemplateCreator(row, column, props);
+            return column.cellTemplateCreator(props);
         } else {
-            return (
-                <Cell
-                    {...props}
-                />
-            );
+            return (<Cell {...props} />);
         }
     }
 

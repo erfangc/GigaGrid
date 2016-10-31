@@ -60,5 +60,9 @@
     "typescript": "^1.7.5",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.11"
+  },
+  "peerDependencies": {
+    "react": "^0.14.6",
+    "react-dom": "^0.14.6"
   }
 }

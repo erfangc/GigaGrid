@@ -34,7 +34,7 @@ export interface ColumnDef extends ColumnLike {
     width?: string
     weightBy?: string
     formatInstruction?: FormatInstruction
-    cellTemplateCreator?: (row: Row, column: Column, props: CellProps) => JSX.Element
+    cellTemplateCreator?: (props: CellProps) => JSX.Element
     headerTemplateCreator?: (column: Column) => JSX.Element
 }
 

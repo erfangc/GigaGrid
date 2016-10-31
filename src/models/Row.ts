@@ -89,6 +89,15 @@ export class Row {
     }
 
     /**
+     * legacy is detail function
+     * @deprecated
+     * @return {boolean}
+     */
+    isDetail(): boolean {
+        return this.isDetailRow();
+    }
+
+    /**
      * a detail row is one with no direct descendants nor ultimate descendants
      * @return {boolean}
      */
