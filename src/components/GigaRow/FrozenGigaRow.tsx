@@ -10,7 +10,7 @@ export class FrozenGigaRow extends GigaRow {
     getCellProps(column: Column, i: number): CellProps {
         let {rowHeight, dispatcher, gridProps, row} = this.props;
         return {
-            key: i,
+            key: super.generateCellKey(column),
             isFirstColumn: i === 0,
             column: column,
             columnNumber: i,

@@ -84,7 +84,7 @@ describe("GigaRow Components", () => {
                 }
             }
 
-            column.cellTemplateCreator = (row: Row, column: Column, props: CellProps) => {
+            column.cellTemplateCreator = (props: CellProps) => {
                 return (<CustomCell {...props}/>);
             };
 

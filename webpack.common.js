@@ -11,7 +11,7 @@ module.exports = {
                 test: /\.tsx?$/, loader: "ts-loader"
             },
             {
-                test: /\.styl$/, loader: 'style-loader!css-loader!stylus-loader'
+                test: /\.(styl|css)$/, loader: 'style-loader!css-loader!stylus-loader'
             }
         ]
     }

@@ -79,18 +79,17 @@ export class Cell extends React.Component<CellProps, any> {
         if (!row.isDetailRow()
             && (column.aggregationMethod === AggregationMethod.COUNT || column.aggregationMethod === AggregationMethod.COUNT_DISTINCT))
             renderedCellContent = `[${renderedCellContent}]`;
-        return (
-            this.renderContentContainerWithElement(
-                <span className="content">
-                    {renderedCellContent}
-                </span>
-            )
+        return this.renderContentContainerWithElement(
+            <span className="content">
+                    {/* Render a blank space instead of something that could be null or undefined */}
+                {renderedCellContent || "\u00A0"}
+            </span>
         );
     }
 
-    protected renderCellWithCollapseExpandButton(): JSX.Element {
+    renderCellWithCollapseExpandButton(): any|JSX.Element {
         let row = this.props.row;
-        let cx = classNames({
+        const cx = classNames({
             "fa": true,
             "fa-plus-square-o": row.collapsed,
             "fa-minus-square-o": !row.collapsed
@@ -98,17 +97,19 @@ export class Cell extends React.Component<CellProps, any> {
         return (
             this.renderContentContainerWithElement(
                 <span className="content group-by-cell">
-                    <i className={cx} onClick={(e: MouseEvent)=>this.onCollapseToggle(e)}/>&nbsp;
+                    <i className={cx} onClick={(e: MouseEvent) => this.onCollapseToggle(e)}/>&nbsp;
                     {row.bucketInfo.title || ""}
+                    {row.loading ? [" ",<i className="fa fa-spinner fa-spin"/>] : null}
                 </span>
             )
         );
     }
 
     protected renderContentContainerWithElement(elm: JSX.Element): JSX.Element {
-        let {columnNumber} = this.props;
+        let {columnNumber, row, column} = this.props;
+        let textAlign = Cell.calculateTextAlignment(row, column);
         return (
-            <div className={`content-container giga-grid-column-${columnNumber}`}
+            <div className={`content-container giga-grid-column-${columnNumber} ${textAlign}`}
                  style={this.calculateStyle()}
                  onClick={e=>this.onSelect()}
             >
@@ -117,15 +118,33 @@ export class Cell extends React.Component<CellProps, any> {
         );
     }
 
+    public static calculateTextAlignment(row: Row, column: Column) {
+        const value = row.get(column);
+        if (column.formatInstruction && column.formatInstruction.textAlign)
+            return `text-align-${column.formatInstruction.textAlign}`;
+        else
+        if (isNaN(value))
+            return `text-align-left`;
+        else
+            return `text-align-right`;
+    }
+
     protected onCollapseToggle(e: MouseEvent) {
         e.preventDefault();
         e.stopPropagation(); // we don't want toggle collapse to also trigger a row / cell clicked event
-        let {row, dispatcher} = this.props;
-        const action: ToggleCollapseAction = {
-            type: GigaActionType.TOGGLE_ROW_COLLAPSE,
-            subtotalRow: row
-        };
-        dispatcher.dispatch(action);
-    }
 
+        const gridProps = this.props.gridProps;
+        if (gridProps && gridProps.useServerStore) {
+            if (gridProps.fetchRowsActionCreator)
+                gridProps.fetchRowsActionCreator(this.props.row, this.props.dispatcher);
+            else
+                throw "error: server store in use yet fetchRowsActionCreator not defined on GigaGrid props";
+        } else {
+            const action: ToggleCollapseAction = {
+                type: GigaActionType.TOGGLE_ROW_COLLAPSE,
+                subtotalRow: this.props.row
+            };
+            this.props.dispatcher.dispatch(action);
+        }
+    }
 }
