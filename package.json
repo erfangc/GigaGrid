@@ -1,8 +1,12 @@
 {
   "name": "giga-grid",
-  "version": "0.4.0",
+  "version": "0.4.2",
   "description": "Massively performant, multi-layered React.js table widget Written in TypeScript",
   "main": "dist/giga-grid.js",
+  "files": [
+    "dist/giga-grid.js",
+	"styles/"
+  ],
   "scripts": {
     "start": "concurrently \"webpack --config webpack.examples.js --watch\" \"live-server\"",
     "build": "webpack --config webpack.production.js",
@@ -60,5 +64,9 @@
     "typescript": "^1.7.5",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.11"
+  },
+  "peerDependencies": {
+    "react": "^0.14.6",
+    "react-dom": "^0.14.6"
   }
 }

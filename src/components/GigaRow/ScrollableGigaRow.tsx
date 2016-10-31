@@ -7,7 +7,7 @@ export class ScrollableGigaRow extends GigaRow {
     getCellProps(column: Column, i: number): CellProps {
         let {gridProps, rowHeight, dispatcher, row} = this.props;
         return {
-            key: i,
+            key: super.generateCellKey(column),
             isFirstColumn: i == 0 && !gridProps.staticLeftHeaders,
             column: column,
             columnNumber: i + (gridProps.staticLeftHeaders || 0),
