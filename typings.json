@@ -1,0 +1,21 @@
+{
+  "name": "giga-grid",
+  "globalDependencies": {
+    "react-global": "github:DefinitelyTyped/DefinitelyTyped/react/react-global.d.ts#40c60850ad6c8175a62d5ab48c4e016ea5b3dffe",
+    "react-addons-css-transition-group": "github:DefinitelyTyped/DefinitelyTyped/react/react-addons-css-transition-group.d.ts#40c60850ad6c8175a62d5ab48c4e016ea5b3dffe",
+    "react-addons-create-fragment": "github:DefinitelyTyped/DefinitelyTyped/react/react-addons-create-fragment.d.ts#40c60850ad6c8175a62d5ab48c4e016ea5b3dffe",
+    "react-addons-transition-group": "github:DefinitelyTyped/DefinitelyTyped/react/react-addons-transition-group.d.ts#40c60850ad6c8175a62d5ab48c4e016ea5b3dffe",
+    "react-addons-linked-state-mixin": "github:DefinitelyTyped/DefinitelyTyped/react/react-addons-linked-state-mixin.d.ts#40c60850ad6c8175a62d5ab48c4e016ea5b3dffe",
+    "react-addons-pure-render-mixin": "github:DefinitelyTyped/DefinitelyTyped/react/react-addons-pure-render-mixin.d.ts#40c60850ad6c8175a62d5ab48c4e016ea5b3dffe",
+    "react-addons-test-utils": "github:DefinitelyTyped/DefinitelyTyped/react/react-addons-test-utils.d.ts#40c60850ad6c8175a62d5ab48c4e016ea5b3dffe",
+    "react-dom": "github:DefinitelyTyped/DefinitelyTyped/react/react-dom.d.ts#40c60850ad6c8175a62d5ab48c4e016ea5b3dffe",
+    "react-addons-update": "github:DefinitelyTyped/DefinitelyTyped/react/react-addons-update.d.ts#40c60850ad6c8175a62d5ab48c4e016ea5b3dffe",
+    "react-addons-perf": "github:DefinitelyTyped/DefinitelyTyped/react/react-addons-perf.d.ts#40c60850ad6c8175a62d5ab48c4e016ea5b3dffe",
+    "react": "github:DefinitelyTyped/DefinitelyTyped/react/react.d.ts#6766ed1d0faf02ede9e2edf2e66bbb2388c825ec",
+    "jasmine": "github:DefinitelyTyped/DefinitelyTyped/jasmine/jasmine.d.ts#40c60850ad6c8175a62d5ab48c4e016ea5b3dffe",
+    "jquery": "github:DefinitelyTyped/DefinitelyTyped/jquery/jquery.d.ts#ba257a9b91bc0de1bdd9091b6723194c905a902a",
+    "classnames": "github:DefinitelyTyped/DefinitelyTyped/classnames/classnames.d.ts#1da639a106527e0c4010b354a1efe52a3059a291",
+    "flux": "github:DefinitelyTyped/DefinitelyTyped/flux/flux.d.ts#a6ff9f6e195a334afd89e4b721d05e9520eee4c0",
+    "lodash": "github:DefinitelyTyped/DefinitelyTyped/lodash/lodash.d.ts#ba257a9b91bc0de1bdd9091b6723194c905a902a"
+  }
+}

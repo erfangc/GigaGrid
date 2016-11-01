@@ -1,7 +1,6 @@
 var commonConfig = require("./webpack.common.js");
 
 commonConfig.output = {
-    path: "./examples",
     filename: "bundle.js"
 };
 
@@ -9,5 +8,13 @@ commonConfig.output = {
  * watch a different entry
  */
 commonConfig.entry = "./examples/Examples.tsx";
+
+commonConfig.devServer = {
+    contentBase: './',
+    publicPath: '/',
+    historyApiFallback: true,
+    inline: true,
+    port: 8070
+};
 
 module.exports = commonConfig;

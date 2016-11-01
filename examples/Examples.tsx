@@ -3,7 +3,6 @@ import * as ReactDOM from "react-dom";
 import {GigaGrid} from "../index";
 import UKBudget from "./data/UKBudget";
 import {GigaProps, GigaState} from "../src/components/GigaGrid";
-import {Tabs, Tab} from "react-bootstrap";
 import {Row} from "../src/models/Row";
 import {SortDirection} from "../src/models/ColumnLike";
 import "../styles/theme/Retro.styl";
@@ -12,24 +11,10 @@ interface ExamplesProps extends React.Props<Examples> {
     ukBudget: GigaProps
 }
 
-interface ExampleState {
-    activeTabKey: number
-}
-
-export class Examples extends React.Component<ExamplesProps, ExampleState> {
+export class Examples extends React.Component<ExamplesProps, {}> {
 
     constructor(props: ExamplesProps) {
         super(props);
-        this.state = {
-            activeTabKey: 0
-        }
-    }
-
-    private handleTabSelect(idx) {
-        // trigger resize on click so the table headers adjust
-        this.setState({
-            activeTabKey: idx
-        });
     }
 
     render() {
@@ -37,14 +22,7 @@ export class Examples extends React.Component<ExamplesProps, ExampleState> {
         return (
             <div>
                 <div className="container">
-                    <br/>
-                    <Tabs activeKey={this.state.activeTabKey} onSelect={idx=>this.handleTabSelect(idx)}
-                          animation={false}>
-                        <Tab eventKey={0} title="Basic Example">
-                            <br/>
-                            {this.renderBasicExample(additionalUserButtons)}
-                        </Tab>
-                    </Tabs>
+                    {this.renderBasicExample(additionalUserButtons)}
                 </div>
             </div>
         );
