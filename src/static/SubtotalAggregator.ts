@@ -47,6 +47,27 @@ function range(detailRows: Row[], column: Column): string {
 }
 
 /**
+ * computes the default preferred alignment of the given cell
+ * if a formatInstruction is specified on column, then the textAlign property will be respected
+ * otherwise we use the default heuristic: numbers -> 'text-align-right' NaN -> 'text-align-left'
+ * @param row
+ * @param column
+ */
+export function align(row: Row, column: Column) {
+    let value = row.get(column);
+    if (column.formatInstruction && column.formatInstruction.textAlign) {
+        return `text-align-${column.formatInstruction.textAlign}`;
+    } else {
+        if (isNaN(value)) {
+            return `text-align-left`;
+        }
+        else {
+            return `text-align-right`;
+        }
+    }
+}
+
+/**
  * formats a given value per the format instruction
  * TODO add tests
  * TODO this does not belong to a file called SubtotalAggregator.ts
