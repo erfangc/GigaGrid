@@ -4,7 +4,7 @@ import {Column, AggregationMethod} from "../models/ColumnLike";
 import {Row} from "../models/Row";
 import {GigaActionType} from "../store/GigaStore";
 import {GridComponentProps} from "./GigaGrid";
-import {format} from "../static/SubtotalAggregator";
+import {format, align} from "../static/SubtotalAggregator";
 import {ToggleCollapseAction} from "../store/reducers/RowCollapseReducers";
 import SyntheticEvent = __React.SyntheticEvent;
 import $ = require('jquery');
@@ -51,16 +51,16 @@ export class Cell extends React.Component<CellProps, any> {
         dispatcher.dispatch(action);
     }
 
-    protected calculateStyle() {
+    protected calculateContainerStyle() {
         let {column, rowHeight, isFirstColumn} = this.props;
         return {
             width: column.width,
             height: rowHeight,
-            paddingLeft: isFirstColumn ? this.calculateFirstColumnIdentation() : undefined
+            paddingLeft: isFirstColumn ? this.calculateIdentation() : undefined
         };
     }
 
-    protected calculateFirstColumnIdentation(): string {
+    protected calculateIdentation(): string {
         let {row} = this.props;
         /*
          handle when there are no subtotal rows
@@ -83,11 +83,12 @@ export class Cell extends React.Component<CellProps, any> {
             <span className="content">
                     {/* Render a blank space instead of something that could be null or undefined */}
                 {renderedCellContent || "\u00A0"}
-            </span>
+            </span>,
+            align(row, column)
         );
     }
 
-    renderCellWithCollapseExpandButton(): any|JSX.Element {
+    protected renderCellWithCollapseExpandButton(): any|JSX.Element {
         let row = this.props.row;
         const cx = classNames({
             "fa": true,
@@ -99,34 +100,21 @@ export class Cell extends React.Component<CellProps, any> {
                 <span className="content group-by-cell">
                     <i className={cx} onClick={(e: MouseEvent) => this.onCollapseToggle(e)}/>&nbsp;
                     {row.bucketInfo.title || ""}
-                    {row.loading ? [" ",<i className="fa fa-spinner fa-spin"/>] : null}
                 </span>
             )
         );
     }
 
-    protected renderContentContainerWithElement(elm: JSX.Element): JSX.Element {
-        let {columnNumber, row, column} = this.props;
-        let textAlign = Cell.calculateTextAlignment(row, column);
+    protected renderContentContainerWithElement(elm: JSX.Element, className?: string): JSX.Element {
+        let {columnNumber} = this.props;
         return (
-            <div className={`content-container giga-grid-column-${columnNumber} ${textAlign}`}
-                 style={this.calculateStyle()}
+            <div className={`content-container giga-grid-column-${columnNumber} ${className}`}
+                 style={this.calculateContainerStyle()}
                  onClick={e=>this.onSelect()}
             >
                 {elm}
             </div>
         );
-    }
-
-    public static calculateTextAlignment(row: Row, column: Column) {
-        const value = row.get(column);
-        if (column.formatInstruction && column.formatInstruction.textAlign)
-            return `text-align-${column.formatInstruction.textAlign}`;
-        else
-        if (isNaN(value))
-            return `text-align-left`;
-        else
-            return `text-align-right`;
     }
 
     protected onCollapseToggle(e: MouseEvent) {
