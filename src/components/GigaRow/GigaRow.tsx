@@ -42,14 +42,14 @@ export abstract class GigaRow extends React.Component<GigaRowProps, any> {
         return (
             <div className={cx}
                  style={{height: rowHeight}}
-                 onClick={(e:MouseEvent) => this.rowSelect(e)}
+                 onClick={(e: React.MouseEvent) => this.rowSelect(e)}
             >
                 {cells}
             </div>
         );
     }
 
-    rowSelect(e: MouseEvent) {
+    rowSelect(e: React.MouseEvent) {
         e.preventDefault();
         let {dispatcher, row} = this.props;
         let action = {

@@ -5,11 +5,11 @@ import * as _ from "lodash";
 import {GigaActionType, GigaAction} from "../../store/GigaStore";
 import "./SettingsPopover.styl";
 import * as classNames from "classnames";
+import {ColumnUpdateAction} from "../../store/reducers/ColumnUpdateReducer";
+import {AdditionalButton} from "../GigaGrid";
 import DragEvent = __React.DragEvent;
 import Props = __React.Props;
 import SyntheticEvent = __React.SyntheticEvent;
-import {ColumnUpdateAction} from "../../store/reducers/ColumnUpdateReducer";
-import {AdditionalButton} from "../GigaGrid";
 
 export interface SettingsPopoverProps {
     subtotalBys:Column[]
@@ -26,7 +26,7 @@ interface SettingsPopoverState {
 }
 
 export interface SortableDataTransfer {
-    type:string
+    type: string
     colTag:string
     idx:number
 }
@@ -255,22 +255,22 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
                 <div>
                     <div className="column-50">
                         <h5>Aggregation Method</h5>
-                        <select value={column.aggregationMethod} onChange={onAggregationMethodChange.bind(this)}>
-                            <option type="radio" value={AggregationMethod.SUM}>Sum</option>
-                            <option type="radio" value={AggregationMethod.COUNT}>Count</option>
-                            <option type="radio" value={AggregationMethod.COUNT_DISTINCT}>Count Distinct</option>
-                            <option type="radio" value={AggregationMethod.RANGE}>Range</option>
-                            <option type="radio" value={AggregationMethod.AVERAGE}>Average</option>
-                            <option type="radio" value={AggregationMethod.WEIGHTED_AVERAGE}>Weighted Average</option>
+                        <select value={AggregationMethod[column.aggregationMethod]} onChange={onAggregationMethodChange.bind(this)}>
+                            <option type="radio" value={AggregationMethod[AggregationMethod.SUM]}>Sum</option>
+                            <option type="radio" value={AggregationMethod[AggregationMethod.COUNT]}>Count</option>
+                            <option type="radio" value={AggregationMethod[AggregationMethod.COUNT_DISTINCT]}>Count Distinct</option>
+                            <option type="radio" value={AggregationMethod[AggregationMethod.RANGE]}>Range</option>
+                            <option type="radio" value={AggregationMethod[AggregationMethod.AVERAGE]}>Average</option>
+                            <option type="radio" value={AggregationMethod[AggregationMethod.WEIGHTED_AVERAGE]}>Weighted Average</option>
                         </select>
                     </div>
                     <div className="column-50">
                         <h5>Format</h5>
-                        <select value={column.format} onChange={onFormatChange.bind(this)}>
-                            <option value={ColumnFormat.CURRENCY}>Currency</option>
-                            <option value={ColumnFormat.DATE}>Date</option>
-                            <option value={ColumnFormat.NUMBER}>Number</option>
-                            <option value={ColumnFormat.STRING}>String</option>
+                        <select value={ColumnFormat[column.format]} onChange={onFormatChange.bind(this)}>
+                            <option value={ColumnFormat[ColumnFormat.CURRENCY]}>Currency</option>
+                            <option value={ColumnFormat[ColumnFormat.DATE]}>Date</option>
+                            <option value={ColumnFormat[ColumnFormat.NUMBER]}>Number</option>
+                            <option value={ColumnFormat[ColumnFormat.STRING]}>String</option>
                         </select>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import {GigaGrid} from "../index";
+import {GigaGrid} from "../src/index";
 import UKBudget from "./data/UKBudget";
 import {GigaProps, GigaState} from "../src/components/GigaGrid";
 import {Row} from "../src/models/Row";

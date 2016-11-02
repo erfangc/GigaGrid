@@ -98,7 +98,7 @@ export class Cell extends React.Component<CellProps, any> {
         return (
             this.renderContentContainerWithElement(
                 <span className="content group-by-cell">
-                    <i className={cx} onClick={(e: MouseEvent) => this.onCollapseToggle(e)}/>&nbsp;
+                    <i className={cx} onClick={(e: React.MouseEvent) => this.onCollapseToggle(e)}/>&nbsp;
                     {row.bucketInfo.title || ""}
                 </span>
             )
@@ -117,7 +117,7 @@ export class Cell extends React.Component<CellProps, any> {
         );
     }
 
-    protected onCollapseToggle(e: MouseEvent) {
+    protected onCollapseToggle(e: React.MouseEvent) {
         e.preventDefault();
         e.stopPropagation(); // we don't want toggle collapse to also trigger a row / cell clicked event
 
