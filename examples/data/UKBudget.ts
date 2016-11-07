@@ -10,7 +10,9 @@ const columnDefs:ColumnDef[] = [
         title: "Food",
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
-        formatInstruction: {roundTo: 1}
+        formatInstruction: {
+            roundTo: 1
+        }
     },
     {
         colTag: "WFuel",
@@ -50,6 +52,27 @@ const columnDefs:ColumnDef[] = [
     {
         colTag: "TotExp",
         title: "Total Expense",
+        format: ColumnFormat.NUMBER,
+        aggregationMethod: AggregationMethod.AVERAGE,
+        formatInstruction: {roundTo: 0}
+    },
+    {
+        colTag: "Age",
+        title: "Age",
+        format: ColumnFormat.NUMBER,
+        aggregationMethod: AggregationMethod.AVERAGE,
+        formatInstruction: {roundTo: 0}
+    },
+    {
+        colTag: "Children",
+        title: "Children",
+        format: ColumnFormat.NUMBER,
+        aggregationMethod: AggregationMethod.AVERAGE,
+        formatInstruction: {roundTo: 0}
+    },
+    {
+        colTag: "Income",
+        title: "Income",
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
         formatInstruction: {roundTo: 0}
