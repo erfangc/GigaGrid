@@ -2,6 +2,7 @@ import {Row} from "../models/Row";
 import * as _ from "lodash";
 import {Column, ColumnFormat, BucketInfo} from "../models/ColumnLike";
 import {ServerSubtotalRow, dataToSubtotalRows} from "../store/ServerStore";
+import {format} from "./SubtotalAggregator";
 
 export class TreeBuilder {
 
@@ -165,7 +166,11 @@ export class TreeBuilder {
 
     private static resolveSubtotalBucket(subtotalBy: Column, detailedRow: Row): BucketInfo {
         // FIXME this is the naive implementation, cannot handle text-align-right bands
-        const title = detailedRow.get(subtotalBy);
+        let title;
+        if( subtotalBy.format === ColumnFormat.NUMBER )
+            title = format(detailedRow.get(subtotalBy), subtotalBy.formatInstruction);
+        else
+            title = detailedRow.get(subtotalBy);
         // if the given column is not defined in the data, return undefined, this will
         if (title === undefined)
             return undefined;

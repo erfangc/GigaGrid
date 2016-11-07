@@ -28,6 +28,7 @@ export interface FormatInstruction {
     roundTo?: number
     multiplier?: number
     separator?: boolean
+    locale?: string
 }
 
 export interface ColumnDef extends ColumnLike {

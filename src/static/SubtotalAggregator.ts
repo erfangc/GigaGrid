@@ -80,26 +80,18 @@ export function format(value: any, fmtInstruction: FormatInstruction): any {
         return value;
     if (fmtInstruction && value === '')
         return null;
-    function addCommas(nStr) {
-        nStr += '';
-        var x = nStr.split('.');
-        var x1 = x[0];
-        var x2 = x.length > 1 ? '.' + x[1] : '';
-        var rgx = /(\d+)(\d{3})/;
-        while (rgx.test(x1)) {
-            x1 = x1.replace(rgx, '$1' + ',' + '$2');
-        }
-        return x1 + x2;
-    }
 
     var result = value;
     if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result))
         result *= fmtInstruction.multiplier;
     if (typeof fmtInstruction.roundTo !== "undefined" && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
         result = parseFloat(result).toFixed(fmtInstruction.roundTo);
-    if (fmtInstruction.separator && !isNaN(result))
-        result = addCommas(result);
-    if (fmtInstruction.showAsPercent && !isNaN(result))
+    if ((fmtInstruction.separator || fmtInstruction.locale) && !isNaN(result)) {
+        // Provide legacy support for fmtInstruction.separator
+        const locale: string = fmtInstruction.locale || "en-US";
+        result = new Intl.NumberFormat(locale).format(result);
+    }
+    if (fmtInstruction.showAsPercent && ['number', 'string'].indexOf(typeof result) > -1)
         result = `${result}%`;
     return result;
 }

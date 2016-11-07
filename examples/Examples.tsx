@@ -1,10 +1,11 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import * as _ from 'lodash';
 import {GigaGrid} from "../src/index";
 import UKBudget from "./data/UKBudget";
 import {GigaProps, GigaState} from "../src/components/GigaGrid";
 import {Row} from "../src/models/Row";
-import {SortDirection} from "../src/models/ColumnLike";
+import {SortDirection, ColumnDef} from "../src/models/ColumnLike";
 import "../styles/theme/Retro.styl";
 
 interface ExamplesProps extends React.Props<Examples> {
@@ -30,6 +31,8 @@ export class Examples extends React.Component<ExamplesProps, {}> {
 
     private renderBasicExample(additionalUserButtons) {
         var additionalUserButtons = additionalUserButtons.map(this.callCustomFunction.bind(this));
+        // Comment below line in if you want to test locale functionality
+        // this.enhanceColumnsWithLocale(UKBudget.columnDefs);
         return (<GigaGrid
             onRowClick={(row:Row, state:GigaState)=>{
                console.log(row);
@@ -56,6 +59,13 @@ export class Examples extends React.Component<ExamplesProps, {}> {
 
     private customCallback() {
         console.log('Export grid');
+    }
+
+    private enhanceColumnsWithLocale(columnDefs: ColumnDef[]) {
+        _.each(columnDefs, (columnDef:ColumnDef) => {
+            if( columnDef.formatInstruction )
+                columnDef.formatInstruction.locale = "bn";
+        })
     }
 }
 
