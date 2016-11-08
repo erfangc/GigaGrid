@@ -274,7 +274,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         const allCols = columns[columns.length - 1];
         let leftCols, rightCols;
         // Static headers experience a latency issue in internet explorer.  Let's not enable it for now
-        if (isNaN(this.props.staticLeftHeaders) || isInternetExplorer()) {
+        if (isNaN(this.props.staticLeftHeaders)) {
             leftCols = [];
             rightCols = allCols;
         }
@@ -395,8 +395,12 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         const $leftHeaderRows = $(node).find(".giga-grid-left-headers-container .giga-grid-row");
         const $dataRows = $(node).find(".giga-grid-right-data-container .giga-grid-row");
 
+        // Since we are not showing the scrollbar on left headers for IE, let's make the left header container shorter to make up
+        var extraIEHeight = 0;
+        if( isInternetExplorer() )
+            extraIEHeight += 18;
         // Set max height of row containers so scroll bars show up
-        $(node).find(".giga-grid-left-headers-container").css("max-height", $(node).find(".giga-grid-body-viewport").innerHeight());
+        $(node).find(".giga-grid-left-headers-container").css("max-height", $(node).find(".giga-grid-body-viewport").innerHeight() - extraIEHeight);
         $(node).find(".giga-grid-right-data-container").css("max-height", $(node).find(".giga-grid-body-viewport").innerHeight());
 
         allignColumns($leftHeaderContainers, $leftHeaderRows);
