@@ -119,6 +119,14 @@ export class ServerStore extends ReduceStore<GigaState> {
                 newState.displayStart = boundaries.displayStart;
                 newState.displayEnd = boundaries.displayEnd;
                 break;
+            case GigaActionType.STOP_LOADING_MORE_DATA:
+                let row = (action as LoadingMoreDataAction).parentRow;
+                row.loading = false;
+                newState = _.clone(state);
+                boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, $(state.viewport), $(state.canvas));
+                newState.displayStart = boundaries.displayStart;
+                newState.displayEnd = boundaries.displayEnd;
+                break;
             case GigaActionType.GOT_MORE_DATA:
                 const myAction = action as GotMoreDataAction;
                 const {parentRow, rows, isDetail} = myAction;
