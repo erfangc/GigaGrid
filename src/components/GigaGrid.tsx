@@ -14,8 +14,7 @@ import {InitializeAction} from "../store/reducers/InitializeReducer";
 import {ChangeRowDisplayBoundsAction} from "../store/reducers/ChangeRowDisplayBoundsReducer";
 import {ReduceStore} from "flux/utils";
 import {ServerStore, ServerSubtotalRow} from "../store/ServerStore";
-import $ = require('jquery');
-import ReactElement = __React.ReactElement;
+import * as $ from "jquery";
 
 /**
  * Interface that describe the shape of the `Props` that `GigaGrid` accepts from the user
@@ -210,15 +209,10 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         this.state = this.store.getState();
         // do not call setState again, this is the only place! otherwise you are violating the principles of Flux
         // not that would be wrong but it would break the 1 way data flow and make keeping track of mutation difficult
-        this.store.addListener(()=> {
+        this.store.addListener(() => {
             this.setState(this.store.getState());
         });
     }
-
-    refs: {
-        [key: string]: (Element);
-        stepInput: (HTMLInputElement);
-    };
 
     submitColumnConfigChange(action: GigaAction) {
         this.dispatcher.dispatch(action);
@@ -249,14 +243,14 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
     render() {
 
-        var columns: Column[][];
+        let columns: Column[][];
         const state = this.store.getState();
         if (this.props.columnGroups)
             columns = ColumnFactory.createColumnsFromGroupDefinition(this.props.columnGroups, state);
         else
             columns = [state.columns];
 
-        var bodyStyle: any = {};
+        const bodyStyle: any = {};
 
         /**
          * As noted in the collapseHeight property of the GigaProps interface, if collapseHeight is true, the table will
@@ -331,7 +325,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
     }
 
     componentWillReceiveProps(nextProps: GigaProps) {
-        var payload: InitializeAction = {
+        const payload: InitializeAction = {
             type: GigaActionType.INITIALIZE,
             props: nextProps
         };
@@ -363,7 +357,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
          * a class to each cell, labeled with each column number, we are able to simply change the dimensions of a cell
          * dynamically by changing the styling directly in the stylesheet, instead of at the element level.
          */
-        var widths = [];
+        let widths = [];
 
         // Gets with of .content in a cell, or 80, whichever is greater
         function getWidthForDataCell(elem): number {
@@ -421,7 +415,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         const oldSheetNode = $(`head > style#giga-grid-style-${this.state.gridID}`);
         const sheet = (_.findWhere<{}, StyleSheet>(document.styleSheets, {ownerNode: oldSheetNode}) || this.createGigaGridStyleSheet()) as CSSStyleSheet;
 
-        for (var i = 0; i < $leftHeaderContainers.length + $rightHeaderContainers.length; ++i) {
+        for (let i = 0; i < $leftHeaderContainers.length + $rightHeaderContainers.length; ++i) {
             const selectorText = `.giga-grid-${this.state.gridID} .giga-grid-column-${i}`;
             const cssText = `width: ${widths[i]}px !important;`;
             const oldRule: CSSPageRule = _.findWhere<{},CSSRule>(sheet.cssRules, {selectorText}) as CSSPageRule;
@@ -433,8 +427,8 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
         }
 
 
-        var $leftHeadersDataContainer = $(node).find(".giga-grid-left-headers-container");
-        var $bodyViewport = $(node).find(".giga-grid-body-viewport");
+        let $leftHeadersDataContainer = $(node).find(".giga-grid-left-headers-container");
+        let $bodyViewport = $(node).find(".giga-grid-body-viewport");
         //setting max-width of sticky data and headers as 75% of the body-viewport width
         $leftHeadersDataContainer.css("max-width", 0.75 * $bodyViewport.innerWidth());
         $(node).find(".left-static-headers").css("max-width", 0.75 * $bodyViewport.innerWidth());
@@ -450,7 +444,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
      * @returns {CSSStyleSheet}
      */
     private createGigaGridStyleSheet(): StyleSheet {
-        var style = document.createElement("style");
+        let style = document.createElement("style");
         style.setAttribute("id", `giga-grid-style-${this.state.gridID}`);
         document.head.appendChild(style);
         return style.sheet;
@@ -558,14 +552,14 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
  */
 export function getScrollBarWidth() {
 
-    var scrollBarWidth = null;
+    let scrollBarWidth = null;
 
     function computeScrollBarWidth() {
-        var inner = document.createElement('p');
+        let inner = document.createElement('p');
         inner.style.width = "100%";
         inner.style.height = "200px";
 
-        var outer = document.createElement('div');
+        let outer = document.createElement('div');
         outer.style.position = "absolute";
         outer.style.top = "0px";
         outer.style.left = "0px";
@@ -576,9 +570,9 @@ export function getScrollBarWidth() {
         outer.appendChild(inner);
 
         document.body.appendChild(outer);
-        var w1 = inner.offsetWidth;
+        let w1 = inner.offsetWidth;
         outer.style.overflow = 'scroll';
-        var w2 = inner.offsetWidth;
+        let w2 = inner.offsetWidth;
         if (w1 == w2) w2 = outer.clientWidth;
 
         document.body.removeChild(outer);
@@ -597,8 +591,8 @@ export function getScrollBarWidth() {
  * @returns {boolean}
  */
 export function isInternetExplorer() {
-    var ua = window.navigator.userAgent;
-    var msie = ua.indexOf("MSIE ");
+    let ua = window.navigator.userAgent;
+    let msie = ua.indexOf("MSIE ");
 
     return (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))  // If Internet Explorer, return version number
 }

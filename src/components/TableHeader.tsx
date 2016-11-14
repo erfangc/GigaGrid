@@ -1,8 +1,7 @@
 import * as React from "react";
-import {Column} from "../../src/models/ColumnLike";
+import {Column} from "../models/ColumnLike";
 import {TableHeaderCell} from "./TableHeaderCell";
 import {GridComponentProps, getScrollBarWidth} from "./GigaGrid";
-import Dispatcher = Flux.Dispatcher;
 
 export interface TableHeaderProps extends GridComponentProps<TableHeader> {
     tableHeaderClass?: string
@@ -32,7 +31,7 @@ export class TableHeader extends React.Component<TableHeaderProps,any> {
 
     private renderHeaderRows(): JSX.Element[] {
         const trs: JSX.Element[] = [];
-        var i: number;
+        let i: number;
         for (i = 0; i < this.props.columns.length - 1; i++)
             trs.push(TableHeader.renderColumnGroups(this.props.columns[i], i));
         trs.push(this.renderLeafColumns(this.props.columns[i], i));
@@ -40,7 +39,7 @@ export class TableHeader extends React.Component<TableHeaderProps,any> {
     }
 
     private static renderColumnGroups(columns: Column[], key: number): JSX.Element {
-        const ths = columns.map((column: Column, i: number)=> {
+        const ths = columns.map((column: Column, i: number) => {
             const style: any = {
                 width: column.colSpan + "px"
             };
@@ -54,7 +53,7 @@ export class TableHeader extends React.Component<TableHeaderProps,any> {
     }
 
     private renderLeafColumns(columns: Column[], key: number): JSX.Element {
-        const ths = columns.map((column: Column, i: number)=> {
+        const ths = columns.map((column: Column, i: number) => {
             return (
                 <TableHeaderCell column={column}
                                  key={i}

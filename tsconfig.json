@@ -4,7 +4,8 @@
     "module": "commonjs",
     "sourceMap": true,
     "jsx": "react",
-	"outDir": "build"
+	"outDir": "build",
+    "allowSyntheticDefaultImports": true
   },
   "exclude": [
     "dist",

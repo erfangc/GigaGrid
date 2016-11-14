@@ -8,8 +8,8 @@ function straightSum(detailRows: Row[], column: Column): number {
 }
 
 function weightedAverage(detailRows: Row[], column: Column): number {
-    var denom = 0.0;
-    var sumproduct = 0.0;
+    let denom = 0.0;
+    let sumproduct = 0.0;
     for (let i = 0; i < detailRows.length; i++) {
         denom = denom + detailRows[i].getByColTag(column.weightBy);
         sumproduct = sumproduct + detailRows[i].getByColTag(column.colTag) * detailRows[i].getByColTag(column.weightBy)
@@ -81,7 +81,7 @@ export function format(value: any, fmtInstruction: FormatInstruction): any {
     if (fmtInstruction && value === '')
         return null;
 
-    var result = value;
+    let result = value;
     if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result))
         result *= fmtInstruction.multiplier;
     if (typeof fmtInstruction.roundTo !== "undefined" && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
@@ -123,7 +123,7 @@ export class SubtotalAggregator {
     static aggregate(detailRows: Row[], columns: Column[]): any {
         const aggregated: any = {};
         columns.forEach((column: Column) => {
-            var value;
+            let value;
             switch (column.aggregationMethod) {
                 case AggregationMethod.AVERAGE:
                     value = average(detailRows, column);

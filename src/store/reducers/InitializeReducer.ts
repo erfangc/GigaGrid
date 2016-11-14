@@ -1,4 +1,4 @@
-import {PROGRESSIVE_RENDERING_THRESHOLD, GigaAction} from "./../GigaStore";
+import {PROGRESSIVE_RENDERING_THRESHOLD, GigaAction} from "../GigaStore";
 import {TreeRasterizer} from "../../static/TreeRasterizer";
 import {Row} from "../../models/Row";
 import {SortFactory} from "../../static/SortFactory";
@@ -77,7 +77,7 @@ export default function (action:InitializeAction):GigaState {
 
     const filteredColumns:Column[] = _.filter(columnsWithSort, (column:Column) => subtotalBys.map(subtotalBy => subtotalBy.colTag).indexOf(column.colTag) === -1);
 
-    var tree = TreeBuilder.buildTree(
+    let tree = TreeBuilder.buildTree(
         data,
         subtotalBys,
         initiallyExpandedSubtotalRows,

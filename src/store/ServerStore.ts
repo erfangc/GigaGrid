@@ -18,7 +18,7 @@ import {TreeBuilder} from "../static/TreeBuilder";
 import {Row} from "../models/Row";
 import {ToggleCollapseAction, toggleCollapseReducer} from "./reducers/RowCollapseReducers";
 import {SortFactory} from "../static/SortFactory";
-import $ = require('jquery');
+import * as $ from "jquery";
 
 /**
  * Initial state reducer for Server store
@@ -106,13 +106,15 @@ export class ServerStore extends ReduceStore<GigaState> {
 
     reduce(state: GigaState,
            action: GigaAction): GigaState {
+        let newState: GigaState;
+        let row: Row;
         let boundaries;
         switch (action.type) {
             /**
              * server only action handlers
              */
             case GigaActionType.LOADING_MORE_DATA:
-                let row = (action as LoadingMoreDataAction).parentRow;
+                row = (action as LoadingMoreDataAction).parentRow;
                 row.loading = true;
                 newState = _.clone(state);
                 boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, $(state.viewport), $(state.canvas));
@@ -120,7 +122,7 @@ export class ServerStore extends ReduceStore<GigaState> {
                 newState.displayEnd = boundaries.displayEnd;
                 break;
             case GigaActionType.STOP_LOADING_MORE_DATA:
-                let row = (action as LoadingMoreDataAction).parentRow;
+                row = (action as LoadingMoreDataAction).parentRow;
                 row.loading = false;
                 newState = _.clone(state);
                 boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, $(state.viewport), $(state.canvas));
@@ -191,8 +193,6 @@ export class ServerStore extends ReduceStore<GigaState> {
             default:
                 newState = state;
         }
-
-        var newState: GigaState;
 
         /*
          determine if an action should trigger rasterization

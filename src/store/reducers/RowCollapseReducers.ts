@@ -6,7 +6,8 @@ import {GigaAction} from "../GigaStore";
 import {TreeBuilder} from "../../static/TreeBuilder";
 import {Row} from "../../models/Row";
 import {ScrollCalculator} from "../../static/ScrollCalculator";
-import $ = require('jquery');
+import * as $ from "jquery";
+
 export function expandAllReducer(state:GigaState):GigaState {
     TreeBuilder.recursivelyToggleChildrenCollapse(state.tree.getRoot(), false);
     return _.clone(state);

@@ -12,9 +12,9 @@ export function sortUpdateReducer(state:GigaState, action:SortUpdateAction):Giga
     /**
      * go through all the columns in state, flip on/off sort flags as necessary
      */
-    var newPartialState = {};
+    let newPartialState = {};
     state.columns.forEach((column:Column)=> {
-        var sb = _.find(action.sortBys, s=>s.colTag === column.colTag);
+        let sb = _.find(action.sortBys, s => s.colTag === column.colTag);
         if (sb)
             column.direction = sb.direction;
         else

@@ -1,4 +1,5 @@
 import * as React from "react";
+import {DragEvent, SyntheticEvent} from "react";
 import {Column, AggregationMethod, ColumnFormat} from "../../models/ColumnLike";
 import {SortableItem} from "./SortableItem";
 import * as _ from "lodash";
@@ -7,33 +8,30 @@ import "./SettingsPopover.styl";
 import * as classNames from "classnames";
 import {ColumnUpdateAction} from "../../store/reducers/ColumnUpdateReducer";
 import {AdditionalButton} from "../GigaGrid";
-import DragEvent = __React.DragEvent;
-import Props = __React.Props;
-import SyntheticEvent = __React.SyntheticEvent;
 
 export interface SettingsPopoverProps {
-    subtotalBys:Column[]
-    columns:Column[]
-    onSubmit:(action:GigaAction)=>any
-    onDismiss:()=>any
-    additionalUserButtons:AdditionalButton[]
+    subtotalBys: Column[]
+    columns: Column[]
+    onSubmit: (action: GigaAction)=>any
+    onDismiss: ()=>any
+    additionalUserButtons: AdditionalButton[]
 }
 
 interface SettingsPopoverState {
-    subtotalBys:Column[]
-    columns:Column[]
-    activeColumn:Column // the column being edited
+    subtotalBys: Column[]
+    columns: Column[]
+    activeColumn: Column // the column being edited
 }
 
 export interface SortableDataTransfer {
     type: string
-    colTag:string
-    idx:number
+    colTag: string
+    idx: number
 }
 
 export class SettingsPopover extends React.Component<SettingsPopoverProps, SettingsPopoverState> {
 
-    constructor(props:SettingsPopoverProps) {
+    constructor(props: SettingsPopoverProps) {
         super(props);
         const columns = _.clone(props.columns);
         const subtotalBys = _.clone(props.subtotalBys);
@@ -48,10 +46,10 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
      * @param src
      * @param dest
      */
-    private swapToAnotherListOfColumns(from:Column[],
-                                       to:Column[],
-                                       src:SortableDataTransfer,
-                                       dest:SortableDataTransfer) {
+    private static swapToAnotherListOfColumns(from: Column[],
+                                       to: Column[],
+                                       src: SortableDataTransfer,
+                                       dest: SortableDataTransfer) {
         const item = from.splice(src.idx, 1)[0];
         to.splice(dest.idx + 1, 0, item);
     }
@@ -62,10 +60,10 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
      * @param src
      * @param dest
      */
-    private moveColumn(columns:Column[], src:SortableDataTransfer, dest:SortableDataTransfer) {
+    private moveColumn(columns: Column[], src: SortableDataTransfer, dest: SortableDataTransfer) {
         const item = columns.splice(src.idx, 1)[0];
         // need a more reliable way to to determine destIdx, given that the same column could be repeated in the list
-        const destIdx = _.findIndex(columns, c=>c.colTag === dest.colTag);
+        const destIdx = _.findIndex(columns, c => c.colTag === dest.colTag);
         columns.splice(destIdx + 1, 0, item);
     }
 
@@ -74,8 +72,8 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
      * @param src
      * @param dest
      */
-    private updateColumnPosition(src:SortableDataTransfer,
-                                 dest:SortableDataTransfer) {
+    private updateColumnPosition(src: SortableDataTransfer,
+                                 dest: SortableDataTransfer) {
 
         if (src.type === dest.type)
             /**
@@ -86,7 +84,7 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
             /**
              * src is in a different list of column than dest, we need to transfer them
              */
-            this.swapToAnotherListOfColumns(this.state[src.type], this.state[dest.type], src, dest);
+            SettingsPopover.swapToAnotherListOfColumns(this.state[src.type], this.state[dest.type], src, dest);
 
         this.setState(_.assign<{}, SettingsPopoverState>({}, this.state, {
             columns: this.state.columns,
@@ -95,7 +93,7 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
     }
 
     commitColumnUpdates() {
-        const payload:ColumnUpdateAction = {
+        const payload: ColumnUpdateAction = {
             type: GigaActionType.COLUMNS_UPDATE,
             columns: this.state.columns,
             subtotalBys: this.state.subtotalBys
@@ -103,8 +101,8 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
         this.props.onSubmit.call(undefined, payload);
     }
 
-    renderSortable(type:string, columns:Column[]) {
-        const items = columns.map((c, i)=>
+    renderSortable(type: string, columns: Column[]) {
+        const items = columns.map((c, i) =>
             <SortableItem
                 key={i}
                 column={c}
@@ -136,7 +134,7 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
                             colTag: null,
                             idx: 0
                         };
-                        this.swapToAnotherListOfColumns(fromList, toList, src, dest);
+                        SettingsPopover.swapToAnotherListOfColumns(fromList, toList, src, dest);
                         this.setState(_.assign<{},SettingsPopoverState>({},this.state, {
                             columns: this.state.columns,
                             subtotalBys: this.state.subtotalBys
@@ -154,9 +152,9 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
 
     render() {
         const activeColumn = this.state.activeColumn;
-        const layoutControlClassDict:ClassDictionary = {
+        const layoutControlClassDict: ClassDictionary = {
             "giga-grid-flex-column": true,
-            "column-50": activeColumn ? true : false,
+            "column-50": !!activeColumn,
             "column-100": !activeColumn ? false : true
         };
         const layoutControlClassName = classNames(layoutControlClassDict);
@@ -177,11 +175,11 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
                     <span className="giga-grid-button"
                           onClick={()=>this.props.onSubmit.call(undefined,{type:GigaActionType.EXPAND_ALL})}>Expand All</span>
                             {" "}
-                    <span className="giga-grid-button"
-                          onClick={()=>this.props.onSubmit.call(undefined,{type:GigaActionType.COLLAPSE_ALL})}>Collapse All</span>
+                            <span className="giga-grid-button"
+                                  onClick={()=>this.props.onSubmit.call(undefined,{type:GigaActionType.COLLAPSE_ALL})}>Collapse All</span>
                             {" "}
-                    <span className="giga-grid-button"
-                          onClick={()=>this.props.onSubmit.call(undefined,{type:GigaActionType.CLEAR_SORT})}>Clear Sort</span>
+                            <span className="giga-grid-button"
+                                  onClick={()=>this.props.onSubmit.call(undefined,{type:GigaActionType.CLEAR_SORT})}>Clear Sort</span>
                         </div>
                         <br/>
                         {this.renderAdditionalUserButtons()}
@@ -205,36 +203,36 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
         );
     }
 
-    private renderAdditionalUserButtons(){
-        var additionalUserButtons = this.props.additionalUserButtons;
+    private renderAdditionalUserButtons() {
+        let additionalUserButtons = this.props.additionalUserButtons;
         return (
-        <div>
-        {additionalUserButtons.map(function(additionalUserButton) {
-            return <span className="giga-grid-button" key={additionalUserButton.name}
-                              onClick={()=>additionalUserButton.customCallback()}>{additionalUserButton.name}</span>
-        })}
-        </div>
-    );
+            <div>
+                {additionalUserButtons.map(function (additionalUserButton) {
+                    return <span className="giga-grid-button" key={additionalUserButton.name}
+                                 onClick={()=>additionalUserButton.customCallback()}>{additionalUserButton.name}</span>
+                })}
+            </div>
+        );
     }
 
-    private renderColumnConfigurer(column?:Column):JSX.Element | string {
+    private renderColumnConfigurer(column?: Column): JSX.Element | string {
         if (!column)
             return "";
 
-        function onTitleChange(e:SyntheticEvent) {
+        function onTitleChange(e: SyntheticEvent) {
             e.preventDefault();
             column.title = (e.target as HTMLInputElement).value;
             this.setState(_.assign<{},SettingsPopoverState>({}, this.state, {column: column}));
         }
 
-        function onAggregationMethodChange(e:SyntheticEvent) {
+        function onAggregationMethodChange(e: SyntheticEvent) {
             e.preventDefault();
             //noinspection TypeScriptValidateTypes
             column.aggregationMethod = parseInt((e.target as HTMLSelectElement).value);
             this.setState(_.assign<{},SettingsPopoverState>({}, this.state, {column: column}));
         }
 
-        function onFormatChange(e:SyntheticEvent) {
+        function onFormatChange(e: SyntheticEvent) {
             e.preventDefault();
             //noinspection TypeScriptValidateTypes
             column.format = parseInt((e.target as HTMLSelectElement).value);
@@ -255,13 +253,18 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
                 <div>
                     <div className="column-50">
                         <h5>Aggregation Method</h5>
-                        <select value={AggregationMethod[column.aggregationMethod]} onChange={onAggregationMethodChange.bind(this)}>
+                        <select value={AggregationMethod[column.aggregationMethod]}
+                                onChange={onAggregationMethodChange.bind(this)}>
                             <option type="radio" value={AggregationMethod[AggregationMethod.SUM]}>Sum</option>
                             <option type="radio" value={AggregationMethod[AggregationMethod.COUNT]}>Count</option>
-                            <option type="radio" value={AggregationMethod[AggregationMethod.COUNT_DISTINCT]}>Count Distinct</option>
+                            <option type="radio" value={AggregationMethod[AggregationMethod.COUNT_DISTINCT]}>
+                                Count Distinct
+                            </option>
                             <option type="radio" value={AggregationMethod[AggregationMethod.RANGE]}>Range</option>
                             <option type="radio" value={AggregationMethod[AggregationMethod.AVERAGE]}>Average</option>
-                            <option type="radio" value={AggregationMethod[AggregationMethod.WEIGHTED_AVERAGE]}>Weighted Average</option>
+                            <option type="radio" value={AggregationMethod[AggregationMethod.WEIGHTED_AVERAGE]}>
+                                Weighted Average
+                            </option>
                         </select>
                     </div>
                     <div className="column-50">

@@ -12,7 +12,7 @@ export class TreeBuilder {
      * @returns {Tree}
      */
     public static buildShallowTree(rows: ServerSubtotalRow[]): Tree {
-        var rootBucket: BucketInfo = {colTag: null, title: "Grand Total", value: null};
+        const rootBucket: BucketInfo = {colTag: null, title: "Grand Total", value: null};
         const grandTotal = new Row();
         grandTotal.bucketInfo = rootBucket;
         grandTotal.sectorPath = [];

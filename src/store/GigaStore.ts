@@ -1,5 +1,3 @@
-///<reference path="../../typings/index.d.ts"/>
-
 import * as _ from "lodash";
 import {GigaState, GigaProps} from "../components/GigaGrid";
 import {ReduceStore} from "flux/utils";
