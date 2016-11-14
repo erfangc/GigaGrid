@@ -66,7 +66,7 @@ export class TreeBuilder {
          * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
          * parent Row (in other words, find the detailRow's "bucket") and append said detailRow to the parent
          */
-        var rootBucketInfo = {colTag: null, title: "Grand Total", value: null};
+        let rootBucketInfo = {colTag: null, title: "Grand Total", value: null};
         const grandTotal = new Row();
         grandTotal.bucketInfo = rootBucketInfo;
         grandTotal.sectorPath = [];
@@ -144,7 +144,7 @@ export class TreeBuilder {
      */
     private static traverseOrCreate(grandTotal: Row, buckets: BucketInfo[]): Row {
         // traverse to the correct Row
-        var currentRow: Row = grandTotal;
+        let currentRow: Row = grandTotal;
         for (let k = 0; k < buckets.length; k++) {
             // update the current subtotal row
             const title = buckets[k].title;

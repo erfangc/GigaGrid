@@ -62,7 +62,7 @@ export class GigaStore extends ReduceStore<GigaState> {
     reduce(state:GigaState,
            action:GigaAction):GigaState {
 
-        var newState:GigaState;
+        let newState: GigaState;
         switch (action.type) {
             case GigaActionType.INITIALIZE:
                 newState = this.initialize(action as InitializeAction);

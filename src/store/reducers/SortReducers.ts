@@ -39,10 +39,6 @@ export interface ClearSortAction extends GigaAction {
 
 }
 
-export interface AddSortAction extends GigaAction {
-    sortBy:Column
-}
-
 export interface SortUpdateAction extends GigaAction {
     sortBys:Column[]
 }

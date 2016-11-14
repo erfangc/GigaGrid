@@ -14,7 +14,7 @@ export class SortFactory {
      * @returns {Tree}
      */
     public static sortTree(tree:Tree, sortBys:Column[], firstColumn?: Column):Tree {
-        var sortFn = SortFactory.createCompositeSorter(sortBys, firstColumn);
+        let sortFn = SortFactory.createCompositeSorter(sortBys, firstColumn);
         SortFactory.recursivelyExecuteSort(tree.getRoot(), sortFn);
         return tree;
     }
@@ -40,8 +40,8 @@ export class SortFactory {
         // apply that sortBy function to the data, use the next sortBy as tie breaker
         return function (a:Row, b:Row):number {
             let i = 0;
-            var sortFn = SortFactory.buildLexicalSortFn(sortBys[i], firstColumn);
-            var result = sortFn(a, b);
+            let sortFn = SortFactory.buildLexicalSortFn(sortBys[i], firstColumn);
+            let result = sortFn(a, b);
             while (result === 0 && i < (sortBys.length - 1)) {
                 i++;
                 sortFn = SortFactory.resolveSortFnForColumn(sortBys[i]);
@@ -66,7 +66,7 @@ export class SortFactory {
             const valA = extractCellValue(a, sortBy, firstColumn);
             const valB = extractCellValue(b, sortBy, firstColumn);
 
-            var result = 0;
+            let result = 0;
 
             if (!valA || !valB) {
                 if (valA)

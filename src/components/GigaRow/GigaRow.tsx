@@ -36,7 +36,7 @@ export abstract class GigaRow extends React.Component<GigaRowProps, any> {
             "detail-row": row.isDetailRow(),
             "selected": row.selected,
         };
-        rowClassNames[subtotalLvlClassName] = row.isDetailRow() ? false : true;
+        rowClassNames[subtotalLvlClassName] = !row.isDetailRow();
         let cx = classNames(rowClassNames);
         let cells = columns.map((column, i) => GigaRow.renderCell(this.getCellProps(column, i)));
         return (

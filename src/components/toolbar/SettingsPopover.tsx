@@ -155,7 +155,7 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
         const layoutControlClassDict: ClassDictionary = {
             "giga-grid-flex-column": true,
             "column-50": !!activeColumn,
-            "column-100": !activeColumn ? false : true
+            "column-100": activeColumn !== null
         };
         const layoutControlClassName = classNames(layoutControlClassDict);
         return (
