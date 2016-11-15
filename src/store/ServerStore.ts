@@ -1,6 +1,6 @@
 import {ReduceStore} from "flux/utils";
 import {Dispatcher} from "flux";
-import {GigaState, GigaProps} from "../components/GigaGrid";
+import {GigaState} from "../components/GigaGrid";
 import {ScrollCalculator} from "../static/ScrollCalculator";
 import {GigaStore, GigaActionType, GigaAction, PROGRESSIVE_RENDERING_THRESHOLD} from "./GigaStore";
 import {InitializeAction, decorateInitialSortBys, decorateColumnsWithSort} from "./reducers/InitializeReducer";
@@ -19,6 +19,7 @@ import {Row} from "../models/Row";
 import {ToggleCollapseAction, toggleCollapseReducer} from "./reducers/RowCollapseReducers";
 import {SortFactory} from "../static/SortFactory";
 import * as $ from "jquery";
+import {GigaProps} from "../components/GigaProps";
 
 /**
  * Initial state reducer for Server store
@@ -52,7 +53,7 @@ function initialStateReducer(action: InitializeAction): GigaState {
      * create subtotalBys from columns (any properties passed in via initialSubtotalBys will override the same property on the corresponding Column object
      */
     const subtotalBys: Column[] = (initialSubtotalBys || []).map(subtotalBy => {
-        const column: Column = _.find(columns, column => column.colTag === subtotalBy.colTag);
+        const column: Column = _.find<Column>(columns, column => column.colTag === subtotalBy.colTag);
         return _.assign<{}, Column>({}, column, subtotalBy);
     });
 

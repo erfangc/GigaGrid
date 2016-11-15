@@ -3,17 +3,17 @@ import {
     GigaStore,
     GigaActionType
 } from "../../src/store/GigaStore";
-import {GigaProps} from "../../src/components/GigaGrid";
 import {TestUtils} from "../TestUtils";
 import {ColumnFormat, SortDirection} from "../../src/models/ColumnLike";
 import {Dispatcher} from "flux";
 import {SortUpdateAction, ClearSortAction} from "../../src/store/reducers/SortReducers";
+import {GigaProps} from "../../src/components/GigaProps";
 
 describe("GigaStore", ()=> {
 
-    var dispatcher:Dispatcher<GigaAction>;
-    var store:GigaStore;
-    var props:GigaProps;
+    let dispatcher: Dispatcher<GigaAction>;
+    let store: GigaStore;
+    let props: GigaProps;
 
     beforeEach(()=> {
         dispatcher = new Dispatcher<GigaAction>();
@@ -57,7 +57,7 @@ describe("GigaStore", ()=> {
                 sortBys: [sortByGift]
             };
 
-            var root = store.getState().tree.getRoot();
+            const root = store.getState().tree.getRoot();
             dispatcher.dispatch(action);
             expect(store.getState().rasterizedRows[0].getByColTag('gift')).toBe(10);
             expect(root.detailRows[0].getByColTag('gift')).toBe(10);

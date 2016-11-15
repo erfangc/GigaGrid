@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import {GigaState, GigaProps} from "../components/GigaGrid";
+import {GigaState} from "../components/GigaGrid";
 import {ReduceStore} from "flux/utils";
 import {Dispatcher} from "flux";
 import {TreeRasterizer} from "../static/TreeRasterizer";
@@ -19,6 +19,7 @@ import {
     ToggleCollapseAction
 } from "./reducers/RowCollapseReducers";
 import {columnUpdateReducer, ColumnUpdateAction} from "./reducers/ColumnUpdateReducer";
+import {GigaProps} from "../components/GigaProps";
 
 /*
  define the # of rows necessary to trigger progressive rendering

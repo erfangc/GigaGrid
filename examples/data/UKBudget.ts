@@ -1,8 +1,8 @@
+import {GigaProps} from "../../src/components/GigaProps";
 declare var require:any;
 
 import {ColumnFormat, AggregationMethod, ColumnDef, Column} from "../../src/models/ColumnLike";
-import {GigaProps} from "../../src/components/GigaGrid";
-var json = require("./UKBudget.json");
+let json = require("./UKBudget.json");
 
 const columnDefs:ColumnDef[] = [
     {

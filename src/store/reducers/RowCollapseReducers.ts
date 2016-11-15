@@ -1,12 +1,13 @@
 /*
  Subtotal Action Handlers
  */
-import {GigaState,GigaProps} from "../../components/GigaGrid";
+import {GigaState} from "../../components/GigaGrid";
 import {GigaAction} from "../GigaStore";
 import {TreeBuilder} from "../../static/TreeBuilder";
 import {Row} from "../../models/Row";
 import {ScrollCalculator} from "../../static/ScrollCalculator";
 import * as $ from "jquery";
+import {GigaProps} from "../../components/GigaProps";
 
 export function expandAllReducer(state:GigaState):GigaState {
     TreeBuilder.recursivelyToggleChildrenCollapse(state.tree.getRoot(), false);

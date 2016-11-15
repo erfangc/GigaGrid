@@ -5,7 +5,8 @@
     "sourceMap": true,
     "jsx": "react",
 	"outDir": "build",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "outDir": "build"
   },
   "exclude": [
     "dist",

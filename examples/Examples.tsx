@@ -3,10 +3,11 @@ import * as ReactDOM from "react-dom";
 import * as _ from 'lodash';
 import {GigaGrid} from "../src/index";
 import UKBudget from "./data/UKBudget";
-import {GigaProps, GigaState} from "../src/components/GigaGrid";
+import {GigaState} from "../src/components/GigaGrid";
 import {Row} from "../src/models/Row";
 import {SortDirection, ColumnDef} from "../src/models/ColumnLike";
 import "../styles/theme/Retro.styl";
+import {GigaProps} from "../src/components/GigaProps";
 
 interface ExamplesProps extends React.Props<Examples> {
     ukBudget: GigaProps

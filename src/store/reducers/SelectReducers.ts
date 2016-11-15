@@ -1,7 +1,8 @@
-import {GigaState, GigaProps} from "../../components/GigaGrid";
+import {GigaState} from "../../components/GigaGrid";
 import {GigaAction} from "../GigaStore";
 import {Row} from "../../models/Row";
 import {Column} from "../../models/ColumnLike";
+import {GigaProps} from "../../components/GigaProps";
 
 export function cellSelectReducer(state:GigaState, action:ToggleCellSelectAction, props: GigaProps):GigaState {
     

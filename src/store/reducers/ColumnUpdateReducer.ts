@@ -1,9 +1,10 @@
-import {GigaState, GigaProps} from "../../components/GigaGrid";
+import {GigaState} from "../../components/GigaGrid";
 import {SortFactory} from "../../static/SortFactory";
 import {SubtotalAggregator} from "../../static/SubtotalAggregator";
 import {TreeBuilder, Tree} from "../../static/TreeBuilder";
 import {GigaAction} from "../GigaStore";
 import {Column} from "../../models/ColumnLike";
+import {GigaProps} from "../../components/GigaProps";
 
 export function columnUpdateReducer(state:GigaState, action:ColumnUpdateAction, props: GigaProps) {
     const newColumnStates = {

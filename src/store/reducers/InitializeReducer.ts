@@ -5,7 +5,8 @@ import {SortFactory} from "../../static/SortFactory";
 import {SubtotalAggregator} from "../../static/SubtotalAggregator";
 import {TreeBuilder} from "../../static/TreeBuilder";
 import {Column, SortDirection} from "../../models/ColumnLike";
-import {GigaState, GigaProps} from "../../components/GigaGrid";
+import {GigaState} from "../../components/GigaGrid";
+import {GigaProps} from "../../components/GigaProps";
 
 /**
  * decorate any sortBy(s) with properties that might exist on the column - properties defined in sortBys override those
@@ -65,7 +66,7 @@ export default function (action:InitializeAction):GigaState {
      * create subtotalBys from columns (any properties passed in via initialSubtotalBys will override the same property on the corresponding Column object
      */
     const subtotalBys:Column[] = (initialSubtotalBys || []).map(subtotalBy => {
-        const column:Column = _.find(columns, column => column.colTag === subtotalBy.colTag);
+        const column:Column = _.find<Column>(columns, column => column.colTag === subtotalBy.colTag);
         return _.assign<{}, Column>({}, column, subtotalBy);
     });
 
