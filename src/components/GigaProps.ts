@@ -1,4 +1,4 @@
-import {AdditionalButton, GigaGrid, GigaState} from "./GigaGrid";
+import {AdditionalButton, GigaState} from "./GigaGrid";
 import {ServerSubtotalRow} from "../store/ServerStore";
 import {GigaAction} from "../store/GigaStore";
 import {Dispatcher} from "flux";
@@ -9,7 +9,7 @@ import {ColumnGroupDef, ColumnDef, Column, FilterBy} from "../models/ColumnLike"
  * the bare minimum are: `data` and `columnDefs`
  * This is the Public API for GigaGrid by definition
  */
-export interface GigaProps extends React.Props<GigaGrid> {
+export interface GigaProps {
 
     /**
      * Initial set of SubtotalBy declarations, default to `[]`. If set, the grid will initialize

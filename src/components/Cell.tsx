@@ -6,6 +6,7 @@ import {GigaActionType} from "../store/GigaStore";
 import {GridComponentProps} from "./GigaGrid";
 import {format, align} from "../static/SubtotalAggregator";
 import {ToggleCollapseAction} from "../store/reducers/RowCollapseReducers";
+import ClassAttributes = __React.ClassAttributes;
 
 export interface CellProps extends GridComponentProps<Cell> {
     row: Row
@@ -24,7 +25,7 @@ export interface CellProps extends GridComponentProps<Cell> {
  * Users who wants to provide custom rendering should extend this class and leverage many of its protected methods as
  * building blocks for rendering a cell or revert to default behavior as conditions dictate
  */
-export class Cell extends React.Component<CellProps, any> {
+export class Cell extends React.Component<CellProps & ClassAttributes<Cell>, any> {
 
     constructor(props) {
         super(props);

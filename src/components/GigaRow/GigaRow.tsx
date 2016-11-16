@@ -8,18 +8,18 @@ import {CellProps, Cell} from "../Cell";
 import {GigaProps} from "../GigaProps";
 
 export interface GigaRowProps extends GridComponentProps<GigaRow> {
-    row: Row;
-    rowHeight: string;
-    columns: Column[];
-    staticLeftHeaders?: boolean;
-    scrollableRightData?: boolean;
+    row: Row
+    rowHeight: string
+    columns: Column[]
+    staticLeftHeaders?: boolean
+    scrollableRightData?: boolean
     gridProps: GigaProps
 }
 
 export abstract class GigaRow extends React.Component<GigaRowProps, any> {
 
     constructor(props: GigaRowProps) {
-        super(props);
+        super(props)
     }
 
     protected generateCellKey(column: Column): string {

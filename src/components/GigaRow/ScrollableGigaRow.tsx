@@ -1,10 +1,10 @@
-import * as React from "react";
+import {ClassAttributes} from "react";
 import {GigaRow} from "./GigaRow";
 import {Column} from "../../models/ColumnLike";
-import {CellProps} from "../Cell";
+import {CellProps, Cell} from "../Cell";
 
 export class ScrollableGigaRow extends GigaRow {
-    getCellProps(column: Column, i: number): CellProps {
+    getCellProps(column: Column, i: number): CellProps & ClassAttributes<Cell> {
         let {gridProps, rowHeight, dispatcher, row} = this.props;
         return {
             key: super.generateCellKey(column),
