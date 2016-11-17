@@ -30,8 +30,8 @@
   ],
   "dependencies": {
     "font-awesome": "^4.5.0",
-    "react": "^0.14.6",
-    "react-dom": "^0.14.6"
+    "react": "^15.4.0",
+    "react-dom": "^15.4.0"
   },
   "author": "Erfang Chen",
   "license": "MIT",
@@ -55,7 +55,7 @@
     "lodash": "^3.10.1",
     "mkdirp": "^0.5.1",
     "phantomjs": "^2.1.3",
-    "react-addons-test-utils": "^0.14.7",
+    "react-addons-test-utils": "^15.4.0",
     "style-loader": "^0.13.0",
     "stylus": "^0.53.0",
     "stylus-loader": "^1.6.1",
@@ -66,7 +66,7 @@
     "webpack-dev-server": "^1.16.2"
   },
   "peerDependencies": {
-    "react": "^0.14.6",
-    "react-dom": "^0.14.6"
+    "react": "^15.4.0",
+    "react-dom": "^15.4.0"
   }
 }

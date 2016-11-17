@@ -28,12 +28,12 @@ export class TableBody extends React.Component<TableBodyProps,any> {
         );
     }
 
-    renderRows(rowHeight: number, start?: number, end?: number): JSX.Element[] {
+    renderRows(rowHeight: string, start?: number, end?: number): JSX.Element[] {
         const rows = validateBounds(start, end) ? this.props.rows.slice(start, end + 1) : this.props.rows;
         return rows.map((row: Row, i: number) => this.mapRowsInBody(rowHeight, row, i));
     }
 
-    mapRowsInBody(rowHeight: number, row: Row, i: number): JSX.Element {
+    mapRowsInBody(rowHeight: string, row: Row, i: number): JSX.Element {
         throw "Must extend TableBody, cannot use is as a component directly!";
     }
 
@@ -48,7 +48,7 @@ export class TableBody extends React.Component<TableBodyProps,any> {
 
              this allows us to preserve the total height of contents in table without actually rendering every row
              */
-            let rows = this.renderRows(parseInt(rowHeight), displayStart, displayEnd);
+            let rows = this.renderRows(rowHeight, displayStart, displayEnd);
             let placeholderHeights = this.calculatePlaceholderHeight();
             return (
                 <div>
@@ -61,7 +61,7 @@ export class TableBody extends React.Component<TableBodyProps,any> {
             );
 
         } else {
-            let rows = this.renderRows(parseInt(rowHeight));
+            let rows = this.renderRows(rowHeight);
             return (
                 <div>
                     {rows}

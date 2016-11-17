@@ -4,13 +4,13 @@ import {FrozenGigaRow} from "../GigaRow/FrozenGigaRow";
 import {TableBody} from "./TableBody";
 
 export class FrozenTableBody extends TableBody {
-    mapRowsInBody(rowHeight: number, row: Row, i: number): JSX.Element {
+    mapRowsInBody(rowHeight: string, row: Row, i: number): JSX.Element {
         let {columns, dispatcher, gridProps} = this.props;
         return (
             <FrozenGigaRow key={i}
                            columns={columns}
                            row={row}
-                           rowHeight={`${rowHeight}`}
+                           rowHeight={rowHeight}
                            dispatcher={dispatcher}
                            staticLeftHeaders={true}
                            gridProps={gridProps}
