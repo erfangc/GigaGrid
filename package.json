@@ -8,7 +8,7 @@
     "styles/"
   ],
   "scripts": {
-    "start": "webpack-dev-server --open --config webpack.examples.js",
+    "start": "webpack-dev-server --open --config webpack.dev.js",
     "build": "webpack --config webpack.production.js",
     "test": "karma start karma2.conf.js --single-run",
     "test:watch": "karma start karma2.conf.js --browsers Chrome",

@@ -16,8 +16,9 @@ import {ReduceStore} from "flux/utils";
 import {ServerStore} from "../store/ServerStore";
 import * as $ from "jquery";
 import {GigaProps} from "./GigaProps";
+import {ClassAttributes} from "react";
 
-export interface GridComponentProps<T> extends React.Props<T> {
+export interface GridComponentProps<T> {
     dispatcher: Dispatcher<GigaAction>;
     // idk if this is a good idea - but sub components often need to refer to things like callbacks - really annoying to pass them at each level
     // making them optional so tests' don't complain as much
@@ -78,7 +79,7 @@ export interface GigaState {
  * **Developer Warning** Please DO NOT pass a reference of this component to its children nor call setState() in the component
  **/
 
-export class GigaGrid extends React.Component<GigaProps, GigaState> {
+export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGrid>, GigaState> {
 
     private store: ReduceStore<GigaState>;
     private dispatcher: Dispatcher<GigaAction>;
@@ -292,7 +293,7 @@ export class GigaGrid extends React.Component<GigaProps, GigaState> {
 
         // Since we are not showing the scrollbar on left headers for IE, let's make the left header container shorter to make up
         let extraIEHeight = 0;
-        if( isInternetExplorer() )
+        if (isInternetExplorer())
             extraIEHeight += 18;
         // Set max height of row containers so scroll bars show up
         $(node).find(".giga-grid-left-headers-container").css("max-height", $(node).find(".giga-grid-body-viewport").innerHeight() - extraIEHeight);
