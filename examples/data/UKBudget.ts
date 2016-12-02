@@ -79,7 +79,7 @@ const columnDefs:ColumnDef[] = [
     }
 ];
 
-const initialSubtotalBys:Column[] = [{colTag: "Age", title: "Age"}, {colTag: "Children", title: "Children"}, {colTag: "Income", title: "Income"}];
+const initialSubtotalBys = ["Age","Children","Income"];
 
 const props:GigaProps = {
     columnDefs: columnDefs,

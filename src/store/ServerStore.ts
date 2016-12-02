@@ -53,8 +53,12 @@ function initialStateReducer(action: InitializeAction): GigaState {
      * create subtotalBys from columns (any properties passed in via initialSubtotalBys will override the same property on the corresponding Column object
      */
     const subtotalBys: Column[] = (initialSubtotalBys || []).map(subtotalBy => {
-        const column: Column = _.find<Column>(columns, column => column.colTag === subtotalBy.colTag);
-        return _.assign<{}, Column>({}, column, subtotalBy);
+        if( typeof subtotalBy === 'string' )
+            return _.find<Column>(columns, column => column.colTag === subtotalBy);
+        else if( typeof subtotalBy === 'object' )
+            return _.assign({}, _.find<Column>(columns, column => column.colTag === subtotalBy.colTag), subtotalBy) as Column;
+        else
+            throw `Invalid subtotalBy: ${subtotalBy}`
     });
 
     // create a simple shallow tree based on the initial data

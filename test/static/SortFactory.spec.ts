@@ -29,7 +29,7 @@ describe("SortFactory", ()=> {
         const tree:Tree = TreeBuilder.buildTree(UKBudget.data, []);
         it("should sort on age and children in descending order", ()=> {
             const sorted = SortFactory.sortTree(tree, byAgeThenChildrenDESC);
-            var detailRows = sorted.getRoot().detailRows;
+            let detailRows = sorted.getRoot().detailRows;
             expect(detailRows[0].getByColTag("Age")).toBe(60);
             expect(detailRows[1].getByColTag("Age")).toBe(60);
             expect(detailRows[detailRows.length - 1].getByColTag("Age")).toBe(19);
@@ -38,7 +38,7 @@ describe("SortFactory", ()=> {
         });
         it("should sort on age and children in ascending order", ()=> {
             const sorted = SortFactory.sortTree(tree, byAgeThenChildrenASC);
-            var detailRows = sorted.getRoot().detailRows;
+            let detailRows = sorted.getRoot().detailRows;
             expect(detailRows[0].getByColTag("Age")).toBe(19);
             expect(detailRows[1].getByColTag("Age")).toBe(19);
             expect(detailRows[detailRows.length - 1].getByColTag("Age")).toBe(60);
@@ -48,7 +48,8 @@ describe("SortFactory", ()=> {
     });
 
     describe("Sorting a Subtotaled Tree", ()=> {
-        const tree:Tree = TreeBuilder.buildTree(UKBudget.data, UKBudget.initialSubtotalBys);
+        const subtotalBys:Column[] = [{colTag: "Age", title: "Age"}, {colTag: "Children", title: "Children"}, {colTag: "Income", title: "Income"}];
+        const tree:Tree = TreeBuilder.buildTree(UKBudget.data, subtotalBys);
         it("should sort on age and children in descending order", ()=> {
             const sorted = SortFactory.sortTree(tree, byAgeThenChildrenDESC, {colTag: "Age"});
             const lvl1Subtotals = sorted.getRoot().children;

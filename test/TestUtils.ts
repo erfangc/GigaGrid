@@ -245,9 +245,9 @@ class PeopleTestData implements TestDataFactory {
     }
 
     rawData():any[] {
-        return [{"gender": "Female", "first_name": "Maria", "last_name": "Young", "gift": 2},
+        return [{"gender": "Female", "first_name": "Maria", "last_name": "Young", "gift": 10},
             {"gender": "Female", "first_name": "Kimberly", "last_name": "Kennedy", "gift": 2},
-            {"gender": "Female", "first_name": "Lisa", "last_name": "Hall", "gift": 10},
+            {"gender": "Female", "first_name": "Lisa", "last_name": "Hall", "gift": 2},
             {"gender": "Female", "first_name": "Andrea", "last_name": "Peterson", "gift": 4},
             {"gender": "Male", "first_name": "Clarence", "last_name": "Cox", "gift": 9},
             {"gender": "Male", "first_name": "Charles", "last_name": "Riley", "gift": 7},
