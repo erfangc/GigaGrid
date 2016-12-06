@@ -41,11 +41,7 @@ export class Examples extends React.Component<ExamplesProps, {}> {
                 return true;
             }}
             additionalUserButtons={additionalUserButtons}
-            initialSortBys={[
-                {colTag:"Age", direction: SortDirection.ASC},
-                {colTag:"Children", direction: SortDirection.ASC},
-                {colTag:"Income", direction: SortDirection.ASC}
-            ]}
+            initialSortBys={["Age","Children","Income"]}
             staticLeftHeaders={1}
             {...UKBudget}
         />);

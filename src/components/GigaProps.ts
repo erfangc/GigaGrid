@@ -15,13 +15,13 @@ export interface GigaProps {
      * Initial set of SubtotalBy declarations, default to `[]`. If set, the grid will initialize
      * with the specified subtotals
      */
-    initialSubtotalBys?: ColumnDef[]
+    initialSubtotalBys?: (Column|string)[]
 
     /**
      * Initial set of SortBy declarations, default to `[]`. If set, the grid will initialize
      * with the specified sorting order
      */
-    initialSortBys?: Column[]
+    initialSortBys?: (Column|string)[]
 
     initialFilterBys?: FilterBy[]
 

@@ -17,8 +17,12 @@ import {GigaProps} from "../../components/GigaProps";
  */
 export function decorateInitialSortBys(initialSortBys, columnsWithSort:Column[]): Column[] {
     return (initialSortBys || []).map((sortBy:Column)=> {
-        const column = _.find(columnsWithSort, (column:Column) => column.colTag === sortBy.colTag);
-        return _.assign<{},Column,{},Column>({}, column, sortBy);
+        if( typeof sortBy === 'string' )
+            return _.assign({}, _.find<Column>(columnsWithSort, column => column.colTag === sortBy), { direction: SortDirection.ASC });
+        else if( typeof sortBy === 'object' )
+            return _.assign({}, _.find<Column>(columnsWithSort, column => column.colTag === sortBy.colTag), sortBy) as Column;
+        else
+            throw `Invalid sortBy: ${sortBy}`
     });
 }
 
@@ -66,8 +70,10 @@ export default function (action:InitializeAction):GigaState {
      * create subtotalBys from columns (any properties passed in via initialSubtotalBys will override the same property on the corresponding Column object
      */
     const subtotalBys:Column[] = (initialSubtotalBys || []).map(subtotalBy => {
-        const column:Column = _.find<Column>(columns, column => column.colTag === subtotalBy.colTag);
-        return _.assign<{}, Column>({}, column, subtotalBy);
+        if( typeof subtotalBy === 'string' )
+            return _.find<Column>(columns, column => column.colTag === subtotalBy);
+        else if( typeof subtotalBy === 'object' )
+            return _.assign({}, _.find<Column>(columns, column => column.colTag === subtotalBy.colTag), subtotalBy) as Column;
     });
 
     /**
