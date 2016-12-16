@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Column} from "../models/ColumnLike";
 import {TableHeaderCell} from "./TableHeaderCell";
-import {GridComponentProps, getScrollBarWidth} from "./GigaGrid";
+import {GridComponentProps, getHorizontalScrollbarThickness} from "./GigaGrid";
 
 export interface TableHeaderProps extends GridComponentProps<TableHeader> {
     tableHeaderClass?: string
@@ -68,7 +68,7 @@ export class TableHeader extends React.Component<TableHeaderProps,any> {
         });
         // add a placeholder to offset the scrollbar
         ths.push(<div className="blank-header-cell text-align-right table-header" key={ths.length}
-                      style={{minWidth: '0', width:`${getScrollBarWidth()}px`}}>&nbsp;</div>);
+                      style={{minWidth: '0', width:`${getHorizontalScrollbarThickness() + 5}px`}}>&nbsp;</div>);
         if (this.props.staticLeftHeaders > 0) {
             const leftHeaders = ths.slice(0, this.props.staticLeftHeaders);
             const rightScrollingHeaders = ths.slice(this.props.staticLeftHeaders);
