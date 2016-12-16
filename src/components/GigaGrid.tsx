@@ -291,13 +291,13 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         const $leftHeaderRows = $(node).find(".giga-grid-left-headers-container .giga-grid-row");
         const $dataRows = $(node).find(".giga-grid-right-data-container .giga-grid-row");
 
-        // Since we are not showing the scrollbar on left headers for IE, let's make the left header container shorter to make up
-        let extraIEHeight = 0;
-        if (isInternetExplorer())
-            extraIEHeight += 18;
-        // Set max height of row containers so scroll bars show up
-        $(node).find(".giga-grid-left-headers-container").css("max-height", $(node).find(".giga-grid-body-viewport").innerHeight() - extraIEHeight);
-        $(node).find(".giga-grid-right-data-container").css("max-height", $(node).find(".giga-grid-body-viewport").innerHeight());
+        // There will never been a horiz scrollbar in the left headers, so give it less height in case it shows up on the right side
+        const extraScrollbarHeight = getScrollbarThickness();
+        const viewportHeight = $(node).find(".giga-grid-body-viewport").innerHeight();
+        const $rightDataContainer = $(node).find(".giga-grid-right-data-container");
+
+        // Set max height of row containers so scroll bar shows up
+        $rightDataContainer.css("max-height", viewportHeight);
 
         allignColumns($leftHeaderContainers, $leftHeaderRows);
         allignColumns($rightHeaderContainers, $dataRows);
@@ -339,6 +339,10 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         $(node).find(".giga-grid-right-data-container").css("max-width", $(node).innerWidth() - $leftHeadersDataContainer.innerWidth());
         $(node).find(".right-scrolling-headers").css("max-width", $(node).innerWidth() - $leftHeadersDataContainer.innerWidth());
 
+        // If the scrollbars push the table up on the right side, we need to make the left side flush with the right
+        setTimeout(() => {
+            $leftHeadersDataContainer.css("max-height", viewportHeight - (hasNodeHorizOverflowed($rightDataContainer.get(0)) ? extraScrollbarHeight : 0));
+        });
     }
 
     /**
@@ -447,6 +451,16 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
 
 }
 
+function getScrollbarThickness() { // call after document is finished loading
+    const el= document.createElement('div');
+    el.style.visibility= 'hidden';
+    el.style.overflow= 'scroll';
+    document.body.appendChild(el);
+    const h= el.offsetHeight-el.clientHeight;
+    document.body.removeChild(el);
+    return h;
+}
+
 /**
  * uber hax to get scrollbar width
  * see stackoverflow reference: http://stackoverflow.com/questions/986937/how-can-i-get-the-browsers-scrollbar-sizes
@@ -488,13 +502,6 @@ export function getScrollBarWidth() {
 
 }
 
-/**
- * Find out if a user is using internet explorer
- * @returns {boolean}
- */
-export function isInternetExplorer() {
-    let ua = window.navigator.userAgent;
-    let msie = ua.indexOf("MSIE ");
-
-    return (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./));  // If Internet Explorer, return version number
+function hasNodeHorizOverflowed(htmlElement: HTMLElement) {
+    return htmlElement.scrollWidth > htmlElement.offsetWidth;
 }
