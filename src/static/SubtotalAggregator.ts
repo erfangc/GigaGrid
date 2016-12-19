@@ -78,7 +78,7 @@ export function align(row: Row, column: Column) {
 export function format(value: any, fmtInstruction: FormatInstruction): any {
     if (!fmtInstruction)
         return value;
-    if (fmtInstruction && value === '')
+    if (value === '' || value === null || value === undefined)
         return null;
 
     let result = value;
