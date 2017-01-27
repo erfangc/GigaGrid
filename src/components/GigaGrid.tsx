@@ -336,7 +336,8 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         $(node).find(".left-static-headers").css("max-width", 0.75 * $bodyViewport.innerWidth());
 
         // After we're done with all this, make sure the data container and respective headers has max-width matching the container minus the left-headers
-        $(node).find(".giga-grid-right-data-container").css("max-width", $(node).innerWidth() - $leftHeadersDataContainer.innerWidth());
+        // #71 subtract one additional pixel for some rare screen configurations
+        $(node).find(".giga-grid-right-data-container").css("max-width", $(node).innerWidth() - $leftHeadersDataContainer.innerWidth() - 1);
         $(node).find(".right-scrolling-headers").css("max-width", $(node).innerWidth() - $leftHeadersDataContainer.innerWidth());
 
         // If the scrollbars push the table up on the right side, we need to make the left side flush with the right
