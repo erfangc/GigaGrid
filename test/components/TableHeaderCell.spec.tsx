@@ -4,7 +4,7 @@ import {GigaAction, GigaActionType} from "../../src/store/GigaStore";
 import {Dispatcher} from "flux";
 import {SortDirection, ColumnFormat} from "../../src/models/ColumnLike";
 import {TableHeaderCell} from "../../src/components/TableHeaderCell";
-import {SortUpdateAction} from "../../src/store/reducers/SortReducers";
+import {SortUpdateAction} from "../../src/store/handlers/SortReducers";
 
 describe("clicking on a header cell should sort by that header", ()=> {
 

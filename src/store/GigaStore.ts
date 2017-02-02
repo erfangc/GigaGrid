@@ -3,29 +3,30 @@ import {GigaState} from "../components/GigaGrid";
 import {ReduceStore} from "flux/utils";
 import {Dispatcher} from "flux";
 import {TreeRasterizer} from "../static/TreeRasterizer";
-import initialStateReducer, {InitializeAction} from "./reducers/InitializeReducer";
+import initialStateReducer, {InitializeAction} from "./handlers/InitializeReducer";
 import {
-    rowSelectReducer,
-    cellSelectReducer,
+    rowSelectHandler,
+    cellSelectHandler,
     ToggleRowSelectAction,
     ToggleCellSelectAction
-} from "./reducers/SelectReducers";
-import {changeDisplayBoundsReducer, ChangeRowDisplayBoundsAction} from "./reducers/ChangeRowDisplayBoundsReducer";
-import {sortUpdateReducer, cleartSortReducer, SortUpdateAction} from "./reducers/SortReducers";
+} from "./handlers/SelectReducers";
+import {changeDisplayBoundsHandler, ChangeRowDisplayBoundsAction} from "./handlers/ChangeRowDisplayBoundsReducer";
+import {sortUpdateHandler, cleartSortHandler, SortUpdateAction} from "./handlers/SortReducers";
 import {
-    toggleCollapseReducer,
-    collapseAllReducer,
-    expandAllReducer,
+    toggleCollapseHandler,
+    collapseAllHandler,
+    expandAllHandler,
     ToggleCollapseAction
-} from "./reducers/RowCollapseReducers";
-import {columnUpdateReducer, ColumnUpdateAction} from "./reducers/ColumnUpdateReducer";
+} from "./handlers/RowCollapseReducers";
+import {columnUpdateHandler, ColumnUpdateAction} from "./handlers/ColumnUpdateReducer";
 import {GigaProps} from "../components/GigaProps";
+import {CellContentChangeAction, cellContentChangeHandler} from "./handlers/CellContentChange";
 
 /*
  define the # of rows necessary to trigger progressive rendering
  below which all row display bound change events are ignored
  */
-export const PROGRESSIVE_RENDERING_THRESHOLD:number = 20;
+export const PROGRESSIVE_RENDERING_THRESHOLD: number = 20;
 
 /**
  * state store for the table, relevant states and stored here. the only way to mutate these states are by sending GigaAction(s) through the Dispatcher given to the store at construction
@@ -34,9 +35,9 @@ export const PROGRESSIVE_RENDERING_THRESHOLD:number = 20;
  */
 export class GigaStore extends ReduceStore<GigaState> {
 
-    private props:GigaProps;
+    private props: GigaProps;
 
-    constructor(dispatcher:Dispatcher<GigaAction>, props:GigaProps) {
+    constructor(dispatcher: Dispatcher<GigaAction>, props: GigaProps) {
         super(dispatcher);
         this.props = props;
         dispatcher.dispatch({
@@ -44,7 +45,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         });
     }
 
-    getInitialState():GigaState {
+    getInitialState(): GigaState {
         return null;
     }
 
@@ -54,14 +55,14 @@ export class GigaStore extends ReduceStore<GigaState> {
      * state as oppose to application state ...
      * This however, allow us a mechanism to derive initial state again when props change (i.e. such as when the parent component give us new props without un-mounting)
      */
-    initialize(action:InitializeAction):GigaState {
+    initialize(action: InitializeAction): GigaState {
         // if props not passed we will use this.props
-        const overrideAction:InitializeAction = _.assign<{},{},{},InitializeAction>({}, action, {props: action.props || this.props});
+        const overrideAction: InitializeAction = _.assign<{},{},{},InitializeAction>({}, action, {props: action.props || this.props});
         return initialStateReducer(overrideAction);
     }
 
-    reduce(state:GigaState,
-           action:GigaAction):GigaState {
+    reduce(state: GigaState,
+           action: GigaAction): GigaState {
 
         let newState: GigaState;
         switch (action.type) {
@@ -69,31 +70,34 @@ export class GigaStore extends ReduceStore<GigaState> {
                 newState = this.initialize(action as InitializeAction);
                 break;
             case GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS:
-                newState = changeDisplayBoundsReducer(state, action as ChangeRowDisplayBoundsAction);
+                newState = changeDisplayBoundsHandler(state, action as ChangeRowDisplayBoundsAction);
+                break;
+            case GigaActionType.CELL_CONTENT_CHANGE:
+                newState = cellContentChangeHandler(state, action as CellContentChangeAction);
                 break;
             case GigaActionType.COLUMNS_UPDATE:
-                newState = columnUpdateReducer(state, action as ColumnUpdateAction, this.props);
+                newState = columnUpdateHandler(state, action as ColumnUpdateAction, this.props);
                 break;
             case GigaActionType.TOGGLE_ROW_COLLAPSE:
-                newState = toggleCollapseReducer(state, action as ToggleCollapseAction,this.props);
+                newState = toggleCollapseHandler(state, action as ToggleCollapseAction, this.props);
                 break;
             case GigaActionType.COLLAPSE_ALL:
-                newState = collapseAllReducer(state);
+                newState = collapseAllHandler(state);
                 break;
             case GigaActionType.EXPAND_ALL:
-                newState = expandAllReducer(state);
+                newState = expandAllHandler(state);
                 break;
             case GigaActionType.NEW_SORT:
-                newState = sortUpdateReducer(state, action as SortUpdateAction);
+                newState = sortUpdateHandler(state, action as SortUpdateAction);
                 break;
             case GigaActionType.CLEAR_SORT:
-                newState = cleartSortReducer(state);
+                newState = cleartSortHandler(state);
                 break;
             case GigaActionType.TOGGLE_ROW_SELECT:
-                newState = rowSelectReducer(state, action as ToggleRowSelectAction, this.props);
+                newState = rowSelectHandler(state, action as ToggleRowSelectAction, this.props);
                 break;
             case GigaActionType.TOGGLE_CELL_SELECT:
-                newState = cellSelectReducer(state, action as ToggleCellSelectAction, this.props);
+                newState = cellSelectHandler(state, action as ToggleCellSelectAction, this.props, this.getDispatcher());
                 break;
             case GigaActionType.TOGGLE_SETTINGS_POPOVER:
                 newState = _.assign<{},GigaState>({}, state, {showSettingsPopover: !state.showSettingsPopover});
@@ -112,7 +116,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return newState;
     }
 
-    static shouldTriggerRasterization(action:GigaAction) {
+    static shouldTriggerRasterization(action: GigaAction) {
         return [
                 GigaActionType.CLEAR_SORT,
                 GigaActionType.NEW_SORT,
@@ -132,6 +136,7 @@ export class GigaStore extends ReduceStore<GigaState> {
  */
 export enum GigaActionType {
     INITIALIZE,
+    CELL_CONTENT_CHANGE,
     NEW_SORT,
     CLEAR_SORT,
     TOGGLE_ROW_COLLAPSE,
@@ -149,5 +154,5 @@ export enum GigaActionType {
 }
 
 export interface GigaAction {
-    type:GigaActionType
+    type: GigaActionType
 }

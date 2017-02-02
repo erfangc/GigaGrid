@@ -6,7 +6,7 @@ import {GigaAction} from "../GigaStore";
 import {Column} from "../../models/ColumnLike";
 import {GigaProps} from "../../components/GigaProps";
 
-export function columnUpdateReducer(state:GigaState, action:ColumnUpdateAction, props: GigaProps) {
+export function columnUpdateHandler(state:GigaState, action:ColumnUpdateAction, props: GigaProps) {
     const newColumnStates = {
         columns: action.columns || state.columns,
         subtotalBys: action.subtotalBys || state.subtotalBys,

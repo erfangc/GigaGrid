@@ -8,7 +8,7 @@ import {Column} from "../../models/ColumnLike";
 import {GigaState} from "../../components/GigaGrid";
 import {GigaAction} from "../GigaStore";
 
-export function sortUpdateReducer(state:GigaState, action:SortUpdateAction):GigaState {
+export function sortUpdateHandler(state:GigaState, action:SortUpdateAction):GigaState {
     /**
      * go through all the columns in state, flip on/off sort flags as necessary
      */
@@ -26,7 +26,7 @@ export function sortUpdateReducer(state:GigaState, action:SortUpdateAction):Giga
     return _.assign<{}, GigaState>({}, state, newPartialState);
 }
 
-export function cleartSortReducer(state:GigaState):GigaState {
+export function cleartSortHandler(state:GigaState):GigaState {
     state.columns.forEach((column:Column) => column.direction = undefined);
     const newTree:Tree = SortFactory.sortTree(state.tree, []);
     const newState = _.clone(state);

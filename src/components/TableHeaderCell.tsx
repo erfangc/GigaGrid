@@ -5,7 +5,7 @@ import {GridComponentProps} from "./GigaGrid";
 import {GigaActionType} from "../store/GigaStore";
 import * as _ from "lodash";
 import {ToolbarToggle} from "./toolbar/Toolbar";
-import {SortUpdateAction} from "../store/reducers/SortReducers";
+import {SortUpdateAction} from "../store/handlers/SortReducers";
 
 export interface TableHeaderProps extends GridComponentProps<TableHeaderCell> {
     column:Column

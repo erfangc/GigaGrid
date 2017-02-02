@@ -35,11 +35,6 @@ export class Examples extends React.Component<ExamplesProps, {}> {
         // Comment below line in if you want to test locale functionality
         // this.enhanceColumnsWithLocale(UKBudget.columnDefs);
         return (<GigaGrid
-            onRowClick={(row:Row, state:GigaState)=>{
-               console.log(row);
-               console.log(state);
-                return true;
-            }}
             additionalUserButtons={additionalUserButtons}
             initialSortBys={["Age","Children","Income"]}
             staticLeftHeaders={1}
