@@ -6,7 +6,7 @@ import * as _ from "lodash";
 import {GigaActionType, GigaAction} from "../../store/GigaStore";
 import "./SettingsPopover.styl";
 import * as classNames from "classnames";
-import {ColumnUpdateAction} from "../../store/reducers/ColumnUpdateReducer";
+import {ColumnUpdateAction} from "../../store/handlers/ColumnUpdateReducer";
 import {AdditionalButton} from "../GigaGrid";
 
 export interface SettingsPopoverProps {

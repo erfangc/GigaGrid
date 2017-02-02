@@ -2,7 +2,7 @@ import {GigaState} from "../../components/GigaGrid";
 import {GigaAction} from "../GigaStore";
 import {ScrollCalculator} from "../../static/ScrollCalculator";
 
-export function changeDisplayBoundsReducer(state:GigaState, action:ChangeRowDisplayBoundsAction) {
+export function changeDisplayBoundsHandler(state:GigaState, action:ChangeRowDisplayBoundsAction) {
     const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(action.rowHeight, action.viewport, action.canvas);
     const newState = _.clone(state);
     newState.displayStart = displayStart;

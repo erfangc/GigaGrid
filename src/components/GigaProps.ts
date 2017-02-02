@@ -50,7 +50,7 @@ export interface GigaProps {
      * @param row
      * @param columnDef
      */
-    onCellClick?: (row: Row, columnDef: Column)=>boolean
+    onCellClick?: (row: Row, columnDef: Column, dispatcher: Dispatcher<any>)=>boolean
 
     /**
      * array of object literals representing the raw un-subtotaled data

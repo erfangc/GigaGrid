@@ -6,7 +6,7 @@ import {
 import {TestUtils} from "../TestUtils";
 import {ColumnFormat, SortDirection} from "../../src/models/ColumnLike";
 import {Dispatcher} from "flux";
-import {SortUpdateAction, ClearSortAction} from "../../src/store/reducers/SortReducers";
+import {SortUpdateAction, ClearSortAction} from "../../src/store/handlers/SortReducers";
 import {GigaProps} from "../../src/components/GigaProps";
 
 describe("GigaStore", ()=> {

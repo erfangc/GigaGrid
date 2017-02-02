@@ -5,7 +5,7 @@ import {Row} from "../models/Row";
 import {GigaActionType} from "../store/GigaStore";
 import {GridComponentProps} from "./GigaGrid";
 import {format, align} from "../static/SubtotalAggregator";
-import {ToggleCollapseAction} from "../store/reducers/RowCollapseReducers";
+import {ToggleCollapseAction} from "../store/handlers/RowCollapseReducers";
 import ClassAttributes = __React.ClassAttributes;
 
 export interface CellProps extends GridComponentProps<Cell> {

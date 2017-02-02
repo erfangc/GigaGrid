@@ -1,10 +1,12 @@
 import {GigaProps} from "../../src/components/GigaProps";
-declare var require:any;
+import {ColumnFormat, AggregationMethod, ColumnDef} from "../../src/models/ColumnLike";
+import {GigaActionType} from "../../src/store/GigaStore";
+import {CellContentChangeAction} from "../../src/store/handlers/CellContentChange";
+declare var require: any;
 
-import {ColumnFormat, AggregationMethod, ColumnDef, Column} from "../../src/models/ColumnLike";
 let json = require("./UKBudget.json");
 
-const columnDefs:ColumnDef[] = [
+const columnDefs: ColumnDef[] = [
     {
         colTag: "WFood",
         title: "Food",
@@ -79,12 +81,24 @@ const columnDefs:ColumnDef[] = [
     }
 ];
 
-const initialSubtotalBys = ["Age","Children","Income"];
+const initialSubtotalBys = ["Age", "Children", "Income"];
 
-const props:GigaProps = {
+const props: GigaProps = {
     columnDefs: columnDefs,
     initialSubtotalBys: initialSubtotalBys,
-    data: json as any[]
+    data: json as any[],
+    onCellClick: function (row, columnDef, dispatcher) {
+        let action: CellContentChangeAction = {
+            type: GigaActionType.CELL_CONTENT_CHANGE,
+            column: columnDef,
+            row: row,
+            newContent: 0
+        };
+        setTimeout(()=>{
+            dispatcher.dispatch(action);
+        });
+        return true;
+    }
 };
 
 export default props;

@@ -3,23 +3,24 @@ import {Dispatcher} from "flux";
 import {GigaState} from "../components/GigaGrid";
 import {ScrollCalculator} from "../static/ScrollCalculator";
 import {GigaStore, GigaActionType, GigaAction, PROGRESSIVE_RENDERING_THRESHOLD} from "./GigaStore";
-import {InitializeAction, decorateInitialSortBys, decorateColumnsWithSort} from "./reducers/InitializeReducer";
+import {InitializeAction, decorateInitialSortBys, decorateColumnsWithSort} from "./handlers/InitializeReducer";
 import {TreeRasterizer} from "../static/TreeRasterizer";
 import {
     ToggleCellSelectAction,
-    cellSelectReducer,
+    cellSelectHandler,
     ToggleRowSelectAction,
-    rowSelectReducer
-} from "./reducers/SelectReducers";
-import {cleartSortReducer, SortUpdateAction, sortUpdateReducer} from "./reducers/SortReducers";
-import {ChangeRowDisplayBoundsAction, changeDisplayBoundsReducer} from "./reducers/ChangeRowDisplayBoundsReducer";
+    rowSelectHandler
+} from "./handlers/SelectReducers";
+import {cleartSortHandler, SortUpdateAction, sortUpdateHandler} from "./handlers/SortReducers";
+import {ChangeRowDisplayBoundsAction, changeDisplayBoundsHandler} from "./handlers/ChangeRowDisplayBoundsReducer";
 import {Column, BucketInfo} from "../models/ColumnLike";
 import {TreeBuilder} from "../static/TreeBuilder";
 import {Row} from "../models/Row";
-import {ToggleCollapseAction, toggleCollapseReducer} from "./reducers/RowCollapseReducers";
+import {ToggleCollapseAction, toggleCollapseHandler} from "./handlers/RowCollapseReducers";
 import {SortFactory} from "../static/SortFactory";
 import * as $ from "jquery";
 import {GigaProps} from "../components/GigaProps";
+import {CellContentChangeAction, cellContentChangeHandler} from "./handlers/CellContentChange";
 
 /**
  * Initial state reducer for Server store
@@ -154,6 +155,9 @@ export class ServerStore extends ReduceStore<GigaState> {
                 newState.displayStart = boundaries.displayStart;
                 newState.displayEnd = boundaries.displayEnd;
                 break;
+            case GigaActionType.CELL_CONTENT_CHANGE:
+                newState = cellContentChangeHandler(state, action as CellContentChangeAction);
+                break;
             case GigaActionType.COLLAPSE_ROW:
                 break;
             /**
@@ -163,25 +167,25 @@ export class ServerStore extends ReduceStore<GigaState> {
                 newState = this.initialize(action as InitializeAction);
                 break;
             case GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS:
-                newState = changeDisplayBoundsReducer(state, action as ChangeRowDisplayBoundsAction);
+                newState = changeDisplayBoundsHandler(state, action as ChangeRowDisplayBoundsAction);
                 break;
             case GigaActionType.NEW_SORT:
-                newState = sortUpdateReducer(state, action as SortUpdateAction);
+                newState = sortUpdateHandler(state, action as SortUpdateAction);
                 break;
             case GigaActionType.CLEAR_SORT:
-                newState = cleartSortReducer(state);
+                newState = cleartSortHandler(state);
                 break;
             case GigaActionType.TOGGLE_ROW_SELECT:
-                newState = rowSelectReducer(state, action as ToggleRowSelectAction, this.props);
+                newState = rowSelectHandler(state, action as ToggleRowSelectAction, this.props);
                 break;
             case GigaActionType.TOGGLE_CELL_SELECT:
-                newState = cellSelectReducer(state, action as ToggleCellSelectAction, this.props);
+                newState = cellSelectHandler(state, action as ToggleCellSelectAction, this.props, this.getDispatcher());
                 break;
             case GigaActionType.TOGGLE_SETTINGS_POPOVER:
                 newState = _.assign<{},GigaState>({}, state, {showSettingsPopover: !state.showSettingsPopover});
                 break;
             case GigaActionType.TOGGLE_ROW_COLLAPSE:
-                newState = toggleCollapseReducer(state, action as ToggleCollapseAction, this.props);
+                newState = toggleCollapseHandler(state, action as ToggleCollapseAction, this.props);
                 break;
             /**
              * not supported actions for server rendering mode
