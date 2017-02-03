@@ -37,6 +37,7 @@ export class Examples extends React.Component<ExamplesProps, {}> {
         return (<GigaGrid
             additionalUserButtons={additionalUserButtons}
             initialSortBys={["Age","Children","Income"]}
+            bodyHeight={"500px"}
             staticLeftHeaders={1}
             {...UKBudget}
         />);

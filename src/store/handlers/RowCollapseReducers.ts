@@ -23,7 +23,7 @@ export function toggleCollapseHandler(state:GigaState, action:ToggleCollapseActi
     const row = action.subtotalRow;
     row.toggleCollapse();
     const newState = _.clone(state);
-    const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(props.rowHeight, $(state.viewport), $(state.canvas));
+    const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(props.rowHeight, props.bodyHeight, $(state.viewport), $(state.canvas));
     newState.displayStart = displayStart;
     newState.displayEnd = displayEnd;
     return newState;
