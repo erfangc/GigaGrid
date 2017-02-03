@@ -16,6 +16,7 @@ export class ScrollCalculator {
             const tableHeight: number = viewport[0].style.maxHeight ? parseInt(viewport[0].style.maxHeight) : $(viewport[0]).height();
             displayEnd = displayStart + Math.ceil(tableHeight / parseInt(rowHeight));
         }
+        // If the bodyHeight is larger than the current viewable area, let's get enough data for that area
         if( bodyHeight ){
             const parsedBodyHeight = parseInt(bodyHeight);
             const parsedRowHeight = parseInt(rowHeight);
