@@ -1,5 +1,4 @@
 ///<reference path="../../typings/index.d.ts"/>
-
 import * as React from "react";
 import "../../styles/theme/Default.styl";
 import {ScrollableGigaRow} from "../../src/components/GigaRow/ScrollableGigaRow";
@@ -7,13 +6,14 @@ import * as ReactTestUtils from "react-addons-test-utils";
 import {TestUtils} from "../TestUtils";
 import {Row} from "../../src/models/Row";
 import {Column} from "../../src/models/ColumnLike";
-import {Cell, CellProps} from "../../src/components/Cell";
+import {Cell, CellProps} from "../../src/components/Cell/Cell";
+import {CellRenderer} from "../../src/components/Cell/CellRenderer";
 import $ = require('jquery');
 
 describe("GigaRow Components", () => {
 
     describe("GigaRow rendering of a SubtotalRow", () => {
-        var component = null;
+        let component = null;
         const row: Row = TestUtils.getSimpleSubtotalRow();
         const data = TestUtils.newPeopleTestData();
         const columns: Column[] = TestUtils.getSimpleColumns();
@@ -68,15 +68,22 @@ describe("GigaRow Components", () => {
     });
 
     describe("GigaRow render rows with custom cells instead of the default one", () => {
-        it("can handle custom cell content", ()=> {
-            var component = null;
+        it("can handle custom cell content", () => {
+            let component = null;
             const row: Row = TestUtils.getDetailRow();
             const column: Column = TestUtils.getSimpleColumns()[0];
             const data = TestUtils.newPeopleTestData();
 
-            class CustomCell extends Cell {
+            class CustomCell extends React.Component<{},{}> {
+                cellRenderer: CellRenderer;
+
+                constructor(props) {
+                    super(props);
+                    this.cellRenderer = new CellRenderer(props);
+                }
+
                 render() {
-                    return super.renderContentContainerWithElement(
+                    return this.cellRenderer.renderContentContainerWithElement(
                         <div>
                             <span style={{color:"green"}}>Hello World</span>
                         </div>
