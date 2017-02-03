@@ -1,19 +1,19 @@
 import * as React from "react";
 import * as ReactTestUtils from "react-addons-test-utils";
-import {GigaAction} from "../../src/store/GigaStore";
-import {Row} from "../../src/models/Row";
-import {TestUtils} from "../TestUtils";
-import {Column} from "../../src/models/ColumnLike";
-import {Cell} from "../../src/components/Cell";
+import {GigaAction} from "../../../src/store/GigaStore";
+import {Row} from "../../../src/models/Row";
+import {TestUtils} from "../../TestUtils";
+import {Column} from "../../../src/models/ColumnLike";
+import {Cell} from "../../../src/components/Cell/Cell";
 import * as $ from "jquery";
 import {Dispatcher} from "flux";
 
 describe("Cell", ()=> {
 
-    var dispatcher:Dispatcher<GigaAction>;
-    var row:Row;
-    var columns:Column[];
-    var component;
+    let dispatcher: Dispatcher<GigaAction>;
+    let row: Row;
+    let columns: Column[];
+    let component;
     beforeEach(()=> {
         dispatcher = new Dispatcher<GigaAction>();
         row = TestUtils.getDetailRow();

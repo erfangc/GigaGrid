@@ -1,46 +1,23 @@
-import * as React from "react";
+import {Cell, CellProps} from "./Cell";
 import * as classNames from "classnames";
-import {Column, AggregationMethod} from "../models/ColumnLike";
-import {Row} from "../models/Row";
-import {GigaActionType} from "../store/GigaStore";
-import {GridComponentProps} from "./GigaGrid";
-import {format, align} from "../static/SubtotalAggregator";
-import {ToggleCollapseAction} from "../store/handlers/RowCollapseReducers";
-import ClassAttributes = __React.ClassAttributes;
-
-export interface CellProps extends GridComponentProps<Cell> {
-    row: Row
-    column: Column
-    rowHeight: string
-    isFirstColumn?: boolean
-    columnNumber: number
-}
+import {ClassAttributes} from "react";
+import * as React from "react";
+import {GigaActionType} from "../../store/GigaStore";
+import {format, align} from "../../static/SubtotalAggregator";
+import {AggregationMethod} from "../../models/ColumnLike";
+import {ToggleCollapseAction} from "../../store/handlers/RowCollapseReducers";
 
 /**
- * Cell is the base class for constructing a single cell in the table
- * by default, if the cell being rendered is the first cell of a subtotal row,
- * we will render a cell with a +/- button to facilitate expand/collapse of rows
- * otherwise we will render a normal cell with text content
- *
- * Users who wants to provide custom rendering should extend this class and leverage many of its protected methods as
- * building blocks for rendering a cell or revert to default behavior as conditions dictate
+ * helper class to render cells
  */
-export class Cell extends React.Component<CellProps & ClassAttributes<Cell>, any> {
+export class CellRenderer {
+    props: CellProps & ClassAttributes<Cell>;
 
-    constructor(props) {
-        super(props);
+    constructor(props: CellProps & ClassAttributes<Cell>) {
+        this.props = props;
     }
 
-    render() {
-        const {row, isFirstColumn} = this.props;
-        if (!row.isDetailRow() && isFirstColumn) {
-            return this.renderCellWithCollapseExpandButton();
-        } else {
-            return this.renderCellWithoutCollapseExpandButton();
-        }
-    }
-
-    protected onSelect() {
+    onSelect() {
         let {row, column, dispatcher} = this.props;
         let action = {
             type: GigaActionType.TOGGLE_CELL_SELECT,
@@ -50,7 +27,7 @@ export class Cell extends React.Component<CellProps & ClassAttributes<Cell>, any
         dispatcher.dispatch(action);
     }
 
-    protected calculateContainerStyle() {
+    calculateContainerStyle() {
         let {column, rowHeight, isFirstColumn} = this.props;
         return {
             width: column.width,
@@ -59,7 +36,7 @@ export class Cell extends React.Component<CellProps & ClassAttributes<Cell>, any
         };
     }
 
-    protected calculateIdentation(): string {
+    calculateIdentation(): string {
         let {row} = this.props;
         /*
          handle when there are no subtotal rows
@@ -72,7 +49,7 @@ export class Cell extends React.Component<CellProps & ClassAttributes<Cell>, any
         }
     }
 
-    protected renderCellWithoutCollapseExpandButton(): JSX.Element {
+    renderCellWithoutCollapseExpandButton(): JSX.Element {
         let {row, column} = this.props;
         let renderedCellContent: JSX.Element|string|number = format(row.get(column), column.formatInstruction) || "";
         if (!row.isDetailRow()
@@ -87,7 +64,7 @@ export class Cell extends React.Component<CellProps & ClassAttributes<Cell>, any
         );
     }
 
-    protected renderCellWithCollapseExpandButton(): any|JSX.Element {
+    renderCellWithCollapseExpandButton(): any|JSX.Element {
         let row = this.props.row;
         const cx = classNames({
             "fa": true,
@@ -104,7 +81,7 @@ export class Cell extends React.Component<CellProps & ClassAttributes<Cell>, any
         );
     }
 
-    protected renderContentContainerWithElement(elm: JSX.Element, className?: string): JSX.Element {
+    renderContentContainerWithElement(elm: JSX.Element, className?: string): JSX.Element {
         let {columnNumber} = this.props;
         return (
             <div className={`content-container giga-grid-column-${columnNumber} ${className}`}
@@ -116,7 +93,7 @@ export class Cell extends React.Component<CellProps & ClassAttributes<Cell>, any
         );
     }
 
-    protected onCollapseToggle(e: React.MouseEvent) {
+    onCollapseToggle(e: React.MouseEvent) {
         e.preventDefault();
         e.stopPropagation(); // we don't want toggle collapse to also trigger a row / cell clicked event
 
