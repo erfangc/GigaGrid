@@ -3,7 +3,7 @@ import {GigaAction} from "../GigaStore";
 import {ScrollCalculator} from "../../static/ScrollCalculator";
 
 export function changeDisplayBoundsHandler(state:GigaState, action:ChangeRowDisplayBoundsAction) {
-    const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(action.rowHeight, action.viewport, action.canvas);
+    const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(action.rowHeight, action.bodyHeight, action.viewport, action.canvas);
     const newState = _.clone(state);
     newState.displayStart = displayStart;
     newState.displayEnd = displayEnd;
@@ -14,4 +14,5 @@ export interface ChangeRowDisplayBoundsAction extends GigaAction {
     viewport:JQuery
     canvas:JQuery
     rowHeight:string
+    bodyHeight:string
 }

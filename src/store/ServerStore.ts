@@ -123,7 +123,7 @@ export class ServerStore extends ReduceStore<GigaState> {
                 row = (action as LoadingMoreDataAction).parentRow;
                 row.loading = true;
                 newState = _.clone(state);
-                boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, $(state.viewport), $(state.canvas));
+                boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, this.props.bodyHeight, $(state.viewport), $(state.canvas));
                 newState.displayStart = boundaries.displayStart;
                 newState.displayEnd = boundaries.displayEnd;
                 break;
@@ -131,7 +131,7 @@ export class ServerStore extends ReduceStore<GigaState> {
                 row = (action as LoadingMoreDataAction).parentRow;
                 row.loading = false;
                 newState = _.clone(state);
-                boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, $(state.viewport), $(state.canvas));
+                boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, this.props.bodyHeight, $(state.viewport), $(state.canvas));
                 newState.displayStart = boundaries.displayStart;
                 newState.displayEnd = boundaries.displayEnd;
                 break;
@@ -151,7 +151,7 @@ export class ServerStore extends ReduceStore<GigaState> {
                     dataToSubtotalRows(rows).forEach(row=>parentRow.addChild(row));
                 }
                 newState = _.clone(state); // force update
-                boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, $(state.viewport), $(state.canvas));
+                boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, this.props.bodyHeight, $(state.viewport), $(state.canvas));
                 newState.displayStart = boundaries.displayStart;
                 newState.displayEnd = boundaries.displayEnd;
                 break;
