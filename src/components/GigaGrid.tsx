@@ -90,7 +90,6 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         initialFilterBys: [],
         data: [],
         columnDefs: [],
-        bodyHeight: "500px",
         rowHeight: "25px",
         collapseHeight: false,
         expandTable: false,
@@ -253,6 +252,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
      */
     synchTableHeaderWidthToFirstRow() {
         const node: Element = ReactDOM.findDOMNode<Element>(this);
+        const {bodyHeight} = this.props;
 
         /**
          * To improve performance, we use our own dynamic stylesheet for giga-grid.  jQuery is slow, so by adding
@@ -293,7 +293,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
 
         // There will never been a horiz scrollbar in the left headers, so give it less height in case it shows up on the right side
         const extraScrollbarHeight = getHorizontalScrollbarThickness();
-        const viewportHeight = $(node).find(".giga-grid-body-viewport").innerHeight();
+        const viewportHeight = bodyHeight ? parseInt(bodyHeight) : $(node).find(".giga-grid-body-viewport").innerHeight();
         const $rightDataContainer = $(node).find(".giga-grid-right-data-container");
 
         // Set max height of row containers so scroll bar shows up
@@ -437,7 +437,8 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
             type: GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS,
             canvas: $canvas,
             viewport: $viewport,
-            rowHeight: this.props.rowHeight
+            rowHeight: this.props.rowHeight,
+            bodyHeight: this.props.bodyHeight
         };
         this.dispatcher.dispatch(action);
     }
