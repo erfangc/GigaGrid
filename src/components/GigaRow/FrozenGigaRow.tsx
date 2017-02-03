@@ -1,6 +1,6 @@
 import {GigaRow} from "./GigaRow";
 import {Column} from "../../models/ColumnLike";
-import {CellProps, Cell} from "../Cell";
+import {CellProps, Cell} from "../Cell/Cell";
 import {ClassAttributes} from "react";
 
 /**

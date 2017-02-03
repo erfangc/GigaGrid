@@ -1,4 +1,5 @@
 import * as React from "react";
+import {ClassAttributes} from "react";
 import * as ReactDOM from "react-dom";
 import * as _ from "lodash";
 import {Column, FilterBy, ColumnFactory} from "../models/ColumnLike";
@@ -16,7 +17,6 @@ import {ReduceStore} from "flux/utils";
 import {ServerStore} from "../store/ServerStore";
 import * as $ from "jquery";
 import {GigaProps} from "./GigaProps";
-import {ClassAttributes} from "react";
 
 export interface GridComponentProps<T> {
     dispatcher: Dispatcher<GigaAction>;
@@ -27,7 +27,7 @@ export interface GridComponentProps<T> {
 
 export interface AdditionalButton {
     name: string
-    customCallback: ()=>any
+    customCallback: () => any
 }
 
 /**
@@ -351,7 +351,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
      * @returns {CSSStyleSheet}
      */
     private createGigaGridStyleSheet(): StyleSheet {
-        let style = document.createElement("style");
+        let style: any = document.createElement("style");
         style.setAttribute("id", `giga-grid-style-${this.state.gridID}`);
         document.head.appendChild(style);
         return style.sheet;
@@ -453,11 +453,11 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
 }
 
 export function getHorizontalScrollbarThickness() {
-    const el= document.createElement('div');
-    el.style.visibility= 'hidden';
-    el.style.overflow= 'scroll';
+    const el: any = document.createElement('div');
+    el.style.visibility = 'hidden';
+    el.style.overflow = 'scroll';
     document.body.appendChild(el);
-    const h = el.offsetHeight-el.clientHeight;
+    const h = el.offsetHeight - el.clientHeight;
     document.body.removeChild(el);
     return h;
 }
