@@ -30,6 +30,11 @@ export class Row {
     collapsed: boolean = true;
     bucketInfo: BucketInfo;
 
+    /**
+     * If this Row is server side rendered and there is an issue with the server call
+     */
+    errorStatus?:number;
+
     private _childrenByTitle: { [title: string]: Row; } = {};
 
     private findIndex(child: Row) {
