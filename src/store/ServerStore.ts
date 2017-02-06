@@ -135,6 +135,10 @@ export class ServerStore extends ReduceStore<GigaState> {
                 newState.displayStart = boundaries.displayStart;
                 newState.displayEnd = boundaries.displayEnd;
                 break;
+            case GigaActionType.SET_LOADING_DATA_ERROR_STATUS:
+                row = (action as SetLoadingDataErrorStatusAction).row;
+                row.errorStatus = (action as SetLoadingDataErrorStatusAction).status;
+                break;
             case GigaActionType.GOT_MORE_DATA:
                 const myAction = action as GotMoreDataAction;
                 const {parentRow, rows, isDetail} = myAction;
@@ -262,4 +266,9 @@ interface GotMoreDataAction extends GigaAction {
 
 interface LoadingMoreDataAction extends GigaAction {
     parentRow: Row
+}
+
+interface SetLoadingDataErrorStatusAction extends GigaAction {
+    row: Row
+    status: number
 }
