@@ -136,6 +136,7 @@ export class ServerStore extends ReduceStore<GigaState> {
                 newState.displayEnd = boundaries.displayEnd;
                 break;
             case GigaActionType.SET_LOADING_DATA_ERROR_STATUS:
+                newState = _.clone(state);
                 row = (action as SetLoadingDataErrorStatusAction).row;
                 row.errorStatus = (action as SetLoadingDataErrorStatusAction).status;
                 break;
