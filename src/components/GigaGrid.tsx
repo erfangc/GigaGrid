@@ -386,6 +386,11 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         $(node).parent().parent().find('.giga-grid-right-data-container').scrollTop(scrollTopAmount + amountToScroll);
     }
 
+    reflowTable(){
+        this.dispatchDisplayBoundChange();
+        this.synchTableHeaderWidthToFirstRow();
+    }
+
     componentDidMount() {
         /*
          * subscribe to window event listeners
@@ -406,8 +411,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         /*
          re-compute displayStart && displayEnd
          */
-        this.dispatchDisplayBoundChange();
-        this.synchTableHeaderWidthToFirstRow();
+        this.reflowTable();
         this.expandTable();
     }
 
