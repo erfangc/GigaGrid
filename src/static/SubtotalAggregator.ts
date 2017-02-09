@@ -86,10 +86,15 @@ export function format(value: any, fmtInstruction: FormatInstruction): any {
         result *= fmtInstruction.multiplier;
     if (typeof fmtInstruction.roundTo !== "undefined" && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
         result = parseFloat(result).toFixed(fmtInstruction.roundTo);
-    if ((fmtInstruction.separator || fmtInstruction.locale) && !isNaN(result)) {
+    // Deal with concept of localities and currency
+    if ((fmtInstruction.separator || fmtInstruction.locale || fmtInstruction.currency) && !isNaN(result)) {
         // Provide legacy support for fmtInstruction.separator
         const locale: string = fmtInstruction.locale || "en-US";
-        result = new Intl.NumberFormat(locale).format(result);
+        // Use currency if available. Warning: this needs to be shimmed for Safari as of Feb 2017.
+        if( fmtInstruction.currency )
+            result = new Intl.NumberFormat(locale, {style: 'currency', currency: fmtInstruction.currency}).format(result);
+        else
+            result = new Intl.NumberFormat(locale).format(result);
     }
     if (fmtInstruction.showAsPercent && ['number', 'string'].indexOf(typeof result) > -1)
         result = `${result}%`;
