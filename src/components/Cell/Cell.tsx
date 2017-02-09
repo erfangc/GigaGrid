@@ -38,7 +38,6 @@ export class Cell extends React.Component<CellProps & ClassAttributes<Cell>, any
     render() {
         const {row, isFirstColumn} = this.props;
         if (!row.isDetailRow() && isFirstColumn) {
-            var a = 1 + 1;
             return this.helper.renderCellWithCollapseExpandButton();
         } else {
             return this.helper.renderCellWithoutCollapseExpandButton();
