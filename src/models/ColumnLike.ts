@@ -29,6 +29,7 @@ export interface FormatInstruction {
     multiplier?: number
     separator?: boolean
     locale?: string
+    currency?: string
 }
 
 export interface ColumnDef extends ColumnLike {

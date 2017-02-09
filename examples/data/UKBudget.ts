@@ -56,7 +56,7 @@ const columnDefs: ColumnDef[] = [
         title: "Total Expense",
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
-        formatInstruction: {roundTo: 0}
+        formatInstruction: {currency: "EUR"}
     },
     {
         colTag: "Age",
