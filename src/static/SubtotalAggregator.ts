@@ -92,7 +92,11 @@ export function format(value: any, fmtInstruction: FormatInstruction): any {
         const locale: string = fmtInstruction.locale || "en-US";
         // Use currency if available. Warning: this needs to be shimmed for Safari as of Feb 2017.
         if( fmtInstruction.currency )
-            result = new Intl.NumberFormat(locale, {style: 'currency', currency: fmtInstruction.currency}).format(result);
+            result = new Intl.NumberFormat(locale, {
+                style: 'currency',
+                maximumFractionDigits: fmtInstruction.roundTo,
+                currency: fmtInstruction.currency
+            }).format(result);
         else
             result = new Intl.NumberFormat(locale).format(result);
     }
