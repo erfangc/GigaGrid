@@ -4,7 +4,7 @@ import {Row} from "../../models/Row";
 import {Column} from "../../models/ColumnLike";
 import {GigaActionType} from "../../store/GigaStore";
 import {GridComponentProps} from "../GigaGrid";
-import {CellProps, Cell} from "../Cell";
+import {CellProps, Cell} from "../Cell/Cell";
 import {GigaProps} from "../GigaProps";
 
 export interface GigaRowProps extends GridComponentProps<GigaRow> {

@@ -1,6 +1,7 @@
 {
   "name": "giga-grid",
   "version": "0.7.5",
+  "version": "0.8.0",
   "description": "Massively performant, multi-layered React.js table widget Written in TypeScript",
   "main": "dist/giga-grid.js",
   "files": [
@@ -60,7 +61,7 @@
     "stylus": "^0.53.0",
     "stylus-loader": "^1.6.1",
     "ts-loader": "^0.8.1",
-    "typescript": "~2.1.0",
+    "typescript": "^2.1.5",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.11",
     "webpack-dev-server": "^1.16.2"

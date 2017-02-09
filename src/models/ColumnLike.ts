@@ -1,7 +1,7 @@
 import {Row} from "./Row";
 import {GigaState} from "../components/GigaGrid";
 import * as _ from "lodash";
-import {CellProps} from "../components/Cell";
+import {CellProps} from "../components/Cell/Cell";
 
 export enum AggregationMethod {
     SUM, WEIGHTED_AVERAGE, AVERAGE, RANGE, COUNT, COUNT_DISTINCT, COUNT_OR_DISTINCT, NONE
