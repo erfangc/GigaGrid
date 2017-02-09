@@ -44,5 +44,32 @@ export class Cell extends React.Component<CellProps & ClassAttributes<Cell>, any
         }
     }
 
+    onSelect() {
+        this.helper.onSelect();
+    }
+
+    calculateContainerStyle() {
+        return this.helper.calculateContainerStyle();
+    }
+
+    calculateIdentation(): string {
+        return this.helper.calculateIdentation();
+    }
+
+    renderCellWithoutCollapseExpandButton(): JSX.Element {
+        return this.helper.renderCellWithoutCollapseExpandButton();
+    }
+
+    renderCellWithCollapseExpandButton(): any|JSX.Element {
+        return this.helper.renderCellWithCollapseExpandButton();
+    }
+
+    renderContentContainerWithElement(elm: JSX.Element, className?: string): JSX.Element {
+        return this.helper.renderContentContainerWithElement(elm, className);
+    }
+
+    onCollapseToggle(e: React.MouseEvent) {
+        this.helper.onCollapseToggle(e);
+    }
 
 }
