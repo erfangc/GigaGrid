@@ -191,7 +191,6 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
                                  gridProps={this.props}/>
                 </div>
                 <div ref={c=>state.viewport=c}
-                     onScroll={()=>this.dispatchDisplayBoundChange()}
                      className="giga-grid-body-viewport"
                      style={bodyStyle}>
                     {
@@ -357,17 +356,35 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         return style.sheet;
     }
 
+
+    /**
+     * I don't love this, but it's only related to scrolling and has nothing to do with state/rendering of the component
+     * so rather than making a re-render happen with a state change, we do this.  This is to fix this problem:
+     * http://stackoverflow.com/questions/26326958/stopping-mousewheel-event-from-happening-twice-in-osx
+     */
+    private shouldScroll = true;
+    
+    // We need to define the exact function to use to bind event listeners to so we can remove them properly on unmount
+    private scrollHandlerEventFunction = (e:Event) => this.scrollHandler(e);
+    private scrollWheelHandlerEventFunction = (e:Event) => this.wheelScrollHandler(e);
+    
     scrollHandler(e) {
         e.preventDefault();
-        const node: Element = ReactDOM.findDOMNode<Element>(this);
-        const dataContainer = $(node).parent().find('.giga-grid-right-data-container');
+        e.stopPropagation();
+        if( this.shouldScroll ) {
+            this.shouldScroll = false;
+            const node: Element = ReactDOM.findDOMNode<Element>(this);
+            const dataContainer = $(node).parent().find('.giga-grid-right-data-container');
 
-        const scrollLeftAmount: number = dataContainer.scrollLeft();
-        const scrollTopAmount: number = dataContainer.scrollTop();
+            const scrollLeftAmount: number = dataContainer.scrollLeft();
+            const scrollTopAmount: number = dataContainer.scrollTop();
 
-        $(node).parent().find('.giga-grid-left-headers-container').scrollTop(scrollTopAmount);
-        $(node).parent().parent().find('.right-scrolling-headers').scrollTop(scrollTopAmount);
-        $(node).parent().parent().find('.right-scrolling-headers').scrollLeft(scrollLeftAmount);
+            $(node).parent().find('.giga-grid-left-headers-container').scrollTop(scrollTopAmount);
+            dataContainer.scrollTop(scrollTopAmount);
+            $(node).parent().parent().find('.right-scrolling-headers').scrollLeft(scrollLeftAmount);
+            this.dispatchDisplayBoundChange();
+            this.shouldScroll = true;
+        }
     }
 
     /**
@@ -376,14 +393,27 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
      */
     wheelScrollHandler(e) {
         e.preventDefault();
+        e.stopPropagation();
+        this.shouldScroll = false;
         // This covers all browsers, see https://www.sitepoint.com/html5-javascript-mouse-wheel/
         const amountToScroll: number = -Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))) * 53;
         const node: Element = ReactDOM.findDOMNode<Element>(this);
+        const leftHeaders = $(node).parent().find('.giga-grid-left-headers-container');
         const dataContainer = $(node).parent().find('.giga-grid-right-data-container');
         const scrollTopAmount: number = dataContainer.scrollTop();
-
-        $(node).parent().find('.giga-grid-left-headers-container').scrollTop(scrollTopAmount + amountToScroll);
-        $(node).parent().parent().find('.giga-grid-right-data-container').scrollTop(scrollTopAmount + amountToScroll);
+        
+        leftHeaders.scrollTop(scrollTopAmount + amountToScroll);
+        dataContainer.scrollTop(scrollTopAmount + amountToScroll);
+        this.dispatchDisplayBoundChange();
+        setTimeout(() => {
+            // Due to scrolling features on some OS (e.g. mac), let's make sure the panels are scrolled the correct spot
+            // http://stackoverflow.com/questions/26326958/stopping-mousewheel-event-from-happening-twice-in-osx
+            if (amountToScroll > 0 ) {
+                leftHeaders.scrollTop(scrollTopAmount + amountToScroll);
+                dataContainer.scrollTop(scrollTopAmount + amountToScroll);
+            }
+            this.shouldScroll = true;
+        });
     }
 
     reflowTable(){
@@ -402,10 +432,11 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
             const node: Element = ReactDOM.findDOMNode<Element>(this);
             const leftPanel: Element = $(node).find('.giga-grid-left-headers-container').get(0);
             const rightPanel: Element = $(node).find('.giga-grid-right-data-container').get(0);
-            rightPanel && rightPanel.addEventListener('scroll', this.scrollHandler);
-            rightPanel && rightPanel.addEventListener('mousewheel', this.wheelScrollHandler);
-            leftPanel && leftPanel.addEventListener('mousewheel', this.wheelScrollHandler);
-            leftPanel && leftPanel.addEventListener('MozMousePixelScroll', this.wheelScrollHandler);
+            rightPanel && rightPanel.addEventListener('scroll', this.scrollHandlerEventFunction);
+            rightPanel && rightPanel.addEventListener('mousewheel', this.scrollWheelHandlerEventFunction);
+            leftPanel && leftPanel.addEventListener('mousewheel', this.scrollWheelHandlerEventFunction);
+            leftPanel && leftPanel.addEventListener('MozMousePixelScroll', this.scrollWheelHandlerEventFunction);
+            rightPanel && rightPanel.addEventListener('MozMousePixelScroll', this.scrollWheelHandlerEventFunction);
         }
 
         /*
@@ -424,12 +455,13 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
 
             // Unbind the scroll listener
             const node: Element = ReactDOM.findDOMNode<Element>(this);
-            $(node).find('.giga-grid-right-data-container').unbind('scroll', this.scrollHandler);
             const leftPanel: Element = $(node).find('.giga-grid-left-headers-container').get(0);
             const rightPanel: Element = $(node).find('.giga-grid-right-data-container').get(0);
-            rightPanel && rightPanel.addEventListener('scroll', this.scrollHandler);
-            leftPanel && leftPanel.removeEventListener('mousewheel', this.wheelScrollHandler);
-            leftPanel && leftPanel.removeEventListener('MozMousePixelScroll', this.wheelScrollHandler);
+            rightPanel && rightPanel.removeEventListener('scroll', this.scrollHandlerEventFunction);
+            rightPanel && rightPanel.removeEventListener('mousewheel', this.scrollWheelHandlerEventFunction);
+            leftPanel && leftPanel.removeEventListener('mousewheel', this.scrollWheelHandlerEventFunction);
+            leftPanel && leftPanel.removeEventListener('MozMousePixelScroll', this.scrollWheelHandlerEventFunction);
+            rightPanel && rightPanel.removeEventListener('MozMousePixelScroll', this.scrollWheelHandlerEventFunction);
         }
     }
 

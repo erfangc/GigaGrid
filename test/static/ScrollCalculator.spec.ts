@@ -33,28 +33,28 @@ describe("ScrollCalculator", ()=> {
         it("can compute displayStart, displayEnd given fixed row height and the two DOM elements representing a viewport and a canvas", ()=> {
             const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(rowHeight, null, viewport, canvas);
             expect(displayStart).toBe(0);
-            expect(displayEnd).toBe(expectedRowsInViewPort);
+            expect(displayEnd).toBe(expectedRowsInViewPort + 2);
         });
 
         it("can compute the correct displayStart, displayEnd when the viewport are scrolled", ()=> {
             viewport.scrollTop(100);
             const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(rowHeight, null, viewport, canvas);
-            expect(displayStart).toBe(2);
-            expect(displayEnd).toBe(2 + expectedRowsInViewPort);
+            expect(displayStart).toBe(2 - 2);
+            expect(displayEnd).toBe(2 + expectedRowsInViewPort + 2);
         });
 
         it("can compute the correct displayStart, displayEnd when the viewport are scrolled further", ()=> {
             $(viewport).scrollTop(650);
             const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(rowHeight, null, viewport, canvas);
-            expect(displayStart).toBe(18);
-            expect(displayEnd).toBe(18 + expectedRowsInViewPort);
+            expect(displayStart).toBe(18 - 2);
+            expect(displayEnd).toBe(18 + expectedRowsInViewPort + 2);
         });
 
         it("can compute the correct displayStart, displayEnd when the viewport are scrolled all the way", ()=> {
             $(viewport).scrollTop(canvas.height() - viewport.height());
             const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(rowHeight, null, viewport, canvas);
-            expect(displayStart).toBe(numRows - expectedRowsInViewPort);
-            expect(displayEnd).toBe(numRows);
+            expect(displayStart).toBe(numRows - expectedRowsInViewPort - 2);
+            expect(displayEnd).toBe(numRows + 2);
         });
 
     });
