@@ -23,6 +23,11 @@ export class ScrollCalculator {
             if( (displayEnd - displayStart) * parsedRowHeight < parsedBodyHeight )
                 displayEnd = Math.round(parsedBodyHeight / parsedRowHeight) + displayStart;
         }
+        
+        // Adding two as a buffer to prevent unwanted "flashing" behavior on some browsers when using scroll wheel
+        displayStart = Math.max(0, displayStart - 2);
+        displayEnd += 2;
+        
         return {
             displayStart,
             displayEnd
