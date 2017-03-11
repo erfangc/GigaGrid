@@ -1,4 +1,3 @@
-///<reference path="../../typings/index.d.ts"/>
 import * as React from "react";
 import "../../styles/theme/Default.styl";
 import {ScrollableGigaRow} from "../../src/components/GigaRow/ScrollableGigaRow";

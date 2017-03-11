@@ -1,10 +1,13 @@
-import {Column, AggregationMethod, FormatInstruction} from "../models/ColumnLike";
-import {Row} from "../models/Row";
-import {Tree} from "./TreeBuilder";
-import * as _ from "lodash";
+import { Column, AggregationMethod, FormatInstruction } from "../models/ColumnLike";
+import { Row } from "../models/Row";
+import { Tree } from "./TreeBuilder";
 
 function straightSum(detailRows: Row[], column: Column): number {
-    return _.sum(detailRows.map(r=>r.getByColTag(column.colTag)));
+    var sum = 0;
+    for (let i = 0; i < detailRows.length; i++) {
+        sum += detailRows[i].get(column);
+    }
+    return sum;
 }
 
 function weightedAverage(detailRows: Row[], column: Column): number {
@@ -12,15 +15,17 @@ function weightedAverage(detailRows: Row[], column: Column): number {
     let sumproduct = 0.0;
     for (let i = 0; i < detailRows.length; i++) {
         denom = denom + detailRows[i].getByColTag(column.weightBy);
-        sumproduct = sumproduct + detailRows[i].getByColTag(column.colTag) * detailRows[i].getByColTag(column.weightBy)
+        sumproduct = sumproduct + detailRows[i].getByColTag(column.colTag) * detailRows[i].getByColTag(column.weightBy);
     }
-    if (denom !== 0.0)
+    if (denom !== 0.0) {
         return sumproduct / denom;
+    }
 }
 
 function average(detailRows: Row[], column: Column): number {
-    if (detailRows.length === 0)
+    if (detailRows.length === 0) {
         return 0;
+    }
     return straightSum(detailRows, column) / detailRows.length;
 }
 
@@ -28,22 +33,9 @@ function count(detailRows: Row[]): number {
     return detailRows.length;
 }
 
-function countOrDistinct(detailRows: Row[], column: Column): any {
-    const distinctCount = countDistinct(detailRows, column);
-    const c = count(detailRows);
-    if (distinctCount !== 1)
-        return `${distinctCount}/${c}`;
-    else
-        return detailRows[0].getByColTag(column.colTag);
-}
-
-function countDistinct(detailRows: Row[], column: Column): number {
-    return _.chain(detailRows).map((r: Row)=>r.getByColTag(column.colTag)).sortBy().uniq(true).value().length;
-}
-
 function range(detailRows: Row[], column: Column): string {
-    const val = detailRows.map((r: Row)=>r.getByColTag(column.colTag));
-    return `${_.min(val)} - ${_.max(val)}`;
+    const val = detailRows.map((r: Row) => r.getByColTag(column.colTag));
+    return `${Math.min(...val)} - ${Math.max(...val)}`;
 }
 
 /**
@@ -91,7 +83,7 @@ export function format(value: any, fmtInstruction: FormatInstruction): any {
         // Provide legacy support for fmtInstruction.separator
         const locale: string = fmtInstruction.locale || "en-US";
         // Use currency if available. Warning: this needs to be shimmed for Safari as of Feb 2017.
-        if( fmtInstruction.currency )
+        if (fmtInstruction.currency)
             result = new Intl.NumberFormat(locale, {
                 style: 'currency',
                 maximumFractionDigits: fmtInstruction.roundTo,
@@ -122,7 +114,7 @@ export class SubtotalAggregator {
      * @param columns
      */
     private static aggregateChildren(subtotalRow: Row, columns: Column[]) {
-        subtotalRow.children.forEach(childRow=> {
+        subtotalRow.children.forEach(childRow => {
             SubtotalAggregator.aggregateSubtotalRow(childRow, columns);
             if (childRow.children.length > 0)
                 SubtotalAggregator.aggregateChildren(childRow, columns);
@@ -139,12 +131,6 @@ export class SubtotalAggregator {
                     break;
                 case AggregationMethod.COUNT:
                     value = count(detailRows);
-                    break;
-                case AggregationMethod.COUNT_DISTINCT:
-                    value = countDistinct(detailRows, column);
-                    break;
-                case AggregationMethod.COUNT_OR_DISTINCT:
-                    value = countOrDistinct(detailRows, column);
                     break;
                 case AggregationMethod.RANGE:
                     value = range(detailRows, column);

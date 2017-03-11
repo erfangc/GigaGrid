@@ -25,8 +25,9 @@ export class SortFactory {
             rootRow.children.forEach((child)=> {
                 SortFactory.recursivelyExecuteSort(child, fn);
             })
-        } else
+        } else {
             rootRow.detailRows.sort(fn);
+        }
     }
 
     private static createCompositeSorter(sortBys:Column[], firstColumn?:Column):(a:Row, b:Row)=>number {

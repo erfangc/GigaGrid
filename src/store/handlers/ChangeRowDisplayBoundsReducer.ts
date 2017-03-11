@@ -1,18 +1,17 @@
-import {GigaState} from "../../components/GigaGrid";
-import {GigaAction} from "../GigaStore";
-import {ScrollCalculator} from "../../static/ScrollCalculator";
+import { GigaState } from "../../components/GigaGrid";
+import { GigaAction } from "../GigaStore";
+import { ScrollCalculator } from "../../static/ScrollCalculator";
 
-export function changeDisplayBoundsHandler(state:GigaState, action:ChangeRowDisplayBoundsAction) {
-    const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(action.rowHeight, action.bodyHeight, action.viewport, action.canvas);
-    const newState = _.clone(state);
+export function changeDisplayBoundsHandler(state: GigaState, action: ChangeRowDisplayBoundsAction) {
+    let {canvas, viewport} = state;
+    const { displayStart, displayEnd } = ScrollCalculator.computeDisplayBoundaries(action.rowHeight, action.bodyHeight, viewport);
+    const newState = Object.assign({}, state);
     newState.displayStart = displayStart;
     newState.displayEnd = displayEnd;
     return newState;
 }
 
 export interface ChangeRowDisplayBoundsAction extends GigaAction {
-    viewport:JQuery
-    canvas:JQuery
-    rowHeight:string
-    bodyHeight:string
+    rowHeight: string;
+    bodyHeight: string;
 }

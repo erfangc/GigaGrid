@@ -20,17 +20,19 @@ div.giga-grid
       overflow-x auto !important
 
   div.giga-grid-left-headers-container, div.giga-grid-right-data-container
-    float left
+    display inline-block
     overflow hidden
 
   div.giga-grid-body-viewport
-    overflow hidden
+    overflow-y scroll
+    white-space nowrap
+    overflow-x hidden
     display inline-block // this allow the viewport to be as wide as the canva
     max-width 100%
 
   div.giga-grid-right-data-container
     overflow-x auto
-    overflow-y scroll
+    overflow-y hidden
 
   div.giga-grid-header-container
     max-width 100%
@@ -59,21 +61,6 @@ div.giga-grid
 
   div.table-header:first-of-type
     padding-right 20px!important // Need room for gear icon
-
-  tr th
-    font-weight normal
-
-  tr th.column-group
-    text-align center
-
-  tr td
-    white-space: nowrap
-
-  tr td i:hover
-    cursor pointer
-
-  thead tr:hover
-    cursor pointer
 
   .text-align-right
     text-align right

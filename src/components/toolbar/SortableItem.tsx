@@ -3,7 +3,7 @@ import * as classNames from "classnames";
 import {ColumnDef} from "../../models/ColumnLike";
 import {SortableDataTransfer} from "./SettingsPopover";
 
-interface SortableItemProps extends React.Props<SortableItem> {
+export interface SortableItemProps extends React.Props<SortableItem> {
     column:ColumnDef
     idx:number
     type:string
@@ -20,7 +20,7 @@ export class SortableItem extends React.Component<SortableItemProps,{}> {
         }
     }
 
-    onDrop(e:React.DragEvent) {
+    onDrop(e:React.DragEvent<any>) {
 
         const src:SortableDataTransfer = {
             type: e.dataTransfer.getData('type'),
@@ -36,20 +36,20 @@ export class SortableItem extends React.Component<SortableItemProps,{}> {
         this.props.onUpdate(src, dest)
     }
 
-    onDragStart(e:React.DragEvent) {
+    onDragStart(e:React.DragEvent<any>) {
         e.dataTransfer.setData('colTag', this.props.column.colTag);
         e.dataTransfer.setData('type', this.props.type);
         e.dataTransfer.setData('idx', `${this.props.idx}`);
     }
 
-    onDragOver(e:React.DragEvent) {
+    onDragOver(e:React.DragEvent<any>) {
         e.preventDefault();
         this.setState({
             isDraggingOver: true
         });
     }
 
-    onDragLeave(e:React.DragEvent) {
+    onDragLeave(e:React.DragEvent<any>) {
         e.preventDefault();
         this.setState({
             isDraggingOver: false

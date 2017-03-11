@@ -1,15 +1,23 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "lib": [
+      "dom",
+      "es6"
+    ],
     "module": "commonjs",
+    "moduleResolution": "node",
     "sourceMap": true,
+    "declaration": true,
+    "declarationDir": "lib",
     "jsx": "react",
-	"outDir": "build",
     "allowSyntheticDefaultImports": true,
     "outDir": "build"
   },
   "exclude": [
     "dist",
-    "node_modules"
+    "node_modules",
+    "lib",
+    "index.d.ts"
   ]
 }

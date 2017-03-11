@@ -10,7 +10,7 @@ describe('GigaGrid', ()=> {
         const peopleData = TestUtils.newPeopleTestData();
         const data:any[] = peopleData.rawData();
         const columnDefs:ColumnDef[] = peopleData.columnDefs();
-        let component: React.Component<any, any> = null;
+        let component: GigaGrid = null;
         ReactTestUtils.renderIntoDocument(<GigaGrid ref={c=>component=c} data={data} columnDefs={columnDefs}/>);
         const rows = ReactTestUtils.scryRenderedDOMComponentsWithClass(component, "giga-grid-row");
         expect(rows.length).toBe(10);

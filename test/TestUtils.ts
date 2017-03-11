@@ -1,23 +1,23 @@
-import {Row} from "../src/models/Row";
-import {ColumnDef, ColumnFormat, AggregationMethod, Column, ColumnGroupDef} from "../src/models/ColumnLike";
-import {TreeBuilder, Tree} from "../src/static/TreeBuilder";
-import {GigaState} from "../src/components/GigaGrid";
+import { Row } from "../src/models/Row";
+import { ColumnDef, ColumnFormat, AggregationMethod, Column, ColumnGroupDef } from "../src/models/ColumnLike";
+import { TreeBuilder, Tree } from "../src/static/TreeBuilder";
+import { GigaState } from "../src/components/GigaGrid";
 
-interface TestDataFactory {
-    rawData():any[]
-    columnDefs():ColumnDef[]
-    tree():Tree
-    columns():Column[]
-    detailRows():Row[]
+export interface TestDataFactory {
+    rawData(): any[]
+    columnDefs(): ColumnDef[]
+    tree(): Tree
+    columns(): Column[]
+    detailRows(): Row[]
 }
 
-class ComprehensiveTypeData implements TestDataFactory {
+export class ComprehensiveTypeData implements TestDataFactory {
 
     constructor() {
 
     }
 
-    rawData():any[] {
+    rawData(): any[] {
         return [
             {
                 "id": 1,
@@ -186,7 +186,7 @@ class ComprehensiveTypeData implements TestDataFactory {
             }];
     }
 
-    columnDefs():ColumnDef[] {
+    columnDefs(): ColumnDef[] {
         return [
             {
                 colTag: "id",
@@ -239,25 +239,25 @@ class ComprehensiveTypeData implements TestDataFactory {
 
 }
 
-class PeopleTestData implements TestDataFactory {
+export class PeopleTestData implements TestDataFactory {
 
     constructor() {
     }
 
-    rawData():any[] {
-        return [{"gender": "Female", "first_name": "Maria", "last_name": "Young", "gift": 10},
-            {"gender": "Female", "first_name": "Kimberly", "last_name": "Kennedy", "gift": 2},
-            {"gender": "Female", "first_name": "Lisa", "last_name": "Hall", "gift": 2},
-            {"gender": "Female", "first_name": "Andrea", "last_name": "Peterson", "gift": 4},
-            {"gender": "Male", "first_name": "Clarence", "last_name": "Cox", "gift": 9},
-            {"gender": "Male", "first_name": "Charles", "last_name": "Riley", "gift": 7},
-            {"gender": "Male", "first_name": "Bruce", "last_name": "Turner", "gift": 2},
-            {"gender": "Female", "first_name": "Shirley", "last_name": "Riley", "gift": 9},
-            {"gender": "Male", "first_name": "David", "last_name": "Hunt", "gift": 7},
-            {"gender": "Male", "first_name": "Thomas", "last_name": "Bradley", "gift": 6}];
+    rawData(): any[] {
+        return [{ "gender": "Female", "first_name": "Maria", "last_name": "Young", "gift": 10 },
+        { "gender": "Female", "first_name": "Kimberly", "last_name": "Kennedy", "gift": 2 },
+        { "gender": "Female", "first_name": "Lisa", "last_name": "Hall", "gift": 2 },
+        { "gender": "Female", "first_name": "Andrea", "last_name": "Peterson", "gift": 4 },
+        { "gender": "Male", "first_name": "Clarence", "last_name": "Cox", "gift": 9 },
+        { "gender": "Male", "first_name": "Charles", "last_name": "Riley", "gift": 7 },
+        { "gender": "Male", "first_name": "Bruce", "last_name": "Turner", "gift": 2 },
+        { "gender": "Female", "first_name": "Shirley", "last_name": "Riley", "gift": 9 },
+        { "gender": "Male", "first_name": "David", "last_name": "Hunt", "gift": 7 },
+        { "gender": "Male", "first_name": "Thomas", "last_name": "Bradley", "gift": 6 }];
     }
 
-    columnDefs():ColumnDef[] {
+    columnDefs(): ColumnDef[] {
         return [
             {
                 colTag: "first_name",
@@ -286,19 +286,19 @@ class PeopleTestData implements TestDataFactory {
         ];
     }
 
-    tree():Tree {
-        return TreeBuilder.buildTree(this.rawData(), [{colTag: "gender"}]);
+    tree(): Tree {
+        return TreeBuilder.buildTree(this.rawData(), [{ colTag: "gender" }]);
     }
 
-    columns():Column[] {
+    columns(): Column[] {
         return this.columnDefs();
     }
 
-    detailRows():Row[] {
+    detailRows(): Row[] {
         return TreeBuilder.buildTree(this.rawData()).getRoot().detailRows;
     }
 
-    gridProps():any{
+    gridProps(): any {
         return {
             staticLeftHeaders: 1
         }
@@ -307,27 +307,27 @@ class PeopleTestData implements TestDataFactory {
 
 export class TestUtils {
 
-    static getSimpleRawDataWithMissing():any[] {
+    static getSimpleRawDataWithMissing(): any[] {
         return [
-            {"col1": "A", "col2": "C"},
-            {"col1": "B"},
-            {"col1": "A", "col2": "C"},
-            {"col1": "A", "col2": "D"},
-            {"col1": "B"}
+            { "col1": "A", "col2": "C" },
+            { "col1": "B" },
+            { "col1": "A", "col2": "C" },
+            { "col1": "A", "col2": "D" },
+            { "col1": "B" }
         ];
     }
 
-    static getSimpleRawData():any[] {
+    static getSimpleRawData(): any[] {
         return [
-            {"col1": "A", "col2": "C"},
-            {"col1": "B", "col2": "C"},
-            {"col1": "A", "col2": "C"},
-            {"col1": "A", "col2": "D"},
-            {"col1": "B", "col2": "D"}
+            { "col1": "A", "col2": "C" },
+            { "col1": "B", "col2": "C" },
+            { "col1": "A", "col2": "C" },
+            { "col1": "A", "col2": "D" },
+            { "col1": "B", "col2": "D" }
         ];
     }
 
-    static getDetailRow():Row {
+    static getDetailRow(): Row {
         let row = new Row();
         row.data = {
             "numCol1": 7,
@@ -338,7 +338,7 @@ export class TestUtils {
         return row;
     }
 
-    static getSimpleSubtotalRow():Row {
+    static getSimpleSubtotalRow(): Row {
         const subtotalRow = new Row();
         subtotalRow.bucketInfo = {
             colTag: "col",
@@ -361,26 +361,26 @@ export class TestUtils {
      * returns column definitions for two numeric columns: numCol1, numCol2, as well as two string columns: textCol1, textCol2
      * @returns {ColumnDef[]}
      */
-    static getSimpleColumns():ColumnDef[] {
-        const columnDef1:ColumnDef = {
+    static getSimpleColumns(): ColumnDef[] {
+        const columnDef1: ColumnDef = {
             colTag: "numCol1",
             title: "",
             format: ColumnFormat.NUMBER,
             aggregationMethod: AggregationMethod.SUM
         };
-        const columnDef2:ColumnDef = {
+        const columnDef2: ColumnDef = {
             colTag: "numCol2",
             title: "",
             format: ColumnFormat.NUMBER,
             aggregationMethod: AggregationMethod.SUM
         };
-        const columnDef3:ColumnDef = {
+        const columnDef3: ColumnDef = {
             colTag: "textCol1",
             title: "",
             format: ColumnFormat.STRING,
             aggregationMethod: AggregationMethod.NONE
         };
-        const columnDef4:ColumnDef = {
+        const columnDef4: ColumnDef = {
             colTag: "textCol2",
             title: "",
             format: ColumnFormat.STRING,
@@ -395,11 +395,11 @@ export class TestUtils {
         ];
     }
 
-    static newPeopleTestData():PeopleTestData {
+    static newPeopleTestData(): PeopleTestData {
         return new PeopleTestData();
     }
 
-    static newComprehensiveTypeData():ComprehensiveTypeData {
+    static newComprehensiveTypeData(): ComprehensiveTypeData {
         return new ComprehensiveTypeData();
     }
 
@@ -438,20 +438,24 @@ export class TestUtils {
             displayStart: 0,
             displayEnd: 1,
             showSettingsPopover: false,
-            viewport:undefined,
-            canvas:undefined
+            viewport: undefined,
+            canvas: undefined,
+            leftBody: undefined,
+            rightBody: undefined,
+            leftHeader: undefined,
+            rightHeader: undefined
         }
     };
 
-    static getMockColumnGroupDefs():ColumnGroupDef[] {
+    static getMockColumnGroupDefs(): ColumnGroupDef[] {
         return this.mockColumnGroupDefinition.columnGroupDefs;
     }
 
-    static getMockColumnDefs():Column[] {
+    static getMockColumnDefs(): Column[] {
         return this.mockColumnGroupDefinition.columnDefs;
     }
 
-    static getMockState():GigaState {
+    static getMockState(): GigaState {
         return this.mockColumnGroupDefinition.state;
     }
 }

@@ -10,6 +10,7 @@ const columnDefs: ColumnDef[] = [
     {
         colTag: "WFood",
         title: "Food",
+        width: 180,
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
         formatInstruction: {

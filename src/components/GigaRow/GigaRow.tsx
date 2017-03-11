@@ -30,7 +30,7 @@ export abstract class GigaRow extends React.Component<GigaRowProps, any> {
     render() {
         let {row, rowHeight, columns} = this.props;
         let subtotalLvlClassName = `subtotal-row-${row.sectorPath.length - 1}`;
-        let rowClassNames: ClassDictionary = {
+        let rowClassNames = {
             "giga-grid-row": true,
             "placeholder-false": true,
             "subtotal-row": !row.isDetailRow(),
@@ -43,14 +43,14 @@ export abstract class GigaRow extends React.Component<GigaRowProps, any> {
         return (
             <div className={cx}
                  style={{height: rowHeight}}
-                 onClick={(e: React.MouseEvent) => this.rowSelect(e)}
+                 onClick={(e: React.MouseEvent<any>) => this.rowSelect(e)}
             >
                 {cells}
             </div>
         );
     }
 
-    rowSelect(e: React.MouseEvent) {
+    rowSelect(e: React.MouseEvent<any>) {
         e.preventDefault();
         let {dispatcher, row} = this.props;
         let action = {

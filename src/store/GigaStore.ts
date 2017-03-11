@@ -1,26 +1,25 @@
-import * as _ from "lodash";
-import {GigaState} from "../components/GigaGrid";
-import {ReduceStore} from "flux/utils";
-import {Dispatcher} from "flux";
-import {TreeRasterizer} from "../static/TreeRasterizer";
-import initialStateReducer, {InitializeAction} from "./handlers/InitializeReducer";
+import { GigaState } from "../components/GigaGrid";
+import { ReduceStore } from "flux/utils";
+import { Dispatcher } from "flux";
+import { TreeRasterizer } from "../static/TreeRasterizer";
+import initialStateReducer, { InitializeAction } from "./handlers/InitializeReducer";
 import {
     rowSelectHandler,
     cellSelectHandler,
     ToggleRowSelectAction,
     ToggleCellSelectAction
 } from "./handlers/SelectReducers";
-import {changeDisplayBoundsHandler, ChangeRowDisplayBoundsAction} from "./handlers/ChangeRowDisplayBoundsReducer";
-import {sortUpdateHandler, cleartSortHandler, SortUpdateAction} from "./handlers/SortReducers";
+import { changeDisplayBoundsHandler, ChangeRowDisplayBoundsAction } from "./handlers/ChangeRowDisplayBoundsReducer";
+import { sortUpdateHandler, cleartSortHandler, SortUpdateAction } from "./handlers/SortReducers";
 import {
     toggleCollapseHandler,
     collapseAllHandler,
     expandAllHandler,
     ToggleCollapseAction
 } from "./handlers/RowCollapseReducers";
-import {columnUpdateHandler, ColumnUpdateAction} from "./handlers/ColumnUpdateReducer";
-import {GigaProps} from "../components/GigaProps";
-import {CellContentChangeAction, cellContentChangeHandler} from "./handlers/CellContentChange";
+import { columnUpdateHandler, ColumnUpdateAction } from "./handlers/ColumnUpdateReducer";
+import { GigaProps } from "../components/GigaProps";
+import { CellContentChangeAction, cellContentChangeHandler } from "./handlers/CellContentChange";
 
 /*
  define the # of rows necessary to trigger progressive rendering
@@ -33,7 +32,7 @@ export const PROGRESSIVE_RENDERING_THRESHOLD: number = 20;
  * there are no way to direct set the state. The GigaGrid controller-view React Component draws its state updates from this store. Updates are automatically triggered for every state mutation through
  * a callback. (i.e. all GigaGrid instances must call store.addListener(()=>this.setState(this.store.getState())) during construction)
  */
-export class GigaStore extends ReduceStore<GigaState> {
+export class GigaStore extends ReduceStore<GigaState, GigaAction> {
 
     private props: GigaProps;
 
@@ -57,12 +56,12 @@ export class GigaStore extends ReduceStore<GigaState> {
      */
     initialize(action: InitializeAction): GigaState {
         // if props not passed we will use this.props
-        const overrideAction: InitializeAction = _.assign<{},{},{},InitializeAction>({}, action, {props: action.props || this.props});
+        const overrideAction: InitializeAction = Object.assign({}, action, { props: action.props || this.props });
         return initialStateReducer(overrideAction);
     }
 
     reduce(state: GigaState,
-           action: GigaAction): GigaState {
+        action: GigaAction): GigaState {
 
         let newState: GigaState;
         switch (action.type) {
@@ -100,7 +99,7 @@ export class GigaStore extends ReduceStore<GigaState> {
                 newState = cellSelectHandler(state, action as ToggleCellSelectAction, this.props, this.getDispatcher());
                 break;
             case GigaActionType.TOGGLE_SETTINGS_POPOVER:
-                newState = _.assign<{},GigaState>({}, state, {showSettingsPopover: !state.showSettingsPopover});
+                newState = Object.assign({}, state, { showSettingsPopover: !state.showSettingsPopover });
                 break;
             default:
                 newState = state;
@@ -110,23 +109,23 @@ export class GigaStore extends ReduceStore<GigaState> {
          determine if an action should trigger rasterization
          todo I wonder if we need to re-compute display bounds after rasterization if so, viewport and canvas must become states so we can access them here
          */
-        if (GigaStore.shouldTriggerRasterization(action))
+        if (GigaStore.shouldTriggerRasterization(action)) {
             newState.rasterizedRows = TreeRasterizer.rasterize(newState.tree);
-
+        }
         return newState;
     }
 
     static shouldTriggerRasterization(action: GigaAction) {
         return [
-                GigaActionType.CLEAR_SORT,
-                GigaActionType.NEW_SORT,
-                GigaActionType.TOGGLE_ROW_COLLAPSE,
-                GigaActionType.COLLAPSE_ALL,
-                GigaActionType.EXPAND_ALL,
-                GigaActionType.COLLAPSE_ROW,
-                GigaActionType.GOT_MORE_DATA,
-                GigaActionType.COLUMNS_UPDATE
-            ].indexOf(action.type) !== -1;
+            GigaActionType.CLEAR_SORT,
+            GigaActionType.NEW_SORT,
+            GigaActionType.TOGGLE_ROW_COLLAPSE,
+            GigaActionType.COLLAPSE_ALL,
+            GigaActionType.EXPAND_ALL,
+            GigaActionType.COLLAPSE_ROW,
+            GigaActionType.GOT_MORE_DATA,
+            GigaActionType.COLUMNS_UPDATE
+        ].indexOf(action.type) !== -1;
     }
 
 }
@@ -155,5 +154,5 @@ export enum GigaActionType {
 }
 
 export interface GigaAction {
-    type: GigaActionType
+    type: GigaActionType;
 }

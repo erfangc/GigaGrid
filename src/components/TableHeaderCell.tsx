@@ -1,29 +1,28 @@
 import * as React from "react";
 import * as classNames from "classnames";
-import {Column, ColumnFormat, SortDirection} from "../models/ColumnLike";
-import {GridComponentProps} from "./GigaGrid";
-import {GigaActionType} from "../store/GigaStore";
-import * as _ from "lodash";
-import {ToolbarToggle} from "./toolbar/Toolbar";
-import {SortUpdateAction} from "../store/handlers/SortReducers";
+import { Column, ColumnFormat, SortDirection } from "../models/ColumnLike";
+import { GridComponentProps } from "./GigaGrid";
+import { GigaActionType } from "../store/GigaStore";
+import { ToolbarToggle } from "./toolbar/Toolbar";
+import { SortUpdateAction } from "../store/handlers/SortReducers";
 
 export interface TableHeaderProps extends GridComponentProps<TableHeaderCell> {
-    column:Column
-    tableHeaderClass?:string
-    isFirstColumn?:boolean
-    isLastColumn?:boolean
-    columnNumber:number
+    column: Column
+    tableHeaderClass?: string
+    isFirstColumn?: boolean
+    isLastColumn?: boolean
+    columnNumber: number
 }
 
-export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
+export class TableHeaderCell extends React.Component<TableHeaderProps, {}> {
 
-    constructor(props:TableHeaderProps) {
+    constructor(props: TableHeaderProps) {
         super(props);
     }
 
     renderSortIcon() {
         classNames();
-        const {direction} = this.props.column;
+        const { direction } = this.props.column;
         if (direction != undefined) {
             const cx = classNames({
                 "fa": true,
@@ -32,7 +31,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
             });
             return (
                 <span>
-                    {' '}<i className={cx}/>
+                    {' '}<i className={cx} />
                 </span>
             );
         }
@@ -41,7 +40,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
     render() {
         const column = this.props.column;
 
-        const componentClasses:ClassDictionary = {
+        const componentClasses = {
             "text-align-right": column.format === ColumnFormat.NUMBER,
             "text-align-left": column.format !== ColumnFormat.NUMBER
         };
@@ -54,7 +53,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
         componentClasses[`giga-grid-column-${this.props.columnNumber}`] = true;
         const cx = classNames(componentClasses);
 
-        if(_.isFunction(column.headerTemplateCreator)){
+        if (typeof column.headerTemplateCreator === 'function') {
             return (
                 <div className={cx}>
                     <span className="content header-text">
@@ -63,17 +62,18 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
                 </div>
             );
         }
-        else{
+        else {
             const style = {
+                width: column.width || "120px",
                 overflow: "visible",
                 position: "relative"
             };
 
             return (
                 <div style={style}
-                    onClick={()=>{
-                        const {direction} = this.props.column;
-                        const sortBy: Column = _.assign<{},Column>({},this.props.column, {
+                    onClick={() => {
+                        const { direction } = this.props.column;
+                        const sortBy: Column = Object.assign({}, this.props.column, {
                             direction: direction === SortDirection.DESC ? SortDirection.ASC : SortDirection.DESC
                         });
                         const payload: SortUpdateAction = {
@@ -96,7 +96,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
 
     renderToolbar() {
         if (this.props.isFirstColumn && !this.props.gridProps.disableConfiguration)
-            return (<ToolbarToggle dispatcher={this.props.dispatcher}/>);
+            return (<ToolbarToggle dispatcher={this.props.dispatcher} />);
         else
             return null;
     }

@@ -1,38 +1,31 @@
 // Karma configuration
 // Generated on Mon Dec 21 2015 16:09:58 GMT-0500 (Eastern Standard Time)
 
-var webpackConfig = require("./webpack.common.js");
-delete webpackConfig.entry; // no need for entry, test files are the entry points
+let path = require('path');
+let webpackConfig = require("./webpack.config")('test');
 
 module.exports = function (config) {
     config.set({
 
-        frameworks: ['jasmine'],
+        frameworks: ['jasmine', 'es6-shim'],
 
         // base path that will be used to resolve all patterns (eg. files, exclude)
         basePath: '',
 
         // list of files / patterns to load in the browser
         files: [
-            'test/**/*.spec.ts',
-            'test/**/*.spec.tsx'
+            './test/**/*.spec.ts',
+            './test/**/*.spec.tsx'
         ],
 
         // list of files to exclude
         exclude: [],
 
-        jspm: {
-            // Edit this to your needs
-            loadFiles: ['build/test/**/*.js'],
-            serveFiles: ['build/src/**/*.js']
-        },
-
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            // add webpack as preprocessor
-            'test/**/*.spec.ts': ['webpack'],
-            'test/**/*.spec.tsx': ['webpack']
+            './test/**/*.spec.ts': ['webpack'],
+            './test/**/*.spec.tsx': ['webpack']
         },
 
         webpack: webpackConfig,
@@ -55,6 +48,11 @@ module.exports = function (config) {
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
         logLevel: config.LOG_INFO,
 
+        browserConsoleLogOptions: {
+            terminal: true,
+            level: ""
+        },
+
 
         // enable / disable watching file and executing tests whenever any file changes
         autoWatch: true,
@@ -65,7 +63,6 @@ module.exports = function (config) {
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: ['PhantomJS'],
-
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
