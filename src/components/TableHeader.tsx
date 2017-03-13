@@ -1,7 +1,7 @@
-import * as React from "react";
-import { Column } from "../models/ColumnLike";
-import { TableHeaderCell } from "./TableHeaderCell";
-import { GridComponentProps, getHorizontalScrollbarThickness } from "./GigaGrid";
+import * as React from 'react';
+import { Column } from '../models/ColumnLike';
+import { TableHeaderCell } from './TableHeaderCell';
+import { GridComponentProps, getHorizontalScrollbarThickness } from './GigaGrid';
 
 export interface TableHeaderProps extends GridComponentProps<TableHeader> {
     tableHeaderClass?: string;
@@ -43,7 +43,7 @@ export class TableHeader extends React.Component<TableHeaderProps, any> {
     private static renderColumnGroups(columns: Column[], key: number): JSX.Element {
         const ths = columns.map((column: Column, i: number) => {
             const style: any = {
-                width: column.colSpan + "px"
+                width: column.colSpan + 'px'
             };
             return (
                 <div className="column-group" key={i} style={style}>
@@ -75,11 +75,17 @@ export class TableHeader extends React.Component<TableHeaderProps, any> {
         if (this.props.staticLeftHeaders > 0) {
             const leftHeaders = ths.slice(0, this.props.staticLeftHeaders);
             const rightScrollingHeaders = ths.slice(this.props.staticLeftHeaders);
-            let {setRightHeader} = this.props;
+            let { setRightHeader } = this.props;
             return (
                 <div key={key}>
-                    <div className="left-static-headers">{leftHeaders}</div>
-                    <div ref={setRightHeader} style={{maxWidth: "100%"}} className="right-scrolling-headers">{rightScrollingHeaders}</div>
+                    <div className="left-static-headers">
+                        {leftHeaders}
+                    </div>
+                    <div
+                        ref={setRightHeader}
+                        className="right-scrolling-headers">
+                        {rightScrollingHeaders}
+                    </div>
                 </div>
             );
         }

@@ -78,30 +78,32 @@ export function format(value: any, fmtInstruction: FormatInstruction): any {
     let result = value;
     if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result)) {
         result *= fmtInstruction.multiplier;
-        if (typeof fmtInstruction.roundTo !== 'undefined' && !isNaN(fmtInstruction.roundTo) && !isNaN(result)) {
-            result = parseFloat(result).toFixed(fmtInstruction.roundTo);
-        }
-        // Deal with concept of localities and currency
-        if ((fmtInstruction.separator || fmtInstruction.locale || fmtInstruction.currency) && !isNaN(result)) {
-            // Provide legacy support for fmtInstruction.separator
-            const locale: string = fmtInstruction.locale || 'en-US';
-            // Use currency if available. Warning: this needs to be shimmed for Safari as of Feb 2017.
-            if (fmtInstruction.currency) {
-                result = new Intl.NumberFormat(locale, {
-                    style: 'currency',
-                    maximumFractionDigits: fmtInstruction.roundTo,
-                    currency: fmtInstruction.currency
-                }).format(result);
-            } else {
-                result = new Intl.NumberFormat(locale).format(result);
-            }
-        }
-        if (fmtInstruction.showAsPercent && ['number', 'string'].indexOf(typeof result) > -1) {
-            result = `${result}%`;
-        }
-        return result;
     }
+    if (typeof fmtInstruction.roundTo !== 'undefined' && !isNaN(fmtInstruction.roundTo) && !isNaN(result)) {
+        result = parseFloat(result).toFixed(fmtInstruction.roundTo);
+    }
+    // Deal with concept of localities and currency
+    if ((fmtInstruction.separator || fmtInstruction.locale || fmtInstruction.currency) && !isNaN(result)) {
+        // Provide legacy support for fmtInstruction.separator
+        const locale: string = fmtInstruction.locale || 'en-US';
+        // Use currency if available. Warning: this needs to be shimmed for Safari as of Feb 2017.
+        if (fmtInstruction.currency) {
+            result = new Intl.NumberFormat(locale, {
+                style: 'currency',
+                maximumFractionDigits: fmtInstruction.roundTo,
+                currency: fmtInstruction.currency
+            }).format(result);
+        }
+        else {
+            result = new Intl.NumberFormat(locale).format(result);
+        }
+    }
+    if (fmtInstruction.showAsPercent && ['number', 'string'].indexOf(typeof result) > -1) {
+        result = `${result}%`;
+    }
+    return result;
 }
+
 
 /**
  * these should return Tree(s) as oppose to being void ... I want to use Immutable.js to simplify things where possible

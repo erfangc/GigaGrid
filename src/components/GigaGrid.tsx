@@ -220,11 +220,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
     private handleVerticalScroll = (e: Event) => {
         e.preventDefault();
         e.stopPropagation();
-        if (this.shouldScroll) {
-            this.shouldScroll = false;
-            this.dispatchDisplayBoundChange();
-            this.shouldScroll = true;
-        }
+        this.dispatchDisplayBoundChange();
     }
 
     /**
@@ -237,7 +233,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         let { viewport } = this.state;
         this.shouldScroll = false;
         // This covers all browsers, see https://www.sitepoint.com/html5-javascript-mouse-wheel/
-        const amountToScroll: number = -Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))) * 53;
+        const amountToScroll: number = -Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))) * 20;
         const scrollTopAmount: number = viewport.scrollTop;
         viewport.scrollTop = scrollTopAmount + amountToScroll;
         this.dispatchDisplayBoundChange();
