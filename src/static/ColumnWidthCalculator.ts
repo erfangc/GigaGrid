@@ -1,8 +1,8 @@
 /**
  * ColumnWidthCalculator
  */
-import { Column, ColumnDef } from "../index";
-import { GigaProps } from "../components/GigaProps";
+import { Column, ColumnDef } from '../index';
+import { GigaProps } from '../components/GigaProps';
 
 export class ColumnWidthCalculator {
 

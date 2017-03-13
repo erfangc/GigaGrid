@@ -1,11 +1,11 @@
-import { Cell, CellProps } from "./Cell";
-import * as classNames from "classnames";
-import { ClassAttributes } from "react";
-import * as React from "react";
-import { GigaActionType } from "../../store/GigaStore";
-import { format, align } from "../../static/SubtotalAggregator";
-import { AggregationMethod } from "../../models/ColumnLike";
-import { ToggleCollapseAction } from "../../store/handlers/RowCollapseReducers";
+import { Cell, CellProps } from './Cell';
+import * as classNames from 'classnames';
+import { ClassAttributes } from 'react';
+import * as React from 'react';
+import { GigaActionType } from '../../store/GigaStore';
+import { format, align } from '../../static/SubtotalAggregator';
+import { AggregationMethod } from '../../models/ColumnLike';
+import { ToggleCollapseAction } from '../../store/handlers/RowCollapseReducers';
 
 /**
  * helper class to render cells
@@ -43,7 +43,7 @@ export class CellRenderer {
          handle when there are no subtotal rows
          */
         if (row.sectorPath.length === 0) {
-            return "10px";
+            return '10px';
         } else {
             const identLevel = row.sectorPath.length;
             return ((row.isDetailRow() && identLevel !== 0 ? identLevel + 1 : identLevel) * 20) + 'px';
@@ -52,7 +52,7 @@ export class CellRenderer {
 
     renderCellWithoutCollapseExpandButton(): JSX.Element {
         let { row, column } = this.props;
-        let renderedCellContent: JSX.Element | string | number = format(row.get(column), column.formatInstruction) || "";
+        let renderedCellContent: JSX.Element | string | number = format(row.get(column), column.formatInstruction) || '';
         if (!row.isDetailRow()
             && (column.aggregationMethod === AggregationMethod.COUNT || column.aggregationMethod === AggregationMethod.COUNT_DISTINCT)) {
             renderedCellContent = `[${renderedCellContent}]`;
@@ -60,7 +60,7 @@ export class CellRenderer {
         return this.renderContentContainerWithElement(
             <span className="content">
                 {/* Render a blank space instead of something that could be null or undefined */}
-                {renderedCellContent || "\u00A0"}
+                {renderedCellContent || '\u00A0'}
             </span>,
             align(row, column)
         );
@@ -69,15 +69,15 @@ export class CellRenderer {
     renderCellWithCollapseExpandButton(): any | JSX.Element {
         let row = this.props.row;
         const cx = classNames({
-            "fa": true,
-            "fa-plus-square-o": row.collapsed,
-            "fa-minus-square-o": !row.collapsed
+            'fa': true,
+            'fa-plus-square-o': row.collapsed,
+            'fa-minus-square-o': !row.collapsed
         });
         return (
             this.renderContentContainerWithElement(
                 <span className="content group-by-cell">
                     <i className={cx} onClick={(e: React.MouseEvent<any>) => this.onCollapseToggle(e)} />&nbsp;
-                    {row.bucketInfo.title || ""}
+                    {row.bucketInfo.title || ''}
                 </span>
             )
         );
@@ -104,7 +104,7 @@ export class CellRenderer {
             if (gridProps.fetchRowsActionCreator) {
                 gridProps.fetchRowsActionCreator(this.props.row, this.props.dispatcher);
             } else {
-                throw "error: server store in use yet fetchRowsActionCreator not defined on GigaGrid props";
+                throw 'error: server store in use yet fetchRowsActionCreator not defined on GigaGrid props';
             }
         } else {
             const action: ToggleCollapseAction = {

@@ -1,7 +1,7 @@
-import * as React from "react";
-import {Row} from "../../models/Row";
-import {FrozenGigaRow} from "../GigaRow/FrozenGigaRow";
-import {TableBody} from "./TableBody";
+import * as React from 'react';
+import {Row} from '../../models/Row';
+import {FrozenGigaRow} from '../GigaRow/FrozenGigaRow';
+import {TableBody} from './TableBody';
 
 export class FrozenTableBody extends TableBody {
     mapRowsInBody(rowHeight: string, row: Row, i: number): JSX.Element {

@@ -1,4 +1,4 @@
-import {ColumnDef, BucketInfo} from "./ColumnLike";
+import { ColumnDef, BucketInfo } from './ColumnLike';
 
 /**
  * The Row class is the central abstraction and data structure to represent a row in the table
@@ -33,14 +33,16 @@ export class Row {
     /**
      * If this Row is server side rendered and there is an issue with the server call
      */
-    errorStatus?:number;
+    errorStatus?: number;
 
     private _childrenByTitle: { [title: string]: Row; } = {};
 
     private findIndex(child: Row) {
-        for (let i = 0; i < this.children.length; i++)
-            if (this.children[i].bucketInfo.title === child.bucketInfo.title)
+        for (let i = 0; i < this.children.length; i++) {
+            if (this.children[i].bucketInfo.title === child.bucketInfo.title) {
                 return i;
+            }
+        }
         return -1;
     }
 
@@ -56,7 +58,7 @@ export class Row {
     }
 
     removeChild(child: Row) {
-        if (this._childrenByTitle[child.bucketInfo.title] != undefined) {
+        if (this._childrenByTitle[child.bucketInfo.title] !== undefined) {
             const idx = this.findIndex(child);
             this.children.splice(idx, 1);
             this._childrenByTitle[child.bucketInfo.title] = undefined;
@@ -76,7 +78,7 @@ export class Row {
     }
 
     hasChildWithTitle(title: string): boolean {
-        return this.getChildByTitle(title) != undefined;
+        return this.getChildByTitle(title) !== undefined;
     }
 
     getByColTag(colTag: string): any {
@@ -89,7 +91,7 @@ export class Row {
      * @return {boolean}
      */
     containsDetailRowsOnly(): boolean {
-        let {children, detailRows} = this;
+        let { children, detailRows } = this;
         return children.length === 0 && detailRows.length !== 0;
     }
 
@@ -107,7 +109,7 @@ export class Row {
      * @return {boolean}
      */
     isDetailRow(): boolean {
-        let {children, detailRows, isSubtotal} = this;
+        let { children, detailRows, isSubtotal } = this;
         return !isSubtotal && children.length === 0 && detailRows.length === 0;
     }
 

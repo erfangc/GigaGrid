@@ -1,9 +1,9 @@
-import { Column, AggregationMethod, FormatInstruction } from "../models/ColumnLike";
-import { Row } from "../models/Row";
-import { Tree } from "./TreeBuilder";
+import { Column, AggregationMethod, FormatInstruction } from '../models/ColumnLike';
+import { Row } from '../models/Row';
+import { Tree } from './TreeBuilder';
 
 function straightSum(detailRows: Row[], column: Column): number {
-    var sum = 0;
+    let sum = 0;
     for (let i = 0; i < detailRows.length; i++) {
         sum += detailRows[i].get(column);
     }
@@ -68,35 +68,40 @@ export function align(row: Row, column: Column) {
  * @returns {any}
  */
 export function format(value: any, fmtInstruction: FormatInstruction): any {
-    if (!fmtInstruction)
+    if (!fmtInstruction) {
         return value;
-    if (value === '' || value === null || value === undefined)
+    }
+    if (value === '' || value === null || value === undefined) {
         return null;
+    }
 
     let result = value;
-    if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result))
+    if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result)) {
         result *= fmtInstruction.multiplier;
-    if (typeof fmtInstruction.roundTo !== "undefined" && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
-        result = parseFloat(result).toFixed(fmtInstruction.roundTo);
-    // Deal with concept of localities and currency
-    if ((fmtInstruction.separator || fmtInstruction.locale || fmtInstruction.currency) && !isNaN(result)) {
-        // Provide legacy support for fmtInstruction.separator
-        const locale: string = fmtInstruction.locale || "en-US";
-        // Use currency if available. Warning: this needs to be shimmed for Safari as of Feb 2017.
-        if (fmtInstruction.currency)
-            result = new Intl.NumberFormat(locale, {
-                style: 'currency',
-                maximumFractionDigits: fmtInstruction.roundTo,
-                currency: fmtInstruction.currency
-            }).format(result);
-        else
-            result = new Intl.NumberFormat(locale).format(result);
+        if (typeof fmtInstruction.roundTo !== 'undefined' && !isNaN(fmtInstruction.roundTo) && !isNaN(result)) {
+            result = parseFloat(result).toFixed(fmtInstruction.roundTo);
+        }
+        // Deal with concept of localities and currency
+        if ((fmtInstruction.separator || fmtInstruction.locale || fmtInstruction.currency) && !isNaN(result)) {
+            // Provide legacy support for fmtInstruction.separator
+            const locale: string = fmtInstruction.locale || 'en-US';
+            // Use currency if available. Warning: this needs to be shimmed for Safari as of Feb 2017.
+            if (fmtInstruction.currency) {
+                result = new Intl.NumberFormat(locale, {
+                    style: 'currency',
+                    maximumFractionDigits: fmtInstruction.roundTo,
+                    currency: fmtInstruction.currency
+                }).format(result);
+            } else {
+                result = new Intl.NumberFormat(locale).format(result);
+            }
+        }
+        if (fmtInstruction.showAsPercent && ['number', 'string'].indexOf(typeof result) > -1) {
+            result = `${result}%`;
+        }
+        return result;
     }
-    if (fmtInstruction.showAsPercent && ['number', 'string'].indexOf(typeof result) > -1)
-        result = `${result}%`;
-    return result;
 }
-
 
 /**
  * these should return Tree(s) as oppose to being void ... I want to use Immutable.js to simplify things where possible
@@ -116,8 +121,9 @@ export class SubtotalAggregator {
     private static aggregateChildren(subtotalRow: Row, columns: Column[]) {
         subtotalRow.children.forEach(childRow => {
             SubtotalAggregator.aggregateSubtotalRow(childRow, columns);
-            if (childRow.children.length > 0)
+            if (childRow.children.length > 0) {
                 SubtotalAggregator.aggregateChildren(childRow, columns);
+            }
         });
     }
 
@@ -142,7 +148,7 @@ export class SubtotalAggregator {
                     value = weightedAverage(detailRows, column);
                     break;
                 default:
-                    value = "";
+                    value = '';
                     break;
             }
             aggregated[column.colTag] = value;

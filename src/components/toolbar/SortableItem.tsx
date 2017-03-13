@@ -1,14 +1,14 @@
-import * as React from "react";
-import * as classNames from "classnames";
-import {ColumnDef} from "../../models/ColumnLike";
-import {SortableDataTransfer} from "./SettingsPopover";
+import * as React from 'react';
+import * as classNames from 'classnames';
+import {ColumnDef} from '../../models/ColumnLike';
+import {SortableDataTransfer} from './SettingsPopover';
 
 export interface SortableItemProps extends React.Props<SortableItem> {
-    column:ColumnDef
-    idx:number
-    type:string
-    onClick:() => any
-    onUpdate:(src:SortableDataTransfer, dest:SortableDataTransfer) => any
+    column:ColumnDef;
+    idx:number;
+    type:string;
+    onClick:() => any;
+    onUpdate:(src:SortableDataTransfer, dest:SortableDataTransfer) => any;
 }
 
 export class SortableItem extends React.Component<SortableItemProps,{}> {
@@ -17,7 +17,7 @@ export class SortableItem extends React.Component<SortableItemProps,{}> {
         super(props);
         this.state = {
             isDraggingOver: false
-        }
+        };
     }
 
     onDrop(e:React.DragEvent<any>) {
@@ -33,7 +33,7 @@ export class SortableItem extends React.Component<SortableItemProps,{}> {
             idx: this.props.idx
         };
 
-        this.props.onUpdate(src, dest)
+        this.props.onUpdate(src, dest);
     }
 
     onDragStart(e:React.DragEvent<any>) {
@@ -75,6 +75,6 @@ export class SortableItem extends React.Component<SortableItemProps,{}> {
                 onDrop={(e)=>this.onDrop(e)}>
                 {this.props.column.title || this.props.column.colTag}
             </li>
-        )
+        );
     }
 }

@@ -1,25 +1,25 @@
-import {ReduceStore} from "flux/utils";
-import {Dispatcher} from "flux";
-import {ScrollCalculator} from "../static/ScrollCalculator";
-import {GigaStore, GigaActionType, GigaAction, PROGRESSIVE_RENDERING_THRESHOLD} from "./GigaStore";
-import {InitializeAction, decorateInitialSortBys, decorateColumnsWithSort} from "./handlers/InitializeReducer";
-import {TreeRasterizer} from "../static/TreeRasterizer";
+import {ReduceStore} from 'flux/utils';
+import {Dispatcher} from 'flux';
+import {ScrollCalculator} from '../static/ScrollCalculator';
+import {GigaStore, GigaActionType, GigaAction, PROGRESSIVE_RENDERING_THRESHOLD} from './GigaStore';
+import {InitializeAction, decorateInitialSortBys, decorateColumnsWithSort} from './handlers/InitializeReducer';
+import {TreeRasterizer} from '../static/TreeRasterizer';
 import {
     ToggleCellSelectAction,
     cellSelectHandler,
     ToggleRowSelectAction,
     rowSelectHandler
-} from "./handlers/SelectReducers";
-import {cleartSortHandler, SortUpdateAction, sortUpdateHandler} from "./handlers/SortReducers";
-import {ChangeRowDisplayBoundsAction, changeDisplayBoundsHandler} from "./handlers/ChangeRowDisplayBoundsReducer";
-import {Column, BucketInfo} from "../models/ColumnLike";
-import {TreeBuilder} from "../static/TreeBuilder";
-import {Row} from "../models/Row";
-import {ToggleCollapseAction, toggleCollapseHandler} from "./handlers/RowCollapseReducers";
-import {SortFactory} from "../static/SortFactory";
-import {GigaProps} from "../components/GigaProps";
-import {CellContentChangeAction, cellContentChangeHandler} from "./handlers/CellContentChange";
-import {GigaState} from "../components/GigaState";
+} from './handlers/SelectReducers';
+import {cleartSortHandler, SortUpdateAction, sortUpdateHandler} from './handlers/SortReducers';
+import {ChangeRowDisplayBoundsAction, changeDisplayBoundsHandler} from './handlers/ChangeRowDisplayBoundsReducer';
+import {Column, BucketInfo} from '../models/ColumnLike';
+import {TreeBuilder} from '../static/TreeBuilder';
+import {Row} from '../models/Row';
+import {ToggleCollapseAction, toggleCollapseHandler} from './handlers/RowCollapseReducers';
+import {SortFactory} from '../static/SortFactory';
+import {GigaProps} from '../components/GigaProps';
+import {CellContentChangeAction, cellContentChangeHandler} from './handlers/CellContentChange';
+import {GigaState} from '../components/GigaState';
 
 /**
  * Initial state reducer for Server store
@@ -116,7 +116,7 @@ export class ServerStore extends ReduceStore<GigaState, GigaAction> {
     }
 
     reduce(state: GigaState,
-        action: GigaAction): GigaState {
+           action: GigaAction): GigaState {
         let newState: GigaState;
         let row: Row;
         let boundaries;

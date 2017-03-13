@@ -1,5 +1,5 @@
-import { Row } from "../models/Row";
-import { Column, ColumnFormat } from "../models/ColumnLike";
+import { Row } from '../models/Row';
+import { Column, ColumnFormat } from '../models/ColumnLike';
 
 /**
  * Figure out what value should we sort on. The data in our table can contain Subtotal and Detail rows

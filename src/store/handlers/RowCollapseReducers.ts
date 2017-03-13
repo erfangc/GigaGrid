@@ -1,12 +1,12 @@
 /*
  Subtotal Action Handlers
  */
-import {GigaAction} from "../GigaStore";
-import {TreeBuilder} from "../../static/TreeBuilder";
-import {Row} from "../../models/Row";
-import {ScrollCalculator} from "../../static/ScrollCalculator";
-import {GigaProps} from "../../components/GigaProps";
-import {GigaState} from "../../components/GigaState";
+import {GigaProps} from '../../components/GigaProps';
+import {GigaState} from '../../components/GigaState';
+import {Row} from '../../models/Row';
+import {ScrollCalculator} from '../../static/ScrollCalculator';
+import {TreeBuilder} from '../../static/TreeBuilder';
+import {GigaAction} from '../GigaStore';
 
 export function expandAllHandler(state: GigaState): GigaState {
     TreeBuilder.recursivelyToggleChildrenCollapse(state.tree.getRoot(), false);

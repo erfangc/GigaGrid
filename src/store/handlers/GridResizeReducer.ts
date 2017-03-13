@@ -1,7 +1,7 @@
-import { GigaState } from "../../components/GigaState";
-import { GigaAction } from "../GigaStore";
-import { GigaProps } from "../../components/GigaProps";
-import { ColumnWidthCalculator } from "../../static/ColumnWidthCalculator";
+import { GigaProps } from '../../components/GigaProps';
+import { GigaState } from '../../components/GigaState';
+import { ColumnWidthCalculator } from '../../static/ColumnWidthCalculator';
+import { GigaAction } from '../GigaStore';
 
 export interface GridResizeAction extends GigaAction {
     newGridWidth: string;

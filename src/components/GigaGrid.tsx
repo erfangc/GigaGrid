@@ -1,19 +1,19 @@
-import * as React from "react";
-import { ClassAttributes } from "react";
-import { Column } from "../models/ColumnLike";
-import { GigaStore, GigaAction, GigaActionType } from "../store/GigaStore";
-import { Dispatcher } from "flux";
-import { FrozenTableBody } from "./TableBody/FrozenTableBody";
-import { ScrollableTableBody } from "./TableBody/ScrollableTableBody";
-import { TableHeader } from "./TableHeader";
-import { SettingsPopover } from "./toolbar/SettingsPopover";
-import { InitializeAction } from "../store/handlers/InitializeReducer";
-import { ChangeRowDisplayBoundsAction } from "../store/handlers/ChangeRowDisplayBoundsReducer";
-import { ReduceStore } from "flux/utils";
-import { ServerStore } from "../store/ServerStore";
-import { GigaProps } from "./GigaProps";
-import { GigaState } from "./GigaState";
-import { GridResizeAction } from "../store/handlers/GridResizeReducer";
+import * as React from 'react';
+import { ClassAttributes } from 'react';
+import { Column } from '../models/ColumnLike';
+import { GigaStore, GigaAction, GigaActionType } from '../store/GigaStore';
+import { Dispatcher } from 'flux';
+import { FrozenTableBody } from './TableBody/FrozenTableBody';
+import { ScrollableTableBody } from './TableBody/ScrollableTableBody';
+import { TableHeader } from './TableHeader';
+import { SettingsPopover } from './toolbar/SettingsPopover';
+import { InitializeAction } from '../store/handlers/InitializeReducer';
+import { ChangeRowDisplayBoundsAction } from '../store/handlers/ChangeRowDisplayBoundsReducer';
+import { ReduceStore } from 'flux/utils';
+import { ServerStore } from '../store/ServerStore';
+import { GigaProps } from './GigaProps';
+import { GigaState } from './GigaState';
+import { GridResizeAction } from '../store/handlers/GridResizeReducer';
 import * as ReactDOM from 'react-dom';
 
 export interface GridComponentProps<T> {
@@ -54,7 +54,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         initialFilterBys: [],
         data: [],
         columnDefs: [],
-        rowHeight: "25px",
+        rowHeight: '25px',
         collapseHeight: false,
         additionalUserButtons: []
     };
@@ -139,7 +139,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
             leftCols = allCols.slice(0, staticLeftHeaders);
             rightCols = allCols.slice(staticLeftHeaders, allCols.length - staticLeftHeaders + 1);
         } else {
-            throw "Please declare a staticLeftHeaders prop which is less than the number of columns in the table.";
+            throw 'Please declare a staticLeftHeaders prop which is less than the number of columns in the table.';
         }
         let placeholderHeights = this.calculatePlaceholderHeight();
 
@@ -160,7 +160,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
                     className="giga-grid-body-viewport"
                     style={bodyStyle}>
                     <div ref={(c) => state.canvas = c}
-                        style={{ height: placeholderHeights.upperPlaceholderHeight + "px" }} className="placeholder" />
+                        style={{ height: placeholderHeights.upperPlaceholderHeight + 'px' }} className="placeholder" />
                     {
                         leftCols.length === 0 ? null :
                             <div className="giga-grid-left-headers-container" ref={(c) => state.leftBody = c}
@@ -175,7 +175,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
                             </div>
                     }
                     <div ref={(c) => state.rightBody = c} className="giga-grid-right-data-container"
-                        style={{ height: bodyHeight, maxWidth: "100%" }}>
+                        style={{ height: bodyHeight, maxWidth: '100%' }}>
                         <ScrollableTableBody
                             dispatcher={this.dispatcher}
                             rows={rows}
@@ -184,7 +184,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
                             gridProps={this.props}
                         />
                     </div>
-                    <div style={{ height: placeholderHeights.lowerPlaceholderHeight + "px" }}
+                    <div style={{ height: placeholderHeights.lowerPlaceholderHeight + 'px' }}
                         className="placeholder"
                     />
                 </div>

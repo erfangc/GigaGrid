@@ -1,13 +1,13 @@
-import { PROGRESSIVE_RENDERING_THRESHOLD, GigaAction } from "../GigaStore";
-import { TreeRasterizer } from "../../static/TreeRasterizer";
-import { Row } from "../../models/Row";
-import { SortFactory } from "../../static/SortFactory";
-import { SubtotalAggregator } from "../../static/SubtotalAggregator";
-import { TreeBuilder } from "../../static/TreeBuilder";
-import { Column, SortDirection } from "../../models/ColumnLike";
-import { GigaProps } from "../../components/GigaProps";
-import { ServerStore } from "../ServerStore";
-import {GigaState} from "../../components/GigaState";
+import { PROGRESSIVE_RENDERING_THRESHOLD, GigaAction } from '../GigaStore';
+import { TreeRasterizer } from '../../static/TreeRasterizer';
+import { Row } from '../../models/Row';
+import { SortFactory } from '../../static/SortFactory';
+import { SubtotalAggregator } from '../../static/SubtotalAggregator';
+import { TreeBuilder } from '../../static/TreeBuilder';
+import { Column, SortDirection } from '../../models/ColumnLike';
+import { GigaProps } from '../../components/GigaProps';
+import { ServerStore } from '../ServerStore';
+import {GigaState} from '../../components/GigaState';
 
 /**
  * decorate any sortBy(s) with properties that might exist on the column - properties defined in sortBys override those

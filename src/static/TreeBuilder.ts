@@ -1,7 +1,7 @@
-import { Row } from "../models/Row";
-import { Column, ColumnFormat, BucketInfo } from "../models/ColumnLike";
-import { ServerSubtotalRow, dataToSubtotalRows } from "../store/ServerStore";
-import { format } from "./SubtotalAggregator";
+import { Row } from '../models/Row';
+import { Column, ColumnFormat, BucketInfo } from '../models/ColumnLike';
+import { ServerSubtotalRow, dataToSubtotalRows } from '../store/ServerStore';
+import { format } from './SubtotalAggregator';
 
 export class TreeBuilder {
 
@@ -11,7 +11,7 @@ export class TreeBuilder {
      * @returns {Tree}
      */
     public static buildShallowTree(rows: ServerSubtotalRow[]): Tree {
-        const rootBucket: BucketInfo = { colTag: null, title: "Grand Total", value: null };
+        const rootBucket: BucketInfo = { colTag: null, title: 'Grand Total', value: null };
         const grandTotal = new Row();
         grandTotal.bucketInfo = rootBucket;
         grandTotal.sectorPath = [];
@@ -23,14 +23,14 @@ export class TreeBuilder {
     }
 
     static buildTree(data: any[],
-        subtotalBys: Column[] = []): Tree {
+                     subtotalBys: Column[] = []): Tree {
         /*
          * the way we create a Tree is as follows
          * since each detailRow in data can only belong to ONE Row and each Row can have only 1 parent
          * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
          * parent Row (in other words, find the detailRow's "bucket") and append said detailRow to the parent
          */
-        let rootBucketInfo = { colTag: null, title: "Grand Total", value: null };
+        let rootBucketInfo = { colTag: null, title: 'Grand Total', value: null };
         const grandTotal = new Row();
         grandTotal.bucketInfo = rootBucketInfo;
         grandTotal.sectorPath = [];

@@ -1,7 +1,7 @@
-import {AdditionalButton} from "./GigaGrid";
-import {Row} from "../models/Row";
-import {FilterBy, Column} from "../models/ColumnLike";
-import {Tree} from "../static/TreeBuilder";
+import {Column, FilterBy} from '../models/ColumnLike';
+import {Row} from '../models/Row';
+import {Tree} from '../static/TreeBuilder';
+import {AdditionalButton} from './GigaGrid';
 /**
  * Interface that Declares the Valid State of GigaGrid
  * The grid's state consists of an `Tree` object that model the rows in a hierarchical structure (representing subtotals)

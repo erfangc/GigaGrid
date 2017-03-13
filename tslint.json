@@ -6,7 +6,30 @@
 		"no-unused-variable": true,
 		"curly": true,
 		"class-name": true,
-		"semicolon": ["always"],
-		"triple-equals": true
+		"semicolon": [
+			"always"
+		],
+		"triple-equals": true,
+		"adjacent-overload-signatures": true,
+		"no-console": [
+			true,
+			"log"
+		],
+		"no-debugger": true,
+		"no-var-keyword": true,
+		"no-use-before-declare": true,
+		"align": [
+			true,
+			"parameters",
+			"statements"
+		],
+		"quotemark": [
+			true,
+			"single",
+			"jsx-double"
+		],
+		"variable-name": [
+			true, "check-format", "ban-keywords"
+		]
 	}
 }

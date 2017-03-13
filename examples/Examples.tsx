@@ -1,13 +1,12 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import {GigaGrid} from "../src/index";
-import UKBudget from "./data/UKBudget";
-import {ColumnDef} from "../src/models/ColumnLike";
-import "../styles/theme/Retro.styl";
-import {GigaProps} from "../src/components/GigaProps";
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import {GigaGrid} from '../src/index';
+import UKBudget from './data/UKBudget';
+import '../styles/theme/Retro.styl';
+import {GigaProps} from '../src/components/GigaProps';
 
 export interface ExamplesProps {
-    ukBudget: GigaProps
+    ukBudget: GigaProps;
 }
 
 export class Examples extends React.Component<ExamplesProps, {}> {
@@ -28,43 +27,20 @@ export class Examples extends React.Component<ExamplesProps, {}> {
     }
 
     private renderBasicExample(additionalUserButtons) {
-        var additionalUserButtons: any;
-        additionalUserButtons = additionalUserButtons.map(this.callCustomFunction.bind(this));
-        // Comment below line in if you want to test locale functionality
-        // this.enhanceColumnsWithLocale(UKBudget.columnDefs);
         return (
             <GigaGrid
-                additionalUserButtons={additionalUserButtons}
-                initialSortBys={["Age", "Children", "Income"]}
-                bodyHeight={"500px"}
+                initialSortBys={['Age', 'Children', 'Income']}
+                bodyHeight={'500px'}
                 staticLeftHeaders={1}
                 {...UKBudget}
             />
         );
     }
 
-    private callCustomFunction(additionalUserButton) {
-        additionalUserButton.customCallback = () => {
-            this.customCallback()
-        };
-        return additionalUserButton;
-    }
-
-    private customCallback() {
-        console.log('Export grid');
-    }
-
-    private enhanceColumnsWithLocale(columnDefs: ColumnDef[]) {
-        columnDefs.forEach((columnDef: ColumnDef) => {
-            if (columnDef.formatInstruction)
-                columnDef.formatInstruction.locale = "bn";
-        })
-    }
 }
 
 function main() {
-    // App Entry point
-    ReactDOM.render(<Examples ukBudget={UKBudget}/>, document.getElementById("app"));
+    ReactDOM.render(<Examples ukBudget={UKBudget}/>, document.getElementById('app'));
 }
 
 main();

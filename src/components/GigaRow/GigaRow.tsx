@@ -1,25 +1,25 @@
-import * as React from "react";
-import * as classNames from "classnames";
-import {Row} from "../../models/Row";
-import {Column} from "../../models/ColumnLike";
-import {GigaActionType} from "../../store/GigaStore";
-import {GridComponentProps} from "../GigaGrid";
-import {CellProps, Cell} from "../Cell/Cell";
-import {GigaProps} from "../GigaProps";
+import * as React from 'react';
+import * as classNames from 'classnames';
+import {Row} from '../../models/Row';
+import {Column} from '../../models/ColumnLike';
+import {GigaActionType} from '../../store/GigaStore';
+import {GridComponentProps} from '../GigaGrid';
+import {CellProps, Cell} from '../Cell/Cell';
+import {GigaProps} from '../GigaProps';
 
 export interface GigaRowProps extends GridComponentProps<GigaRow> {
-    row: Row
-    rowHeight: string
-    columns: Column[]
-    staticLeftHeaders?: boolean
-    scrollableRightData?: boolean
-    gridProps: GigaProps
+    row: Row;
+    rowHeight: string;
+    columns: Column[];
+    staticLeftHeaders?: boolean;
+    scrollableRightData?: boolean;
+    gridProps: GigaProps;
 }
 
 export abstract class GigaRow extends React.Component<GigaRowProps, any> {
 
     constructor(props: GigaRowProps) {
-        super(props)
+        super(props);
     }
 
     protected generateCellKey(column: Column): string {
@@ -31,11 +31,11 @@ export abstract class GigaRow extends React.Component<GigaRowProps, any> {
         let {row, rowHeight, columns} = this.props;
         let subtotalLvlClassName = `subtotal-row-${row.sectorPath.length - 1}`;
         let rowClassNames = {
-            "giga-grid-row": true,
-            "placeholder-false": true,
-            "subtotal-row": !row.isDetailRow(),
-            "detail-row": row.isDetailRow(),
-            "selected": row.selected,
+            'giga-grid-row': true,
+            'placeholder-false': true,
+            'subtotal-row': !row.isDetailRow(),
+            'detail-row': row.isDetailRow(),
+            'selected': row.selected,
         };
         rowClassNames[subtotalLvlClassName] = !row.isDetailRow();
         let cx = classNames(rowClassNames);

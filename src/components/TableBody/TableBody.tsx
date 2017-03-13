@@ -1,7 +1,7 @@
-import * as React from "react";
-import { Column } from "../../models/ColumnLike";
-import { Row } from "../../models/Row";
-import { GridComponentProps } from "../GigaGrid";
+import * as React from 'react';
+import { Column } from '../../models/ColumnLike';
+import { Row } from '../../models/Row';
+import { GridComponentProps } from '../GigaGrid';
 
 export interface TableBodyProps extends GridComponentProps<TableBody> {
     rows: Row[];
@@ -21,7 +21,7 @@ export class TableBody extends React.Component<TableBodyProps, any> {
     }
 
     mapRowsInBody(rowHeight: string, row: Row, i: number): JSX.Element {
-        throw "Must extend TableBody, cannot use is as a component directly!";
+        throw 'Must extend TableBody, cannot use is as a component directly!';
     }
 
     render() {

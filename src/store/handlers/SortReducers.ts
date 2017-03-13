@@ -2,11 +2,11 @@
  * Sort Action Handlers
  */
 
-import { SortFactory } from "../../static/SortFactory";
-import { Tree } from "../../static/TreeBuilder";
-import { Column } from "../../models/ColumnLike";
-import { GigaAction } from "../GigaStore";
-import {GigaState} from "../../components/GigaState";
+import { SortFactory } from '../../static/SortFactory';
+import { Tree } from '../../static/TreeBuilder';
+import { Column } from '../../models/ColumnLike';
+import { GigaAction } from '../GigaStore';
+import {GigaState} from '../../components/GigaState';
 
 export function sortUpdateHandler(state: GigaState, action: SortUpdateAction): GigaState {
     /**

@@ -1,10 +1,10 @@
-import {AdditionalButton} from "./GigaGrid";
-import {ServerSubtotalRow} from "../store/ServerStore";
-import {GigaAction} from "../store/GigaStore";
-import {Dispatcher} from "flux";
-import {Row} from "../models/Row";
-import {ColumnDef, Column, FilterBy} from "../models/ColumnLike";
-import {GigaState} from "./GigaState";
+import {Dispatcher} from 'flux';
+import {Column, ColumnDef, FilterBy} from '../models/ColumnLike';
+import {Row} from '../models/Row';
+import {GigaAction} from '../store/GigaStore';
+import {ServerSubtotalRow} from '../store/ServerStore';
+import {AdditionalButton} from './GigaGrid';
+import {GigaState} from './GigaState';
 /**
  * Interface that describe the shape of the `Props` that `GigaGrid` accepts from the user
  * the bare minimum are: `data` and `columnDefs`

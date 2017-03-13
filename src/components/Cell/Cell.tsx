@@ -1,9 +1,9 @@
-import * as React from "react";
-import {ClassAttributes} from "react";
-import {Column} from "../../models/ColumnLike";
-import {Row} from "../../models/Row";
-import {GridComponentProps} from "../GigaGrid";
-import {CellRenderer} from "./CellRenderer";
+import * as React from 'react';
+import {ClassAttributes} from 'react';
+import {Column} from '../../models/ColumnLike';
+import {Row} from '../../models/Row';
+import {GridComponentProps} from '../GigaGrid';
+import {CellRenderer} from './CellRenderer';
 
 export interface CellProps extends GridComponentProps<Cell> {
     row: Row;

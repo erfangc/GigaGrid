@@ -1,26 +1,26 @@
-import { ReduceStore } from "flux/utils";
-import { Dispatcher } from "flux";
-import { TreeRasterizer } from "../static/TreeRasterizer";
-import initialStateReducer, { InitializeAction } from "./handlers/InitializeReducer";
+import { ReduceStore } from 'flux/utils';
+import { Dispatcher } from 'flux';
+import { TreeRasterizer } from '../static/TreeRasterizer';
+import initialStateReducer, { InitializeAction } from './handlers/InitializeReducer';
 import {
     rowSelectHandler,
     cellSelectHandler,
     ToggleRowSelectAction,
     ToggleCellSelectAction
-} from "./handlers/SelectReducers";
-import { changeDisplayBoundsHandler, ChangeRowDisplayBoundsAction } from "./handlers/ChangeRowDisplayBoundsReducer";
-import { sortUpdateHandler, cleartSortHandler, SortUpdateAction } from "./handlers/SortReducers";
+} from './handlers/SelectReducers';
+import { changeDisplayBoundsHandler, ChangeRowDisplayBoundsAction } from './handlers/ChangeRowDisplayBoundsReducer';
+import { sortUpdateHandler, cleartSortHandler, SortUpdateAction } from './handlers/SortReducers';
 import {
     toggleCollapseHandler,
     collapseAllHandler,
     expandAllHandler,
     ToggleCollapseAction
-} from "./handlers/RowCollapseReducers";
-import { columnUpdateHandler, ColumnUpdateAction } from "./handlers/ColumnUpdateReducer";
-import { GigaProps } from "../components/GigaProps";
-import { CellContentChangeAction, cellContentChangeHandler } from "./handlers/CellContentChange";
-import { GigaState } from "../components/GigaState";
-import { gridResizeReducer, GridResizeAction } from "./handlers/GridResizeReducer";
+} from './handlers/RowCollapseReducers';
+import { columnUpdateHandler, ColumnUpdateAction } from './handlers/ColumnUpdateReducer';
+import { GigaProps } from '../components/GigaProps';
+import { CellContentChangeAction, cellContentChangeHandler } from './handlers/CellContentChange';
+import { GigaState } from '../components/GigaState';
+import { gridResizeReducer, GridResizeAction } from './handlers/GridResizeReducer';
 
 /*
  define the # of rows necessary to trigger progressive rendering
@@ -62,7 +62,7 @@ export class GigaStore extends ReduceStore<GigaState, GigaAction> {
     }
 
     reduce(state: GigaState,
-        action: GigaAction): GigaState {
+           action: GigaAction): GigaState {
 
         let newState: GigaState;
         switch (action.type) {

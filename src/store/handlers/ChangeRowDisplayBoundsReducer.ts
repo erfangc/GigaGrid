@@ -1,6 +1,6 @@
-import { GigaAction } from "../GigaStore";
-import { ScrollCalculator } from "../../static/ScrollCalculator";
-import {GigaState} from "../../components/GigaState";
+import { GigaAction } from '../GigaStore';
+import { ScrollCalculator } from '../../static/ScrollCalculator';
+import {GigaState} from '../../components/GigaState';
 
 export function changeDisplayBoundsHandler(state: GigaState, action: ChangeRowDisplayBoundsAction) {
     let {canvas, viewport} = state;

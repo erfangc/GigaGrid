@@ -1,5 +1,5 @@
-import {Row} from "./Row";
-import {CellProps} from "../components/Cell/Cell";
+import {Row} from './Row';
+import {CellProps} from '../components/Cell/Cell';
 
 export enum AggregationMethod {
     SUM, WEIGHTED_AVERAGE, AVERAGE, RANGE, COUNT, COUNT_DISTINCT, COUNT_OR_DISTINCT, NONE
@@ -21,7 +21,7 @@ export enum SortDirection {
 }
 
 export interface FormatInstruction {
-    textAlign?: "left"|"right";
+    textAlign?: 'left'|'right';
     showAsPercent?: boolean;
     roundTo?: number;
     multiplier?: number;

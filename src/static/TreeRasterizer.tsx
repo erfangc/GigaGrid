@@ -1,5 +1,5 @@
-import { Tree } from "./TreeBuilder";
-import { Row } from "../models/Row";
+import { Tree } from './TreeBuilder';
+import { Row } from '../models/Row';
 
 export class TreeRasterizer {
 
