@@ -5,8 +5,8 @@
 import { SortFactory } from "../../static/SortFactory";
 import { Tree } from "../../static/TreeBuilder";
 import { Column } from "../../models/ColumnLike";
-import { GigaState } from "../../components/GigaGrid";
 import { GigaAction } from "../GigaStore";
+import {GigaState} from "../../components/GigaState";
 
 export function sortUpdateHandler(state: GigaState, action: SortUpdateAction): GigaState {
     /**
@@ -41,5 +41,5 @@ export interface ClearSortAction extends GigaAction {
 }
 
 export interface SortUpdateAction extends GigaAction {
-    sortBys: Column[]
+    sortBys: Column[];
 }

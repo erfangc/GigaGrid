@@ -1,7 +1,7 @@
 import { Row } from "../src/models/Row";
 import { ColumnDef, ColumnFormat, AggregationMethod, Column, ColumnGroupDef } from "../src/models/ColumnLike";
 import { TreeBuilder, Tree } from "../src/static/TreeBuilder";
-import { GigaState } from "../src/components/GigaGrid";
+import {GigaState} from "../src/components/GigaState";
 
 export interface TestDataFactory {
     rawData(): any[]

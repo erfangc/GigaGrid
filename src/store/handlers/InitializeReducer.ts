@@ -5,9 +5,9 @@ import { SortFactory } from "../../static/SortFactory";
 import { SubtotalAggregator } from "../../static/SubtotalAggregator";
 import { TreeBuilder } from "../../static/TreeBuilder";
 import { Column, SortDirection } from "../../models/ColumnLike";
-import { GigaState } from "../../components/GigaGrid";
 import { GigaProps } from "../../components/GigaProps";
 import { ServerStore } from "../ServerStore";
+import {GigaState} from "../../components/GigaState";
 
 /**
  * decorate any sortBy(s) with properties that might exist on the column - properties defined in sortBys override those
@@ -105,7 +105,7 @@ export default function (action: InitializeAction): GigaState {
         rasterizedRows: rasterizedRows,
         displayStart: 0,
         columns: filteredColumns,
-        displayEnd: Math.min(rasterizedRows.length - 1, PROGRESSIVE_RENDERING_THRESHOLD),
+        displayEnd: PROGRESSIVE_RENDERING_THRESHOLD,
         subtotalBys: subtotalBys,
         sortBys: sortBys,
         filterBys: Object.assign({}, initialFilterBys) || [],

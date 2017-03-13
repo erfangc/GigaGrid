@@ -24,7 +24,7 @@ export class TableHeader extends React.Component<TableHeaderProps, any> {
 
     render() {
         return (
-            <div className="header-table">
+            <div className="giga-grid-header-container">
                 {this.renderHeaderRows()}
             </div>
         );

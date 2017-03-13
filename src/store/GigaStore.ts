@@ -1,4 +1,3 @@
-import { GigaState } from "../components/GigaGrid";
 import { ReduceStore } from "flux/utils";
 import { Dispatcher } from "flux";
 import { TreeRasterizer } from "../static/TreeRasterizer";
@@ -20,6 +19,7 @@ import {
 import { columnUpdateHandler, ColumnUpdateAction } from "./handlers/ColumnUpdateReducer";
 import { GigaProps } from "../components/GigaProps";
 import { CellContentChangeAction, cellContentChangeHandler } from "./handlers/CellContentChange";
+import {GigaState} from "../components/GigaState";
 
 /*
  define the # of rows necessary to trigger progressive rendering
@@ -137,6 +137,7 @@ export enum GigaActionType {
     INITIALIZE,
     CELL_CONTENT_CHANGE,
     NEW_SORT,
+    VIEWPORT_RESIZE,
     CLEAR_SORT,
     TOGGLE_ROW_COLLAPSE,
     COLLAPSE_ALL,

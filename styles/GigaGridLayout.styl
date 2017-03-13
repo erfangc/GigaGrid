@@ -13,6 +13,9 @@ div.giga-grid
   div.giga-grid-header-container
     font-size 11px
     height 20px
+    max-width 100%
+    white-space nowrap
+    overflow hidden
 
   // Hack to turn off frozen scrollbars for IE
   @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none)
@@ -33,11 +36,6 @@ div.giga-grid
   div.giga-grid-right-data-container
     overflow-x auto
     overflow-y hidden
-
-  div.giga-grid-header-container
-    max-width 100%
-    white-space nowrap
-    overflow hidden
 
   div.table-header
     box-sizing border-box

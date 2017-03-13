@@ -53,7 +53,7 @@ describe("Cell", ()=> {
                 />
             </div>
         );
-        expect($(ReactTestUtils.findRenderedDOMComponentWithClass(component,"content-container")).css("padding-left")).toBe("75px");
+        expect($(ReactTestUtils.findRenderedDOMComponentWithClass(component,"content-container")).css("padding-left")).toBe("60px");
     });
 
     it("can render a +/- for the first cell of a subtotal row", ()=> {

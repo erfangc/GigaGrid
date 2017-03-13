@@ -30,7 +30,7 @@ export class CellRenderer {
     calculateContainerStyle() {
         let { column, rowHeight, isFirstColumn } = this.props;
         return {
-            width: column.width || '120px',
+            width: `${column.width}px`,
             height: rowHeight,
             paddingLeft: isFirstColumn ? this.calculateIdentation() : undefined
         };
@@ -45,7 +45,7 @@ export class CellRenderer {
             return "10px";
         } else {
             const identLevel = row.sectorPath.length;
-            return ((row.isDetailRow() && identLevel !== 0 ? identLevel + 1 : identLevel) * 25) + 'px';
+            return ((row.isDetailRow() && identLevel !== 0 ? identLevel + 1 : identLevel) * 20) + 'px';
         }
     }
 

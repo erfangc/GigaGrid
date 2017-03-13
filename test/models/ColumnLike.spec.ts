@@ -1,9 +1,8 @@
-import {Column, ColumnGroupDef} from "../../src/models/ColumnLike";
-import {GigaState} from "../../src/components/GigaGrid";
 import {TestUtils} from "../TestUtils";
+import {GigaState} from "../../src/components/GigaState";
 
-describe("ColumnCreator", ()=> {
+describe("ColumnCreator", () => {
 
-    const simpleState:GigaState = TestUtils.getMockState();
+    const simpleState: GigaState = TestUtils.getMockState();
 
 });

@@ -20,6 +20,7 @@ const columnDefs: ColumnDef[] = [
     {
         colTag: "WFuel",
         title: "Fuel",
+        width: 120,
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
         formatInstruction: {roundTo: 2, showAsPercent: true, multiplier: 100}
@@ -27,6 +28,7 @@ const columnDefs: ColumnDef[] = [
     {
         colTag: "WCloth",
         title: "Cloth",
+        width: 120,
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
         formatInstruction: {roundTo: 2, showAsPercent: true, multiplier: 100}
@@ -34,6 +36,7 @@ const columnDefs: ColumnDef[] = [
     {
         colTag: "WAlc",
         title: "Alc",
+        width: 120,
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
         formatInstruction: {roundTo: 2, showAsPercent: true, multiplier: 100}
@@ -41,6 +44,7 @@ const columnDefs: ColumnDef[] = [
     {
         colTag: "WTrans",
         title: "Transportation",
+        width: 120,
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
         formatInstruction: {roundTo: 2, showAsPercent: true, multiplier: 100}
@@ -48,6 +52,7 @@ const columnDefs: ColumnDef[] = [
     {
         colTag: "WOther",
         title: "Other",
+        width: 120,
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
         formatInstruction: {roundTo: 2, showAsPercent: true, multiplier: 100},
@@ -55,6 +60,7 @@ const columnDefs: ColumnDef[] = [
     {
         colTag: "TotExp",
         title: "Total Expense",
+        width: 120,
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
         formatInstruction: {currency: "EUR"}
@@ -62,6 +68,7 @@ const columnDefs: ColumnDef[] = [
     {
         colTag: "Age",
         title: "Age",
+        width: 120,
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
         formatInstruction: {roundTo: 0}
@@ -69,6 +76,7 @@ const columnDefs: ColumnDef[] = [
     {
         colTag: "Children",
         title: "Children",
+        width: 120,
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
         formatInstruction: {roundTo: 0}
@@ -76,6 +84,7 @@ const columnDefs: ColumnDef[] = [
     {
         colTag: "Income",
         title: "Income",
+        width: 120,
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
         formatInstruction: {roundTo: 0}

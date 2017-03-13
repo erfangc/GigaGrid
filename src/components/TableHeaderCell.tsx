@@ -7,11 +7,11 @@ import { ToolbarToggle } from "./toolbar/Toolbar";
 import { SortUpdateAction } from "../store/handlers/SortReducers";
 
 export interface TableHeaderProps extends GridComponentProps<TableHeaderCell> {
-    column: Column
-    tableHeaderClass?: string
-    isFirstColumn?: boolean
-    isLastColumn?: boolean
-    columnNumber: number
+    column: Column;
+    tableHeaderClass?: string;
+    isFirstColumn?: boolean;
+    isLastColumn?: boolean;
+    columnNumber: number;
 }
 
 export class TableHeaderCell extends React.Component<TableHeaderProps, {}> {
@@ -23,7 +23,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps, {}> {
     renderSortIcon() {
         classNames();
         const { direction } = this.props.column;
-        if (direction != undefined) {
+        if (direction !== undefined) {
             const cx = classNames({
                 "fa": true,
                 "fa-sort-asc": direction === SortDirection.ASC,
@@ -45,10 +45,11 @@ export class TableHeaderCell extends React.Component<TableHeaderProps, {}> {
             "text-align-left": column.format !== ColumnFormat.NUMBER
         };
 
-        if (this.props.tableHeaderClass)
+        if (this.props.tableHeaderClass) {
             componentClasses[`${this.props.tableHeaderClass}`] = true;
-        else
+        } else {
             componentClasses["table-header"] = true;
+        }
 
         componentClasses[`giga-grid-column-${this.props.columnNumber}`] = true;
         const cx = classNames(componentClasses);
@@ -64,7 +65,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps, {}> {
         }
         else {
             const style = {
-                width: column.width || "120px",
+                width: `${column.width}px`,
                 overflow: "visible",
                 position: "relative"
             };
@@ -95,10 +96,11 @@ export class TableHeaderCell extends React.Component<TableHeaderProps, {}> {
     }
 
     renderToolbar() {
-        if (this.props.isFirstColumn && !this.props.gridProps.disableConfiguration)
+        if (this.props.isFirstColumn && !this.props.gridProps.disableConfiguration) {
             return (<ToolbarToggle dispatcher={this.props.dispatcher} />);
-        else
+        } else {
             return null;
+        }
     }
 
 }

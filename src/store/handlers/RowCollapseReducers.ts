@@ -1,13 +1,12 @@
 /*
  Subtotal Action Handlers
  */
-import { GigaState } from "../../components/GigaGrid";
-import { GigaAction } from "../GigaStore";
-import { TreeBuilder } from "../../static/TreeBuilder";
-import { Row } from "../../models/Row";
-import { ScrollCalculator } from "../../static/ScrollCalculator";
-import * as $ from "jquery";
-import { GigaProps } from "../../components/GigaProps";
+import {GigaAction} from "../GigaStore";
+import {TreeBuilder} from "../../static/TreeBuilder";
+import {Row} from "../../models/Row";
+import {ScrollCalculator} from "../../static/ScrollCalculator";
+import {GigaProps} from "../../components/GigaProps";
+import {GigaState} from "../../components/GigaState";
 
 export function expandAllHandler(state: GigaState): GigaState {
     TreeBuilder.recursivelyToggleChildrenCollapse(state.tree.getRoot(), false);
@@ -23,7 +22,7 @@ export function toggleCollapseHandler(state: GigaState, action: ToggleCollapseAc
     const row = action.subtotalRow;
     row.toggleCollapse();
     const newState = Object.assign({}, state);
-    const { displayStart, displayEnd } = ScrollCalculator.computeDisplayBoundaries(props.rowHeight, props.bodyHeight, state.viewport);
+    const {displayStart, displayEnd} = ScrollCalculator.computeDisplayBoundaries(props.rowHeight, props.bodyHeight, state.viewport);
     newState.displayStart = displayStart;
     newState.displayEnd = displayEnd;
     return newState;
