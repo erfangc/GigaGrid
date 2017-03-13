@@ -11,7 +11,7 @@
   "typings": "./index.d.ts",
   "scripts": {
     "start": "webpack-dev-server --env=dev --progress --colors",
-    "build": "webpack --env=prod --progress --colors",
+    "build": "webpack -p --env=prod --progress --display-modules --colors",
     "test": "karma start karma2.conf.js --single-run",
     "test:watch": "karma start karma2.conf.js --browsers Chrome",
     "test:chrome": "karma start karma2.conf.js --single-run --browsers Chrome"
