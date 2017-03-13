@@ -31,6 +31,7 @@ export class CellRenderer {
         let { column, rowHeight, isFirstColumn } = this.props;
         return {
             width: `${column.width}px`,
+            minWidth: column.minWidth ? `${column.minWidth}px` : '75px',
             height: rowHeight,
             paddingLeft: isFirstColumn ? this.calculateIdentation() : undefined
         };

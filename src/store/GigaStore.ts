@@ -19,7 +19,8 @@ import {
 import { columnUpdateHandler, ColumnUpdateAction } from "./handlers/ColumnUpdateReducer";
 import { GigaProps } from "../components/GigaProps";
 import { CellContentChangeAction, cellContentChangeHandler } from "./handlers/CellContentChange";
-import {GigaState} from "../components/GigaState";
+import { GigaState } from "../components/GigaState";
+import { gridResizeReducer, GridResizeAction } from "./handlers/GridResizeReducer";
 
 /*
  define the # of rows necessary to trigger progressive rendering
@@ -100,6 +101,9 @@ export class GigaStore extends ReduceStore<GigaState, GigaAction> {
                 break;
             case GigaActionType.TOGGLE_SETTINGS_POPOVER:
                 newState = Object.assign({}, state, { showSettingsPopover: !state.showSettingsPopover });
+                break;
+            case GigaActionType.VIEWPORT_RESIZE:
+                newState = gridResizeReducer(state, action as GridResizeAction, this.props);
                 break;
             default:
                 newState = state;

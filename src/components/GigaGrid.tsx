@@ -13,6 +13,8 @@ import { ReduceStore } from "flux/utils";
 import { ServerStore } from "../store/ServerStore";
 import { GigaProps } from "./GigaProps";
 import { GigaState } from "./GigaState";
+import { GridResizeAction } from "../store/handlers/GridResizeReducer";
+import * as ReactDOM from 'react-dom';
 
 export interface GridComponentProps<T> {
     dispatcher: Dispatcher<GigaAction>;
@@ -245,8 +247,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         e.preventDefault();
         e.stopPropagation();
         let { rightBody, rightHeader } = this.state;
-        const scrollLeftAmount = rightBody.scrollLeft;
-        rightHeader.scrollLeft = scrollLeftAmount;
+        rightHeader.scrollLeft = rightBody.scrollLeft;
     }
 
     private dispatchDisplayBoundChange() {
@@ -272,6 +273,23 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         viewport.addEventListener('mousewheel', this.handleWheelScroll);
         viewport.addEventListener('MozMousePixelScroll', this.handleWheelScroll);
         rightBody.addEventListener('scroll', this.handleHorizontalScroll);
+        window.addEventListener('resize', this.handleWindowResize);
+        this.handleWindowResize();
+    }
+
+    private handleWindowResize = () => {
+        /**
+         *  we will almost certainly operate in an environment where we do not know the component's width until after the component has mounted,
+         *  so here we dispatch an event to resize the grid as appropriate
+         */
+        setTimeout(() => {
+            let { dispatcher } = this;
+            let node = ReactDOM.findDOMNode(this);
+            dispatcher.dispatch({
+                type: GigaActionType.VIEWPORT_RESIZE,
+                newGridWidth: `${node.clientWidth}px`
+            } as GridResizeAction);
+        });
     }
 
     componentWillUnmount() {
@@ -283,6 +301,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         viewport.removeEventListener('mousewheel', this.handleWheelScroll);
         viewport.removeEventListener('MozMousePixelScroll', this.handleWheelScroll);
         rightBody.removeEventListener('scroll', this.handleHorizontalScroll);
+        window.removeEventListener('resize', this.handleWindowResize);
     }
 
 }

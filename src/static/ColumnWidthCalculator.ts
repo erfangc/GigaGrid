@@ -20,14 +20,17 @@ export class ColumnWidthCalculator {
          */
         let unspecifiedColumns: Column[] = [];
         let totalSpecifiedWidth: number = 0;
-        for (let i = 0; i < columnDefs.length; i++) {
-            let columnDef = columnDefs[i];
+        let columnDefsMap: { [key: string]: ColumnDef } = {};
+        columnDefs.forEach(columnDef => columnDefsMap[columnDef.colTag] = columnDef);
+
+        for (let i = 0; i < columns.length; i++) {
             let column = columns[i];
+            let columnDef = columnDefsMap[column.colTag];
             if (columnDef.width) {
                 totalSpecifiedWidth += columnDef.width;
                 column.width = columnDef.width;
             } else {
-                unspecifiedColumns.push(columns[i]);
+                unspecifiedColumns.push(column);
             }
         }
         let remainingWidth = newWidth - totalSpecifiedWidth;

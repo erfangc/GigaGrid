@@ -33,6 +33,7 @@ export interface FormatInstruction {
 export interface ColumnDef extends ColumnLike {
     // how wide the column is to be
     width?: number;
+    minWidth?: number;
     weightBy?: string;
     formatInstruction?: FormatInstruction;
     cellTemplateCreator?: (props: CellProps) => JSX.Element;

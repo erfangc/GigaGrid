@@ -66,6 +66,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps, {}> {
         else {
             const style = {
                 width: `${column.width}px`,
+                minWidth: column.minWidth ? `${column.minWidth}px` : '75px',
                 overflow: "visible",
                 position: "relative"
             };

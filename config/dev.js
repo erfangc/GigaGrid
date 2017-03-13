@@ -3,7 +3,6 @@ const commonConfig = require("./base.js");
 
 module.exports = function (env) {
     return webpackMerge(commonConfig(), {
-        devtool: 'cheap-module-eval-source-map',
         entry: './examples/Examples.tsx',
         module: {
             loaders: [
