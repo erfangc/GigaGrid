@@ -2,12 +2,10 @@
 /// <reference types="react" />
 import * as React from "react";
 import { ClassAttributes } from "react";
-import { Column, FilterBy } from "../models/ColumnLike";
-import { Row } from "../models/Row";
-import { Tree } from "../static/TreeBuilder";
 import { GigaAction } from "../store/GigaStore";
 import { Dispatcher } from "flux";
 import { GigaProps } from "./GigaProps";
+import { GigaState } from "./GigaState";
 export interface GridComponentProps<T> {
     dispatcher: Dispatcher<GigaAction>;
     gridProps?: GigaProps;
@@ -15,33 +13,6 @@ export interface GridComponentProps<T> {
 export interface AdditionalButton {
     name: string;
     customCallback: () => any;
-}
-/**
- * Interface that Declares the Valid State of GigaGrid
- * The grid's state consists of an `Tree` object that model the rows in a hierarchical structure (representing subtotals)
- *
- * `rasterizedRows` is a flattened version of `tree`. Each `Row` in `rasterizedRows` is converted into a `TableRow` component
- * at render time. (even though we represent subtotal-ed data as a tree in-memory, HTML tables must ultimately be rendered as a two-dimensional grid
- * and that is why `rasterizedRow` exists
- *
- * `displayStart`, `displayEnd` determines the range in `rasterizedRows` that is actually rendered as `tr` elements. This is the avoid needlessly rendering rows that will not be visible in the viewport
- *
- * `widthMeasures` contain state information on the width of each column and the table
- */
-export interface GigaState {
-    gridID?: number;
-    tree: Tree;
-    columns: Column[];
-    subtotalBys: Column[];
-    sortBys: Column[];
-    filterBys: FilterBy[];
-    rasterizedRows: Row[];
-    displayStart: number;
-    displayEnd: number;
-    showSettingsPopover: boolean;
-    additionalUserButtons?: AdditionalButton[];
-    canvas: HTMLElement;
-    viewport: HTMLElement;
 }
 /**
  * The root component of this React library. assembles raw data into `Row` objects which are then translated into their
@@ -68,23 +39,23 @@ export declare class GigaGrid extends React.Component<GigaProps & ClassAttribute
     renderSettingsPopover(): JSX.Element;
     render(): JSX.Element;
     componentWillReceiveProps(nextProps: GigaProps): void;
+    private calculatePlaceholderHeight();
     /**
      * I don't love this, but it's only related to scrolling and has nothing to do with state/rendering of the component
      * so rather than making a re-render happen with a state change, we do this.  This is to fix this problem:
      * http://stackoverflow.com/questions/26326958/stopping-mousewheel-event-from-happening-twice-in-osx
      */
     private shouldScroll;
-    private scrollHandlerEventFunction;
-    private scrollWheelHandlerEventFunction;
-    scrollHandler(e: any): void;
+    private handleVerticalScroll;
     /**
      * A wheely important function.  You can't scroll normally in the left-headers area, but a user would expect the
      * table to scroll if he or she uses the mousewheel.  So we have to listen for this event.
      */
-    wheelScrollHandler(e: any): void;
+    private handleWheelScroll;
+    private handleHorizontalScroll;
+    private dispatchDisplayBoundChange();
     reflowTable(): void;
     componentDidMount(): void;
     componentWillUnmount(): void;
-    private dispatchDisplayBoundChange();
 }
 export declare function getHorizontalScrollbarThickness(): number;

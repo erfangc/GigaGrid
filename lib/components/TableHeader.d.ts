@@ -6,6 +6,7 @@ export interface TableHeaderProps extends GridComponentProps<TableHeader> {
     tableHeaderClass?: string;
     columns: Column[][];
     staticLeftHeaders: number;
+    setRightHeader: (c: HTMLDivElement) => void;
 }
 /**
  * terminology: column groups are columns that can span multiple `leaf` columns and physically reside

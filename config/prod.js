@@ -3,10 +3,20 @@ const commonConfig = require("./base.js");
 
 module.exports = function (env) {
     return webpackMerge(commonConfig(), {
-        vendor: [
-            'react',
-            'react-dom'
-        ],
+        externals: {
+            "react": {
+                commonjs: 'react',
+                commonjs2: 'react',
+                amd: 'react',
+                root: 'React'
+            },
+            "react-dom": {
+                commonjs: 'react-dom',
+                commonjs2: 'react-dom',
+                amd: 'react-dom',
+                root: 'ReactDOM'
+            }
+        },
         module: {
             loaders: [
                 {
@@ -18,7 +28,7 @@ module.exports = function (env) {
             ]
         },
         entry: './src/index.ts',
-        output = {
+        output: {
             path: "./dist",
             libraryTarget: "umd",
             library: "GigaGrid",

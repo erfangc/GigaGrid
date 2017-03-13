@@ -1,7 +1,7 @@
 import { GigaAction } from "../GigaStore";
 import { Column } from "../../models/ColumnLike";
-import { GigaState } from "../../components/GigaGrid";
 import { GigaProps } from "../../components/GigaProps";
+import { GigaState } from "../../components/GigaState";
 /**
  * decorate any sortBy(s) with properties that might exist on the column - properties defined in sortBys override those
  * defined in the column definition

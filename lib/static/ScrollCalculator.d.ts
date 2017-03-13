@@ -3,5 +3,5 @@ export interface DisplayBoundaries {
     displayEnd: number;
 }
 export declare class ScrollCalculator {
-    static computeDisplayBoundaries(rowHeight: string, bodyHeight: string, viewport: any, canvas: any): DisplayBoundaries;
+    static computeDisplayBoundaries(rowHeight: string, bodyHeight: string, viewport: HTMLDivElement): DisplayBoundaries;
 }

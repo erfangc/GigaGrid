@@ -5,7 +5,8 @@
   "main": "dist/giga-grid.js",
   "files": [
     "dist/giga-grid.js",
-    "styles/"
+    "styles/",
+    "lib/"
   ],
   "typings": "./index.d.ts",
   "scripts": {

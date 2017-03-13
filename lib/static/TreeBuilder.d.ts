@@ -8,7 +8,7 @@ export declare class TreeBuilder {
      * @returns {Tree}
      */
     static buildShallowTree(rows: ServerSubtotalRow[]): Tree;
-    static buildTree(data: any[], subtotalBys?: Column[], initiallyExpandedSubtotalRows?: string[][], initiallySelectedSubtotalRows?: string[][]): Tree;
+    static buildTree(data: any[], subtotalBys?: Column[]): Tree;
     private static bucketDetailRow(subtotalBys, detailedRow, grandTotal);
     /**
      * recursively collapse the given node

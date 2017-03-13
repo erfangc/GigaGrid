@@ -1,10 +1,11 @@
 /// <reference types="flux" />
-import { AdditionalButton, GigaState } from "./GigaGrid";
+import { AdditionalButton } from "./GigaGrid";
 import { ServerSubtotalRow } from "../store/ServerStore";
 import { GigaAction } from "../store/GigaStore";
 import { Dispatcher } from "flux";
 import { Row } from "../models/Row";
-import { ColumnGroupDef, ColumnDef, Column, FilterBy } from "../models/ColumnLike";
+import { ColumnDef, Column, FilterBy } from "../models/ColumnLike";
+import { GigaState } from "./GigaState";
 /**
  * Interface that describe the shape of the `Props` that `GigaGrid` accepts from the user
  * the bare minimum are: `data` and `columnDefs`
@@ -56,7 +57,6 @@ export interface GigaProps {
      * and other metadata about each column in `data`
      */
     columnDefs: ColumnDef[];
-    columnGroups?: ColumnGroupDef[];
     bodyHeight?: string;
     rowHeight?: string;
     /**
@@ -65,9 +65,6 @@ export interface GigaProps {
      */
     collapseHeight?: boolean;
     /**
-     * EXPERIMENTAL - these props allow us to expand / select SubtotalRow on construction of the grid component
-     */
-    /**
      * create a ServerStore instead of GigaStore, this will drastically change the grid works
      * expand / collapse async action creators must also be provided
      */
@@ -75,13 +72,8 @@ export interface GigaProps {
     fetchRowsActionCreator?: (row: Row, dispatch: Dispatcher<GigaAction>) => any;
     initialData?: ServerSubtotalRow[];
     /**
-     * sector paths to expand by default
-     */
-    initiallyExpandedSubtotalRows?: string[][];
-    /**
      * sector paths to mark as "selected"
      */
-    initiallySelectedSubtotalRows?: string[][];
     disableConfiguration?: boolean;
     /**
      * custom classes

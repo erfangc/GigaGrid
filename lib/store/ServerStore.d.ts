@@ -1,12 +1,12 @@
 /// <reference types="flux" />
 import { ReduceStore } from "flux/utils";
 import { Dispatcher } from "flux";
-import { GigaState } from "../components/GigaGrid";
 import { GigaAction } from "./GigaStore";
 import { InitializeAction } from "./handlers/InitializeReducer";
 import { BucketInfo } from "../models/ColumnLike";
 import { Row } from "../models/Row";
 import { GigaProps } from "../components/GigaProps";
+import { GigaState } from "../components/GigaState";
 export declare class ServerStore extends ReduceStore<GigaState, GigaAction> {
     static id: number;
     private props;

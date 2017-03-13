@@ -37,7 +37,7 @@ export interface FormatInstruction {
     currency?: string;
 }
 export interface ColumnDef extends ColumnLike {
-    width?: string;
+    width?: number;
     weightBy?: string;
     formatInstruction?: FormatInstruction;
     cellTemplateCreator?: (props: CellProps) => JSX.Element;
