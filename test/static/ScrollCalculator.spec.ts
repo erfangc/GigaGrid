@@ -1,10 +1,10 @@
-import { ScrollCalculator } from "../../src/static/ScrollCalculator";
+import { ScrollCalculator } from '../../src/static/ScrollCalculator';
 
-describe("ScrollCalculator", () => {
+describe('ScrollCalculator', () => {
 
-    describe("a setup where table (canvas) height = 1500 rows, viewport height = 500px", () => {
+    describe('a setup where table (canvas) height = 1500 rows, viewport height = 500px', () => {
         const rowHeight = '35px';
-        it("can compute displayStart, displayEnd given fixed row height and the two DOM elements representing a viewport and a canvas", () => {
+        it('can compute displayStart, displayEnd given fixed row height and the two DOM elements representing a viewport and a canvas', () => {
             const viewport: any = {
                 style: {
                     maxHeight: '500px'
@@ -13,10 +13,10 @@ describe("ScrollCalculator", () => {
             };
             const { displayStart, displayEnd } = ScrollCalculator.computeDisplayBoundaries(rowHeight, null, viewport);
             expect(displayStart).toBe(0);
-            expect(displayEnd).toBe(15);
+            expect(displayEnd).toBe(19);
         });
 
-        it("can compute the correct displayStart, displayEnd when the viewport are scrolled by 100px", () => {
+        it('can compute the correct displayStart, displayEnd when the viewport are scrolled by 100px', () => {
             const viewport: any = {
                 style: {},
                 clientHeight: 500,
@@ -24,7 +24,7 @@ describe("ScrollCalculator", () => {
             };
             const { displayStart, displayEnd } = ScrollCalculator.computeDisplayBoundaries(rowHeight, null, viewport);
             expect(displayStart).toBe(2);
-            expect(displayEnd).toBe(17);
+            expect(displayEnd).toBe(21);
         });
 
         // it("can compute the correct displayStart, displayEnd when the viewport are scrolled further", () => {

@@ -1,12 +1,12 @@
-import * as React from "react";
-import { DragEvent, SyntheticEvent } from "react";
-import { Column, AggregationMethod, ColumnFormat } from "../../models/ColumnLike";
-import { SortableItem } from "./SortableItem";
-import { GigaActionType, GigaAction } from "../../store/GigaStore";
-import "./SettingsPopover.styl";
-import * as classNames from "classnames";
-import { ColumnUpdateAction } from "../../store/handlers/ColumnUpdateReducer";
-import { AdditionalButton } from "../GigaGrid";
+import * as React from 'react';
+import { DragEvent, SyntheticEvent } from 'react';
+import { Column, AggregationMethod, ColumnFormat } from '../../models/ColumnLike';
+import { SortableItem } from './SortableItem';
+import { GigaActionType, GigaAction } from '../../store/GigaStore';
+import './SettingsPopover.styl';
+import * as classNames from 'classnames';
+import { ColumnUpdateAction } from '../../store/handlers/ColumnUpdateReducer';
+import { AdditionalButton } from '../GigaGrid';
 
 export interface SettingsPopoverProps {
     subtotalBys: Column[];
@@ -46,9 +46,9 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
      * @param dest
      */
     private static swapToAnotherListOfColumns(from: Column[],
-        to: Column[],
-        src: SortableDataTransfer,
-        dest: SortableDataTransfer) {
+                                              to: Column[],
+                                              src: SortableDataTransfer,
+                                              dest: SortableDataTransfer) {
         const item = from.splice(src.idx, 1)[0];
         to.splice(dest.idx + 1, 0, item);
     }
@@ -72,7 +72,7 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
      * @param dest
      */
     private updateColumnPosition(src: SortableDataTransfer,
-        dest: SortableDataTransfer) {
+                                 dest: SortableDataTransfer) {
 
         if (src.type === dest.type) {
             /**
@@ -153,9 +153,9 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
     render() {
         const activeColumn = this.state.activeColumn;
         const layoutControlClassDict = {
-            "giga-grid-flex-column": true,
-            "column-50": !!activeColumn,
-            "column-100": activeColumn !== null
+            'giga-grid-flex-column': true,
+            'column-50': !!activeColumn,
+            'column-100': activeColumn !== null
         };
         const layoutControlClassName = classNames(layoutControlClassDict);
         return (
@@ -165,19 +165,19 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
                     <div className={layoutControlClassName}>
                         <div>
                             <h5>Columns</h5>
-                            {this.renderSortable("columns", this.state.columns)}
+                            {this.renderSortable('columns', this.state.columns)}
                         </div>
                         <div>
                             <h5>Subtotal By</h5>
-                            {this.renderSortable("subtotalBys", this.state.subtotalBys)}
+                            {this.renderSortable('subtotalBys', this.state.subtotalBys)}
                         </div>
                         <div>
                             <span className="giga-grid-button"
                                 onClick={() => this.props.onSubmit.call(undefined, { type: GigaActionType.EXPAND_ALL })}>Expand All</span>
-                            {" "}
+                            {' '}
                             <span className="giga-grid-button"
                                 onClick={() => this.props.onSubmit.call(undefined, { type: GigaActionType.COLLAPSE_ALL })}>Collapse All</span>
-                            {" "}
+                            {' '}
                             <span className="giga-grid-button"
                                 onClick={() => this.props.onSubmit.call(undefined, { type: GigaActionType.CLEAR_SORT })}>Clear Sort</span>
                         </div>
@@ -189,12 +189,12 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
                     {this.renderColumnConfigurer(activeColumn)}
                 </div>
                 <div>
-                    <span className="giga-grid-button" style={{ float: "right" }}
+                    <span className="giga-grid-button" style={{ float: 'right' }}
                         onClick={(e) => this.props.onDismiss()}>
                         Close <i className="fa fa-times" />
                     </span>
 
-                    <span className="giga-grid-button" style={{ float: "right" }}
+                    <span className="giga-grid-button" style={{ float: 'right' }}
                         onClick={(e) => this.commitColumnUpdates()}>
                         Save <i className="fa fa-save" />
                     </span>
@@ -217,7 +217,7 @@ export class SettingsPopover extends React.Component<SettingsPopoverProps, Setti
 
     private renderColumnConfigurer(column?: Column): JSX.Element | string {
         if (!column) {
-            return "";
+            return '';
         }
 
         function onTitleChange(e: SyntheticEvent<any>) {

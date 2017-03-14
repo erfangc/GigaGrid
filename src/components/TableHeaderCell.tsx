@@ -1,10 +1,11 @@
-import * as React from "react";
-import * as classNames from "classnames";
-import { Column, ColumnFormat, SortDirection } from "../models/ColumnLike";
-import { GridComponentProps } from "./GigaGrid";
-import { GigaActionType } from "../store/GigaStore";
-import { ToolbarToggle } from "./toolbar/Toolbar";
-import { SortUpdateAction } from "../store/handlers/SortReducers";
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import * as classNames from 'classnames';
+import { Column, ColumnFormat, SortDirection } from '../models/ColumnLike';
+import { GridComponentProps } from './GigaGrid';
+import { GigaActionType, ColumnResizeAction } from '../store/GigaStore';
+import { ToolbarToggle } from './toolbar/Toolbar';
+import { SortUpdateAction } from '../store/handlers/SortReducers';
 
 export interface TableHeaderProps extends GridComponentProps<TableHeaderCell> {
     column: Column;
@@ -25,9 +26,9 @@ export class TableHeaderCell extends React.Component<TableHeaderProps, {}> {
         const { direction } = this.props.column;
         if (direction !== undefined) {
             const cx = classNames({
-                "fa": true,
-                "fa-sort-asc": direction === SortDirection.ASC,
-                "fa-sort-desc": direction === SortDirection.DESC
+                'fa': true,
+                'fa-sort-asc': direction === SortDirection.ASC,
+                'fa-sort-desc': direction === SortDirection.DESC
             });
             return (
                 <span>
@@ -41,14 +42,14 @@ export class TableHeaderCell extends React.Component<TableHeaderProps, {}> {
         const column = this.props.column;
 
         const componentClasses = {
-            "text-align-right": column.format === ColumnFormat.NUMBER,
-            "text-align-left": column.format !== ColumnFormat.NUMBER
+            'text-align-right': column.format === ColumnFormat.NUMBER,
+            'text-align-left': column.format !== ColumnFormat.NUMBER
         };
 
         if (this.props.tableHeaderClass) {
             componentClasses[`${this.props.tableHeaderClass}`] = true;
         } else {
-            componentClasses["table-header"] = true;
+            componentClasses['table-header'] = true;
         }
 
         componentClasses[`giga-grid-column-${this.props.columnNumber}`] = true;
@@ -67,10 +68,9 @@ export class TableHeaderCell extends React.Component<TableHeaderProps, {}> {
             const style = {
                 width: `${column.width}px`,
                 minWidth: column.minWidth ? `${column.minWidth}px` : '75px',
-                overflow: "visible",
-                position: "relative"
+                overflow: 'visible',
+                position: 'relative'
             };
-
             return (
                 <div style={style}
                     onClick={() => {
@@ -90,6 +90,21 @@ export class TableHeaderCell extends React.Component<TableHeaderProps, {}> {
                     </span>
                     {this.renderSortIcon()}
                     {this.renderToolbar()}
+                    <span
+                        style={{ cursor: 'col-resize', float: 'right', backgroundColor: '#ebebeb', width: '3px', marginLeft: '2px' }}
+                        draggable
+                        onDragEnd={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            let cellNode: HTMLDivElement = ReactDOM.findDOMNode(this) as HTMLDivElement;
+                            let action: ColumnResizeAction = {
+                                type: GigaActionType.COLUMN_RESIZE,
+                                column: column,
+                                newWidth: e.clientX - cellNode.getBoundingClientRect().right + column.width
+                            };
+                            this.props.dispatcher.dispatch(action);
+                        }}>&nbsp;
+                    </span>
                 </div>
             );
         }

@@ -32,6 +32,7 @@
   ],
   "dependencies": {
     "@types/flux": "^3.0.1",
+    "@types/react-dom": "^0.14.23",
     "classnames": "^2.2.5",
     "flux": "^3.1.2",
     "font-awesome": "^4.5.0",

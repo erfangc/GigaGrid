@@ -21,6 +21,7 @@ import { GigaProps } from '../components/GigaProps';
 import { CellContentChangeAction, cellContentChangeHandler } from './handlers/CellContentChange';
 import { GigaState } from '../components/GigaState';
 import { gridResizeReducer, GridResizeAction } from './handlers/GridResizeReducer';
+import { Column } from '../index';
 
 /*
  define the # of rows necessary to trigger progressive rendering
@@ -105,6 +106,11 @@ export class GigaStore extends ReduceStore<GigaState, GigaAction> {
             case GigaActionType.VIEWPORT_RESIZE:
                 newState = gridResizeReducer(state, action as GridResizeAction, this.props);
                 break;
+            case GigaActionType.COLUMN_RESIZE:
+                newState = Object.assign({}, state);
+                let resizeAction = (action as ColumnResizeAction);
+                resizeAction.column.width = resizeAction.newWidth;
+                break;
             default:
                 newState = state;
         }
@@ -141,6 +147,7 @@ export enum GigaActionType {
     INITIALIZE,
     CELL_CONTENT_CHANGE,
     NEW_SORT,
+    COLUMN_RESIZE,
     VIEWPORT_RESIZE,
     CLEAR_SORT,
     TOGGLE_ROW_COLLAPSE,
@@ -160,4 +167,9 @@ export enum GigaActionType {
 
 export interface GigaAction {
     type: GigaActionType;
+}
+
+export interface ColumnResizeAction extends GigaAction {
+    column: Column;
+    newWidth: number;
 }

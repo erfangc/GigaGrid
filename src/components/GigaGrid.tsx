@@ -188,7 +188,8 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
                         className="placeholder"
                     />
                 </div>
-            </div>);
+            </div>
+        );
     }
 
     componentWillReceiveProps(nextProps: GigaProps) {
@@ -220,7 +221,11 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
     private handleVerticalScroll = (e: Event) => {
         e.preventDefault();
         e.stopPropagation();
-        this.dispatchDisplayBoundChange();
+        if (this.shouldScroll) {
+            this.shouldScroll = false;
+            this.dispatchDisplayBoundChange();
+            this.shouldScroll = true;
+        }
     }
 
     /**
@@ -237,6 +242,14 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         const scrollTopAmount: number = viewport.scrollTop;
         viewport.scrollTop = scrollTopAmount + amountToScroll;
         this.dispatchDisplayBoundChange();
+        setTimeout(() => {
+            // Due to scrolling features on some OS (e.g. mac), let's make sure the panels are scrolled the correct spot
+            // http://stackoverflow.com/questions/26326958/stopping-mousewheel-event-from-happening-twice-in-osx
+            if (amountToScroll > 0) {
+                viewport.scrollTop = scrollTopAmount + amountToScroll;
+            }
+            this.shouldScroll = true;
+        });
     }
 
     private handleHorizontalScroll = (e: Event) => {
@@ -254,10 +267,6 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
             bodyHeight: bodyHeight
         };
         this.dispatcher.dispatch(action);
-    }
-
-    reflowTable() {
-        this.dispatchDisplayBoundChange();
     }
 
     componentDidMount() {
