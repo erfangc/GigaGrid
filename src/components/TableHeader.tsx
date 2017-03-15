@@ -22,40 +22,9 @@ export class TableHeader extends React.Component<TableHeaderProps, any> {
         super(props);
     }
 
-    render() {
-        return (
-            <div className="giga-grid-header-container">
-                {this.renderHeaderRows()}
-            </div>
-        );
-    }
-
-    private renderHeaderRows(): JSX.Element[] {
-        const trs: JSX.Element[] = [];
-        let i: number;
-        for (i = 0; i < this.props.columns.length - 1; i++) {
-            trs.push(TableHeader.renderColumnGroups(this.props.columns[i], i));
-        }
-        trs.push(this.renderLeafColumns(this.props.columns[i], i));
-        return trs;
-    }
-
-    private static renderColumnGroups(columns: Column[], key: number): JSX.Element {
-        const ths = columns.map((column: Column, i: number) => {
-            const style: any = {
-                width: column.colSpan + 'px'
-            };
-            return (
-                <div className="column-group" key={i} style={style}>
-                    <span className="content header-text">{column.title}</span>
-                </div>
-            );
-        });
-        return (<div className="column-group-row" key={key}>{ths}</div>);
-    }
-
-    private renderLeafColumns(columns: Column[], key: number): JSX.Element {
-        const ths = columns.map((column: Column, i: number) => {
+    renderCells(): JSX.Element[] {
+        let { columns } = this.props;
+        return columns[0].map((column: Column, i: number) => {
             return (
                 <TableHeaderCell
                     column={column}
@@ -69,29 +38,26 @@ export class TableHeader extends React.Component<TableHeaderProps, any> {
                 />
             );
         });
-        // add a placeholder to offset the scrollbar
-        ths.push(<div className="blank-header-cell text-align-right table-header" key={ths.length}
-            style={{ minWidth: '0', width: `${getHorizontalScrollbarThickness() + 5}px` }}>&nbsp;</div>);
-        if (this.props.staticLeftHeaders > 0) {
-            const leftHeaders = ths.slice(0, this.props.staticLeftHeaders);
-            const rightScrollingHeaders = ths.slice(this.props.staticLeftHeaders);
-            let { setRightHeader } = this.props;
-            return (
-                <div key={key}>
-                    <div className="left-static-headers">
-                        {leftHeaders}
-                    </div>
-                    <div
-                        ref={setRightHeader}
-                        className="right-scrolling-headers">
-                        {rightScrollingHeaders}
-                    </div>
+    }
+
+    render(): JSX.Element {
+        let cells = this.renderCells();
+        let { staticLeftHeaders } = this.props;
+        let frozen = cells.slice(0, this.props.staticLeftHeaders);
+        let scrollable = cells.slice(this.props.staticLeftHeaders);
+        let maybeFrozen = staticLeftHeaders > 0 ? (
+            <div className="frozen">
+                {frozen}
+            </div>
+        ) : null;
+        return (
+            <div className="header">
+                {maybeFrozen}
+                <div className="scrollable">
+                    {scrollable}
                 </div>
-            );
-        }
-        else {
-            return (<div className="right-scrolling-headers" key={key}>{ths}</div>);
-        }
+            </div>
+        );
     }
 
 }

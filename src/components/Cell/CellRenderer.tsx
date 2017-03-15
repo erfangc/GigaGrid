@@ -84,9 +84,8 @@ export class CellRenderer {
     }
 
     renderContentContainerWithElement(elm: JSX.Element, className?: string): JSX.Element {
-        let { columnNumber } = this.props;
         return (
-            <div className={`content-container giga-grid-column-${columnNumber} ${className}`}
+            <div className={`cell`}
                 style={this.calculateContainerStyle()}
                 onClick={e => this.onSelect()}
             >

@@ -1,0 +1,59 @@
+div.giga-grid {
+    position: relative;
+    margin: 0;
+    font-family: Arial, serif;
+    box-sizing: border-box;
+}
+
+/* headers layout styling */
+div.giga-grid .header {
+    /* this helps us align the two components of the header side-by-side: the frozen and the scrollable */
+    white-space: nowrap;
+    /* clip the display of overflowing headers */
+    overflow: hidden;
+    max-width: 100%;
+}
+
+div.giga-grid .header .frozen, div.giga-grid .header .scrollable {
+    display: inline-block;
+    overflow: hidden;
+}
+
+/* body layout styling */
+div.giga-grid .body {
+    /* this helps us align the two components of the body side-by-side: the frozen and the scrollable */
+    white-space: nowrap;
+    /* clip the display of overflowing rows */
+    max-width: 100%;
+    overflow-x: hidden;
+    /* this is crucial for vertical infinite scrolling, where we scroll the entire body */
+    overflow-y: scroll;
+}
+
+div.giga-grid .body .frozen {
+    display: inline-block;
+    overflow: hidden;
+}
+
+div.giga-grid .body .scrollable {
+    display: inline-block;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+
+/*
+row and cell layout styling
+ */
+div.giga-grid .row {
+    white-space:nowrap;
+    display: block;
+}
+
+/* cells layout styling */
+div.giga-grid .cell {
+    display: inline-block;
+    overflow: hidden;
+    /* prevent the cell from being too small */
+    min-width: 75px;
+}

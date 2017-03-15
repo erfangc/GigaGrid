@@ -90,19 +90,7 @@ const initialSubtotalBys = ['Age', 'Children', 'Income'];
 const props: GigaProps = {
     columnDefs: columnDefs,
     initialSubtotalBys: initialSubtotalBys,
-    data: json as any[],
-    onCellClick: function (row, columnDef, dispatcher) {
-        let action: CellContentChangeAction = {
-            type: GigaActionType.CELL_CONTENT_CHANGE,
-            column: columnDef,
-            row: row,
-            newContent: 0
-        };
-        setTimeout(()=>{
-            dispatcher.dispatch(action);
-        });
-        return true;
-    }
+    data: json as any[]
 };
 
 export default props;

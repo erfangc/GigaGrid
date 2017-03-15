@@ -31,8 +31,7 @@ export abstract class GigaRow extends React.Component<GigaRowProps, any> {
         let {row, rowHeight, columns} = this.props;
         let subtotalLvlClassName = `subtotal-row-${row.sectorPath.length - 1}`;
         let rowClassNames = {
-            'giga-grid-row': true,
-            'placeholder-false': true,
+            'row': true,
             'subtotal-row': !row.isDetailRow(),
             'detail-row': row.isDetailRow(),
             'selected': row.selected,

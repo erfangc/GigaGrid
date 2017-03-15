@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {GigaGrid} from '../src/index';
 import UKBudget from './data/UKBudget';
-import '../styles/theme/Retro.styl';
+import '../src/layout.css';
 import {GigaProps} from '../src/components/GigaProps';
 
 export interface ExamplesProps {

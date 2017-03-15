@@ -42,6 +42,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps, {}> {
         const column = this.props.column;
 
         const componentClasses = {
+            'cell': true,
             'text-align-right': column.format === ColumnFormat.NUMBER,
             'text-align-left': column.format !== ColumnFormat.NUMBER
         };

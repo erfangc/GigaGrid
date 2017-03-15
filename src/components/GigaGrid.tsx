@@ -157,13 +157,17 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
                     setRightHeader={(c) => state.rightHeader = c}
                 />
                 <div ref={c => state.viewport = c}
-                    className="giga-grid-body-viewport"
+                    className="body"
                     style={bodyStyle}>
-                    <div ref={(c) => state.canvas = c}
-                        style={{ height: placeholderHeights.upperPlaceholderHeight + 'px' }} className="placeholder" />
+                    <div
+                        ref={(c) => state.canvas = c}
+                        style={{ height: `${placeholderHeights.upperPlaceholderHeight}px` }}
+                    />
                     {
                         leftCols.length === 0 ? null :
-                            <div className="giga-grid-left-headers-container" ref={(c) => state.leftBody = c}
+                            <div
+                                className="frozen"
+                                ref={(c) => state.leftBody = c}
                                 style={{ height: bodyHeight }}>
                                 <FrozenTableBody
                                     dispatcher={this.dispatcher}
@@ -174,8 +178,10 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
                                 />
                             </div>
                     }
-                    <div ref={(c) => state.rightBody = c} className="giga-grid-right-data-container"
-                        style={{ height: bodyHeight, maxWidth: '100%' }}>
+                    <div
+                        ref={(c) => state.rightBody = c}
+                        className="scrollable"
+                        style={{ height: bodyHeight }}>
                         <ScrollableTableBody
                             dispatcher={this.dispatcher}
                             rows={rows}
@@ -184,9 +190,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
                             gridProps={this.props}
                         />
                     </div>
-                    <div style={{ height: placeholderHeights.lowerPlaceholderHeight + 'px' }}
-                        className="placeholder"
-                    />
+                    <div style={{ height: `${placeholderHeights.lowerPlaceholderHeight}px` }} />
                 </div>
             </div>
         );
