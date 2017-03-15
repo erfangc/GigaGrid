@@ -8,7 +8,7 @@ export class ScrollCalculator {
         rowHeight: string,
         bodyHeight: string,
         viewport: HTMLDivElement): DisplayBoundaries {
-        const bufferRows = 4;
+        const bufferRows = 0;
         let displayStart = 0, displayEnd = 20;
         const progress = viewport.scrollTop;
         displayStart = Math.floor(progress / parseInt(rowHeight));

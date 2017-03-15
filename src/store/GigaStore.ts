@@ -100,9 +100,6 @@ export class GigaStore extends ReduceStore<GigaState, GigaAction> {
             case GigaActionType.TOGGLE_CELL_SELECT:
                 newState = cellSelectHandler(state, action as ToggleCellSelectAction, this.props, this.getDispatcher());
                 break;
-            case GigaActionType.TOGGLE_SETTINGS_POPOVER:
-                newState = Object.assign({}, state, { showSettingsPopover: !state.showSettingsPopover });
-                break;
             case GigaActionType.VIEWPORT_RESIZE:
                 newState = gridResizeReducer(state, action as GridResizeAction, this.props);
                 break;
@@ -161,7 +158,6 @@ export enum GigaActionType {
     TOGGLE_ROW_SELECT,
     TOGGLE_CELL_SELECT,
     CHANGE_ROW_DISPLAY_BOUNDS,
-    TOGGLE_SETTINGS_POPOVER,
     COLUMNS_UPDATE
 }
 

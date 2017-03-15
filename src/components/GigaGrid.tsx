@@ -6,7 +6,6 @@ import { Dispatcher } from 'flux';
 import { FrozenTableBody } from './TableBody/FrozenTableBody';
 import { ScrollableTableBody } from './TableBody/ScrollableTableBody';
 import { TableHeader } from './TableHeader';
-import { SettingsPopover } from './toolbar/SettingsPopover';
 import { InitializeAction } from '../store/handlers/InitializeReducer';
 import { ChangeRowDisplayBoundsAction } from '../store/handlers/ChangeRowDisplayBoundsReducer';
 import { ReduceStore } from 'flux/utils';
@@ -15,7 +14,7 @@ import { GigaProps } from './GigaProps';
 import { GigaState } from './GigaState';
 import { GridResizeAction } from '../store/handlers/GridResizeReducer';
 import * as ReactDOM from 'react-dom';
-
+import '../layout.css';
 export interface GridComponentProps<T> {
     dispatcher: Dispatcher<GigaAction>;
     // idk if this is a good idea - but sub components often need to refer to things like callbacks - really annoying to pass them at each level
@@ -83,30 +82,6 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         this.dispatcher.dispatch(action);
     }
 
-    toggleSettingsPopover() {
-        this.dispatcher.dispatch({
-            type: GigaActionType.TOGGLE_SETTINGS_POPOVER
-        });
-    }
-
-    renderSettingsPopover() {
-        const state = this.store.getState();
-        if (state.showSettingsPopover) {
-            return (
-                <div>
-                    <SettingsPopover
-                        subtotalBys={state.subtotalBys}
-                        columns={state.columns}
-                        onSubmit={(action: GigaAction) => this.submitColumnConfigChange(action)}
-                        onDismiss={() => this.toggleSettingsPopover()}
-                        additionalUserButtons={state.additionalUserButtons}
-                    />
-                </div>);
-        } else {
-            return null;
-        }
-    }
-
     render() {
 
         let columns: Column[][];
@@ -147,7 +122,6 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
 
         return (
             <div className={`giga-grid giga-grid-${this.state.gridID}`}>
-                {this.renderSettingsPopover()}
                 <TableHeader
                     dispatcher={this.dispatcher}
                     columns={columns}

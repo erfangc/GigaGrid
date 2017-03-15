@@ -13,7 +13,7 @@ describe('ScrollCalculator', () => {
             };
             const { displayStart, displayEnd } = ScrollCalculator.computeDisplayBoundaries(rowHeight, null, viewport);
             expect(displayStart).toBe(0);
-            expect(displayEnd).toBe(19);
+            expect(displayEnd).toBe(15);
         });
 
         it('can compute the correct displayStart, displayEnd when the viewport are scrolled by 100px', () => {
@@ -24,7 +24,7 @@ describe('ScrollCalculator', () => {
             };
             const { displayStart, displayEnd } = ScrollCalculator.computeDisplayBoundaries(rowHeight, null, viewport);
             expect(displayStart).toBe(2);
-            expect(displayEnd).toBe(21);
+            expect(displayEnd).toBe(17);
         });
 
         // it("can compute the correct displayStart, displayEnd when the viewport are scrolled further", () => {

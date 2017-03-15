@@ -191,9 +191,6 @@ export class ServerStore extends ReduceStore<GigaState, GigaAction> {
             case GigaActionType.TOGGLE_CELL_SELECT:
                 newState = cellSelectHandler(state, action as ToggleCellSelectAction, this.props, this.getDispatcher());
                 break;
-            case GigaActionType.TOGGLE_SETTINGS_POPOVER:
-                newState = Object.assign({}, state, { showSettingsPopover: !state.showSettingsPopover });
-                break;
             case GigaActionType.TOGGLE_ROW_COLLAPSE:
                 newState = toggleCollapseHandler(state, action as ToggleCollapseAction, this.props);
                 break;

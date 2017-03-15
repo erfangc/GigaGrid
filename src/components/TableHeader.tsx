@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Column } from '../models/ColumnLike';
 import { TableHeaderCell } from './TableHeaderCell';
-import { GridComponentProps, getHorizontalScrollbarThickness } from './GigaGrid';
+import { GridComponentProps } from './GigaGrid';
 
 export interface TableHeaderProps extends GridComponentProps<TableHeader> {
     tableHeaderClass?: string;
@@ -42,7 +42,7 @@ export class TableHeader extends React.Component<TableHeaderProps, any> {
 
     render(): JSX.Element {
         let cells = this.renderCells();
-        let { staticLeftHeaders } = this.props;
+        let { staticLeftHeaders, setRightHeader } = this.props;
         let frozen = cells.slice(0, this.props.staticLeftHeaders);
         let scrollable = cells.slice(this.props.staticLeftHeaders);
         let maybeFrozen = staticLeftHeaders > 0 ? (
@@ -53,7 +53,7 @@ export class TableHeader extends React.Component<TableHeaderProps, any> {
         return (
             <div className="header">
                 {maybeFrozen}
-                <div className="scrollable">
+                <div className="scrollable" ref={setRightHeader}>
                     {scrollable}
                 </div>
             </div>
