@@ -11,11 +11,13 @@ div.giga-grid .header {
     white-space: nowrap;
     /* clip the display of overflowing headers */
     overflow: hidden;
+    height: 16px;
     max-width: 100%;
 }
 
 div.giga-grid .header .frozen, div.giga-grid .header .scrollable {
     display: inline-block;
+    height: 16px;
     overflow: hidden;
 }
 
@@ -50,10 +52,24 @@ div.giga-grid .row {
     display: block;
 }
 
-/* cells layout styling */
+/* basic cells layout styling */
 div.giga-grid .cell {
     display: inline-block;
     overflow: hidden;
     /* prevent the cell from being too small */
     min-width: 75px;
+}
+
+/* body cells should be vertically centered to look decent */
+div.giga-grid .body .cell {
+    vertical-align: middle;
+}
+
+div.giga-grid .text-align-left {
+    text-align: left;
+
+}
+
+div.giga-grid .text-align-right {
+    text-align: right;
 }

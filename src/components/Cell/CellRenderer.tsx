@@ -32,8 +32,7 @@ export class CellRenderer {
         return {
             width: `${column.width}px`,
             minWidth: column.minWidth ? `${column.minWidth}px` : '75px',
-            height: rowHeight,
-            paddingLeft: isFirstColumn ? this.calculateIdentation() : undefined
+            height: rowHeight
         };
     }
 
@@ -62,7 +61,7 @@ export class CellRenderer {
                 {/* Render a blank space instead of something that could be null or undefined */}
                 {renderedCellContent || '\u00A0'}
             </span>,
-            align(row, column)
+            `text-align-${align(column)}`
         );
     }
 
@@ -85,7 +84,7 @@ export class CellRenderer {
 
     renderContentContainerWithElement(elm: JSX.Element, className?: string): JSX.Element {
         return (
-            <div className={`cell`}
+            <div className={`cell ${className}`}
                 style={this.calculateContainerStyle()}
                 onClick={e => this.onSelect()}
             >

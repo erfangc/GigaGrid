@@ -47,14 +47,18 @@ export class TableHeader extends React.Component<TableHeaderProps, any> {
         let scrollable = cells.slice(this.props.staticLeftHeaders);
         let maybeFrozen = staticLeftHeaders > 0 ? (
             <div className="frozen">
-                {frozen}
+                <div className="row">
+                    {frozen}
+                </div>
             </div>
         ) : null;
         return (
             <div className="header">
                 {maybeFrozen}
                 <div className="scrollable" ref={setRightHeader}>
-                    {scrollable}
+                    <div className="row">
+                        {scrollable}
+                    </div>
                 </div>
             </div>
         );

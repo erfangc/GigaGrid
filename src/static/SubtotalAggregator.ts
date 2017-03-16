@@ -1,6 +1,7 @@
 import { Column, AggregationMethod, FormatInstruction } from '../models/ColumnLike';
 import { Row } from '../models/Row';
 import { Tree } from './TreeBuilder';
+import { ColumnFormat } from "../index";
 
 function straightSum(detailRows: Row[], column: Column): number {
     let sum = 0;
@@ -42,19 +43,17 @@ function range(detailRows: Row[], column: Column): string {
  * computes the default preferred alignment of the given cell
  * if a formatInstruction is specified on column, then the textAlign property will be respected
  * otherwise we use the default heuristic: numbers -> 'text-align-right' NaN -> 'text-align-left'
- * @param row
  * @param column
  */
-export function align(row: Row, column: Column) {
-    let value = row.get(column);
-    if (column.formatInstruction && column.formatInstruction.textAlign) {
-        return `text-align-${column.formatInstruction.textAlign}`;
+export function align(column: Column) {
+    let {formatInstruction, format} = column;
+    if (formatInstruction && formatInstruction.textAlign) {
+        return formatInstruction.textAlign;
     } else {
-        if (isNaN(value)) {
-            return `text-align-left`;
-        }
-        else {
-            return `text-align-right`;
+        if (format === ColumnFormat.CURRENCY || format === ColumnFormat.NUMBER) {
+            return 'right';
+        } else {
+            return 'left';
         }
     }
 }

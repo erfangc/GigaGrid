@@ -5,6 +5,8 @@ import { Column, SortDirection } from '../models/ColumnLike';
 import { GridComponentProps } from './GigaGrid';
 import { GigaActionType, ColumnResizeAction } from '../store/GigaStore';
 import { SortUpdateAction } from '../store/handlers/SortReducers';
+import { ColumnFormat } from '../models/ColumnLike';
+import { align } from "../static/SubtotalAggregator";
 
 export interface TableHeaderProps extends GridComponentProps<TableHeaderCell> {
     column: Column;
@@ -38,7 +40,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps, {}> {
     }
 
     render() {
-        const column = this.props.column;
+        const { column } = this.props;
 
         const style = {
             height: '15px',
@@ -58,7 +60,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps, {}> {
                     };
                     this.props.dispatcher.dispatch(payload);
                 }}
-                className="cell">
+                className={`cell text-align-${align(column)}`}>
                 {column.title || column.colTag}
                 {this.renderSortIcon()}
                 <span

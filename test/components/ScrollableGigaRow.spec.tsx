@@ -21,16 +21,12 @@ describe('GigaRow Components', () => {
                                    gridProps={data.gridProps()}/>
             </div>
         );
-        const rows: Element[] = ReactTestUtils.scryRenderedDOMComponentsWithClass(component, 'giga-grid-row');
+        const rows: Element[] = ReactTestUtils.scryRenderedDOMComponentsWithClass(component, 'row');
         const singleRow: HTMLDivElement = rows[0] as HTMLDivElement;
 
         it('should render a row', () => {
             expect(rows.length).toBe(1);
-            expect(singleRow.style.height).toBe('25px')
-        });
-
-        it('should have class placeholder-false', () => {
-            expect(singleRow.className).toContain('placeholder-false');
+            expect(singleRow.style.height).toBe('25px');
         });
 
         it('should have class subtotal-row', () => {
@@ -50,7 +46,7 @@ describe('GigaRow Components', () => {
                                    gridProps={data.gridProps()}/>
             </div>
         );
-        const rows: Element[] = ReactTestUtils.scryRenderedDOMComponentsWithClass(component, 'giga-grid-row');
+        const rows: Element[] = ReactTestUtils.scryRenderedDOMComponentsWithClass(component, 'row');
         const singleRow: HTMLDivElement = rows[0] as HTMLDivElement;
 
         it('should render a row', () => {
@@ -58,8 +54,7 @@ describe('GigaRow Components', () => {
             expect(singleRow.style.height).toBe('25px');
         });
 
-        it('should have class placeholder-false', () => {
-            expect(singleRow.className).toContain('placeholder-false');
+        it('should have class detail-row', () => {
             expect(singleRow.className).toContain('detail-row');
             expect(singleRow.className).not.toContain('subtotal-row');
         });
