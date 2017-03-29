@@ -83,6 +83,9 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
 
     private store: ReduceStore<GigaState>;
     private dispatcher: Dispatcher<GigaAction>;
+    
+    // This is very bad.  Good thing we have started the process to rewrite this
+    private lastYScrollAmount = 0;
 
     static defaultProps: GigaProps = {
         initialSubtotalBys: [],
@@ -161,8 +164,8 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
             bodyStyle.maxHeight = this.props.bodyHeight;
         else
             bodyStyle.height = this.props.bodyHeight;
-
-
+        
+        
         /**
          * We need to figure out what columns go in which sub table depending on how many static left headers there are
          */
@@ -191,7 +194,6 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
                                  gridProps={this.props}/>
                 </div>
                 <div ref={c=>state.viewport=c}
-                     onScroll={()=>this.dispatchDisplayBoundChange()}
                      className="giga-grid-body-viewport"
                      style={bodyStyle}>
                     {
@@ -233,7 +235,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         this.dispatcher.dispatch(payload);
         this.expandTable();
     }
-
+    
     /**
      * on component update, we use jquery to align table headers
      * this is the "give up" solution, implemented in 0.1.7
@@ -245,6 +247,13 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
             this.state.sortBys !== prevState.sortBys ||
             this.state.subtotalBys !== prevState.subtotalBys)
             this.synchTableHeaderWidthToFirstRow();
+        
+        const node: Element = ReactDOM.findDOMNode<Element>(this);
+        const dataContainer = $(node).parent().find('.giga-grid-right-data-container');
+        const scrollTopAmount: number = dataContainer.scrollTop();
+        console.log(scrollTopAmount);
+        $(node).parent().find('.giga-grid-left-headers-container').scrollTop(this.lastYScrollAmount);
+        $(node).parent().parent().find('.giga-grid-right-data-container').scrollTop(this.lastYScrollAmount);
     }
 
     /**
@@ -364,10 +373,12 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
 
         const scrollLeftAmount: number = dataContainer.scrollLeft();
         const scrollTopAmount: number = dataContainer.scrollTop();
-
+        this.lastYScrollAmount = scrollTopAmount;
         $(node).parent().find('.giga-grid-left-headers-container').scrollTop(scrollTopAmount);
         $(node).parent().parent().find('.right-scrolling-headers').scrollTop(scrollTopAmount);
         $(node).parent().parent().find('.right-scrolling-headers').scrollLeft(scrollLeftAmount);
+        this.dispatchDisplayBoundChange();
+        return false;
     }
 
     /**
@@ -381,9 +392,11 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         const node: Element = ReactDOM.findDOMNode<Element>(this);
         const dataContainer = $(node).parent().find('.giga-grid-right-data-container');
         const scrollTopAmount: number = dataContainer.scrollTop();
-
+        this.lastYScrollAmount = scrollTopAmount + amountToScroll;
         $(node).parent().find('.giga-grid-left-headers-container').scrollTop(scrollTopAmount + amountToScroll);
         $(node).parent().parent().find('.giga-grid-right-data-container').scrollTop(scrollTopAmount + amountToScroll);
+        this.dispatchDisplayBoundChange();
+        return false;
     }
 
     reflowTable(){
@@ -397,15 +410,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
          */
         if (typeof window !== "undefined") {
             window.addEventListener('resize', this.synchTableHeaderWidthToFirstRow.bind(this));
-
-            // Bind scroll listener to move headers when data container is scrolled
-            const node: Element = ReactDOM.findDOMNode<Element>(this);
-            const leftPanel: Element = $(node).find('.giga-grid-left-headers-container').get(0);
-            const rightPanel: Element = $(node).find('.giga-grid-right-data-container').get(0);
-            rightPanel && rightPanel.addEventListener('scroll', this.scrollHandler);
-            rightPanel && rightPanel.addEventListener('mousewheel', this.wheelScrollHandler);
-            leftPanel && leftPanel.addEventListener('mousewheel', this.wheelScrollHandler);
-            leftPanel && leftPanel.addEventListener('MozMousePixelScroll', this.wheelScrollHandler);
+            this.enableScrollHandlers();
         }
 
         /*
@@ -421,16 +426,36 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
          */
         if (typeof window !== "undefined") {
             window.removeEventListener('resize', this.synchTableHeaderWidthToFirstRow);
-
-            // Unbind the scroll listener
-            const node: Element = ReactDOM.findDOMNode<Element>(this);
-            $(node).find('.giga-grid-right-data-container').unbind('scroll', this.scrollHandler);
-            const leftPanel: Element = $(node).find('.giga-grid-left-headers-container').get(0);
-            const rightPanel: Element = $(node).find('.giga-grid-right-data-container').get(0);
-            rightPanel && rightPanel.addEventListener('scroll', this.scrollHandler);
-            leftPanel && leftPanel.removeEventListener('mousewheel', this.wheelScrollHandler);
-            leftPanel && leftPanel.removeEventListener('MozMousePixelScroll', this.wheelScrollHandler);
+            this.disableScrollHandlers();
         }
+    }
+
+    private encapsulatedScrollHandler = (e) => this.scrollHandler(e);
+    private encapsulatedWheelScrollHandler = (e) => this.wheelScrollHandler(e);
+    
+    // Bind scroll listener to move headers when data container is scrolled
+    private enableScrollHandlers(){
+        const node: Element = ReactDOM.findDOMNode<Element>(this);
+        const leftPanel: Element = $(node).find('.giga-grid-left-headers-container').get(0);
+        const rightPanel: Element = $(node).find('.giga-grid-right-data-container').get(0);
+        rightPanel && rightPanel.addEventListener('scroll', this.encapsulatedScrollHandler);
+        rightPanel && rightPanel.addEventListener('mousewheel', this.encapsulatedWheelScrollHandler);
+        rightPanel && rightPanel.addEventListener('MozMousePixelScroll', this.encapsulatedWheelScrollHandler);
+        leftPanel && leftPanel.addEventListener('mousewheel', this.encapsulatedWheelScrollHandler);
+        leftPanel && leftPanel.addEventListener('MozMousePixelScroll', this.encapsulatedWheelScrollHandler);
+    }
+
+    // Unbind the scroll listeners
+    private disableScrollHandlers(){
+        const node: Element = ReactDOM.findDOMNode<Element>(this);
+        $(node).find('.giga-grid-right-data-container').unbind('scroll', this.scrollHandler);
+        const leftPanel: Element = $(node).find('.giga-grid-left-headers-container').get(0);
+        const rightPanel: Element = $(node).find('.giga-grid-right-data-container').get(0);
+        rightPanel && rightPanel.removeEventListener('scroll', this.encapsulatedScrollHandler);
+        rightPanel && rightPanel.removeEventListener('mousewheel', this.encapsulatedWheelScrollHandler);
+        rightPanel && rightPanel.removeEventListener('MozMousePixelScroll', this.encapsulatedWheelScrollHandler);
+        leftPanel && leftPanel.removeEventListener('mousewheel', this.encapsulatedWheelScrollHandler);
+        leftPanel && leftPanel.removeEventListener('MozMousePixelScroll', this.encapsulatedWheelScrollHandler);
     }
 
     private dispatchDisplayBoundChange() {
