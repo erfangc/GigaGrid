@@ -6,6 +6,7 @@ import {GigaActionType} from "../../store/GigaStore";
 import {format, align} from "../../static/SubtotalAggregator";
 import {AggregationMethod} from "../../models/ColumnLike";
 import {ToggleCollapseAction} from "../../store/handlers/RowCollapseReducers";
+import any = jasmine.any;
 
 /**
  * helper class to render cells
@@ -53,7 +54,12 @@ export class CellRenderer {
         let {row, column} = this.props;
         let renderedCellContent: JSX.Element|string|number = format(row.get(column), column.formatInstruction) || "";
         if (!row.isDetailRow()
-            && (column.aggregationMethod === AggregationMethod.COUNT || column.aggregationMethod === AggregationMethod.COUNT_DISTINCT))
+            && (/* If aggregationMethod is of type Number | AggregationMethod.key e.g. 0,1,2,.. */
+                AggregationMethod.COUNT === column.aggregationMethod ||
+                AggregationMethod.COUNT_DISTINCT === column.aggregationMethod ||
+                /* If aggregationMethod is of type string e.g. "COUNT", "COUNT_DISTINCT",... */
+                AggregationMethod.COUNT === Number(AggregationMethod[column.aggregationMethod]) ||
+                AggregationMethod.COUNT_DISTINCT === Number(AggregationMethod[column.aggregationMethod])))
             renderedCellContent = `[${renderedCellContent}]`;
         return this.renderContentContainerWithElement(
             <span className="content">
