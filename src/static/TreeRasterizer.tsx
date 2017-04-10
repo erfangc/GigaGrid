@@ -1,5 +1,5 @@
-import {Tree} from "./TreeBuilder";
-import {Row} from "../models/Row";
+import { Tree } from './TreeBuilder';
+import { Row } from '../models/Row';
 
 export class TreeRasterizer {
 
@@ -20,12 +20,13 @@ export class TreeRasterizer {
         rasterizedRows.push(row);
         // push children (at which point recurse)
         if (!row.collapsed) {
-            if (row.containsDetailRowsOnly())
-                row.detailRows.forEach(detailRow=>rasterizedRows.push(detailRow));
-            else
-                row.children.forEach(child=> {
+            if (row.containsDetailRowsOnly()) {
+                row.detailRows.forEach(detailRow => rasterizedRows.push(detailRow));
+            } else {
+                row.children.forEach(child => {
                     TreeRasterizer.rasterizeChildren(child, rasterizedRows);
                 });
+            }
         }
     }
 

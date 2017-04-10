@@ -1,17 +1,17 @@
-import {GigaAction} from "../GigaStore";
-import {Row} from "../../models/Row";
-import {Column} from "../../models/ColumnLike";
-import {GigaState} from "../../components/GigaGrid";
+import { GigaAction } from '../GigaStore';
+import { Row } from '../../models/Row';
+import { Column } from '../../models/ColumnLike';
+import {GigaState} from '../../components/GigaState';
 
-export function cellContentChangeHandler(state:GigaState, action:CellContentChangeAction) {
-    const newState = _.clone(state);
-    let {row,column,newContent} = action;
+export function cellContentChangeHandler(state: GigaState, action: CellContentChangeAction) {
+    const newState = Object.assign({}, state);
+    let { row, column, newContent } = action;
     row.data[column.colTag] = newContent;
     return newState;
 }
 
 export interface CellContentChangeAction extends GigaAction {
-    row: Row
-    column: Column
-    newContent: any
+    row: Row;
+    column: Column;
+    newContent: any;
 }

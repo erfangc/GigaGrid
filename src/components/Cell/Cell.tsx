@@ -1,16 +1,16 @@
-import * as React from "react";
-import {ClassAttributes} from "react";
-import {Column} from "../../models/ColumnLike";
-import {Row} from "../../models/Row";
-import {GridComponentProps} from "../GigaGrid";
-import {CellRenderer} from "./CellRenderer";
+import * as React from 'react';
+import {ClassAttributes} from 'react';
+import {Column} from '../../models/ColumnLike';
+import {Row} from '../../models/Row';
+import {GridComponentProps} from '../GigaGrid';
+import {CellRenderer} from './CellRenderer';
 
 export interface CellProps extends GridComponentProps<Cell> {
-    row: Row
-    column: Column
-    rowHeight: string
-    isFirstColumn?: boolean
-    columnNumber: number
+    row: Row;
+    column: Column;
+    rowHeight: string;
+    isFirstColumn?: boolean;
+    columnNumber: number;
 }
 
 /**
@@ -68,7 +68,7 @@ export class Cell extends React.Component<CellProps & ClassAttributes<Cell>, any
         return this.helper.renderContentContainerWithElement(elm, className);
     }
 
-    onCollapseToggle(e: React.MouseEvent) {
+    onCollapseToggle(e: React.MouseEvent<any>) {
         this.helper.onCollapseToggle(e);
     }
 

@@ -1,10 +1,14 @@
-import {Column, AggregationMethod, FormatInstruction} from "../models/ColumnLike";
-import {Row} from "../models/Row";
-import {Tree} from "./TreeBuilder";
-import * as _ from "lodash";
+import { Column, AggregationMethod, FormatInstruction } from '../models/ColumnLike';
+import { Row } from '../models/Row';
+import { Tree } from './TreeBuilder';
+import { ColumnFormat } from "../index";
 
 function straightSum(detailRows: Row[], column: Column): number {
-    return _.sum(detailRows.map(r=>r.getByColTag(column.colTag)));
+    let sum = 0;
+    for (let i = 0; i < detailRows.length; i++) {
+        sum += detailRows[i].get(column);
+    }
+    return sum;
 }
 
 function weightedAverage(detailRows: Row[], column: Column): number {
@@ -12,15 +16,17 @@ function weightedAverage(detailRows: Row[], column: Column): number {
     let sumproduct = 0.0;
     for (let i = 0; i < detailRows.length; i++) {
         denom = denom + detailRows[i].getByColTag(column.weightBy);
-        sumproduct = sumproduct + detailRows[i].getByColTag(column.colTag) * detailRows[i].getByColTag(column.weightBy)
+        sumproduct = sumproduct + detailRows[i].getByColTag(column.colTag) * detailRows[i].getByColTag(column.weightBy);
     }
-    if (denom !== 0.0)
+    if (denom !== 0.0) {
         return sumproduct / denom;
+    }
 }
 
 function average(detailRows: Row[], column: Column): number {
-    if (detailRows.length === 0)
+    if (detailRows.length === 0) {
         return 0;
+    }
     return straightSum(detailRows, column) / detailRows.length;
 }
 
@@ -28,41 +34,26 @@ function count(detailRows: Row[]): number {
     return detailRows.length;
 }
 
-function countOrDistinct(detailRows: Row[], column: Column): any {
-    const distinctCount = countDistinct(detailRows, column);
-    const c = count(detailRows);
-    if (distinctCount !== 1)
-        return `${distinctCount}/${c}`;
-    else
-        return detailRows[0].getByColTag(column.colTag);
-}
-
-function countDistinct(detailRows: Row[], column: Column): number {
-    return _.chain(detailRows).map((r: Row)=>r.getByColTag(column.colTag)).sortBy().uniq(true).value().length;
-}
-
 function range(detailRows: Row[], column: Column): string {
-    const val = detailRows.map((r: Row)=>r.getByColTag(column.colTag));
-    return `${_.min(val)} - ${_.max(val)}`;
+    const val = detailRows.map((r: Row) => r.getByColTag(column.colTag));
+    return `${Math.min(...val)} - ${Math.max(...val)}`;
 }
 
 /**
  * computes the default preferred alignment of the given cell
  * if a formatInstruction is specified on column, then the textAlign property will be respected
  * otherwise we use the default heuristic: numbers -> 'text-align-right' NaN -> 'text-align-left'
- * @param row
  * @param column
  */
-export function align(row: Row, column: Column) {
-    let value = row.get(column);
-    if (column.formatInstruction && column.formatInstruction.textAlign) {
-        return `text-align-${column.formatInstruction.textAlign}`;
+export function align(column: Column) {
+    let {formatInstruction, format} = column;
+    if (formatInstruction && formatInstruction.textAlign) {
+        return formatInstruction.textAlign;
     } else {
-        if (isNaN(value)) {
-            return `text-align-left`;
-        }
-        else {
-            return `text-align-right`;
+        if (format === ColumnFormat.CURRENCY || format === ColumnFormat.NUMBER) {
+            return 'right';
+        } else {
+            return 'left';
         }
     }
 }
@@ -76,32 +67,39 @@ export function align(row: Row, column: Column) {
  * @returns {any}
  */
 export function format(value: any, fmtInstruction: FormatInstruction): any {
-    if (!fmtInstruction)
+    if (!fmtInstruction) {
         return value;
-    if (value === '' || value === null || value === undefined)
+    }
+    if (value === '' || value === null || value === undefined) {
         return null;
+    }
 
     let result = value;
-    if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result))
+    if (fmtInstruction.multiplier && !isNaN(fmtInstruction.multiplier) && !isNaN(result)) {
         result *= fmtInstruction.multiplier;
-    if (typeof fmtInstruction.roundTo !== "undefined" && !isNaN(fmtInstruction.roundTo) && !isNaN(result))
+    }
+    if (typeof fmtInstruction.roundTo !== 'undefined' && !isNaN(fmtInstruction.roundTo) && !isNaN(result)) {
         result = parseFloat(result).toFixed(fmtInstruction.roundTo);
+    }
     // Deal with concept of localities and currency
     if ((fmtInstruction.separator || fmtInstruction.locale || fmtInstruction.currency) && !isNaN(result)) {
         // Provide legacy support for fmtInstruction.separator
-        const locale: string = fmtInstruction.locale || "en-US";
+        const locale: string = fmtInstruction.locale || 'en-US';
         // Use currency if available. Warning: this needs to be shimmed for Safari as of Feb 2017.
-        if( fmtInstruction.currency )
+        if (fmtInstruction.currency) {
             result = new Intl.NumberFormat(locale, {
                 style: 'currency',
                 maximumFractionDigits: fmtInstruction.roundTo,
                 currency: fmtInstruction.currency
             }).format(result);
-        else
+        }
+        else {
             result = new Intl.NumberFormat(locale).format(result);
+        }
     }
-    if (fmtInstruction.showAsPercent && ['number', 'string'].indexOf(typeof result) > -1)
+    if (fmtInstruction.showAsPercent && ['number', 'string'].indexOf(typeof result) > -1) {
         result = `${result}%`;
+    }
     return result;
 }
 
@@ -122,10 +120,11 @@ export class SubtotalAggregator {
      * @param columns
      */
     private static aggregateChildren(subtotalRow: Row, columns: Column[]) {
-        subtotalRow.children.forEach(childRow=> {
+        subtotalRow.children.forEach(childRow => {
             SubtotalAggregator.aggregateSubtotalRow(childRow, columns);
-            if (childRow.children.length > 0)
+            if (childRow.children.length > 0) {
                 SubtotalAggregator.aggregateChildren(childRow, columns);
+            }
         });
     }
 
@@ -140,12 +139,6 @@ export class SubtotalAggregator {
                 case AggregationMethod.COUNT:
                     value = count(detailRows);
                     break;
-                case AggregationMethod.COUNT_DISTINCT:
-                    value = countDistinct(detailRows, column);
-                    break;
-                case AggregationMethod.COUNT_OR_DISTINCT:
-                    value = countOrDistinct(detailRows, column);
-                    break;
                 case AggregationMethod.RANGE:
                     value = range(detailRows, column);
                     break;
@@ -156,7 +149,7 @@ export class SubtotalAggregator {
                     value = weightedAverage(detailRows, column);
                     break;
                 default:
-                    value = "";
+                    value = '';
                     break;
             }
             aggregated[column.colTag] = value;

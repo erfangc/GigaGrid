@@ -1,8 +1,7 @@
-import {Row} from "../models/Row";
-import * as _ from "lodash";
-import {Column, ColumnFormat, BucketInfo} from "../models/ColumnLike";
-import {ServerSubtotalRow, dataToSubtotalRows} from "../store/ServerStore";
-import {format} from "./SubtotalAggregator";
+import { Row } from '../models/Row';
+import { Column, ColumnFormat, BucketInfo } from '../models/ColumnLike';
+import { ServerSubtotalRow, dataToSubtotalRows } from '../store/ServerStore';
+import { format } from './SubtotalAggregator';
 
 export class TreeBuilder {
 
@@ -12,61 +11,26 @@ export class TreeBuilder {
      * @returns {Tree}
      */
     public static buildShallowTree(rows: ServerSubtotalRow[]): Tree {
-        const rootBucket: BucketInfo = {colTag: null, title: "Grand Total", value: null};
+        const rootBucket: BucketInfo = { colTag: null, title: 'Grand Total', value: null };
         const grandTotal = new Row();
         grandTotal.bucketInfo = rootBucket;
         grandTotal.sectorPath = [];
         grandTotal.collapsed = false;
-        dataToSubtotalRows(rows).forEach(row=> {
+        dataToSubtotalRows(rows).forEach(row => {
             grandTotal.addChild(row);
         });
         return new Tree(grandTotal);
     }
 
-    /**
-     * traverse the tree and find nodes that has identical sector path, set toggleCollapse to false
-     * TODO add tests to ensure it does not break
-     * @param node
-     * @param initiallyExpandedSubtotalRows
-     */
-    private static selectivelyExpand(node: Row, initiallyExpandedSubtotalRows: string[][]) {
-
-        initiallyExpandedSubtotalRows.forEach((sp)=> {
-            for (let i = 1; i <= sp.length; i++)
-                if (_.isEqual(node.sectorPath, sp.slice(0, i)))
-                    node.collapsed = false;
-        });
-
-        if (node.getNumChildren() != 0)
-            node.children.forEach((child)=>TreeBuilder.selectivelyExpand(child, initiallyExpandedSubtotalRows))
-    }
-
-    /**
-     * traverse the tree and find nodes that has identical sector path, set isSelected to true
-     * TODO add tests to ensure it does not break
-     * @param node
-     * @param initiallySelectedSubtotalRows
-     */
-    private static selectivelySelect(node: Row, initiallySelectedSubtotalRows: string[][]) {
-        initiallySelectedSubtotalRows.forEach((sp)=> {
-            if (_.isEqual(node.sectorPath, sp))
-                node.selected = true;
-        });
-        if (node.getNumChildren() != 0)
-            node.children.forEach((child)=>TreeBuilder.selectivelySelect(child, initiallySelectedSubtotalRows))
-    }
-
     static buildTree(data: any[],
-                     subtotalBys: Column[] = [],
-                     initiallyExpandedSubtotalRows?: string[][],
-                     initiallySelectedSubtotalRows?: string[][]): Tree {
+                     subtotalBys: Column[] = []): Tree {
         /*
          * the way we create a Tree is as follows
          * since each detailRow in data can only belong to ONE Row and each Row can have only 1 parent
          * we take each detailRow, traverse from the root node (i.e. grandTotal) to the given detailRow's theoretical
          * parent Row (in other words, find the detailRow's "bucket") and append said detailRow to the parent
          */
-        let rootBucketInfo = {colTag: null, title: "Grand Total", value: null};
+        let rootBucketInfo = { colTag: null, title: 'Grand Total', value: null };
         const grandTotal = new Row();
         grandTotal.bucketInfo = rootBucketInfo;
         grandTotal.sectorPath = [];
@@ -74,17 +38,9 @@ export class TreeBuilder {
         data.forEach(datum => {
             let detailedRow = new Row();
             detailedRow.data = datum;
-            this.bucketDetailRow(subtotalBys, detailedRow, grandTotal)
+            this.bucketDetailRow(subtotalBys, detailedRow, grandTotal);
         });
         TreeBuilder.recursivelyToggleChildrenCollapse(grandTotal, true);
-
-        /**
-         * EXPERIMENTAL - these props allow us to expand / select Row on construction of the grid component
-         */
-        if (initiallyExpandedSubtotalRows)
-            TreeBuilder.selectivelyExpand(grandTotal, initiallyExpandedSubtotalRows);
-        if (initiallySelectedSubtotalRows)
-            TreeBuilder.selectivelySelect(grandTotal, initiallySelectedSubtotalRows);
 
         return new Tree(grandTotal);
     }
@@ -126,12 +82,13 @@ export class TreeBuilder {
             TreeBuilder.recursivelyToggleChildrenCollapse(row, shouldCollapse);
         }
 
-        node.children.forEach((child)=> {
+        node.children.forEach((child) => {
             if (shouldCollapse) {
                 toggleCollapse(child, shouldCollapse);
             } else { // expand all
-                if (child.children.length || child.sectorPath.length === 1 || child.detailRows.length)
+                if (child.children.length || child.sectorPath.length === 1 || child.detailRows.length) {
                     toggleCollapse(child, shouldCollapse);
+                }
             }
         });
     }
@@ -148,9 +105,9 @@ export class TreeBuilder {
         for (let k = 0; k < buckets.length; k++) {
             // update the current subtotal row
             const title = buckets[k].title;
-            if (currentRow.hasChildWithTitle(title))
+            if (currentRow.hasChildWithTitle(title)) {
                 currentRow = currentRow.getChildByTitle(title);
-            else {
+            } else {
                 // create a new sector if it is not already available
                 // Row are created with a `title` and a `firstCellValue` property, firstCellValue is used to determine the row's sort order
                 let newRow = new Row();
@@ -167,13 +124,15 @@ export class TreeBuilder {
     private static resolveSubtotalBucket(subtotalBy: Column, detailedRow: Row): BucketInfo {
         // FIXME this is the naive implementation, cannot handle text-align-right bands
         let title;
-        if( subtotalBy.format === ColumnFormat.NUMBER )
+        if (subtotalBy.format === ColumnFormat.NUMBER) {
             title = format(detailedRow.get(subtotalBy), subtotalBy.formatInstruction);
-        else
+        } else {
             title = detailedRow.get(subtotalBy);
+        }
         // if the given column is not defined in the data, return undefined, this will
-        if (title === undefined)
+        if (title === undefined) {
             return undefined;
+        }
         return {
             colTag: subtotalBy.colTag,
             title: subtotalBy.title ? `${subtotalBy.title}: ${title}` : title,

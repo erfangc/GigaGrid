@@ -1,26 +1,25 @@
-import {ReduceStore} from "flux/utils";
-import {Dispatcher} from "flux";
-import {GigaState} from "../components/GigaGrid";
-import {ScrollCalculator} from "../static/ScrollCalculator";
-import {GigaStore, GigaActionType, GigaAction, PROGRESSIVE_RENDERING_THRESHOLD} from "./GigaStore";
-import {InitializeAction, decorateInitialSortBys, decorateColumnsWithSort} from "./handlers/InitializeReducer";
-import {TreeRasterizer} from "../static/TreeRasterizer";
+import {ReduceStore} from 'flux/utils';
+import {Dispatcher} from 'flux';
+import {ScrollCalculator} from '../static/ScrollCalculator';
+import {GigaStore, GigaActionType, GigaAction, PROGRESSIVE_RENDERING_THRESHOLD} from './GigaStore';
+import {InitializeAction, decorateInitialSortBys, decorateColumnsWithSort} from './handlers/InitializeReducer';
+import {TreeRasterizer} from '../static/TreeRasterizer';
 import {
     ToggleCellSelectAction,
     cellSelectHandler,
     ToggleRowSelectAction,
     rowSelectHandler
-} from "./handlers/SelectReducers";
-import {cleartSortHandler, SortUpdateAction, sortUpdateHandler} from "./handlers/SortReducers";
-import {ChangeRowDisplayBoundsAction, changeDisplayBoundsHandler} from "./handlers/ChangeRowDisplayBoundsReducer";
-import {Column, BucketInfo} from "../models/ColumnLike";
-import {TreeBuilder} from "../static/TreeBuilder";
-import {Row} from "../models/Row";
-import {ToggleCollapseAction, toggleCollapseHandler} from "./handlers/RowCollapseReducers";
-import {SortFactory} from "../static/SortFactory";
-import * as $ from "jquery";
-import {GigaProps} from "../components/GigaProps";
-import {CellContentChangeAction, cellContentChangeHandler} from "./handlers/CellContentChange";
+} from './handlers/SelectReducers';
+import {cleartSortHandler, SortUpdateAction, sortUpdateHandler} from './handlers/SortReducers';
+import {ChangeRowDisplayBoundsAction, changeDisplayBoundsHandler} from './handlers/ChangeRowDisplayBoundsReducer';
+import {Column, BucketInfo} from '../models/ColumnLike';
+import {TreeBuilder} from '../static/TreeBuilder';
+import {Row} from '../models/Row';
+import {ToggleCollapseAction, toggleCollapseHandler} from './handlers/RowCollapseReducers';
+import {SortFactory} from '../static/SortFactory';
+import {GigaProps} from '../components/GigaProps';
+import {CellContentChangeAction, cellContentChangeHandler} from './handlers/CellContentChange';
+import {GigaState} from '../components/GigaState';
 
 /**
  * Initial state reducer for Server store
@@ -35,14 +34,13 @@ function initialStateReducer(action: InitializeAction): GigaState {
         initialSortBys,
         initialSubtotalBys,
         initialFilterBys,
-        expandTable,
         additionalUserButtons
     } = action.props;
     /**
      * turn ColumnDefs into "Columns" which are decorated with behaviors
      */
-    const columns = columnDefs.map(columnDef=> {
-        return _.assign<{},Column>({}, columnDef, {});
+    const columns = columnDefs.map(columnDef => {
+        return Object.assign({}, columnDef, {});
     });
     /**
      * create sortBys from columns (any properties passed via initialSortBys will override the same property in the corresponding Column object
@@ -54,12 +52,14 @@ function initialStateReducer(action: InitializeAction): GigaState {
      * create subtotalBys from columns (any properties passed in via initialSubtotalBys will override the same property on the corresponding Column object
      */
     const subtotalBys: Column[] = (initialSubtotalBys || []).map(subtotalBy => {
-        if( typeof subtotalBy === 'string' )
-            return _.find<Column>(columns, column => column.colTag === subtotalBy);
-        else if( typeof subtotalBy === 'object' )
-            return _.assign({}, _.find<Column>(columns, column => column.colTag === subtotalBy.colTag), subtotalBy) as Column;
-        else
-            throw `Invalid subtotalBy: ${subtotalBy}`
+        if (typeof subtotalBy === 'string') {
+            return columns.find(column => column.colTag === subtotalBy);
+        }
+        else if (typeof subtotalBy === 'object') {
+            return Object.assign({}, columns.find(column => column.colTag === subtotalBy.colTag), subtotalBy as Column);
+        } else {
+            throw `Invalid subtotalBy: ${subtotalBy}`;
+        }
     });
 
     // create a simple shallow tree based on the initial data
@@ -68,27 +68,32 @@ function initialStateReducer(action: InitializeAction): GigaState {
 
     const rasterizedRows: Row[] = TreeRasterizer.rasterize(tree);
 
-    const gridID: number = parseInt(_.uniqueId());
+    const gridID: number = ServerStore.id++;
 
     return {
         rasterizedRows: rasterizedRows,
         displayStart: 0,
         columns: columnsWithSort,
-        displayEnd: Math.min(rasterizedRows.length - 1, PROGRESSIVE_RENDERING_THRESHOLD),
+        displayEnd: PROGRESSIVE_RENDERING_THRESHOLD,
         subtotalBys: subtotalBys,
         sortBys: sortBys,
-        filterBys: _.cloneDeep(initialFilterBys) || [],
+        filterBys: Object.assign({}, initialFilterBys) || [],
         tree: tree,
         showSettingsPopover: false,
         viewport: undefined,
         canvas: undefined,
-        expandTable,
+        leftBody: undefined,
+        rightBody: undefined,
+        leftHeader: undefined,
+        rightHeader: undefined,
         additionalUserButtons,
         gridID
-    }
+    };
 }
 
-export class ServerStore extends ReduceStore<GigaState> {
+export class ServerStore extends ReduceStore<GigaState, GigaAction> {
+
+    static id: number = 0;
 
     private props: GigaProps;
 
@@ -106,7 +111,7 @@ export class ServerStore extends ReduceStore<GigaState> {
 
     initialize(action: InitializeAction): GigaState {
         // if props not passed we will use this.props
-        const overrideAction: InitializeAction = _.assign<{},{},{},InitializeAction>({}, action, {props: action.props || this.props});
+        const overrideAction: InitializeAction = Object.assign({}, action, { props: action.props || this.props });
         return initialStateReducer(overrideAction); // TODO create initialize reducer
     }
 
@@ -122,41 +127,41 @@ export class ServerStore extends ReduceStore<GigaState> {
             case GigaActionType.LOADING_MORE_DATA:
                 row = (action as LoadingMoreDataAction).parentRow;
                 row.loading = true;
-                newState = _.clone(state);
-                boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, this.props.bodyHeight, $(state.viewport), $(state.canvas));
+                newState = Object.assign({}, state);
+                boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, this.props.bodyHeight, state.viewport);
                 newState.displayStart = boundaries.displayStart;
                 newState.displayEnd = boundaries.displayEnd;
                 break;
             case GigaActionType.STOP_LOADING_MORE_DATA:
                 row = (action as LoadingMoreDataAction).parentRow;
                 row.loading = false;
-                newState = _.clone(state);
-                boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, this.props.bodyHeight, $(state.viewport), $(state.canvas));
+                newState = Object.assign({}, state);
+                boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, this.props.bodyHeight, state.viewport);
                 newState.displayStart = boundaries.displayStart;
                 newState.displayEnd = boundaries.displayEnd;
                 break;
             case GigaActionType.SET_LOADING_DATA_ERROR_STATUS:
-                newState = _.clone(state);
+                newState = Object.assign({}, state);
                 row = (action as SetLoadingDataErrorStatusAction).row;
                 row.errorStatus = (action as SetLoadingDataErrorStatusAction).status;
                 break;
             case GigaActionType.GOT_MORE_DATA:
                 const myAction = action as GotMoreDataAction;
-                const {parentRow, rows, isDetail} = myAction;
+                const { parentRow, rows, isDetail } = myAction;
                 parentRow.collapsed = false;
                 parentRow.loading = false;
                 // empty and existing children / detail children
                 if (isDetail) {
                     // add data as detail rows
                     parentRow.detailRows = [];
-                    dataToDetailRows(rows).forEach(row=>parentRow.detailRows.push(row));
+                    dataToDetailRows(rows).forEach(row => parentRow.detailRows.push(row));
                 } else {
                     // add data as subtotal rows
                     parentRow.children = [];
-                    dataToSubtotalRows(rows).forEach(row=>parentRow.addChild(row));
+                    dataToSubtotalRows(rows).forEach(row => parentRow.addChild(row));
                 }
-                newState = _.clone(state); // force update
-                boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, this.props.bodyHeight, $(state.viewport), $(state.canvas));
+                newState = Object.assign({}, state);
+                boundaries = ScrollCalculator.computeDisplayBoundaries(this.props.rowHeight, this.props.bodyHeight, state.viewport);
                 newState.displayStart = boundaries.displayStart;
                 newState.displayEnd = boundaries.displayEnd;
                 break;
@@ -186,9 +191,6 @@ export class ServerStore extends ReduceStore<GigaState> {
             case GigaActionType.TOGGLE_CELL_SELECT:
                 newState = cellSelectHandler(state, action as ToggleCellSelectAction, this.props, this.getDispatcher());
                 break;
-            case GigaActionType.TOGGLE_SETTINGS_POPOVER:
-                newState = _.assign<{},GigaState>({}, state, {showSettingsPopover: !state.showSettingsPopover});
-                break;
             case GigaActionType.TOGGLE_ROW_COLLAPSE:
                 newState = toggleCollapseHandler(state, action as ToggleCollapseAction, this.props);
                 break;
@@ -212,18 +214,18 @@ export class ServerStore extends ReduceStore<GigaState> {
          determine if an action should trigger rasterization
          todo I wonder if we need to re-compute display bounds after rasterization if so, viewport and canvas must become states so we can access them here
          */
-        if (GigaStore.shouldTriggerRasterization(action))
+        if (GigaStore.shouldTriggerRasterization(action)) {
             newState.rasterizedRows = TreeRasterizer.rasterize(newState.tree);
-
+        }
         return newState;
     }
 
 }
 
 export interface ServerSubtotalRow {
-    data: any
-    bucketInfo: BucketInfo
-    sectorPath: BucketInfo[]
+    data: any;
+    bucketInfo: BucketInfo;
+    sectorPath: BucketInfo[];
 }
 
 /**
@@ -233,7 +235,7 @@ export interface ServerSubtotalRow {
  * @returns {Row[]}
  */
 function dataToDetailRows(rows: any[]): Row[] {
-    return rows.map(row=> {
+    return rows.map(row => {
         const detailRow = new Row();
         detailRow.data = row.data;
         detailRow.sectorPath = row.sectorPath;
@@ -248,7 +250,7 @@ function dataToDetailRows(rows: any[]): Row[] {
  * @returns {Row[]}
  */
 export function dataToSubtotalRows(rows: ServerSubtotalRow[]): Row[] {
-    return rows.map(row=> {
+    return rows.map(row => {
         const subtotalRow = new Row();
         subtotalRow.bucketInfo = row.bucketInfo;
         subtotalRow.sectorPath = row.sectorPath;
@@ -260,16 +262,16 @@ export function dataToSubtotalRows(rows: ServerSubtotalRow[]): Row[] {
 }
 
 interface GotMoreDataAction extends GigaAction {
-    rows: any[]
-    isDetail: boolean
-    parentRow: Row
+    rows: any[];
+    isDetail: boolean;
+    parentRow: Row;
 }
 
 interface LoadingMoreDataAction extends GigaAction {
-    parentRow: Row
+    parentRow: Row;
 }
 
 interface SetLoadingDataErrorStatusAction extends GigaAction {
-    row: Row
-    status: number
+    row: Row;
+    status: number;
 }

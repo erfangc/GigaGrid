@@ -1,67 +1,30 @@
-import * as React from "react";
-import {ClassAttributes} from "react";
-import * as ReactDOM from "react-dom";
-import * as _ from "lodash";
-import {Column, FilterBy, ColumnFactory} from "../models/ColumnLike";
-import {Row} from "../models/Row";
-import {Tree} from "../static/TreeBuilder";
-import {GigaStore, GigaAction, GigaActionType} from "../store/GigaStore";
-import {Dispatcher} from "flux";
-import {FrozenTableBody} from "./TableBody/FrozenTableBody";
-import {ScrollableTableBody} from "./TableBody/ScrollableTableBody";
-import {TableHeader} from "./TableHeader";
-import {SettingsPopover} from "./toolbar/SettingsPopover";
-import {InitializeAction} from "../store/handlers/InitializeReducer";
-import {ChangeRowDisplayBoundsAction} from "../store/handlers/ChangeRowDisplayBoundsReducer";
-import {ReduceStore} from "flux/utils";
-import {ServerStore} from "../store/ServerStore";
-import * as $ from "jquery";
-import {GigaProps} from "./GigaProps";
-
+import * as React from 'react';
+import { ClassAttributes } from 'react';
+import { Column } from '../models/ColumnLike';
+import { GigaStore, GigaAction, GigaActionType } from '../store/GigaStore';
+import { Dispatcher } from 'flux';
+import { FrozenTableBody } from './TableBody/FrozenTableBody';
+import { ScrollableTableBody } from './TableBody/ScrollableTableBody';
+import { TableHeader } from './TableHeader';
+import { InitializeAction } from '../store/handlers/InitializeReducer';
+import { ChangeRowDisplayBoundsAction } from '../store/handlers/ChangeRowDisplayBoundsReducer';
+import { ReduceStore } from 'flux/utils';
+import { ServerStore } from '../store/ServerStore';
+import { GigaProps } from './GigaProps';
+import { GigaState } from './GigaState';
+import { GridResizeAction } from '../store/handlers/GridResizeReducer';
+import * as ReactDOM from 'react-dom';
+import '../layout.css';
 export interface GridComponentProps<T> {
     dispatcher: Dispatcher<GigaAction>;
     // idk if this is a good idea - but sub components often need to refer to things like callbacks - really annoying to pass them at each level
     // making them optional so tests' don't complain as much
-    gridProps?: GigaProps
+    gridProps?: GigaProps;
 }
 
 export interface AdditionalButton {
-    name: string
-    customCallback: () => any
-}
-
-/**
- * Interface that Declares the Valid State of GigaGrid
- * The grid's state consists of an `Tree` object that model the rows in a hierarchical structure (representing subtotals)
- *
- * `rasterizedRows` is a flattened version of `tree`. Each `Row` in `rasterizedRows` is converted into a `TableRow` component
- * at render time. (even though we represent subtotal-ed data as a tree in-memory, HTML tables must ultimately be rendered as a two-dimensional grid
- * and that is why `rasterizedRow` exists
- *
- * `displayStart`, `displayEnd` determines the range in `rasterizedRows` that is actually rendered as `tr` elements. This is the avoid needlessly rendering rows that will not be visible in the viewport
- *
- * `widthMeasures` contain state information on the width of each column and the table
- */
-export interface GigaState {
-
-    gridID?: number
-    tree: Tree
-    columns: Column[]
-    subtotalBys: Column[]
-    sortBys: Column[]
-    filterBys: FilterBy[]
-    /*
-     the displayable view of the data in `tree`
-     */
-    rasterizedRows: Row[]
-    displayStart: number
-    displayEnd: number
-    showSettingsPopover: boolean
-    additionalUserButtons?: AdditionalButton[]
-    expandTable?: boolean
-
-    canvas: HTMLElement;
-    viewport: HTMLElement;
+    name: string;
+    customCallback: () => any;
 }
 
 /**
@@ -81,7 +44,7 @@ export interface GigaState {
 
 export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGrid>, GigaState> {
 
-    private store: ReduceStore<GigaState>;
+    private store: ReduceStore<GigaState, GigaAction>;
     private dispatcher: Dispatcher<GigaAction>;
     
     // This is very bad.  Good thing we have started the process to rewrite this
@@ -93,17 +56,17 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         initialFilterBys: [],
         data: [],
         columnDefs: [],
-        rowHeight: "25px",
+        rowHeight: '25px',
         collapseHeight: false,
-        expandTable: false,
         additionalUserButtons: []
     };
 
-    private static createStore(props: GigaProps, dispatcher: Dispatcher<GigaAction>): ReduceStore<GigaState> {
-        if (props.useServerStore)
+    private static createStore(props: GigaProps, dispatcher: Dispatcher<GigaAction>): ReduceStore<GigaState, GigaAction> {
+        if (props.useServerStore) {
             return new ServerStore(dispatcher, props);
-        else
+        } else {
             return new GigaStore(dispatcher, props);
+        }
     }
 
     constructor(props: GigaProps) {
@@ -122,37 +85,11 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         this.dispatcher.dispatch(action);
     }
 
-    toggleSettingsPopover() {
-        this.dispatcher.dispatch({
-            type: GigaActionType.TOGGLE_SETTINGS_POPOVER
-        });
-    }
-
-    renderSettingsPopover() {
-        const state = this.store.getState();
-        if (state.showSettingsPopover)
-            return (
-                <div>
-                    <SettingsPopover
-                        subtotalBys={state.subtotalBys}
-                        columns={state.columns}
-                        onSubmit={(action:GigaAction) => this.submitColumnConfigChange(action)}
-                        onDismiss={()=>this.toggleSettingsPopover()}
-                        additionalUserButtons={state.additionalUserButtons}
-                    />
-                </div>);
-        else
-            return null;
-    }
-
     render() {
 
         let columns: Column[][];
         const state = this.store.getState();
-        if (this.props.columnGroups)
-            columns = ColumnFactory.createColumnsFromGroupDefinition(this.props.columnGroups, state);
-        else
-            columns = [state.columns];
+        columns = [state.columns];
 
         const bodyStyle: any = {};
 
@@ -160,12 +97,13 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
          * As noted in the collapseHeight property of the GigaProps interface, if collapseHeight is true, the table will
          * collapse to the height of the table itself it is smaller than the container
          */
-        if (this.props.collapseHeight)
-            bodyStyle.maxHeight = this.props.bodyHeight;
-        else
-            bodyStyle.height = this.props.bodyHeight;
-        
-        
+        let { bodyHeight } = this.props;
+        if (this.props.collapseHeight) {
+            bodyStyle.maxHeight = bodyHeight;
+        } else {
+            bodyStyle.height = bodyHeight;
+        }
+      
         /**
          * We need to figure out what columns go in which sub table depending on how many static left headers there are
          */
@@ -175,13 +113,16 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         if (isNaN(this.props.staticLeftHeaders)) {
             leftCols = [];
             rightCols = allCols;
+        } else if (allCols.length > this.props.staticLeftHeaders) {
+            let { staticLeftHeaders } = this.props;
+            leftCols = allCols.slice(0, staticLeftHeaders);
+            rightCols = allCols.slice(staticLeftHeaders, allCols.length - staticLeftHeaders + 1);
+        } else {
+            throw 'Please declare a staticLeftHeaders prop which is less than the number of columns in the table.';
         }
-        else if (allCols.length > this.props.staticLeftHeaders) {
-            leftCols = _.take(allCols, this.props.staticLeftHeaders);
-            rightCols = _.takeRight(allCols, allCols.length - this.props.staticLeftHeaders);
-        }
-        else
-            throw "Please declare a staticLeftHeaders prop which is less than the number of columns in the table.";
+        let placeholderHeights = this.calculatePlaceholderHeight();
+
+        let rows = state.rasterizedRows.slice(state.displayStart, state.displayEnd + 1);
 
         return (
             <div className={`giga-grid giga-grid-${this.state.gridID}`}>
@@ -197,34 +138,36 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
                      className="giga-grid-body-viewport"
                      style={bodyStyle}>
                     {
-                        leftCols.length == 0 ? "" :
-                            <div className="giga-grid-left-headers-container">
-                                <div className="giga-grid-body-canvas">
-                                    <FrozenTableBody dispatcher={this.dispatcher}
-                                                     rows={state.rasterizedRows}
-                                                     columns={leftCols}
-                                                     displayStart={state.displayStart}
-                                                     displayEnd={state.displayEnd}
-                                                     rowHeight={this.props.rowHeight}
-                                                     gridProps={this.props}
-                                    />
-                                </div>
+                        leftCols.length === 0 ? null :
+                            <div
+                                className="frozen"
+                                ref={(c) => state.leftBody = c}
+                                style={{ height: bodyHeight }}>
+                                <FrozenTableBody
+                                    dispatcher={this.dispatcher}
+                                    rows={rows}
+                                    columns={leftCols}
+                                    rowHeight={this.props.rowHeight}
+                                    gridProps={this.props}
+                                />
                             </div>
                     }
-                    <div className="giga-grid-right-data-container">
-                        <div ref={c=>state.canvas=c} className="giga-grid-body-canvas">
-                            <ScrollableTableBody dispatcher={this.dispatcher}
-                                                 rows={state.rasterizedRows}
-                                                 columns={rightCols}
-                                                 displayStart={state.displayStart}
-                                                 displayEnd={state.displayEnd}
-                                                 rowHeight={this.props.rowHeight}
-                                                 gridProps={this.props}
-                            />
-                        </div>
+                    <div
+                        ref={(c) => state.rightBody = c}
+                        className="scrollable"
+                        style={{ height: bodyHeight }}>
+                        <ScrollableTableBody
+                            dispatcher={this.dispatcher}
+                            rows={rows}
+                            columns={rightCols}
+                            rowHeight={this.props.rowHeight}
+                            gridProps={this.props}
+                        />
                     </div>
+                    <div style={{ height: `${placeholderHeights.lowerPlaceholderHeight}px` }} />
                 </div>
-            </div>);
+            </div>
+        );
     }
 
     componentWillReceiveProps(nextProps: GigaProps) {
@@ -256,117 +199,25 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         $(node).parent().parent().find('.giga-grid-right-data-container').scrollTop(this.lastYScrollAmount);
     }
 
-    /**
-     * yes this is still a thing!
-     */
-    synchTableHeaderWidthToFirstRow() {
-        const node: Element = ReactDOM.findDOMNode<Element>(this);
-        const {bodyHeight} = this.props;
-
-        /**
-         * To improve performance, we use our own dynamic stylesheet for giga-grid.  jQuery is slow, so by adding
-         * a class to each cell, labeled with each column number, we are able to simply change the dimensions of a cell
-         * dynamically by changing the styling directly in the stylesheet, instead of at the element level.
-         */
-        let widths = [];
-
-        // Gets with of .content in a cell, or 80, whichever is greater
-        function getWidthForDataCell(elem): number {
-            const leftPadding: number = +($(elem).css("padding-left").replace(/[^\d.-]/g, ''));
-            const rightPadding: number = +($(elem).css("padding-right").replace(/[^\d.-]/g, ''));
-
-            // 80 px is the min width of cell
-            return Math.max($(elem).find(".content").innerWidth() + leftPadding + rightPadding, 80);
-        }
-
-        // This function alligns header cells and their underlying data cells
-        function allignColumns($headerContainers, $rows) {
-            _.forEach($headerContainers, (header, index: number) => {
-                const headerWidth: number = getWidthForDataCell(header);
-
-                // Get all data cells underlying this column
-                const $dataElems = $rows.find(`.content-container:nth-of-type(${index + 1})`);
-
-                // Get all widths of underlying data cells, and find the largest
-                const dataWidths: number[] = _.map($dataElems, (elem): number => getWidthForDataCell(elem));
-                const columnWidth: number = Math.max.apply(null, dataWidths.concat(headerWidth)) + 10; // Adding 10 for padding
-                widths.push(columnWidth);
-            });
-        }
-
-        // Get jQuery objects for four "quadrant" containers
-        const $leftHeaderContainers = $(node).find(".left-static-headers .table-header");
-        const $rightHeaderContainers = $(node).find(".right-scrolling-headers .table-header:not(.blank-header-cell)");
-        const $leftHeaderRows = $(node).find(".giga-grid-left-headers-container .giga-grid-row");
-        const $dataRows = $(node).find(".giga-grid-right-data-container .giga-grid-row");
-
-        // There will never been a horiz scrollbar in the left headers, so give it less height in case it shows up on the right side
-        const extraScrollbarHeight = getHorizontalScrollbarThickness();
-        const viewportHeight = bodyHeight ? parseInt(bodyHeight) : $(node).find(".giga-grid-body-viewport").innerHeight();
-        const $rightDataContainer = $(node).find(".giga-grid-right-data-container");
-
-        // Set max height of row containers so scroll bar shows up
-        $rightDataContainer.css("max-height", viewportHeight);
-
-        allignColumns($leftHeaderContainers, $leftHeaderRows);
-        allignColumns($rightHeaderContainers, $dataRows);
-
-        const gigaGridWidth: number = $(node).innerWidth();
-
-        const sumOfHeaderWidths: number = widths.reduce((sum, memo) => sum + memo, 0);
-
-        // If the table doesn't fit the width of the container, make them fit it
-        if (gigaGridWidth * .98 > sumOfHeaderWidths) {
-            const $allHeaderContainers = $(node).find(".table-header:not(.blank-header-cell)");
-            const $blankCell = $(node).find(".table-header.blank-header-cell");
-            const expandAllHeadersBy: number = (gigaGridWidth - sumOfHeaderWidths - $blankCell.innerWidth()) / $allHeaderContainers.length;
-            widths = widths.map((w) => w + expandAllHeadersBy);
-        }
-
-        const oldSheetNode = $(`head > style#giga-grid-style-${this.state.gridID}`);
-        const sheet = (_.findWhere<{}, StyleSheet>(document.styleSheets, {ownerNode: oldSheetNode}) || this.createGigaGridStyleSheet()) as CSSStyleSheet;
-
-        for (let i = 0; i < $leftHeaderContainers.length + $rightHeaderContainers.length; ++i) {
-            const selectorText = `.giga-grid-${this.state.gridID} .giga-grid-column-${i}`;
-            const cssText = `width: ${widths[i]}px !important;`;
-            const oldRule: CSSPageRule = _.findWhere<{},CSSRule>(sheet.cssRules, {selectorText}) as CSSPageRule;
-            if (oldRule)
-                sheet.deleteRule((sheet.rules as any).indexOf(oldRule));
-
-            if (!oldRule || oldRule.style.cssText !== cssText)
-                sheet.insertRule(`${selectorText} { ${cssText} }`, 0);
-        }
-
-
-        let $leftHeadersDataContainer = $(node).find(".giga-grid-left-headers-container");
-        let $bodyViewport = $(node).find(".giga-grid-body-viewport");
-        //setting max-width of sticky data and headers as 75% of the body-viewport width
-        $leftHeadersDataContainer.css("max-width", 0.75 * $bodyViewport.innerWidth());
-        $(node).find(".left-static-headers").css("max-width", 0.75 * $bodyViewport.innerWidth());
-
-        // After we're done with all this, make sure the data container and respective headers has max-width matching the container minus the left-headers
-        // #71 subtract one additional pixel for some rare screen configurations
-        $(node).find(".giga-grid-right-data-container").css("max-width", $(node).innerWidth() - $leftHeadersDataContainer.innerWidth() - 1);
-        $(node).find(".right-scrolling-headers").css("max-width", $(node).innerWidth() - $leftHeadersDataContainer.innerWidth());
-
-        // If the scrollbars push the table up on the right side, we need to make the left side flush with the right
-        setTimeout(() => {
-            $leftHeadersDataContainer.css("max-height", viewportHeight - (hasNodeHorizOverflowed($rightDataContainer.get(0)) ? extraScrollbarHeight : 0));
-        });
+    private calculatePlaceholderHeight() {
+        let { rowHeight } = this.props;
+        let { displayStart, displayEnd, rasterizedRows } = this.state;
+        let rowHeightInt: number = parseInt(rowHeight);
+        return {
+            upperPlaceholderHeight: Math.max(displayStart * rowHeightInt, 0),
+            lowerPlaceholderHeight: Math.max((rasterizedRows.length - displayEnd) * rowHeightInt, 0)
+        };
     }
 
     /**
-     * Creates a new stylesheet for this grid
-     * @returns {CSSStyleSheet}
+     * I don't love this, but it's only related to scrolling and has nothing to do with state/rendering of the component
+     * so rather than making a re-render happen with a state change, we do this.  This is to fix this problem:
+     * http://stackoverflow.com/questions/26326958/stopping-mousewheel-event-from-happening-twice-in-osx
      */
-    private createGigaGridStyleSheet(): StyleSheet {
-        let style: any = document.createElement("style");
-        style.setAttribute("id", `giga-grid-style-${this.state.gridID}`);
-        document.head.appendChild(style);
-        return style.sheet;
-    }
+    private shouldScroll = true;
 
-    scrollHandler(e) {
+    // We need to define the exact function to use to bind event listeners to so we can remove them properly on unmount
+    private handleVerticalScroll = (e: Event) => {
         e.preventDefault();
         const node: Element = ReactDOM.findDOMNode<Element>(this);
         const dataContainer = $(node).parent().find('.giga-grid-right-data-container');
@@ -385,8 +236,11 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
      * A wheely important function.  You can't scroll normally in the left-headers area, but a user would expect the
      * table to scroll if he or she uses the mousewheel.  So we have to listen for this event.
      */
-    wheelScrollHandler(e) {
+    private handleWheelScroll = (e: any) => {
         e.preventDefault();
+        e.stopPropagation();
+        let { viewport } = this.state;
+        this.shouldScroll = false;
         // This covers all browsers, see https://www.sitepoint.com/html5-javascript-mouse-wheel/
         const amountToScroll: number = -Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))) * 53;
         const node: Element = ReactDOM.findDOMNode<Element>(this);
@@ -399,30 +253,43 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         return false;
     }
 
-    reflowTable(){
-        this.dispatchDisplayBoundChange();
-        this.synchTableHeaderWidthToFirstRow();
+    private dispatchDisplayBoundChange() {
+        let { rowHeight, bodyHeight } = this.props;
+        const action: ChangeRowDisplayBoundsAction = {
+            type: GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS,
+            rowHeight: rowHeight,
+            bodyHeight: bodyHeight
+        };
+        this.dispatcher.dispatch(action);
     }
 
     componentDidMount() {
         /*
-         * subscribe to window event listeners
+         * subscribe to listeners
          */
         if (typeof window !== "undefined") {
             window.addEventListener('resize', this.synchTableHeaderWidthToFirstRow.bind(this));
             this.enableScrollHandlers();
         }
 
-        /*
-         re-compute displayStart && displayEnd
+    private handleWindowResize = () => {
+        /**
+         *  we will almost certainly operate in an environment where we do not know the component's width until after the component has mounted,
+         *  so here we dispatch an event to resize the grid as appropriate
          */
-        this.reflowTable();
-        this.expandTable();
+        setTimeout(() => {
+            let { dispatcher } = this;
+            let node = ReactDOM.findDOMNode(this);
+            dispatcher.dispatch({
+                type: GigaActionType.VIEWPORT_RESIZE,
+                newGridWidth: `${node.clientWidth}px`
+            } as GridResizeAction);
+        });
     }
 
     componentWillUnmount() {
         /*
-         * unsubscribe to window event listeners
+         * unsubscribe to listeners
          */
         if (typeof window !== "undefined") {
             window.removeEventListener('resize', this.synchTableHeaderWidthToFirstRow);
@@ -490,8 +357,4 @@ export function getHorizontalScrollbarThickness() {
     const h = el.offsetHeight - el.clientHeight;
     document.body.removeChild(el);
     return h;
-}
-
-function hasNodeHorizOverflowed(htmlElement: HTMLElement) {
-    return htmlElement.scrollWidth > htmlElement.offsetWidth;
 }

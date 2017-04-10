@@ -101,19 +101,7 @@ describe("SubtotalAggregator", () => {
         it("COUNT subtotal", () => {
             expect(aggregatedRow["id"]).toBe(15);
         });
-
-        it("COUNT_DISTINCT subtotal", () => {
-            expect(aggregatedRow["last_name"]).toBe(14);
-        });
-
-        it("COUNT_OR_DISTINCT subtotal (gender)", () => {
-            expect(aggregatedRow["gender"]).toBe("2/15");
-        });
-
-        it("COUNT_OR_DISTINCT subtotal (invariant)", () => {
-            expect(aggregatedRow["invariant"]).toBe("Invariant");
-        });
-
+        
         it("SUM subtotal", () => {
             expect(aggregatedRow["sum_field"]).toBe(105);
         });

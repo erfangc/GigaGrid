@@ -16,3 +16,7 @@ throwaway.js.map
 dist/
 build/
 build.map
+.vscode/chrome
+lib/test/
+lib/src/
+lib/examples

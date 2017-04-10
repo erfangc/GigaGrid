@@ -1,8 +1,0 @@
-{
-  "resolution": "main",
-  "tree": {
-    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/1da639a106527e0c4010b354a1efe52a3059a291/classnames/classnames.d.ts",
-    "raw": "github:DefinitelyTyped/DefinitelyTyped/classnames/classnames.d.ts#1da639a106527e0c4010b354a1efe52a3059a291",
-    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/1da639a106527e0c4010b354a1efe52a3059a291/classnames/classnames.d.ts"
-  }
-}

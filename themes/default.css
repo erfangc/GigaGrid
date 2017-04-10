@@ -1,0 +1,18 @@
+div.giga-grid .header {
+    font-size: 12px;
+    background: #2980b9;
+    color: #fff
+}
+
+div.giga-grid .body .row {
+    font-size: 12px;
+    background-color: #f6f6f6
+}
+
+div.giga-grid .body .row:nth-child(even) {
+    background-color: #ebebeb
+}
+
+div.giga-grid .row.detail-row {
+    background-color: #fff
+}
