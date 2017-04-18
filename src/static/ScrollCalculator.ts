@@ -23,6 +23,11 @@ export class ScrollCalculator {
             if( (displayEnd - displayStart) * parsedRowHeight < parsedBodyHeight )
                 displayEnd = Math.round(parsedBodyHeight / parsedRowHeight) + displayStart;
         }
+        
+        // Some browsers paint slower, so let's put some extra rows in to mask slow painting
+        displayStart = Math.max(0, displayStart - 6);
+        displayEnd = displayEnd + 6;
+        
         return {
             displayStart,
             displayEnd

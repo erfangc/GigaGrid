@@ -241,17 +241,14 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
      * this is the "give up" solution, implemented in 0.1.7
      */
     componentDidUpdate(prevProps, prevState) {
+        // No longer sync every time new rows are added
         if (this.state.rasterizedRows.length !== prevState.rasterizedRows.length ||
-            this.state.displayStart !== prevState.displayStart ||
             this.state.filterBys !== prevState.filterBys ||
             this.state.sortBys !== prevState.sortBys ||
             this.state.subtotalBys !== prevState.subtotalBys)
             this.synchTableHeaderWidthToFirstRow();
         
         const node: Element = ReactDOM.findDOMNode<Element>(this);
-        const dataContainer = $(node).parent().find('.giga-grid-right-data-container');
-        const scrollTopAmount: number = dataContainer.scrollTop();
-        console.log(scrollTopAmount);
         $(node).parent().find('.giga-grid-left-headers-container').scrollTop(this.lastYScrollAmount);
         $(node).parent().parent().find('.giga-grid-right-data-container').scrollTop(this.lastYScrollAmount);
     }
@@ -289,7 +286,9 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
 
                 // Get all widths of underlying data cells, and find the largest
                 const dataWidths: number[] = _.map($dataElems, (elem): number => getWidthForDataCell(elem));
-                const columnWidth: number = Math.max.apply(null, dataWidths.concat(headerWidth)) + 10; // Adding 10 for padding
+                let columnWidth: number = Math.max.apply(null, dataWidths.concat(headerWidth)) + 10; // Adding 10 for padding
+                // Because we are no longer syncing every time rows are added, make sure the cells don't shrink
+                columnWidth = Math.max(columnWidth, $(header).innerWidth()); 
                 widths.push(columnWidth);
             });
         }
@@ -388,11 +387,15 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
     wheelScrollHandler(e) {
         e.preventDefault();
         // This covers all browsers, see https://www.sitepoint.com/html5-javascript-mouse-wheel/
-        const amountToScroll: number = -Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))) * 53;
+        let amountToScroll: number = -Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))) * 53;
+        // We give the illusion that IE scrolls at a normal pace by tripling the scroll amount
+        if( isIE() )
+            amountToScroll = amountToScroll * 3;
         const node: Element = ReactDOM.findDOMNode<Element>(this);
         const dataContainer = $(node).parent().find('.giga-grid-right-data-container');
         const scrollTopAmount: number = dataContainer.scrollTop();
         this.lastYScrollAmount = scrollTopAmount + amountToScroll;
+        console.log(amountToScroll);
         $(node).parent().find('.giga-grid-left-headers-container').scrollTop(scrollTopAmount + amountToScroll);
         $(node).parent().parent().find('.giga-grid-right-data-container').scrollTop(scrollTopAmount + amountToScroll);
         this.dispatchDisplayBoundChange();
@@ -494,4 +497,10 @@ export function getHorizontalScrollbarThickness() {
 
 function hasNodeHorizOverflowed(htmlElement: HTMLElement) {
     return htmlElement.scrollWidth > htmlElement.offsetWidth;
+}
+
+function isIE() {
+    const ua = window.navigator.userAgent;
+    const msie = ua.indexOf("MSIE ");
+    return msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./);
 }
