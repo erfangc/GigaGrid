@@ -56,10 +56,11 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
 
         if(_.isFunction(column.headerTemplateCreator)){
             return (
-                <div className={cx}>
+                <div className={cx} onClick={() => this.handleSort()}>
                     <span className="content header-text">
                         {column.headerTemplateCreator(column)}
                     </span>
+                    {this.renderSortIcon()}
                 </div>
             );
         }
@@ -70,19 +71,7 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
             };
 
             return (
-                <div style={style}
-                    onClick={()=>{
-                        const {direction} = this.props.column;
-                        const sortBy: Column = _.assign<{},Column>({},this.props.column, {
-                            direction: direction === SortDirection.DESC ? SortDirection.ASC : SortDirection.DESC
-                        });
-                        const payload: SortUpdateAction = {
-                            type: GigaActionType.NEW_SORT,
-                            sortBys: [sortBy]
-                        };
-                        this.props.dispatcher.dispatch(payload);
-                    }}
-                    className={cx}>
+                <div style={style} onClick={() => this.handleSort()} className={cx}>
                     <span className="content header-text">
                         {column.title || column.colTag}
                     </span>
@@ -92,6 +81,18 @@ export class TableHeaderCell extends React.Component<TableHeaderProps,{}> {
             );
         }
 
+    }
+    
+    handleSort(){
+        const {direction} = this.props.column;
+        const sortBy: Column = _.assign<{},Column>({},this.props.column, {
+            direction: direction === SortDirection.DESC ? SortDirection.ASC : SortDirection.DESC
+        });
+        const payload: SortUpdateAction = {
+            type: GigaActionType.NEW_SORT,
+            sortBys: [sortBy]
+        };
+        this.props.dispatcher.dispatch(payload);
     }
 
     renderToolbar() {
