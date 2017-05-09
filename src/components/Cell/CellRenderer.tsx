@@ -4,8 +4,9 @@ import {ClassAttributes} from "react";
 import * as React from "react";
 import {GigaActionType} from "../../store/GigaStore";
 import {format, align} from "../../static/SubtotalAggregator";
-import {AggregationMethod} from "../../models/ColumnLike";
+import {AggregationMethod, ColumnFormat} from "../../models/ColumnLike";
 import {ToggleCollapseAction} from "../../store/handlers/RowCollapseReducers";
+import * as moment from "moment";
 
 /**
  * helper class to render cells
@@ -51,7 +52,14 @@ export class CellRenderer {
 
     renderCellWithoutCollapseExpandButton(): JSX.Element {
         let {row, column} = this.props;
-        let renderedCellContent: JSX.Element|string|number = format(row.get(column), column.formatInstruction) || "";
+        
+        let renderedCellContent: JSX.Element|string|number;
+        if( row.isDetailRow() && row.get(column) && 
+            (column.format === ColumnFormat.DATETIME || ColumnFormat[column.format].toString() == ColumnFormat.DATETIME.toString()) )
+            renderedCellContent =  moment(row.get(column)).format("LLLL");
+        else
+            renderedCellContent = format(row.get(column), column.formatInstruction) || "";
+        
         if (!row.isDetailRow()
             && (/* If aggregationMethod is of type Number | AggregationMethod.key e.g. 0,1,2,.. */
                 AggregationMethod.COUNT === column.aggregationMethod ||

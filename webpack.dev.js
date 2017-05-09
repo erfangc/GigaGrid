@@ -14,7 +14,7 @@ commonConfig.devServer = {
     publicPath: '/',
     historyApiFallback: true,
     inline: true,
-    port: 8070
+    port: 8060
 };
 
 module.exports = commonConfig;

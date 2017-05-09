@@ -8,7 +8,7 @@ export enum AggregationMethod {
 }
 
 export enum ColumnFormat {
-    NUMBER, STRING, CURRENCY, DATE
+    NUMBER, STRING, CURRENCY, DATE, DATETIME
 }
 
 export interface ColumnLike {

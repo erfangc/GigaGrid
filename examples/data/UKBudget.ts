@@ -6,7 +6,7 @@ declare var require: any;
 
 let json = require("./UKBudget.json");
 
-const columnDefs: ColumnDef[] = [
+const columnDefs: any[] = [
     {
         colTag: "WFood",
         title: "Food",
@@ -78,6 +78,15 @@ const columnDefs: ColumnDef[] = [
         format: ColumnFormat.NUMBER,
         aggregationMethod: AggregationMethod.AVERAGE,
         formatInstruction: {roundTo: 0}
+    },
+    {
+        colTag: "Time",
+        title: "Time",
+        format: "DATETIME",
+        aggregationMethod: AggregationMethod.NONE,
+        formatInstruction: {
+            textAlign: 'left'
+        }
     }
 ];
 
