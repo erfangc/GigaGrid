@@ -259,6 +259,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
     synchTableHeaderWidthToFirstRow() {
         const node: Element = ReactDOM.findDOMNode<Element>(this);
         const {bodyHeight} = this.props;
+        const {columns} = this.state;
 
         /**
          * To improve performance, we use our own dynamic stylesheet for giga-grid.  jQuery is slow, so by adding
@@ -310,18 +311,20 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         allignColumns($leftHeaderContainers, $leftHeaderRows);
         allignColumns($rightHeaderContainers, $dataRows);
 
+        // Overwrite with width size if explicitly stated
+        widths = widths.map((w, idx) => columns[idx].width || w);
+        
         const gigaGridWidth: number = $(node).innerWidth();
 
         const sumOfHeaderWidths: number = widths.reduce((sum, memo) => sum + memo, 0);
 
         // If the table doesn't fit the width of the container, make them fit it
         if (gigaGridWidth * .98 > sumOfHeaderWidths) {
-            const $allHeaderContainers = $(node).find(".table-header:not(.blank-header-cell)");
             const $blankCell = $(node).find(".table-header.blank-header-cell");
-            const expandAllHeadersBy: number = (gigaGridWidth - sumOfHeaderWidths - $blankCell.innerWidth()) / $allHeaderContainers.length;
-            widths = widths.map((w) => w + expandAllHeadersBy);
+            const expandAllHeadersBy: number = (gigaGridWidth - sumOfHeaderWidths - $blankCell.innerWidth()) / _.filter(columns, def => !def.width).length;
+            widths = widths.map((w, idx) => columns[idx].width ? w : w + expandAllHeadersBy);
         }
-
+        
         const oldSheetNode = $(`head > style#giga-grid-style-${this.state.gridID}`);
         const sheet = (_.findWhere<{}, StyleSheet>(document.styleSheets, {ownerNode: oldSheetNode}) || this.createGigaGridStyleSheet()) as CSSStyleSheet;
 

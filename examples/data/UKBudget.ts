@@ -86,7 +86,8 @@ const columnDefs: any[] = [
         aggregationMethod: AggregationMethod.NONE,
         formatInstruction: {
             textAlign: 'left'
-        }
+        },
+        width: 35
     }
 ];
 
