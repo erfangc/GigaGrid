@@ -101,5 +101,6 @@ export interface GigaProps {
     expandTable?: boolean
     staticLeftHeaders?: number
     additionalUserButtons?: AdditionalButton[]
-
+    
+    neverReinitialize?: boolean
 }

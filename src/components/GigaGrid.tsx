@@ -228,12 +228,15 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
     }
 
     componentWillReceiveProps(nextProps: GigaProps) {
-        const payload: InitializeAction = {
-            type: GigaActionType.INITIALIZE,
-            props: nextProps
-        };
-        this.dispatcher.dispatch(payload);
-        this.expandTable();
+        const {neverReinitialize} = this.props;
+        if( !neverReinitialize ) {
+            const payload: InitializeAction = {
+                type: GigaActionType.INITIALIZE,
+                props: nextProps
+            };
+            this.dispatcher.dispatch(payload);
+            this.expandTable();
+        }
     }
     
     /**
