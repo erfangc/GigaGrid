@@ -224,6 +224,7 @@ export interface ServerSubtotalRow {
     data: any
     bucketInfo: BucketInfo
     sectorPath: BucketInfo[]
+    children?: ServerSubtotalRow[]
 }
 
 /**
@@ -253,8 +254,11 @@ export function dataToSubtotalRows(rows: ServerSubtotalRow[]): Row[] {
         subtotalRow.bucketInfo = row.bucketInfo;
         subtotalRow.sectorPath = row.sectorPath;
         subtotalRow.data = row.data;
-        subtotalRow.collapsed = true;
         subtotalRow.isSubtotal = true;
+        const children = row.children;
+        const hasChildren = children && children.length !== 0;
+        subtotalRow.collapsed = !hasChildren;
+        subtotalRow.children = hasChildren ? dataToSubtotalRows(children) : [];
         return subtotalRow;
     });
 }
