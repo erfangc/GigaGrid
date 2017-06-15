@@ -1,32 +1,52 @@
-import * as _ from "lodash";
-import {GigaState} from "../components/GigaGrid";
-import {ReduceStore} from "flux/utils";
-import {Dispatcher} from "flux";
-import {TreeRasterizer} from "../static/TreeRasterizer";
-import initialStateReducer, {InitializeAction} from "./handlers/InitializeReducer";
+import * as _ from 'lodash';
+import {GigaState} from '../components/GigaGrid';
+import {ReduceStore} from 'flux/utils';
+import {Dispatcher} from 'flux';
+import {TreeRasterizer} from '../static/TreeRasterizer';
+import initialStateReducer, {InitializeAction} from './handlers/InitializeReducer';
 import {
-    rowSelectHandler,
     cellSelectHandler,
-    ToggleRowSelectAction,
-    ToggleCellSelectAction
-} from "./handlers/SelectReducers";
-import {changeDisplayBoundsHandler, ChangeRowDisplayBoundsAction} from "./handlers/ChangeRowDisplayBoundsReducer";
-import {sortUpdateHandler, cleartSortHandler, SortUpdateAction} from "./handlers/SortReducers";
+    rowSelectHandler,
+    ToggleCellSelectAction,
+    ToggleRowSelectAction
+} from './handlers/SelectReducers';
+import {changeDisplayBoundsHandler, ChangeRowDisplayBoundsAction} from './handlers/ChangeRowDisplayBoundsReducer';
+import {cleartSortHandler, SortUpdateAction, sortUpdateHandler} from './handlers/SortReducers';
 import {
-    toggleCollapseHandler,
     collapseAllHandler,
     expandAllHandler,
-    ToggleCollapseAction
-} from "./handlers/RowCollapseReducers";
-import {columnUpdateHandler, ColumnUpdateAction} from "./handlers/ColumnUpdateReducer";
-import {GigaProps} from "../components/GigaProps";
-import {CellContentChangeAction, cellContentChangeHandler} from "./handlers/CellContentChange";
+    ToggleCollapseAction,
+    toggleCollapseHandler
+} from './handlers/RowCollapseReducers';
+import {ColumnUpdateAction, columnUpdateHandler} from './handlers/ColumnUpdateReducer';
+import {GigaProps} from '../components/GigaProps';
+import {CellContentChangeAction, cellContentChangeHandler} from './handlers/CellContentChange';
+import {SortFactory} from '../static/SortFactory';
+import {Column, SortDirection} from '../models/ColumnLike';
+import {Row} from '../models/Row';
 
 /*
  define the # of rows necessary to trigger progressive rendering
  below which all row display bound change events are ignored
  */
 export const PROGRESSIVE_RENDERING_THRESHOLD: number = 20;
+
+export function newRowSortReducer(action: GigaAction, newState: GigaState, state: GigaState) {
+    const {column, row, columnNumber, row: {currentlySortedColumnNo, currentlySortedDirection}} = action as NewRowSortAction;
+    let direction = currentlySortedDirection === SortDirection.DESC ? SortDirection.ASC : SortDirection.DESC;
+    if (columnNumber !== currentlySortedColumnNo) {
+        // reset sort direction if a new column is being sorted
+        direction = SortDirection.DESC;
+    }
+    row.currentlySortedDirection = direction;
+    const sortBy = {...column, direction};
+    const fn = SortFactory.buildLexicalSortFn(sortBy);
+    row.currentlySortedColumnNo = columnNumber;
+    row.children = row.children.sort(fn);
+    // force an update by returning a new state
+    newState = {...state};
+    return newState;
+}
 
 /**
  * state store for the table, relevant states and stored here. the only way to mutate these states are by sending GigaAction(s) through the Dispatcher given to the store at construction
@@ -57,7 +77,7 @@ export class GigaStore extends ReduceStore<GigaState> {
      */
     initialize(action: InitializeAction): GigaState {
         // if props not passed we will use this.props
-        const overrideAction: InitializeAction = _.assign<{},{},{},InitializeAction>({}, action, {props: action.props || this.props});
+        const overrideAction: InitializeAction = _.assign<{}, {}, {}, InitializeAction>({}, action, {props: action.props || this.props});
         return initialStateReducer(overrideAction);
     }
 
@@ -93,6 +113,9 @@ export class GigaStore extends ReduceStore<GigaState> {
             case GigaActionType.CLEAR_SORT:
                 newState = cleartSortHandler(state);
                 break;
+            case GigaActionType.NEW_ROW_SORT:
+                newState = newRowSortReducer(action, newState, state);
+                break;
             case GigaActionType.TOGGLE_ROW_SELECT:
                 newState = rowSelectHandler(state, action as ToggleRowSelectAction, this.props);
                 break;
@@ -100,7 +123,7 @@ export class GigaStore extends ReduceStore<GigaState> {
                 newState = cellSelectHandler(state, action as ToggleCellSelectAction, this.props, this.getDispatcher());
                 break;
             case GigaActionType.TOGGLE_SETTINGS_POPOVER:
-                newState = _.assign<{},GigaState>({}, state, {showSettingsPopover: !state.showSettingsPopover});
+                newState = _.assign<{}, GigaState>({}, state, {showSettingsPopover: !state.showSettingsPopover});
                 break;
             default:
                 newState = state;
@@ -120,6 +143,7 @@ export class GigaStore extends ReduceStore<GigaState> {
         return [
                 GigaActionType.CLEAR_SORT,
                 GigaActionType.NEW_SORT,
+                GigaActionType.NEW_ROW_SORT,
                 GigaActionType.TOGGLE_ROW_COLLAPSE,
                 GigaActionType.COLLAPSE_ALL,
                 GigaActionType.EXPAND_ALL,
@@ -139,6 +163,7 @@ export enum GigaActionType {
     CELL_CONTENT_CHANGE,
     NEW_SORT,
     CLEAR_SORT,
+    NEW_ROW_SORT,
     TOGGLE_ROW_COLLAPSE,
     COLLAPSE_ALL,
     EXPAND_ALL,
@@ -156,4 +181,10 @@ export enum GigaActionType {
 
 export interface GigaAction {
     type: GigaActionType
+}
+
+export interface NewRowSortAction extends GigaAction {
+    columnNumber: number,
+    row: Row
+    column: Column
 }

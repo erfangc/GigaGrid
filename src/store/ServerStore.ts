@@ -2,7 +2,7 @@ import {ReduceStore} from "flux/utils";
 import {Dispatcher} from "flux";
 import {GigaState} from "../components/GigaGrid";
 import {ScrollCalculator} from "../static/ScrollCalculator";
-import {GigaStore, GigaActionType, GigaAction, PROGRESSIVE_RENDERING_THRESHOLD} from "./GigaStore";
+import {GigaStore, GigaActionType, GigaAction, PROGRESSIVE_RENDERING_THRESHOLD, newRowSortReducer} from './GigaStore';
 import {InitializeAction, decorateInitialSortBys, decorateColumnsWithSort} from "./handlers/InitializeReducer";
 import {TreeRasterizer} from "../static/TreeRasterizer";
 import {
@@ -170,6 +170,9 @@ export class ServerStore extends ReduceStore<GigaState> {
              */
             case GigaActionType.INITIALIZE:
                 newState = this.initialize(action as InitializeAction);
+                break;
+            case GigaActionType.NEW_ROW_SORT:
+                newState = newRowSortReducer(action, newState, state);
                 break;
             case GigaActionType.CHANGE_ROW_DISPLAY_BOUNDS:
                 newState = changeDisplayBoundsHandler(state, action as ChangeRowDisplayBoundsAction);

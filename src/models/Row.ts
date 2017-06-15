@@ -1,4 +1,4 @@
-import {ColumnDef, BucketInfo} from "./ColumnLike";
+import {ColumnDef, BucketInfo, SortDirection} from './ColumnLike';
 
 /**
  * The Row class is the central abstraction and data structure to represent a row in the table
@@ -29,6 +29,8 @@ export class Row {
     children: Row[] = [];
     collapsed: boolean = true;
     bucketInfo: BucketInfo;
+    currentlySortedColumnNo?: number;
+    currentlySortedDirection?: SortDirection;
 
     /**
      * If this Row is server side rendered and there is an issue with the server call

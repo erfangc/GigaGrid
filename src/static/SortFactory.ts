@@ -29,7 +29,7 @@ export class SortFactory {
             rootRow.detailRows.sort(fn);
     }
 
-    private static createCompositeSorter(sortBys:Column[], firstColumn?:Column):(a:Row, b:Row)=>number {
+    static createCompositeSorter(sortBys:Column[], firstColumn?:Column):(a:Row, b:Row)=>number {
 
         if (!sortBys || sortBys.length === 0)
             return function ():number {
