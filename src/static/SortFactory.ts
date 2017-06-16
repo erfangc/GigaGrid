@@ -20,6 +20,10 @@ export class SortFactory {
     }
 
     private static recursivelyExecuteSort(rootRow:Row, fn:(a:Row, b:Row)=>number):void {
+        if (rootRow.currentlySortedColumnNo != null) {
+            // we clear any existing column sorts when the entire grid is being sorted
+            rootRow.currentlySortedColumnNo = null;
+        }
         if (rootRow.getNumChildren() !== 0) {
             rootRow.children.sort(fn);
             rootRow.children.forEach((child)=> {
