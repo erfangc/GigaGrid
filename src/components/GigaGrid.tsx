@@ -325,7 +325,7 @@ export class GigaGrid extends React.Component<GigaProps & ClassAttributes<GigaGr
         if (gigaGridWidth * .98 > sumOfHeaderWidths) {
             const $blankCell = $(node).find(".table-header.blank-header-cell");
             const expandAllHeadersBy: number = (gigaGridWidth - sumOfHeaderWidths - $blankCell.innerWidth()) / _.filter(columns, def => !def.width).length;
-            widths = widths.map((w, idx) => columns[idx].width ? w : w + expandAllHeadersBy);
+            widths = widths.map((w, idx) => columns[idx].width ? w : Math.floor(w + expandAllHeadersBy));
         }
         
         const oldSheetNode = $(`head > style#giga-grid-style-${this.state.gridID}`);
